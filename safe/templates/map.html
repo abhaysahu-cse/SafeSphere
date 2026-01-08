@@ -1,0 +1,197 @@
+{% load static %}
+<!doctype html>
+<html lang="en" class="map-page">
+
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Emergency Map | SafeSphere</title>
+
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+
+  
+  
+  <style>
+    /* 🔥 OVERRIDE GLOBAL DASHBOARD STYLES FOR MAP PAGE */
+body {
+  background: none !important;
+}
+
+.main-content,
+.page-header,
+.stats-grid,
+section {
+  display: none !important;
+}
+
+/* Ensure nothing pushes map */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+    /* MAP PAGE STYLES */
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    body {
+      overflow: hidden;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    /* FULL SCREEN MAP */
+    #mini-map {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+    }
+
+    /* Top bar */
+    .map-topbar {
+      position: fixed;
+      top: 14px;
+      left: 14px;
+      right: 14px;
+      z-index: 10000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .map-topbar .left,
+    .map-topbar .right {
+      display: flex;
+      gap: 10px;
+      pointer-events: auto;
+    }
+
+    .btn {
+      background: #ffffff;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 14px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      color: #222;
+    }
+
+    /* Info panel */
+    .info-panel {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      width: 300px;
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 16px;
+      z-index: 10000;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+    }
+
+    .info-panel h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    .info-panel p {
+      margin: 6px 0;
+      font-size: 13px;
+      color: #444;
+    }
+
+    /* Legend */
+    .legend {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #ffffff;
+      padding: 14px;
+      border-radius: 14px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+      z-index: 10000;
+    }
+
+    .legend h4 {
+      margin: 0 0 10px;
+      font-size: 14px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    .dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+    }
+
+    .red { background: #e53e3e; }
+    .orange { background: #f6ad55; }
+    .green { background: #48bb78; }
+  </style>
+</head>
+
+<body>
+
+  <!-- TOP BAR -->
+  <div class="map-topbar">
+    <div class="left">
+      <a href="{% url 'index' %}" class="btn">⬅ Dashboard</a>
+      <button id="toggle-zones" class="btn">Toggle Zones</button>
+    </div>
+    <div class="right">
+      <span class="btn">🚨 Emergency Map</span>
+    </div>
+  </div>
+
+  <!-- MAP -->
+  <div id="mini-map" aria-label="Emergency Map"></div>
+
+  <!-- INFO PANEL -->
+  <div class="info-panel">
+    <h3>📍 Safety Guidance</h3>
+    <p>• Red zones: <strong>Do NOT enter</strong></p>
+    <p>• Orange zones: <strong>Proceed with caution</strong></p>
+    <p>• Green zones: <strong>Safe shelters</strong></p>
+    <p style="margin-top:10px;font-weight:600;">Tap on zones for details.</p>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <h4>Legend</h4>
+    <div class="legend-item"><span class="dot red"></span> High Risk</div>
+    <div class="legend-item"><span class="dot orange"></span> Medium Risk</div>
+    <div class="legend-item"><span class="dot green"></span> Safe Zone</div>
+  </div>
+
+  <!-- JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="{% static 'js/map.js' %}"></script>
+
+  <!-- FORCE FULL RENDER -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      setTimeout(() => {
+        if (window.safeSphereMap?.mapInstance) {
+          window.safeSphereMap.mapInstance.invalidateSize(true);
+        }
+      }, 400);
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,95 @@
+{% comment %} <form method="POST">
+  {% csrf_token %}
+  <input type="text" name="username" placeholder="Username">
+  <input type="password" name="password" placeholder="Password">
+  <button type="submit">Login</button>
+  {% if error %}<p>{{ error }}</p>{% endif %}
+</form> {% endcomment %}
+
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="auth-page">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Register | My Project</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container {% if is_signup %}active{% endif %}" id="container">
+        
+        <div class="form-container sign-up">
+            <form method="POST" action="{% url 'signup' %}">
+                {% csrf_token %}
+                <h1>Create Account</h1>
+                <div class="social-icons">
+                    <p>Register with your details</p>
+                </div>
+                <input type="text" name="username" placeholder="Username" required autocomplete="off">
+                <input type="email" name="email" placeholder="Email" required autocomplete="off">
+                <input type="password" name="password" placeholder="Password" required autocomplete="off">
+                
+                {% if signup_error %}
+                    <p class="error-msg">{{ signup_error }}</p>
+                {% endif %}
+                
+                <button type="submit">Sign Up</button>
+            </form>
+        </div>
+
+        <div class="form-container sign-in">
+            <form method="POST" action="{% url 'login' %}">
+                {% csrf_token %}
+                <h1>Sign In</h1>
+                <div class="social-icons">
+                    <p>Enter your credentials</p>
+                </div>
+                <input type="text" name="username" placeholder="Username" required autocomplete="off">
+                <input type="password" name="password" placeholder="Password" required autocomplete="off">
+                
+                <a href="{% url 'password_reset' %}">Forgot Your Password?</a>
+
+                {% if error %}
+                    <p class="error-msg">{{ error }}</p>
+                {% endif %}
+
+                <button type="submit">Login</button>
+            </form>
+        </div>
+
+        <div class="toggle-container">
+            <div class="toggle">
+                <div class="toggle-panel toggle-left">
+                    <h1>Welcome Back!</h1>
+                    <p>Enter your personal details to use all of site features</p>
+                    <button class="hidden" id="login">Sign In</button>
+                </div>
+                <div class="toggle-panel toggle-right">
+                    <h1>Hello, Friend!</h1>
+                    <p>Register with your personal details to use all of site features</p>
+                    <button class="hidden" id="register">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const container = document.getElementById('container');
+        const registerBtn = document.getElementById('register');
+        const loginBtn = document.getElementById('login');
+
+        // Click karne par CSS class toggle hogi aur animation chalegi
+        registerBtn.addEventListener('click', () => {
+            container.classList.add("active");
+        });
+
+        loginBtn.addEventListener('click', () => {
+            container.classList.remove("active");
+        });
+    </script>
+</body>
+</html>

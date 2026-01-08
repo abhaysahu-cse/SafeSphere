@@ -1,0 +1,285 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fire Safety Module</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            line-height: 1.7;
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px #ccc;
+        }
+
+        h1, h2, h3 {
+            color: #d9534f;
+        }
+
+        img {
+            width: 100%;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .nav-buttons {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            color: white;
+        }
+
+        .prev-btn { background: #6c757d; }
+        .next-btn { background: #0275d8; }
+
+        /* Quiz Section */
+        .quiz-box {
+            margin-top: 40px;
+            padding: 20px;
+            background: #fff7e6;
+            border-left: 5px solid #ff9800;
+            border-radius: 8px;
+        }
+
+        .quiz-box h2 {
+            color: #ff9800;
+        }
+
+        .quiz-question {
+            margin-bottom: 15px;
+        }
+
+        .submit-btn {
+            background: #5cb85c;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'learn' %}" 
+   style="
+      position:absolute;
+      top:20px;
+      right:20px;
+      background:#333;
+      color:white;
+      padding:10px 16px;
+      border-radius:8px;
+      text-decoration:none;
+      font-size:16px;">
+   ⬅ Back
+</a>
+
+    <div class="container">
+
+        <h1>🔥 Fire Safety Module</h1>
+
+        <img src="{% static 'image/doinfire.jpeg' %}" alt="Fire Safety">
+
+        <p>
+            Fire safety is one of the most important life-skills for students. Understanding
+            how fires start, how they spread, and how to respond during an emergency can save
+            your life and the lives of others. This module explains fire types, fire prevention,
+            safe evacuation, and the correct usage of fire extinguishers.
+        </p>
+
+        <hr>
+
+        <h2>1. What is Fire?</h2>
+        <p>Fire is a chemical reaction known as combustion. For a fire to start, it needs:</p>
+
+        <ul>
+            <li>🔥 Fuel (wood, paper, petrol, cloth, etc.)</li>
+            <li>🔥 Heat (matchstick, spark, friction)</li>
+            <li>🔥 Oxygen (air)</li>
+        </ul>
+
+        {% comment %} <img src="/static/images/fire_triangle.jpg" alt="Fire Triangle"> {% endcomment %}
+
+        <p>
+            These three elements form the **Fire Triangle**. Removing even one of them will
+            extinguish the fire. This concept is important in fire-fighting.
+        </p>
+
+        <hr>
+
+        <h2>2. Common Causes of Fire</h2>
+
+        {% comment %} <img src="/static/images/fire_causes.jpg" alt="Fire Causes"> {% endcomment %}
+
+        <ul>
+            <li>⚡ Electrical faults, short circuits</li>
+            <li>🔥 Gas leaks in kitchens</li>
+            <li>🕯️ Unattended candles or incense sticks</li>
+            <li>🚬 Smoking indoors</li>
+            <li>🛢️ Flammable liquids stored improperly</li>
+            <li>⚠️ Overheated devices</li>
+        </ul>
+
+        <hr>
+
+        <h2>3. Classes of Fire</h2>
+{% comment %} 
+        <img src="/static/images/fire_classes.jpg" alt="Fire Types"> {% endcomment %}
+
+        <p>Fires are divided into categories depending on the fuel:</p>
+
+        <ul>
+            <li><b>Class A:</b> Wood, paper, cloth</li>
+            <li><b>Class B:</b> Petrol, oil, diesel, paint</li>
+            <li><b>Class C:</b> LPG, CNG, natural gas</li>
+            <li><b>Class D:</b> Metals like magnesium</li>
+            <li><b>Class E:</b> Electrical fires</li>
+        </ul>
+
+        <p>
+            Using the wrong extinguisher can cause explosions or spread the fire, so this
+            classification is very important.
+        </p>
+
+        <hr>
+
+        <h2>4. How to Use a Fire Extinguisher (PASS Method)</h2>
+
+         <img src="{% static 'image/paas.jpg' %}" alt="Fire Extinguisher"> 
+
+        <p>Remember the **PASS** method:</p>
+
+        <ul>
+            <li><b>P</b> – Pull the pin</li>
+            <li><b>A</b> – Aim at the base of the fire</li>
+            <li><b>S</b> – Squeeze the handle</li>
+            <li><b>S</b> – Sweep from side to side</li>
+        </ul>
+
+        <hr>
+
+        <h2>5. Fire Prevention Tips</h2>
+
+        {% comment %} <img src="/static/images/fire_prevention.jpg" alt="Fire Prevention"> {% endcomment %}
+
+        <ul>
+            <li>Check electrical wiring regularly</li>
+            <li>Do not overload plugs</li>
+            <li>Keep flammable items away from heat</li>
+            <li>Install smoke detectors</li>
+            <li>Keep fire extinguishers accessible</li>
+            <li>Never leave cooking unattended</li>
+        </ul>
+
+        <hr>
+
+        <h2>6. Evacuation Steps During Fire</h2>
+
+        {% comment %} <img src="/staticimages/fire_evacuation.jpg" alt="Fire Evacuation"> {% endcomment %}
+
+        <ul>
+            <li>Stay calm and alert others</li>
+            <li>Use stairs—never elevators</li>
+            <li>Crawl low under smoke</li>
+            <li>Cover mouth with a cloth</li>
+            <li>Follow EXIT signs</li>
+            <li>Call emergency number: <b>101</b></li>
+        </ul>
+
+        <hr>
+
+<!-- VIDEO SECTION -->
+<h2>📺 Fire Safety Training Video</h2>
+
+<div class="video-container">
+    <iframe 
+        src="https://www.youtube.com/embed/2fJ4YvN1kzE" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen>
+    </iframe>
+</div>
+ <!-- VIDEO SECTION -->
+<h2>📺 Fire Safety Training Video</h2>
+
+<div class="video-container">
+    <iframe 
+        src="https://www.youtube.com/embed/Vc7ZqtGNmTY" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen>
+    </iframe>
+</div>
+
+       
+        <!-- QUIZ SECTION -->
+        <div class="quiz-box">
+            <h2>📝 Fire Safety Quiz</h2>
+
+            <div class="quiz-question">
+                <p><b>1. What are the three parts of the fire triangle?</b></p>
+                <input type="radio" name="q1"> Fuel, Heat, Oxygen <br>
+                <input type="radio" name="q1"> Smoke, Fuel, Gas <br>
+            </div>
+
+            <div class="quiz-question">
+                <p><b>2. What is the correct method to use an extinguisher?</b></p>
+                <input type="radio" name="q2"> PASS <br>
+                <input type="radio" name="q2"> FIRE <br>
+            </div>
+
+            <div class="quiz-question">
+                <p><b>3. Which fire class involves electrical fires?</b></p>
+                <input type="radio" name="q3"> Class A <br>
+                <input type="radio" name="q3"> Class E <br>
+            </div>
+
+            <button class="submit-btn">Submit Quiz</button>
+        </div>
+
+        <!-- NAVIGATION -->
+        <div class="nav-buttons">
+            <button class="prev-btn">⬅ Previous Module</button>
+            <button class="next-btn">Next Module ➡</button>
+        </div>
+
+    </div>
+
+</body>
+</html>
+
+
+<style>
+.video-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* For 16:9 video ratio */
+    margin: 20px 0;
+}
+
+ .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+}
+
+</style>

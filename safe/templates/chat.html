@@ -1,0 +1,478 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeLearn - AI Assistant</title>
+    <meta name="description" content="Get instant help from AI assistant for disaster preparedness">
+    
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    
+    <style>
+        .chat-input-wrapper {
+            display: flex;
+            align-items: flex-end; /* Align items to the bottom of the textarea */
+            gap: 8px; /* Space between buttons and textarea */
+        }
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 50%;
+            transition: background-color 0.2s, color 0.2s;
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+        .icon-btn:hover {
+            background-color: #f0f0f0;
+        }
+        .mic-active {
+            color: white;
+            background-color: #ef4444; /* Red-500 */
+        }
+        .mic-active:hover {
+            background-color: #dc2626; /* Red-600 */
+        }
+        /* Typing indicator CSS (assuming it was missing) */
+        .typing-dots {
+            display: flex;
+            align-items: center;
+            height: 1.2em;
+        }
+        .typing-dots span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            margin-right: 4px;
+            background-color: #555;
+            border-radius: 50%;
+            animation: bounce 0.6s infinite alternate;
+        }
+        .typing-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .typing-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-5px); }
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <span class="logo-icon">🛡️</span>
+                <span class="logo-text">SafeLearn</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+                <span class="toggle-icon">☰</span>
+            </button>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="{% url 'index' %}" class="nav-link" data-page="dashboard">
+                <span class="nav-icon">📊</span>
+                <span class="nav-text">Dashboard</span>
+            </a>
+            <a href="{% url 'learn' %}" class="nav-link" data-page="learn">
+                <span class="nav-icon">📚</span>
+                <span class="nav-text">Learn</span>
+            </a>
+            <a href="{% url 'games' %}" class="nav-link" data-page="games">
+                <span class="nav-icon">🎮</span>
+                <span class="nav-text">Games</span>
+            </a>
+            <a href="{% url 'drills' %}" class="nav-link" data-page="drills">
+                <span class="nav-icon">🚨</span>
+                <span class="nav-text">Drills</span>
+            </a>
+            <a href="{% url 'leaderboard' %}" class="nav-link" data-page="leaderboard">
+                <span class="nav-icon">🏆</span>
+                <span class="nav-text">Leaderboard</span>
+            </a>
+            <a href="{% url 'emergency' %}" class="nav-link emergency-link" data-page="emergency">
+                <span class="nav-icon">🆘</span>
+                <span class="nav-text">Emergency</span>
+            </a>
+            <a href="{% url 'chat' %}" class="nav-link active" data-page="chat">
+                <span class="nav-icon">💬</span>
+                <span class="nav-text">AI Assistant</span>
+            </a>
+            <a href="{% url 'profile' %}" class="nav-link" data-page="profile">
+                <span class="nav-icon">👤</span>
+                <span class="nav-text">Profile</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <div class="chat-header animate-fade-up">
+            <div class="chat-header-content">
+                <div class="chat-avatar">🤖</div>
+                <div class="chat-header-info">
+                    <h1 class="chat-title">AI Safety Assistant</h1>
+                    <p class="chat-subtitle">Ask me anything about disaster preparedness</p>
+                </div>
+            </div>
+            <button class="btn btn-ghost" onclick="clearChat()">🗑️ Clear Chat</button>
+        </div>
+
+        <div class="chat-container" id="chatContainer">
+            <div class="chat-welcome">
+                <div class="welcome-icon">👋</div>
+                <h2>Welcome to AI Assistant!</h2>
+                <p>I'm here to help you learn about disaster preparedness. Ask me questions like:</p>
+                <div class="suggested-questions">
+                    <button class="suggestion-chip" onclick="sendSuggestion('What should I include in an emergency kit?')">
+                        What should I include in an emergency kit?
+                    </button>
+                    <button class="suggestion-chip" onclick="sendSuggestion('How do I prepare for an earthquake?')">
+                        How do I prepare for an earthquake?
+                    </button>
+                    <button class="suggestion-chip" onclick="sendSuggestion('What are the steps for fire evacuation?')">
+                        What are the steps for fire evacuation?
+                    </button>
+                    <button class="suggestion-chip" onclick="sendSuggestion('How to perform CPR?')">
+                        How to perform CPR?
+                    </button>
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                </div>
+        </div>
+
+        <div class="chat-input-container">
+            <div class="chat-input-wrapper">
+                
+                <button class="icon-btn" id="micBtn" type="button" aria-label="Voice Input">
+                    <span class="mic-icon">🎙️</span>
+                </button>
+
+                <textarea 
+                    class="chat-input" 
+                    id="chatInput" 
+                    placeholder="Type your question here or speak..."
+                    rows="1"
+                    onkeydown="handleChatInput(event)"
+                ></textarea>
+
+                <button class="icon-btn" id="ttsToggleBtn" type="button" aria-label="Toggle Text-to-Speech">
+                    <span id="ttsSpeakerIcon">🔊</span> 
+                    <span id="ttsMuteIcon" style="display: none;">🔇</span> 
+                </button>
+                
+                <button class="chat-send-btn" id="sendBtn" onclick="sendMessage()">
+                    <span class="send-icon">📤</span>
+                </button>
+            </div>
+            <div class="chat-footer">
+                <span class="chat-status">AI Assistant is ready to help</span>
+            </div>
+        </div>
+    </main>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<script>
+    // *** CONFIGURATION ***
+    const GEMINI_API_KEY = 'AIzaSyBfFCxbDDLyPrPEiNcJ3FPgbky6B18jrwQ'; //api key
+    const GEMINI_MODEL = 'gemini-2.5-flash';
+
+    // System Instruction 
+    const SYSTEM_INSTRUCTION = "You are SafeLearn's AI Safety Assistant, an AI-powered disaster preparedness guide for students, teachers, and administrators. Your main responsibilities are: 1. Greet users politely and explain your role briefly. Use Markdown and line breaks for clear, point-based information. 2. Provide step-by-step safety instructions for disasters (earthquake, flood, fire, cyclone, etc.). 3. Share SafeLearn's core services: Learning Modules, Quizzes & Assessments, AR/VR Disaster Simulations, AI Risk Alerts, Resource Hub (Guidelines & Checklists), Gamification & Certificates, and Emergency SOS. 4. Encourage community participation and mental wellbeing. 5. In emergencies, share first-aid and evacuation steps, reminding the user to call the local emergency number (e.g., 112 in India). 6. Be clear, empathetic, and use relevant emojis for alerts (🚨🔥🌊). 7. Reply in English, but if the user asks a simple Hindi question (like 'kese ho'), reply in the Hinglish style (like 'mai theek hu, aap batao'). you are an inian i  agent and try write topic in bold latter ,avoid stars(*).";
+
+
+    // *** STATE & DOM ELEMENTS ***
+    let chatHistory = [];
+    let isTyping = false;
+    let isTtsEnabled = true; // State for Text-to-Speech
+    let isListening = false; // State for Speech-to-Text
+
+    const chatInput = document.getElementById('chatInput');
+    const chatMessagesContainer = document.getElementById('chatMessages');
+    const welcomeDiv = document.querySelector('.chat-welcome');
+    const micBtn = document.getElementById('micBtn'); 
+    const sendBtn = document.getElementById('sendBtn'); 
+    const ttsToggleBtn = document.getElementById('ttsToggleBtn');
+    const ttsSpeakerIcon = document.getElementById('ttsSpeakerIcon');
+    const ttsMuteIcon = document.getElementById('ttsMuteIcon');
+
+
+    // *** UTILITY FUNCTIONS ***
+
+    function scrollToBottom() {
+        const container = document.getElementById('chatContainer'); 
+        if (container) {
+            container.scrollTop = container.scrollHeight;
+        }
+    }
+
+    // --- Text-to-Speech (TTS) ---
+    function speak(text) {
+        if (!isTtsEnabled || !window.speechSynthesis) return;
+        // Clean up text for better speech synthesis: remove HTML tags, emojis, and reduce multiple newlines
+        const cleanedText = text.replace(/<[^>]*>/g, "").replace(/🚨|🔥|🌊|✨|👋|💻|✅|🛡️/g, '').replace(/[\r\n]+/g, ' '); 
+        const utterance = new SpeechSynthesisUtterance(cleanedText);
+        window.speechSynthesis.cancel(); 
+        window.speechSynthesis.speak(utterance);
+    }
+
+    // TTS Toggle Listener
+    if (ttsToggleBtn) {
+        ttsToggleBtn.addEventListener('click', () => {
+            isTtsEnabled = !isTtsEnabled;
+            // Update button visual state
+            ttsSpeakerIcon.style.display = isTtsEnabled ? 'inline' : 'none';
+            ttsMuteIcon.style.display = isTtsEnabled ? 'none' : 'inline';
+            if (!isTtsEnabled) {
+                window.speechSynthesis.cancel();
+            }
+        });
+    }
+
+    // --- Speech-to-Text (STT) ---
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let recognition;
+
+    if (SpeechRecognition && micBtn) {
+        recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.lang = 'en-IN'; // Set language 
+        recognition.interimResults = false;
+
+        micBtn.addEventListener('click', () => {
+            if (isListening) {
+                recognition.stop();
+            } else {
+                micBtn.classList.add('mic-active');
+                micBtn.querySelector('.mic-icon').textContent = '🔴'; // Change icon to recording
+                isListening = true;
+                recognition.start();
+            }
+        });
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            chatInput.value = transcript;
+            sendMessage(); 
+        };
+
+        recognition.onend = () => {
+            micBtn.classList.remove('mic-active');
+            micBtn.querySelector('.mic-icon').textContent = '🎙️'; // Reset icon
+            isListening = false;
+        };
+        
+        recognition.onerror = (event) => {
+            console.error('Speech recognition error:', event.error);
+            micBtn.classList.remove('mic-active');
+            micBtn.querySelector('.mic-icon').textContent = '🎙️'; 
+            isListening = false;
+        };
+
+    } else if (micBtn) {
+        micBtn.style.display = 'none'; // Hide mic button if STT is not supported
+    }
+
+
+    // --- Chat History Management ---
+
+    function loadChatHistory() {
+        const saved = localStorage.getItem('chatHistory');
+        if (saved) {
+            // Convert simple format back to Gemini API format for continuity
+            const simpleHistory = JSON.parse(saved);
+            chatHistory = simpleHistory.map(msg => ({
+                role: msg.role === 'user' ? 'user' : 'model',
+                parts: [{ text: msg.content }]
+            }));
+            
+            // Render using the simple history format for display
+            renderChatHistory(simpleHistory);
+        }
+    }
+
+    function saveChatHistory(historyToSave) {
+        // Save a simple format for display and re-loading
+        const simpleHistory = historyToSave.map(msg => ({
+            role: msg.role,
+            content: msg.parts[0].text,
+            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        }));
+        localStorage.setItem('chatHistory', JSON.stringify(simpleHistory));
+    }
+
+    // Updated render function to accept display history
+    function renderChatHistory(displayHistory = []) {
+        if (displayHistory.length > 0) {
+            if (welcomeDiv) welcomeDiv.style.display = 'none';
+            if (chatMessagesContainer) {
+                chatMessagesContainer.innerHTML = displayHistory.map(msg => createMessageElement(msg)).join('');
+                scrollToBottom();
+            }
+        } else {
+            if (welcomeDiv) welcomeDiv.style.display = 'block';
+            if (chatMessagesContainer) chatMessagesContainer.innerHTML = '';
+        }
+    }
+
+    function createMessageElement(message) {
+        const isUser = message.role === 'user';
+        const content = message.content.replace(/\n/g, '<br>'); // Replace newlines for HTML display
+
+        return `
+            <div class="chat-message ${isUser ? 'user-message' : 'ai-message'}">
+                <div class="message-avatar">${isUser ? '👤' : '🤖'}</div>
+                <div class="message-content">
+                    <div class="message-text">${content}</div>
+                    <div class="message-time">${message.time || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                </div>
+            </div>
+        `;
+    }
+
+    // --- Message Sending and API Integration ---
+
+    function handleChatInput(event) {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            sendMessage();
+        }
+    }
+
+    // Send suggestion (kept for welcome screen buttons)
+    function sendSuggestion(text) {
+        document.getElementById('chatInput').value = text;
+        sendMessage();
+    }
+
+    async function sendMessage() {
+        const message = chatInput.value.trim();
+        
+        if (!message || isTyping) return;
+        
+        // 1. Prepare and display user message
+        const userMessageAPI = { role: 'user', parts: [{ text: message }] };
+        chatHistory.push(userMessageAPI);
+        
+        const displayUserMessage = {
+            role: 'user',
+            content: message,
+            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        };
+
+        if (welcomeDiv) welcomeDiv.style.display = 'none';
+        if (chatMessagesContainer) chatMessagesContainer.innerHTML += createMessageElement(displayUserMessage);
+        
+        // Clear input and show loading
+        chatInput.value = '';
+        chatInput.style.height = 'auto';
+        showTypingIndicator();
+
+        try {
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+            
+            // 🚨 FINAL FIX APPLIED: Wrapping systemInstruction into a Content object
+            const payload = {
+                contents: chatHistory,
+                systemInstruction: {
+                    parts: [{ text: SYSTEM_INSTRUCTION }]
+                }
+            };
+
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error.message || 'API Error: Could not get response.');
+            }
+
+            const result = await response.json();
+            const botMessageText = result.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I couldn't generate a response.";
+
+            // 2. Add bot response to state and display
+            const botMessageAPI = { role: 'model', parts: [{ text: botMessageText }] };
+            chatHistory.push(botMessageAPI);
+
+            const displayBotMessage = {
+                role: 'assistant',
+                content: botMessageText,
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            };
+            
+            // Remove typing indicator and render the final bot message
+            removeTypingIndicator();
+            if (chatMessagesContainer) chatMessagesContainer.innerHTML += createMessageElement(displayBotMessage);
+            speak(botMessageText); // Speak the response
+            
+        } catch (error) {
+            console.error('Gemini API Error:', error);
+            removeTypingIndicator();
+            // Display an informative error message to the user
+            const errorMessage = {
+                role: 'assistant',
+                content: `🚨 Error connecting to AI: ${error.message}. Please verify your API key and ensure the model name is correct.`,
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            };
+            if (chatMessagesContainer) chatMessagesContainer.innerHTML += createMessageElement(errorMessage);
+            speak("I encountered an error while connecting to the AI. Please verify the API key and try again.");
+
+        } finally {
+            isTyping = false;
+            saveChatHistory(chatHistory);
+            scrollToBottom();
+        }
+    }
+
+    // --- Typing Indicator Functions ---
+
+    function showTypingIndicator() {
+        isTyping = true;
+        const typingIndicator = `
+            <div class="chat-message ai-message typing-indicator">
+                <div class="message-avatar">🤖</div>
+                <div class="message-content">
+                    <div class="typing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        `;
+        if (chatMessagesContainer) chatMessagesContainer.innerHTML += typingIndicator;
+        scrollToBottom();
+    }
+
+    function removeTypingIndicator() {
+        const typingIndicator = document.querySelector('.typing-indicator');
+        if (typingIndicator) {
+            typingIndicator.remove();
+        }
+    }
+
+    // Clear chat (Updated to stop TTS)
+    function clearChat() {
+        if (confirm('Are you sure you want to clear the chat history?')) {
+            chatHistory = [];
+            localStorage.removeItem('chatHistory');
+            renderChatHistory([]); // Pass empty array to show welcome screen
+            window.speechSynthesis.cancel(); 
+        }
+    }
+
+
+    // --- Initialize ---
+    loadChatHistory();
+</script>

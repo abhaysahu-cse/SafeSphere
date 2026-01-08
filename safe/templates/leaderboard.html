@@ -1,0 +1,214 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeLearn - Leaderboard</title>
+    <meta name="description" content="Compete with other learners and track your progress">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <span class="logo-icon">🛡️</span>
+                <span class="logo-text">SafeLearn</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+                <span class="toggle-icon">☰</span>
+            </button>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="{% url 'index' %}" class="nav-link" data-page="dashboard">
+                <span class="nav-icon">📊</span>
+                <span class="nav-text">Dashboard</span>
+            </a>
+            <a href="{% url 'learn' %}" class="nav-link" data-page="learn">
+                <span class="nav-icon">📚</span>
+                <span class="nav-text">Learn</span>
+            </a>
+            <a href="{% url 'games' %}" class="nav-link" data-page="games">
+                <span class="nav-icon">🎮</span>
+                <span class="nav-text">Games</span>
+            </a>
+            <a href="{% url 'drills' %}" class="nav-link" data-page="drills">
+                <span class="nav-icon">🚨</span>
+                <span class="nav-text">Drills</span>
+            </a>
+            <a href="{% url 'leaderboard' %}" class="nav-link active" data-page="leaderboard">
+                <span class="nav-icon">🏆</span>
+                <span class="nav-text">Leaderboard</span>
+            </a>
+            <a href="{% url 'emergency' %}" class="nav-link emergency-link" data-page="emergency">
+                <span class="nav-icon">🆘</span>
+                <span class="nav-text">Emergency</span>
+            </a>
+            <a href="{% url 'chat' %}" class="nav-link" data-page="chat">
+                <span class="nav-icon">💬</span>
+                <span class="nav-text">AI Assistant</span>
+            </a>
+            <a href="{% url 'profile' %}" class="nav-link" data-page="profile">
+                <span class="nav-icon">👤</span>
+                <span class="nav-text">Profile</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Gold Gradient Banner -->
+        <div class="leaderboard-banner animate-fade-up">
+            <div class="banner-content">
+                <h1 class="banner-title">🏆 Leaderboard</h1>
+                <p class="banner-subtitle">See how you rank among SafeLearn champions</p>
+            </div>
+        </div>
+
+        <!-- Top 3 Rankings -->
+        <section class="top-three animate-fade-up" style="animation-delay: 0.1s">
+            <div class="top-rank-card rank-2">
+                <div class="rank-medal">🥈</div>
+                <div class="rank-avatar">👨</div>
+                <h3 class="rank-name">Michael Chen</h3>
+                <p class="rank-score">8,920 XP</p>
+            </div>
+
+            <div class="top-rank-card rank-1">
+                <div class="rank-medal">🥇</div>
+                <div class="rank-avatar">👩</div>
+                <h3 class="rank-name">Sarah Johnson</h3>
+                <p class="rank-score">12,450 XP</p>
+                <div class="rank-crown">👑</div>
+            </div>
+
+            <div class="top-rank-card rank-3">
+                <div class="rank-medal">🥉</div>
+                <div class="rank-avatar">👨</div>
+                <h3 class="rank-name">David Park</h3>
+                <p class="rank-score">7,680 XP</p>
+            </div>
+        </section>
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs animate-fade-up" style="animation-delay: 0.2s">
+            <button class="filter-tab active" data-filter="global">Global Ranking</button>
+            <button class="filter-tab" data-filter="friends">Friends</button>
+            <button class="filter-tab" data-filter="weekly">This Week</button>
+        </div>
+
+        <!-- Leaderboard Table -->
+        <section class="section animate-fade-up" style="animation-delay: 0.3s">
+            <div class="leaderboard-table-container">
+                <table class="leaderboard-table" id="leaderboardTable">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>User</th>
+                            <th>XP</th>
+                            <th>Level</th>
+                            <th>Modules</th>
+                            <th>Streak</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardBody">
+                        <!-- Table rows will be generated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Mobile Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <script>
+        const leaderboardData = [
+            { rank: 1, name: 'Sarah Johnson', avatar: '👩', xp: 12450, level: 24, modules: 48, streak: 21 },
+            { rank: 2, name: 'Michael Chen', avatar: '👨', xp: 8920, level: 18, modules: 35, streak: 14 },
+            { rank: 3, name: 'David Park', avatar: '👨', xp: 7680, level: 16, modules: 32, streak: 9 },
+            { rank: 4, name: 'Emma Wilson', avatar: '👩', xp: 6540, level: 14, modules: 28, streak: 12 },
+            { rank: 5, name: 'James Rodriguez', avatar: '👨', xp: 5890, level: 13, modules: 25, streak: 7 },
+            { rank: 6, name: 'Lisa Anderson', avatar: '👩', xp: 5120, level: 11, modules: 22, streak: 15 },
+            { rank: 7, name: 'Robert Taylor', avatar: '👨', xp: 4560, level: 10, modules: 20, streak: 6 },
+            { rank: 8, name: 'Jennifer Lee', avatar: '👩', xp: 3980, level: 9, modules: 18, streak: 5 },
+            { rank: 9, name: 'William Brown', avatar: '👨', xp: 3450, level: 8, modules: 16, streak: 4 },
+            { rank: 10, name: 'You', avatar: '😊', xp: 2450, level: 6, modules: 12, streak: 7, isUser: true }
+        ];
+
+        // Sort leaderboard by XP
+        function sortLeaderboard() {
+            return leaderboardData.sort((a, b) => b.xp - a.xp);
+        }
+
+        // Render leaderboard
+        function renderLeaderboard() {
+            const sorted = sortLeaderboard();
+            const tbody = document.getElementById('leaderboardBody');
+
+            tbody.innerHTML = sorted.map(user => `
+                <tr class="leaderboard-row ${user.isUser ? 'user-row' : ''} ${user.rank <= 3 ? 'top-three-row' : ''}">
+                    <td class="rank-cell">
+                        <span class="rank-number ${user.rank === 1 ? 'rank-gold' : user.rank === 2 ? 'rank-silver' : user.rank === 3 ? 'rank-bronze' : ''}">
+                            ${user.rank <= 3 ? (user.rank === 1 ? '🥇' : user.rank === 2 ? '🥈' : '🥉') : user.rank}
+                        </span>
+                    </td>
+                    <td class="user-cell">
+                        <span class="user-avatar">${user.avatar}</span>
+                        <span class="user-name">${user.name}${user.isUser ? ' (You)' : ''}</span>
+                    </td>
+                    <td class="xp-cell">${user.xp.toLocaleString()}</td>
+                    <td class="level-cell">
+                        <span class="level-badge">Lvl ${user.level}</span>
+                    </td>
+                    <td class="modules-cell">${user.modules}</td>
+                    <td class="streak-cell">
+                        <span class="streak-badge">${user.streak} 🔥</span>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Filter functionality (simplified for demo)
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                // In a real app, this would filter the data
+                renderLeaderboard();
+            });
+        });
+
+        // Update user's position based on current XP
+        function updateUserPosition() {
+            const userXP = parseInt(localStorage.getItem('totalXP') || '2450');
+            const userEntry = leaderboardData.find(u => u.isUser);
+            if (userEntry) {
+                userEntry.xp = userXP;
+                userEntry.level = Math.floor(userXP / 400) + 1;
+                
+                // Recalculate ranks
+                const sorted = leaderboardData.sort((a, b) => b.xp - a.xp);
+                sorted.forEach((user, index) => {
+                    user.rank = index + 1;
+                });
+            }
+        }
+
+        // Initialize
+        updateUserPosition();
+        renderLeaderboard();
+
+        // Update every few seconds to reflect any XP changes
+        setInterval(() => {
+            updateUserPosition();
+            renderLeaderboard();
+        }, 5000);
+    </script>
+</body>
+</html>
+

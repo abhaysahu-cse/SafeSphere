@@ -1,0 +1,270 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Earthquake Safety Module</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #eef6ff;
+            color: #333;
+            line-height: 1.7;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px #b5c8e1;
+        }
+        h1, h2 {
+            color: #0057a3;
+        }
+        img {
+            width: 100%;
+            border-radius: 8px;
+            margin: 12px 0;
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            margin: 20px 0;
+        }
+        .video-container iframe {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+        }
+        .quiz-box {
+            margin-top: 40px;
+            padding: 20px;
+            background: #fffbe7;
+            border-left: 5px solid #ffb300;
+            border-radius: 8px;
+        }
+        .quiz-box h2 { color: #ff8800; }
+
+        button {
+            margin-top: 15px;
+            padding: 12px 20px;
+            border: none;
+            background: #007bff;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .nav-buttons {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .prev-btn { background: #6c757d; }
+        .next-btn { background: #0275d8; }
+    </style>
+
+</head>
+<body>
+
+<a href="{% url 'learn' %}" style="position:absolute; right:20px; top:20px; background:#333; padding:10px 16px; color:#fff; border-radius:8px; text-decoration:none;">⬅ Back</a>
+
+<div class="container">
+
+<h1>🌍 Earthquake Safety Basics</h1>
+<p>Learn essential preparedness, safety rules, and real-life response techniques for earthquakes.</p>
+
+<hr>
+
+<h2>1. What is an Earthquake?</h2>
+<p>
+Earthquakes happen when plates below Earth’s surface move. Energy builds up due to friction, and when released suddenly, the ground shakes.
+</p>
+
+<ul>
+    <li>🌋 Caused by movement of tectonic plates</li>
+    <li>⚡ Sudden release of pressure</li>
+    <li>🌍 No one can predict exact time</li>
+</ul>
+
+<img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.sciencelearn.org.nz%2Fresources%2F340-seismic-waves&psig=AOvVaw1QlB8BxzeTxtN-5-h26PhL&ust=1764867510264000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCJiwhv7xoZEDFQAAAAAdAAAAABAE" alt="Earth layers">
+
+<hr>
+
+<h2>2. What You May Feel During Earthquake</h2>
+
+<ul>
+<li>Light shaking of the floor</li>
+<li>Furniture & windows vibrating</li>
+<li>Fans & hanging objects swinging</li>
+<li>Strong quakes: difficult to walk or stand</li>
+</ul>
+
+<hr>
+
+<h2>3. The Most Important Rule: DROP – COVER – HOLD ON</h2>
+
+<img src="{% static 'image/erathquek.jpeg' %}" alt="Drop Cover Hold">
+
+<ul>
+<li>⬇ <b>DROP</b> to your knees – prevents falling</li>
+<li>🛡 <b>COVER</b> head & neck under table or using arms</li>
+<li>✊ <b>HOLD ON</b> until shaking stops</li>
+</ul>
+
+<h3>Never do this:</h3>
+<ul>
+<li>❌ Do NOT run outside</li>
+<li>❌ Stay away from windows & glass</li>
+<li>❌ Do not stand near cupboards or fans</li>
+<li>❌ Never use elevators</li>
+</ul>
+
+<hr>
+
+<h2>4. What to Do in Different Places</h2>
+
+<h3>If inside a building:</h3>
+<ul>
+<li>Drop, Cover, Hold On</li>
+<li>Stay away from windows & lights</li>
+<li>Stay inside until shaking stops</li>
+</ul>
+
+<h3>If in bed:</h3>
+<ul>
+<li>Stay in bed & cover your head with a pillow</li>
+</ul>
+
+<h3>If outside:</h3>
+<ul>
+<li>Go to open ground</li>
+<li>Away from buildings, trees & electric poles</li>
+</ul>
+
+<h3>If in a vehicle:</h3>
+<ul>
+<li>Stop vehicle safely, stay inside</li>
+<li>Avoid bridges, flyovers, tunnels</li>
+</ul>
+
+<hr>
+
+<h2>5. After the Earthquake</h2>
+
+<ul>
+<li>Stay calm & evacuate safely</li>
+<li>Follow school evacuation route</li>
+<li>Do not run or push others</li>
+<li>Watch for broken glass and wires</li>
+<li>Go to assembly point</li>
+</ul>
+
+<hr>
+
+<h2>6. Earthquake Emergency Kit</h2>
+
+<ul>
+<li>🧴 First Aid Kit</li>
+<li>📱 Emergency contact card</li>
+<li>🔦 Torch</li>
+<li>📢 Whistle</li>
+<li>🚰 Water bottle</li>
+<li>📦 Snacks</li>
+<li>🔋 Power bank</li>
+</ul>
+
+<hr>
+
+<h2>📺 Training Videos</h2>
+
+{% comment %} <div class="video-container">
+<iframe src="https://www.youtube.com/embed/YWTsoSU1BMg" allowfullscreen></iframe>
+</div> {% endcomment %}
+
+{% comment %} <div class="video-container">
+<iframe src="https://www.youtube.com/embed/jPR8HHmpeXE" allowfullscreen></iframe>
+</div> {% endcomment %}
+
+<video width="1000" controls>
+    <source src="{% static 'video/Earthquake_Drills_vid.mp4' %}" type="video/mp4">
+   
+</video>
+
+
+<hr>
+
+<h2>🧠 Myths vs Facts</h2>
+<table border="1" width="100%" cellpadding="8">
+<tr><th>Myth</th><th>Fact</th></tr>
+<tr><td>Stand in doorway</td><td>Not safe in modern buildings</td></tr>
+<tr><td>Run outside</td><td>Most injuries happen while running</td></tr>
+<tr><td>Earthquakes can be predicted</td><td>No one can predict exact time</td></tr>
+<tr><td>Tall buildings always fall</td><td>Designed to sway safely</td></tr>
+</table>
+
+<hr>
+
+<div class="quiz-box">
+<h2>📝 Earthquake Safety Quiz</h2>
+
+<p><b>1. What should you do during shaking?</b></p>
+<input type="radio" name="q1"> Drop, Cover, Hold On ✔<br>
+<input type="radio" name="q1"> Run outside<br><br>
+
+<p><b>2. What part of body must be protected?</b></p>
+<input type="radio" name="q2"> Head & Neck ✔<br>
+<input type="radio" name="q2"> Feet<br><br>
+
+<p><b>3. What is unsafe?</b></p>
+<input type="radio" name="q3"> Window ✔<br>
+<input type="radio" name="q3"> Under desk<br><br>
+
+<p><b>4. Earthquake magnitude is measured on?</b></p>
+<input type="radio" name="q4"> Richter scale ✔<br>
+<input type="radio" name="q4"> Thermometer<br><br>
+
+<button>Submit Quiz</button>
+</div>
+
+<!-- NAVIGATION -->
+<div class="nav-buttons">
+<button class="prev-btn">⬅ Previous Module</button>
+<button class="next-btn">Next Module ➡</button>
+</div>
+
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

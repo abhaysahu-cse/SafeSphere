@@ -1,0 +1,400 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeLearn - Emergency</title>
+    <meta name="description" content="Emergency contacts and quick access to critical information">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <span class="logo-icon">🛡️</span>
+                <span class="logo-text">SafeLearn</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+                <span class="toggle-icon">☰</span>
+            </button>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="{% url 'index' %}" class="nav-link" data-page="dashboard">
+                <span class="nav-icon">📊</span>
+                <span class="nav-text">Dashboard</span>
+            </a>
+            <a href="{% url 'learn' %}" class="nav-link" data-page="learn">
+                <span class="nav-icon">📚</span>
+                <span class="nav-text">Learn</span>
+            </a>
+            <a href="{% url 'games' %}" class="nav-link" data-page="games">
+                <span class="nav-icon">🎮</span>
+                <span class="nav-text">Games</span>
+            </a>
+            <a href="{% url 'drills' %}" class="nav-link" data-page="drills">
+                <span class="nav-icon">🚨</span>
+                <span class="nav-text">Drills</span>
+            </a>
+            <a href="{% url 'leaderboard' %}" class="nav-link" data-page="leaderboard">
+                <span class="nav-icon">🏆</span>
+                <span class="nav-text">Leaderboard</span>
+            </a>
+            <a href="{% url 'emergency' %}" class="nav-link active emergency-link" data-page="emergency">
+                <span class="nav-icon">🆘</span>
+                <span class="nav-text">Emergency</span>
+            </a>
+            <a href="{% url 'chat' %}" class="nav-link" data-page="chat">
+                <span class="nav-icon">💬</span>
+                <span class="nav-text">AI Assistant</span>
+            </a>
+            <a href="{% url 'profile' %}" class="nav-link" data-page="profile">
+                <span class="nav-icon">👤</span>
+                <span class="nav-text">Profile</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Emergency SOS Button -->
+        <div class="emergency-sos-container animate-fade-up">
+            {% comment %} <button class="sos-button" id="sosButton">
+
+                <span class="sos-text">SOS</span>
+                <span class="sos-subtext">Tap for Emergency</span>
+            </button> {% endcomment %}
+            {% comment %} <button onclick="sendLocation()" 
+        style="background: red; color: white; padding: 15px; border-radius: 10px; font-size: 20px;">
+  🚨 Send SOS Location
+</button> {% endcomment %}
+
+  <span class="sos-subtext"><h1>Tap for Emergency</h1></span>
+
+<div style="
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+">
+
+    <button onclick="sendLocation()" 
+        style="
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: red;
+            color: white;
+            border: none;
+            font-size: 22px;
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(255,0,0,0.7);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        ">
+        
+        🚨
+        <span style="font-size: 18px;">Send SOS</span>
+    </button>
+</div>
+
+
+            <p class="sos-description">Press and hold for 3 seconds to sand current location</p>
+        </div>
+
+        <!-- Emergency Tabs -->
+        <div class="emergency-tabs animate-fade-up" style="animation-delay: 0.1s">
+            <button class="emergency-tab active" data-tab="info">📋 Quick Info</button>
+            <button class="emergency-tab" data-tab="steps">📝 Emergency Steps</button>
+            <button class="emergency-tab" data-tab="contacts">📞 Contacts</button>
+        </div>
+
+        <!-- Tab Content: Quick Info -->
+        <div class="tab-content active" id="info-tab">
+            <section class="section animate-fade-up" style="animation-delay: 0.2s">
+                <h2 class="section-title">Essential Information</h2>
+                <div class="info-cards-grid">
+                    <div class="info-card">
+                        <div class="info-icon">📍</div>
+                        <h3 class="info-title">Your Location</h3>
+                        <p class="info-text" id="userLocation">Loading...</p>
+                        <button class="btn btn-ghost btn-sm" onclick="shareLocation()">Share Location</button>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-icon">🩸</div>
+                        <h3 class="info-title">Blood Type</h3>
+                        <p class="info-text">O+</p>
+                        <button class="btn btn-ghost btn-sm" onclick="editMedicalInfo()">Edit Info</button>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-icon">💊</div>
+                        <h3 class="info-title">Allergies</h3>
+                        <p class="info-text">Penicillin, Peanuts</p>
+                        <button class="btn btn-ghost btn-sm" onclick="editMedicalInfo()">Edit Info</button>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-icon">👥</div>
+                        <h3 class="info-title">Emergency Contact</h3>
+                        <p class="info-text">Jane Doe<br>(555) 123-4567</p>
+                        <button class="btn btn-ghost btn-sm" onclick="callContact('555-123-4567')">Call Now</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Tab Content: Emergency Steps -->
+        <div class="tab-content" id="steps-tab">
+            <section class="section animate-fade-up" style="animation-delay: 0.2s">
+                <h2 class="section-title">Emergency Response Steps</h2>
+                <div class="steps-accordion">
+                    <div class="step-card">
+                        <div class="step-header">
+                            <span class="step-number">1</span>
+                            <h3 class="step-title">Stay Calm</h3>
+                        </div>
+                        <p class="step-description">Take deep breaths and assess the situation before acting</p>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-header">
+                            <span class="step-number">2</span>
+                            <h3 class="step-title">Ensure Safety</h3>
+                        </div>
+                        <p class="step-description">Move to a safe location away from immediate danger</p>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-header">
+                            <span class="step-number">3</span>
+                            <h3 class="step-title">Call for Help</h3>
+                        </div>
+                        <p class="step-description">Contact emergency services (911) and provide clear information</p>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-header">
+                            <span class="step-number">4</span>
+                            <h3 class="step-title">Provide First Aid</h3>
+                        </div>
+                        <p class="step-description">If trained, administer first aid while waiting for help</p>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-header">
+                            <span class="step-number">5</span>
+                            <h3 class="step-title">Follow Instructions</h3>
+                        </div>
+                        <p class="step-description">Listen to emergency responders and follow their guidance</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Tab Content: Contacts -->
+        <div class="tab-content" id="contacts-tab">
+            <section class="section animate-fade-up" style="animation-delay: 0.2s">
+                <h2 class="section-title">Emergency Contacts</h2>
+                <div class="contacts-list">
+                    <div class="contact-card contact-priority">
+                        <div class="contact-icon">🚨</div>
+                        <div class="contact-info">
+                            <h3 class="contact-name">Emergency Services</h3>
+                            <p class="contact-number">7803919765</p>
+                        </div>
+                        <button class="btn btn-danger" onclick="callEmergency('7803919765')">Call</button>
+                    </div>
+
+                    <div class="contact-card">
+                        <div class="contact-icon">🏥</div>
+                        <div class="contact-info">
+                            <h3 class="contact-name">Poison Control</h3>
+                            <p class="contact-number"></p>
+                        </div>
+                        <button class="btn btn-primary" onclick="callEmergency('1-800-222-1222')">Call</button>
+                    </div>
+
+                    <div class="contact-card">
+                        <div class="contact-icon">👨‍⚕️</div>
+                        <div class="contact-info">
+                            <h3 class="contact-name">Personal Doctor</h3>
+                            <p class="contact-number">Dr. Abhay - (555) 987-6543</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="callContact('9302828547')">Call</button>
+                    </div>
+
+                    <div class="contact-card">
+                        <div class="contact-icon">👥</div>
+                        <div class="contact-info">
+                            <h3 class="contact-name">Emergency Contact</h3>
+                            <p class="contact-number">Police - 112</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="callContact('112')">Call</button>
+                    </div>
+
+                    <div class="contact-card">
+                        <div class="contact-icon">🏘️</div>
+                        <div class="contact-info">
+                            <h3 class="contact-name">Local Emergency Management</h3>
+                            <p class="contact-number">(555) 246-8100</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="callContact('555-246-8100')">Call</button>
+                    </div>
+
+                    <div class="contact-card">
+                        <div class="contact-icon">🌐</div>
+                        <div class="contact-info">
+                            <h3 class="contact-name">Red Cross</h3>
+                            <p class="contact-number">1-800-733-2767</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="callEmergency('1-800-733-2767')">Call</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Mobile Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- SOS Modal -->
+    <div class="sos-modal" id="sosModal">
+        <div class="sos-modal-content">
+            <h2>🚨 Emergency Alert Sent</h2>
+            <p>Emergency services have been notified.</p>
+            <p><strong>Your location has been shared.</strong></p>
+            <p>Help is on the way. Stay safe!</p>
+            <button class="btn btn-primary" onclick="closeSosModal()">Close</button>
+        </div>
+    </div>
+
+ <script>
+        // Tab switching
+        document.querySelectorAll('.emergency-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabName = tab.dataset.tab;
+                
+                // Update active tab
+                document.querySelectorAll('.emergency-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Update visible content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(`${tabName}-tab`).classList.add('active');
+            });
+        }); 
+ 
+ function sendLocation() {
+    if (!navigator.geolocation) {
+      alert("Your browser does not support location.");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(success, error, {
+      enableHighAccuracy: true
+    });
+
+    function success(position) {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+      const mapsUrl = `https://www.google.com/maps?q=${lat},${lon}`;
+
+      const phone = "917725061185";  // YOUR NUMBER HERE
+      const msg = `🚨 SOS Alert!\nMy Location: ${mapsUrl}`;
+
+      // WhatsApp Web link (desktop)
+      const waLink = `https://web.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(msg)}`;
+
+      // open WhatsApp Web
+      window.open(waLink, "_blank");
+    }
+
+    function error(err) {
+      alert("Location permission denied or error occurred.");
+    }
+  }
+
+
+
+// --- OTHER FUNCTIONS ---
+function closeSosModal() {
+    document.getElementById('sosModal').classList.remove('active');
+}
+
+function getUserLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const lat = position.coords.latitude.toFixed(4);
+                const lon = position.coords.longitude.toFixed(4);
+                document.getElementById('userLocation').textContent = `${lat}, ${lon}`;
+            },
+            () => {
+                document.getElementById('userLocation').textContent = 'Location unavailable';
+            }
+        );
+    } else {
+        document.getElementById('userLocation').textContent = 'Geolocation not supported';
+    }
+}
+
+function shareLocation() {
+      
+    if (!navigator.geolocation) {
+      alert("Your browser does not support location.");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(success, error, {
+      enableHighAccuracy: true
+    });
+
+    function success(position) {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+      const mapsUrl = `https://www.google.com/maps?q=${lat},${lon}`;
+
+      const phone = "917725061185";  // YOUR NUMBER HERE
+      const msg = `🚨 SOS Alert!\nMy Location: ${mapsUrl}`;
+
+      // WhatsApp Web link (desktop)
+      const waLink = `https://web.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(msg)}`;
+
+      // open WhatsApp Web
+      window.open(waLink, "_blank");
+    }
+
+    function error(err) {
+      alert("Location permission denied or error occurred.");
+    }
+  }
+
+
+
+function editMedicalInfo() {
+    alert('💊 Medical info editor coming soon');
+}
+
+function callContact(number) {
+    window.location.href = `tel:${number}`;
+}
+
+function callEmergency(number) {
+    window.location.href = `tel:${number}`;
+}
+
+getUserLocation();
+
+</script>

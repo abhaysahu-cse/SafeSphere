@@ -1,0 +1,204 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeLearn - Dashboard</title>
+    <meta name="description" content="Learn disaster preparedness through interactive modules, games, and drills">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <div class="logo">
+            <span class="logo-icon">🛡️</span>
+            <span class="logo-text">SafeSphere</span>
+        </div>
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+            <span class="toggle-icon">☰</span>
+        </button>
+    </div>
+
+    <nav class="sidebar-nav">
+        <a href="{% url 'index' %}" class="nav-link active">
+            <span class="nav-icon">📊</span>
+            <span class="nav-text">Dashboard</span>
+        </a>
+        <a href="{% url 'learn' %}" class="nav-link">
+            <span class="nav-icon">📚</span>
+            <span class="nav-text">Learn</span>
+        </a>
+        <a href="{% url 'games' %}" class="nav-link">
+            <span class="nav-icon">🎮</span>
+            <span class="nav-text">Games</span>
+        </a>
+        <a href="{% url 'drills' %}" class="nav-link">
+            <span class="nav-icon">🚨</span>
+            <span class="nav-text">Drills</span>
+        </a>
+        <a href="{% url 'leaderboard' %}" class="nav-link">
+            <span class="nav-icon">🏆</span>
+            <span class="nav-text">Leaderboard</span>
+        </a>
+        <a href="{% url 'emergency' %}" class="nav-link emergency-link">
+            <span class="nav-icon">🆘</span>
+            <span class="nav-text">Emergency</span>
+        </a>
+        <a href="{% url 'chat' %}" class="nav-link">
+            <span class="nav-icon">💬</span>
+            <span class="nav-text">AI Assistant</span>
+        </a>
+        <a href="{% url 'profile' %}" class="nav-link">
+            <span class="nav-icon">👤</span>
+            <span class="nav-text">Profile</span>
+        </a>
+        <!-- Weather page -->
+        <a href="{% url 'weather' %}" class="nav-link">
+            <span class="nav-icon">🌦</span>
+            <span class="nav-text">Weather</span>
+        </a>
+        <!-- Map page -->
+        <a href="{% url 'map' %}" class="nav-link">
+            <span class="nav-icon">🗺️</span>
+            <span class="nav-text">full Map</span>
+        </a>
+
+    </nav>
+</aside>
+
+<!-- Main Content -->
+<main class="main-content">
+
+    <header class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">
+                Welcome back,
+                {% if user.is_authenticated %}
+                    {{ user.username }}
+                {% else %}
+                    Learner
+                {% endif %}
+                👋
+            </h1>
+            <p class="page-subtitle">Continue your disaster preparedness journey</p>
+        </div>
+    </header>
+
+    {% if not user.is_authenticated %}
+        <p style="margin: 0 0 1rem 0;">
+            <a href="{% url 'login' %}">Login</a> to track your progress.
+        </p>
+    {% endif %}
+
+    <!-- Stats Cards -->
+    <section class="stats-grid">
+        <div class="stat-card stat-card-blue">
+            <div class="stat-icon">📖</div>
+            <div class="stat-content">
+                <h3 class="stat-value">12</h3>
+                <p class="stat-label">Modules Completed</p>
+            </div>
+        </div>
+
+        <div class="stat-card stat-card-purple">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-content">
+                <h3 class="stat-value">2,450</h3>
+                <p class="stat-label">Total XP</p>
+            </div>
+        </div>
+
+        <div class="stat-card stat-card-yellow">
+            <div class="stat-icon">🔥</div>
+            <div class="stat-content">
+                <h3 class="stat-value">7</h3>
+                <p class="stat-label">Day Streak</p>
+            </div>
+        </div>
+
+        <div class="stat-card stat-card-green">
+            <div class="stat-icon">🎯</div>
+            <div class="stat-content">
+                <h3 class="stat-value">5</h3>
+                <p class="stat-label">Drills Completed</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Continue Learning -->
+    <section class="section">
+        <div class="section-header">
+            <h2 class="section-title">Continue Learning</h2>
+        </div>
+
+        <div class="continue-card">
+            <div class="continue-content">
+                <span class="continue-badge">In Progress</span>
+                <h3 class="continue-title">Earthquake Safety Basics</h3>
+                <p class="continue-description">
+                    Learn essential earthquake preparedness and response techniques
+                </p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 65%"></div>
+                </div>
+                <p class="progress-text">65% complete</p>
+            </div>
+            <button class="btn btn-primary"
+                    onclick="window.location.href='{% url 'learn' %}'">
+                Continue Learning →
+            </button>
+        </div>
+    </section>
+
+    <!-- Recent Modules -->
+    <section class="section">
+        <div class="section-header">
+            <h2 class="section-title">Recent Modules</h2>
+            <a href="{% url 'learn' %}" class="view-all-link">View all →</a>
+        </div>
+
+        <div class="modules-grid">
+            <div class="module-card">
+                <span class="module-icon">🔥</span>
+                <h3 class="module-title">Fire Safety</h3>
+                <p class="module-description">Prevention and response strategies</p>
+            </div>
+
+            <div class="module-card">
+                <span class="module-icon">🌊</span>
+                <h3 class="module-title">Flood Response</h3>
+                <p class="module-description">Stay safe during flooding events</p>
+            </div>
+
+            <div class="module-card">
+                <span class="module-icon">💨</span>
+                <h3 class="module-title">Hurricane Prep</h3>
+                <p class="module-description">Before, during, and after</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="section">
+        <div class="section-header">
+            <h2 class="section-title">Quick Actions</h2>
+        </div>
+
+        <div class="shortcuts-grid">
+            <a href="{% url 'games' %}" class="shortcut-card shortcut-purple">🎮 Play Game</a>
+            <a href="{% url 'drills' %}" class="shortcut-card shortcut-orange">🚨 Start Drill</a>
+            <a href="{% url 'leaderboard' %}" class="shortcut-card shortcut-yellow">🏆 Rankings</a>
+            <a href="{% url 'emergency' %}" class="shortcut-card shortcut-red">🆘 Emergency</a>
+        </div>
+    </section>
+
+</main>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+</body>
+</html>

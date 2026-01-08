@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Weather Updates | SafeSphere</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+  <style>
+    .weather-container {
+      max-width: 500px;
+      margin: 40px auto;
+      background: #ffffff;
+      padding: 24px;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .weather-temp {
+      font-size: 3rem;
+      font-weight: bold;
+    }
+    .weather-meta {
+      color: #555;
+      margin: 6px 0;
+    }
+    .weather-error {
+      color: red;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<main class="weather-container">
+  <h1>🌦 Real-Time Weather Updates</h1>
+  <p class="weather-meta">Live weather conditions for safety awareness</p>
+
+  <h2 id="weather-location">Loading location…</h2>
+
+  <div id="weather-icon">⛅</div>
+  <div class="weather-temp" id="weather-temp">--°C</div>
+  <p id="weather-desc">—</p>
+
+  <div class="weather-meta">
+    Feels like: <span id="weather-feels">—</span><br>
+    Humidity: <span id="weather-humidity">—</span><br>
+    Wind speed: <span id="weather-wind">—</span><br>
+    Last updated: <span id="weather-updated">—</span>
+  </div>
+
+  <button class="btn btn-primary" onclick="fetchWeather(true)">
+    🔄 Refresh Weather
+  </button>
+
+  <p id="weather-error" class="weather-error"></p>
+
+  <br><br>
+  <a href="{% url 'index' %}" class="btn btn-outline">⬅ Back to Dashboard</a>
+</main>
+
+<!-- IMPORTANT: Load JS at bottom -->
+<script src="{% static 'js/weather.js' %}"></script>
+
+</body>
+</html>

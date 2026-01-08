@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Flood Escape Game</title>
+<style>
+body {margin:0; overflow:hidden; font-family:Arial;}
+#hud {position:absolute; left:10px; top:10px; background:rgba(0,0,0,0.6); color:#fff; padding:8px; border-radius:8px;}
+#countdown {position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:48px; background:rgba(0,0,0,0.7); color:blue; padding:20px; border-radius:12px; display:none;}
+#message {position:absolute; top:60%; left:50%; transform:translate(-50%,-50%); font-size:28px; background:rgba(0,0,0,0.7); color:white; padding:12px; border-radius:10px; display:none;}
+#restart {position:absolute; top:72%; left:50%; transform:translate(-50%,-50%); padding:8px 12px; border-radius:6px; border:none; background:#28a745; color:#fff; cursor:pointer; display:none;}
+</style>
+</head>
+<body>
+<a href="{% url 'games' %}" 
+   style="
+      position:absolute;
+      top:20px;
+      right:20px;
+      background:#333;
+      color:white;
+      padding:10px 16px;
+      border-radius:8px;
+      text-decoration:none;
+      font-size:16px;">
+   ⬅ Back
+</a>
+<div id="hud">Time: <span id="timer">0</span>s | Score: <span id="score">0</span></div>
+<div id="countdown"></div>
+<div id="message"></div>
+<button id="restart">Restart</button>
+
+<audio id="floodSound" src="https://cdn.pixabay.com/download/audio/2022/09/15/audio_5e8db3fc2d.mp3?filename=flood-water-river-ambient-110125.mp3"></audio>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script>
+// --- Scene setup ---
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+window.addEventListener('resize', ()=>{
+  camera.aspect = window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+scene.add(new THREE.AmbientLight(0xffffff,0.6));
+const dirLight = new THREE.DirectionalLight(0xffffff,0.6);
+dirLight.position.set(5,10,5);
+scene.add(dirLight);
+
+// Floor & walls
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(20,14), new THREE.MeshStandardMaterial({color:0xe6e6e6}));
+floor.rotation.x=-Math.PI/2; scene.add(floor);
+const wallMat = new THREE.MeshStandardMaterial({color:0xd8d8d8});
+const backWall = new THREE.Mesh(new THREE.PlaneGeometry(20,6), wallMat); backWall.position.set(0,3,-7); scene.add(backWall);
+const leftWall = new THREE.Mesh(new THREE.PlaneGeometry(14,6), wallMat); leftWall.position.set(-10,3,0); leftWall.rotation.y=Math.PI/2; scene.add(leftWall);
+
+// Exit Door
+const door = new THREE.Mesh(new THREE.BoxGeometry(1.4,2.4,0.2), new THREE.MeshStandardMaterial({color:0x3333aa}));
+door.position.set(9.2,1.2,0); scene.add(door);
+
+// Desks/Chairs
+const desks=[];
+for(let r=-2;r<=2;r++){
+  for(let c=-3;c<=1;c++){
+    const desk = new THREE.Mesh(new THREE.BoxGeometry(1.6,0.6,1), new THREE.MeshStandardMaterial({color:0x8b4513}));
+    desk.position.set(c*2+0.5,0.3,r*2); scene.add(desk); desks.push(desk);
+    const chair = new THREE.Mesh(new THREE.BoxGeometry(0.7,0.7,0.7), new THREE.MeshStandardMaterial({color:0x4444ff}));
+    chair.position.set(c*2+2,0.35,r*2); scene.add(chair);
+  }
+}
+
+// Student
+const student = new THREE.Group();
+const body = new THREE.Mesh(new THREE.CylinderGeometry(0.28,0.28,0.9,12), new THREE.MeshStandardMaterial({color:0xffcc99}));
+body.position.y=0.5;
+const head = new THREE.Mesh(new THREE.SphereGeometry(0.22,12,12), new THREE.MeshStandardMaterial({color:0xffe0bd}));
+head.position.y=1.05;
+student.add(body); student.add(head); student.position.set(-8,0,0); scene.add(student);
+
+camera.position.set(0,8,12); camera.lookAt(0,0,0);
+
+// --- Flood ---
+let floodHeight=0, floodSpeed=0.003, floodActive=false;
+const waterMat = new THREE.MeshStandardMaterial({color:0x1e90ff, transparent:true, opacity:0.6});
+const water = new THREE.Mesh(new THREE.BoxGeometry(20,0.1,14), waterMat);
+water.position.y=floodHeight; scene.add(water);
+
+const floodSound = document.getElementById('floodSound');
+
+// Debris
+const debrisArr=[];
+function spawnDebris(x,z){
+  const size=Math.random()*0.3+0.1;
+  const debris=new THREE.Mesh(new THREE.BoxGeometry(size,0.05,size), new THREE.MeshStandardMaterial({color:0x654321}));
+  debris.position.set(x,floodHeight+0.05,z);
+  scene.add(debris); debrisArr.push({obj:debris, life:15});
+}
+
+// Splash particles
+const splashArr=[];
+function spawnSplash(x,z){
+  const sph = new THREE.Mesh(new THREE.SphereGeometry(0.05,6,6), new THREE.MeshStandardMaterial({color:0x1e90ff, transparent:true, opacity:0.6}));
+  sph.position.set(x,floodHeight+0.05,z);
+  scene.add(sph); splashArr.push({obj:sph, life:1, velocityY:0.1+Math.random()*0.1});
+}
+function updateSplash(dt){
+  for(let i=splashArr.length-1;i>=0;i--){
+    const p=splashArr[i];
+    p.life-=dt;
+    p.obj.position.y+=p.velocityY*dt*10;
+    p.obj.material.opacity=Math.max(0,p.life/1.2*0.6);
+    if(p.life<=0){ scene.remove(p.obj); splashArr.splice(i,1);}
+  }
+}
+
+// --- Game Logic ---
+let countdownSec=5, timer=0, score=0, safe=false, gameOver=false;
+const timerEl=document.getElementById('timer');
+const scoreEl=document.getElementById('score');
+const countdownEl=document.getElementById('countdown');
+const messageEl=document.getElementById('message');
+const restartBtn=document.getElementById('restart');
+
+function startCountdown(sec){
+  countdownSec=sec; countdownEl.style.display='block';
+  countdownEl.innerText='Flood in '+countdownSec;
+  const interval=setInterval(()=>{
+    countdownSec--;
+    if(countdownSec>0) countdownEl.innerText='Flood in '+countdownSec;
+    else{ clearInterval(interval); countdownEl.style.display='none'; startFlood(); }
+  },1000);
+}
+
+function startFlood(){ 
+  floodActive=true; 
+  floodSound.currentTime=0; 
+  floodSound.play(); 
+}
+
+// Controls
+window.addEventListener('keydown',(e)=>{
+  if(gameOver) return;
+  const step=0.26;
+  if(e.key==='ArrowLeft') student.position.x-=step;
+  if(e.key==='ArrowRight') student.position.x+=step;
+  if(e.key==='ArrowUp') student.position.z-=step;
+  if(e.key==='ArrowDown') student.position.z+=step;
+  student.position.x=Math.max(-9.5, Math.min(9.5, student.position.x));
+  student.position.z=Math.max(-6.5, Math.min(6.5, student.position.z));
+});
+
+// Check exit
+function checkExit(){
+  const d=Math.hypot(student.position.x-door.position.x, student.position.z-door.position.z);
+  if(d<1.2 && !gameOver){ safe=true; gameOver=true; score=Math.max(0,200-Math.round(timer*10)); scoreEl.innerText=score; showMessage('You escaped! Score: '+score);}
+}
+
+// Check flood collision
+function checkFloodCollision(){
+  if(student.position.y< floodHeight + 0.45 && !gameOver){ gameOver=true; showMessage("You were submerged! Game Over");}
+}
+
+// Message
+function showMessage(text){ messageEl.style.display='block'; messageEl.innerText=text; restartBtn.style.display='block'; }
+
+// Restart
+restartBtn.addEventListener('click',()=>{
+  floodHeight=0; water.position.y=floodHeight; floodActive=false;
+  debrisArr.forEach(d=>scene.remove(d.obj)); debrisArr.length=0;
+  splashArr.forEach(s=>scene.remove(s.obj)); splashArr.length=0;
+  messageEl.style.display='none'; restartBtn.style.display='none';
+  student.position.set(-8,0,0);
+  timer=0; score=0; scoreEl.innerText=score; timerEl.innerText=timer;
+  safe=false; gameOver=false;
+  startCountdown(5);
+});
+
+// Timer
+setInterval(()=>{ if(!gameOver) timer++; timerEl.innerText=timer; },1000);
+
+// Start countdown
+startCountdown(5);
+
+// Animate
+let last=performance.now();
+function animate(){
+  requestAnimationFrame(animate);
+  const now=performance.now(); const dt=(now-last)/1000; last=now;
+
+  if(floodActive && !gameOver){
+    floodHeight+=0.003;
+    water.position.y=floodHeight;
+
+    if(Math.random()<0.02) spawnDebris(-9+Math.random()*18, -7+Math.random()*14);
+    if(Math.random()<0.05) spawnSplash(-9+Math.random()*18, -7+Math.random()*14);
+
+    checkFloodCollision();
+    desks.forEach((d,i)=>{ d.position.y=Math.sin(now*0.001+i)*0.005; });
+  }
+
+  updateSplash(dt);
+  checkExit();
+
+  renderer.render(scene,camera);
+}
+animate();
+</script>
+</body>
+</html>

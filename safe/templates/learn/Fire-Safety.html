@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Fire Safety Module — Prevention & Response</title>
+
+<style>
+  :root{
+    --primary:#c62828;
+    --accent:#ff9800;
+    --bg:#fff7f6;
+    --card:#fff;
+    --muted:#6b7280;
+    --maxw:980px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:system-ui,Segoe UI,Roboto,Arial;
+    background:linear-gradient(180deg,#fffafa 0%, #fff7f2 100%);
+    color:#111827;
+    line-height:1.6;
+    padding:24px;
+    display:flex;
+    justify-content:center;
+  }
+  .wrap{
+    width:100%;
+    max-width:var(--maxw);
+    background:var(--card);
+    border-radius:10px;
+    box-shadow:0 6px 24px rgba(12,12,20,0.06);
+    padding:26px;
+    position:relative;
+  }
+  a.back{
+    position:absolute;
+    right:20px;
+    top:20px;
+    text-decoration:none;
+    background:#111827;
+    color:white;
+    padding:8px 12px;
+    border-radius:8px;
+    font-size:14px;
+  }
+  h1{color:var(--primary); margin:0 0 6px;}
+  h2{color:var(--primary); margin-top:22px;}
+  p.lead{color:var(--muted); margin-top:6px;}
+  img.hero{width:100%; border-radius:10px; margin:14px 0;}
+  .grid{display:grid; gap:16px; grid-template-columns:repeat(2,1fr);}
+  .single{grid-template-columns:1fr;}
+  .card{
+    background:#fff;
+    border-radius:10px;
+    padding:16px;
+    box-shadow:0 3px 10px rgba(12,12,20,0.03);
+    border:1px solid rgba(15,23,42,0.03);
+  }
+  ul{margin:8px 0 0 18px}
+  .video-container{position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:10px; margin:12px 0;}
+  .video-container iframe{position:absolute; inset:0; width:100%; height:100%; border:0;}
+  .poster-row{display:flex; gap:12px; overflow-x:auto; padding-bottom:8px;}
+  .poster{min-width:160px; background:#fffaf0; border-radius:8px; padding:12px; text-align:center; border:1px solid rgba(0,0,0,0.04);}
+  .poster img{width:100%; height:100px; object-fit:cover; border-radius:6px;}
+  .muted{color:var(--muted); font-size:14px}
+  .kit-list{display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;}
+  .kit-item{background:#fff3e0; color:#7a4c00; padding:8px 10px; border-radius:8px; font-weight:600; font-size:14px;}
+  .drill-list{margin-top:8px;}
+  .drill-list li{margin-bottom:8px}
+  .quiz-box{margin-top:16px; background:linear-gradient(180deg,#fffaf6,#fff7ea); border-left:5px solid var(--accent); padding:12px; border-radius:8px;}
+  .quiz-question{margin-bottom:12px}
+  .btn{display:inline-block; padding:10px 14px; border-radius:8px; border:none; cursor:pointer; font-weight:700;}
+  .btn-primary{background:var(--primary); color:white;}
+  .btn-muted{background:#f3f4f6; color:#111827;}
+  .nav{display:flex; justify-content:space-between; margin-top:20px;}
+  .myth-table{width:100%; border-collapse:collapse; margin-top:8px;}
+  .myth-table th, .myth-table td{border:1px solid rgba(0,0,0,0.06); padding:8px; text-align:left;}
+  .note{background:#fff3f3; padding:10px; border-radius:8px; border-left:4px solid var(--primary); margin-top:12px;}
+  @media (max-width:820px){
+    .grid{grid-template-columns:1fr}
+    .poster{min-width:140px}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <a class="back" href="#" onclick="history.back();return false;">⬅ Back</a>
+
+  <h1>🔥 FIRE SAFETY — Prevention & Response</h1>
+  <p class="lead">Complete teaching plan with causes, prevention, response, drills, videos, posters and quizzes — ready for classroom use.</p>
+
+  <img class="hero" src="https://i.ibb.co/PhYt3k4/fire-safety-banner.jpg" alt="Fire Safety Banner">
+
+  <!-- THEORY -->
+  <div class="card">
+    <h2>1. What Students Must Learn</h2>
+
+    <h3>A. What causes fires</h3>
+    <p class="muted">Simple explanations for kids:</p>
+    <ul>
+      <li><strong>Electric short circuits</strong> — faulty wiring or overloaded sockets.</li>
+      <li><strong>Gas leaks</strong> — leaking LPG/CNG combined with a spark can ignite.</li>
+      <li><strong>Stove / candle accidents</strong> — unattended flames.</li>
+      <li><strong>Overheating wires</strong> — old wires or overloaded plugs.</li>
+      <li><strong>Careless burning</strong> — matchsticks, crackers, lit papers.</li>
+    </ul>
+
+    <h3>B. Fire Triangle (Very important)</h3>
+    <p class="muted"><strong>Heat</strong> + <strong>Fuel</strong> + <strong>Oxygen</strong> = Fire. Remove any one and the fire dies.</p>
+
+    <h3>C. Prevention — Everyday Safety Habits</h3>
+    <ul>
+      <li>Do not play with matches, lighters, or switches.</li>
+      <li>Switch off appliances when not in use; unplug chargers.</li>
+      <li>Avoid overloading plugs and extension cords.</li>
+      <li>Keep flammable items away from stoves and heaters.</li>
+      <li>Keep corridors and exits clear of clutter.</li>
+      <li>Teachers/maintenance should check wiring regularly.</li>
+    </ul>
+
+    <h4>Kitchen Safety (for older students)</h4>
+    <ul>
+      <li>Never leave the stove unattended.</li>
+      <li>Check LPG connections and use regulators properly.</li>
+      <li>Do <strong>NOT</strong> pour water on oil fires — use a lid or suitable extinguisher.</li>
+    </ul>
+
+    <h3>D. Response — What to do if fire starts</h3>
+    <p class="muted">Short checklist teachers must teach and rehearse:</p>
+    <ul>
+      <li>Stay calm. Alert teacher/adult and raise alarm.</li>
+      <li>Evacuate immediately — follow evacuation route.</li>
+      <li>If clothes catch fire → <strong>Stop, Drop & Roll</strong>: Stop (don’t run), Drop to ground, Roll to smother flames.</li>
+      <li>Stay low (smoke rises), cover nose & mouth with cloth, avoid lifts, touch doors before opening with back of hand.</li>
+    </ul>
+
+    <h3>E. Using Fire Extinguishers (Teens)</h3>
+    <p class="muted"><strong>PASS</strong> method — Pull pin, Aim at base, Squeeze handle, Sweep side-to-side.</p>
+
+    <h3>F. What NOT to do</h3>
+    <ul>
+      <li>Do NOT hide under beds.</li>
+      <li>Do NOT run toward smoke or flames.</li>
+      <li>Do NOT return inside to fetch belongings.</li>
+      <li>Do NOT pour water on electrical or oil fires.</li>
+    </ul>
+  </div>
+
+  <!-- VIDEOS -->
+  <div class="card" style="margin-top:14px;">
+    <h2>2. Suggested Videos (Show these in class)</h2>
+    <p class="muted">(Search these titles on YouTube or use the provided links below in training.)</p>
+
+    <div class="grid" style="margin-top:10px;">
+      <div class="card">
+        <strong>Fire Safety for Kids (Animated)</strong>
+        <div class="video-container">
+<iframe width="560" height="315" 
+src="https://www.youtube.com/embed/Xgc90CoJbDI?si=HRs0YshubuaMyuus" 
+title="YouTube video player" 
+frameborder="0" allowfullscreen></iframe>        </div>
+      </div>
+
+      <div class="card">
+        <strong>How to Use a Fire Extinguisher — PASS</strong>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/BCylJxO3J7M" title="PASS extinguisher" allowfullscreen></iframe>
+        </div>
+      </div>
+
+      <div class="card">
+        <strong>Stop, Drop, and Roll for Kids</strong>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/f7eDknyWd18" title="Stop Drop Roll" allowfullscreen></iframe>
+        </div>
+      </div>
+
+      <div class="card">
+        <strong>Classroom Fire Drill Simulation</strong>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/JHe5aMlYq7I" title="Classroom Drill" allowfullscreen></iframe>
+        </div>
+      </div>
+
+      <div class="card">
+        <strong>Domestic Fire Safety (Indian context)</strong>
+        <div class="video-container">
+          <iframe src="https://www.youtube.com/embed/sf_8kD8e1YE" title="Domestic Fire Safety" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- POSTERS -->
+  <div class="card" style="margin-top:14px;">
+    <h2>3. Images & Posters to Display</h2>
+    <div class="poster-row" aria-hidden="false" role="list">
+      <div class="poster" role="listitem">
+        <img src="https://i.ibb.co/FqZ7T9Z/fire-triangle.jpg" alt="Fire Triangle">
+        <div style="margin-top:8px;font-weight:700">Fire Triangle</div>
+      </div>
+      <div class="poster" role="listitem">
+        <img src="https://i.ibb.co/9rQw2tN/stop-drop-roll.jpg" alt="Stop Drop Roll">
+        <div style="margin-top:8px;font-weight:700">Stop, Drop & Roll</div>
+      </div>
+      <div class="poster" role="listitem">
+        <img src="https://i.ibb.co/8xWjG8t/pass-extinguisher.jpg" alt="PASS Method">
+        <div style="margin-top:8px;font-weight:700">PASS Extinguisher Steps</div>
+      </div>
+      <div class="poster" role="listitem">
+        <img src="https://i.ibb.co/bNx8vQf/evacuation-map.jpg" alt="Evacuation Map">
+        <div style="margin-top:8px;font-weight:700">Evacuation Route</div>
+      </div>
+    </div>
+
+    <p class="muted" style="margin-top:10px">Print these posters and place them near classroom exits, next to fire extinguishers and in the kitchen area.</p>
+  </div>
+
+  <!-- ACTIVITIES & DRILLS -->
+  <div class="card" style="margin-top:14px;">
+    <h2>4. Activities & Drills (Practical)</h2>
+
+    <h3>A. Mock Fire Drill</h3>
+    <ol class="drill-list">
+      <li>Sound the alarm; students perform Stop, Drop & Roll if needed.</li>
+      <li>Evacuate to assembly point quietly and line up.</li>
+      <li>Teacher performs attendance check and reports missing students.</li>
+      <li>Discuss mistakes and improvements for next drill.</li>
+    </ol>
+    <p class="muted">Do this every 2–3 months.</p>
+
+    <h3>B. Demonstration of Fire Extinguisher (Grades 6+)</h3>
+    <ul>
+      <li>Teacher demonstrates PASS with an expired/empty extinguisher or training unit.</li>
+      <li>Explain difference: CO₂ vs Foam vs Dry Powder.</li>
+      <li>Students practice pulling pin and aiming at base (simulation).</li>
+    </ul>
+
+    <h3>C. Role Play</h3>
+    <p class="muted">Group activities where students act out scenarios: LPG leak, kitchen fire, clothes on fire, corridor smoke.</p>
+
+    <h3>D. Drawing Activity (Younger Kids)</h3>
+    <p class="muted">Topic: "How I will be safe in a fire". Display best drawings on the notice board.</p>
+  </div>
+
+  <!-- EMERGENCY KIT -->
+  <div class="card" style="margin-top:14px;">
+    <h2>5. Emergency Kit & Checklists</h2>
+    <p class="muted">Basic items every classroom and home should have:</p>
+    <div class="kit-list">
+      <div class="kit-item">Whistle</div>
+      <div class="kit-item">Water bottle</div>
+      <div class="kit-item">First-aid</div>
+      <div class="kit-item">Torch</div>
+      <div class="kit-item">Emergency contact card</div>
+      <div class="kit-item">Power bank</div>
+      <div class="kit-item">Small snacks</div>
+    </div>
+
+    <div class="note" style="margin-top:12px">
+      <strong>Teacher checklist:</strong> Mark fire extinguisher inspection date, check alarm system, remove loose wiring and ensure exits are clear.
+    </div>
+  </div>
+
+  <!-- MYTHS VS FACTS -->
+  <div class="card" style="margin-top:14px;">
+    <h2>6. Myths vs Facts</h2>
+    <table class="myth-table" role="table" aria-label="Myths vs Facts">
+      <thead><tr><th>Myth</th><th>Fact</th></tr></thead>
+      <tbody>
+        <tr><td>Stand in doorway is safest</td><td>Modern doorways are not engineered as shelter; find sturdy cover.</td></tr>
+        <tr><td>Running outside is safer</td><td>Most injuries occur while running; evacuate in order.</td></tr>
+        <tr><td>You can predict fires</td><td>Prevention is best; prediction is not possible.</td></tr>
+        <tr><td>Always use water on any fire</td><td>Water on oil/electrical fires is dangerous; use correct extinguisher.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="card" style="margin-top:14px;">
+    <h2>7. Quiz — Test Learning (Instant scoring)</h2>
+    <div class="quiz-box" id="quizBox">
+      <!-- Questions for all ages; you can show/hide per class -->
+      <div class="quiz-question">
+        <p><strong>1. What should you do if your clothes catch fire?</strong></p>
+        <label><input type="radio" name="q1" value="A"> A) Run</label><br>
+        <label><input type="radio" name="q1" value="B"> B) Jump</label><br>
+        <label><input type="radio" name="q1" value="C"> C) Stop, Drop & Roll</label>
+      </div>
+
+      <div class="quiz-question">
+        <p><strong>2. Which method is used for using a fire extinguisher?</strong></p>
+        <label><input type="radio" name="q2" value="A"> A) PASS</label><br>
+        <label><input type="radio" name="q2" value="B"> B) PUSH</label><br>
+        <label><input type="radio" name="q2" value="C"> C) PULL</label>
+      </div>
+
+      <div class="quiz-question">
+        <p><strong>3. Smoke moves which direction?</strong></p>
+        <label><input type="radio" name="q3" value="A"> A) Down</label><br>
+        <label><input type="radio" name="q3" value="B"> B) Up</label>
+      </div>
+
+      <div class="quiz-question">
+        <p><strong>4. Emergency fire number (India)?</strong></p>
+        <label><input type="radio" name="q4" value="A"> A) 102</label><br>
+        <label><input type="radio" name="q4" value="B"> B) 108</label><br>
+        <label><input type="radio" name="q4" value="C"> C) 101</label>
+      </div>
+
+      <div class="quiz-question">
+        <p><strong>5. What should you NEVER use during a fire?</strong></p>
+        <label><input type="radio" name="q5" value="A"> A) Stairs</label><br>
+        <label><input type="radio" name="q5" value="B"> B) Lift</label>
+      </div>
+
+      <button class="btn btn-primary" onclick="gradeQuiz()">Submit Quiz</button>
+      <div id="quizResult" style="margin-top:12px;font-weight:700;"></div>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav">
+    <button class="btn btn-muted prev-btn" onclick="history.back();">⬅ Previous</button>
+    <button class="btn btn-primary next-btn" onclick="alert('Go to next module (implement navigation in your app)')">Next Module ➡</button>
+  </div>
+
+</div>
+
+<script>
+  function gradeQuiz(){
+    const answers = { q1:'C', q2:'A', q3:'B', q4:'C', q5:'B' };
+    let total = 0, correct = 0;
+    for(let k in answers){
+      total += 1;
+      const sel = document.querySelector('input[name="'+k+'"]:checked');
+      if(sel && sel.value === answers[k]) correct += 1;
+    }
+    const score = Math.round((correct/total)*100);
+    const resultEl = document.getElementById('quizResult');
+    resultEl.textContent = 'Score: ' + correct + ' / ' + total + ' ('+score+'%)';
+    if(score === 100){
+      resultEl.style.color = 'green';
+      resultEl.textContent += ' — Excellent! ✅';
+    } else if(score >= 60){
+      resultEl.style.color = '#0b6b00';
+      resultEl.textContent += ' — Good. Discuss wrong answers.';
+    } else {
+      resultEl.style.color = '#b45309';
+      resultEl.textContent += ' — Needs improvement. Review module.';
+    }
+  }
+</script>
+
+</body>
+</html>

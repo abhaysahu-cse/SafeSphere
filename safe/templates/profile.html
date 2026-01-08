@@ -1,0 +1,232 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeLearn - Profile</title>
+    <meta name="description" content="View your learning progress, achievements, and stats">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <span class="logo-icon">🛡️</span>
+                <span class="logo-text">SafeLearn</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+                <span class="toggle-icon">☰</span>
+            </button>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="{% url 'index' %}" class="nav-link" data-page="dashboard">
+                <span class="nav-icon">📊</span>
+                <span class="nav-text">Dashboard</span>
+            </a>
+            <a href="{% url 'learn' %}" class="nav-link" data-page="learn">
+                <span class="nav-icon">📚</span>
+                <span class="nav-text">Learn</span>
+            </a>
+            <a href="{% url 'games' %}" class="nav-link" data-page="games">
+                <span class="nav-icon">🎮</span>
+                <span class="nav-text">Games</span>
+            </a>
+            <a href="{% url 'drills' %}" class="nav-link" data-page="drills">
+                <span class="nav-icon">🚨</span>
+                <span class="nav-text">Drills</span>
+            </a>
+            <a href="{% url 'leaderboard' %}" class="nav-link" data-page="leaderboard">
+                <span class="nav-icon">🏆</span>
+                <span class="nav-text">Leaderboard</span>
+            </a>
+            <a href="{% url 'emergency' %}" class="nav-link emergency-link" data-page="emergency">
+                <span class="nav-icon">🆘</span>
+                <span class="nav-text">Emergency</span>
+            </a>
+            <a href="{% url 'chat' %}" class="nav-link" data-page="chat">
+                <span class="nav-icon">💬</span>
+                <span class="nav-text">AI Assistant</span>
+            </a>
+            <a href="{% url 'profile' %}" class="nav-link active" data-page="profile">
+                <span class="nav-icon">👤</span>
+                <span class="nav-text">Profile</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Profile Header -->
+        <section class="profile-header animate-fade-up">
+            <div class="profile-avatar-container">
+                <div class="profile-avatar">😊</div>
+                <button class="avatar-edit-btn">✏️</button>
+            </div>
+            <div class="profile-info">
+                <h1 class="profile-name" id="profileName">Learner</h1>
+                <p class="profile-title">Safety Enthusiast</p>
+                <div class="profile-level">
+                    <span class="level-badge-large">Level <span id="profileLevel">6</span></span>
+                    <div class="xp-info">
+                        <span id="profileXP">2,450</span> / 2,800 XP
+                    </div>
+                </div>
+                <div class="progress-bar profile-progress-bar">
+                    <div class="progress-fill" id="levelProgress" style="width: 87%"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Overview -->
+        <section class="section animate-fade-up" style="animation-delay: 0.1s">
+            <h2 class="section-title">Your Stats</h2>
+            <div class="profile-stats-grid">
+                <div class="profile-stat-card">
+                    <div class="stat-icon">📚</div>
+                    <h3 class="stat-value" id="statsModules">12</h3>
+                    <p class="stat-label">Modules Completed</p>
+                </div>
+                <div class="profile-stat-card">
+                    <div class="stat-icon">🎮</div>
+                    <h3 class="stat-value" id="statsGames">28</h3>
+                    <p class="stat-label">Games Played</p>
+                </div>
+                <div class="profile-stat-card">
+                    <div class="stat-icon">🚨</div>
+                    <h3 class="stat-value" id="statsDrills">5</h3>
+                    <p class="stat-label">Drills Completed</p>
+                </div>
+                <div class="profile-stat-card">
+                    <div class="stat-icon">🔥</div>
+                    <h3 class="stat-value" id="statsStreak">7</h3>
+                    <p class="stat-label">Day Streak</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Badges -->
+        <section class="section animate-fade-up" style="animation-delay: 0.2s">
+            <h2 class="section-title">Achievements & Badges</h2>
+            <div class="badges-grid" id="badgesGrid">
+                <!-- Badges will be generated by JS -->
+            </div>
+        </section>
+
+        <!-- Activity Timeline -->
+        <section class="section animate-fade-up" style="animation-delay: 0.3s">
+            <h2 class="section-title">Recent Activity</h2>
+            <div class="activity-timeline">
+                <div class="activity-item">
+                    <div class="activity-icon">📚</div>
+                    <div class="activity-content">
+                        <h4 class="activity-title">Completed "Earthquake Safety Basics"</h4>
+                        <p class="activity-time">2 hours ago</p>
+                    </div>
+                    <div class="activity-xp">+100 XP</div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-icon">🎮</div>
+                    <div class="activity-content">
+                        <h4 class="activity-title">Played "Safety Quiz Master"</h4>
+                        <p class="activity-time">5 hours ago</p>
+                    </div>
+                    <div class="activity-xp">+75 XP</div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-icon">🏆</div>
+                    <div class="activity-content">
+                        <h4 class="activity-title">Earned "Fire Safety Expert" badge</h4>
+                        <p class="activity-time">Yesterday</p>
+                    </div>
+                    <div class="activity-xp">+150 XP</div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-icon">🚨</div>
+                    <div class="activity-content">
+                        <h4 class="activity-title">Completed "Medical Emergency Drill"</h4>
+                        <p class="activity-time">2 days ago</p>
+                    </div>
+                    <div class="activity-xp">+200 XP</div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-icon">📚</div>
+                    <div class="activity-content">
+                        <h4 class="activity-title">Started "Flood Response" module</h4>
+                        <p class="activity-time">3 days ago</p>
+                    </div>
+                    <div class="activity-xp">+20 XP</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Mobile Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <script>
+        const badges = [
+            { id: 'first-steps', name: 'First Steps', icon: '👣', description: 'Complete your first module', earned: true },
+            { id: 'fire-expert', name: 'Fire Safety Expert', icon: '🔥', description: 'Master fire safety', earned: true },
+            { id: 'earthquake-pro', name: 'Earthquake Pro', icon: '🌍', description: 'Complete earthquake training', earned: true },
+            { id: 'game-master', name: 'Game Master', icon: '🎮', description: 'Play 25 games', earned: true },
+            { id: 'drill-sergeant', name: 'Drill Sergeant', icon: '🚨', description: 'Complete 5 drills', earned: true },
+            { id: 'week-warrior', name: 'Week Warrior', icon: '📅', description: '7-day streak', earned: true },
+            { id: 'helping-hand', name: 'Helping Hand', icon: '🤝', description: 'Help 10 people', earned: false },
+            { id: 'speed-learner', name: 'Speed Learner', icon: '⚡', description: 'Complete 5 modules in one day', earned: false },
+            { id: 'perfect-score', name: 'Perfect Score', icon: '💯', description: 'Get 100% on any test', earned: false },
+            { id: 'community-hero', name: 'Community Hero', icon: '🦸', description: 'Share 20 safety tips', earned: false },
+            { id: 'month-champion', name: 'Month Champion', icon: '📆', description: '30-day streak', earned: false },
+            { id: 'ultimate-expert', name: 'Ultimate Expert', icon: '🏆', description: 'Complete all modules', earned: false }
+        ];
+
+        // Load profile data
+        function loadProfileData() {
+            const userName = localStorage.getItem('userName') || 'Learner';
+            const totalXP = parseInt(localStorage.getItem('totalXP') || '2450');
+            const level = Math.floor(totalXP / 400) + 1;
+            const xpForNextLevel = level * 400;
+            const currentLevelXP = totalXP % 400;
+            const progressPercent = (currentLevelXP / 400) * 100;
+
+            document.getElementById('profileName').textContent = userName;
+            document.getElementById('profileXP').textContent = totalXP;
+            document.getElementById('profileLevel').textContent = level;
+            document.getElementById('levelProgress').style.width = progressPercent + '%';
+
+            // Update stats
+            document.getElementById('statsModules').textContent = localStorage.getItem('modulesCompleted') || '12';
+            const gameStats = JSON.parse(localStorage.getItem('gameStats') || '{"gamesPlayed": 28}');
+            document.getElementById('statsGames').textContent = gameStats.gamesPlayed || 28;
+            document.getElementById('statsDrills').textContent = localStorage.getItem('drillsCompleted') || '5';
+            document.getElementById('statsStreak').textContent = localStorage.getItem('streakDays') || '7';
+        }
+
+        // Render badges
+        function renderBadges() {
+            const grid = document.getElementById('badgesGrid');
+            grid.innerHTML = badges.map(badge => `
+                <div class="badge-card ${badge.earned ? 'badge-earned' : 'badge-locked'}">
+                    <div class="badge-icon">${badge.earned ? badge.icon : '🔒'}</div>
+                    <h3 class="badge-name">${badge.name}</h3>
+                    <p class="badge-description">${badge.description}</p>
+                    ${badge.earned ? '<span class="badge-status">✓ Earned</span>' : '<span class="badge-status-locked">Locked</span>'}
+                </div>
+            `).join('');
+        }
+
+        // Initialize
+        loadProfileData();
+        renderBadges();
+    </script>
+</body>
+</html>
+

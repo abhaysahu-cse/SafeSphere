@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Earthquake Safety Simulation</title>
+  <style>
+    body { margin: 0; overflow: hidden; }
+    #hud {
+      position: absolute;
+      top: 10px; left: 10px;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      padding: 8px;
+      border-radius: 8px;
+      font-family: Arial;
+    }
+    #countdown {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 48px;
+      font-weight: bold;
+      background: rgba(0,0,0,0.7);
+      color: yellow;
+      padding: 20px;
+      border-radius: 12px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+   
+    <a href="{% url 'games' %}" 
+   style="
+      position:absolute;
+      top:20px;
+      right:20px;
+      background:#333;
+      color:white;
+      padding:10px 16px;
+      border-radius:8px;
+      text-decoration:none;
+      font-size:16px;">
+   ⬅ Back
+</a>
+
+  <div id="hud">Time: <span id="timer">0</span>s | Score: <span id="score">0</span></div>
+  <div id="countdown"></div>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script>
+    // --- Setup Scene ---
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Lights
+    const light = new THREE.DirectionalLight(0xffffff, 1);
+    light.position.set(5, 10, 5);
+    scene.add(light);
+
+    // Floor
+    const floor = new THREE.Mesh(
+      new THREE.PlaneGeometry(20, 20),
+      new THREE.MeshStandardMaterial({color: 0xcccccc})
+    );
+    floor.rotation.x = -Math.PI/2;
+    scene.add(floor);
+
+    // Desk
+    const desk = new THREE.Mesh(
+      new THREE.BoxGeometry(2, 1, 1),
+      new THREE.MeshStandardMaterial({color: 0x8B4513})
+    );
+    desk.position.set(0, 0.5, 0);
+    scene.add(desk);
+
+    // Chair
+    const chair = new THREE.Mesh(
+      new THREE.BoxGeometry(0.8, 0.8, 0.8),
+      new THREE.MeshStandardMaterial({color: 0x4444ff})
+    );
+    chair.position.set(2, 0.4, 0);
+    scene.add(chair);
+
+    // Player (student)
+    const player = new THREE.Mesh(
+      new THREE.SphereGeometry(0.3, 16, 16),
+      new THREE.MeshStandardMaterial({color: 0xff4444})
+    );
+    player.position.set(2, 0.5, 0);
+    scene.add(player);
+
+    camera.position.set(0, 5, 7);
+    camera.lookAt(0,0,0);
+
+    // --- Falling Objects ---
+    const debris = [];
+    function createDebris(x, z) {
+      const box = new THREE.Mesh(
+        new THREE.BoxGeometry(0.5, 0.5, 0.5),
+        new THREE.MeshStandardMaterial({color: 0x999999})
+      );
+      box.position.set(x, 5, z);
+      scene.add(box);
+      debris.push(box);
+    }
+    for(let i=0;i<5;i++){
+      createDebris((Math.random()*8)-4, (Math.random()*8)-4);
+    }
+
+    // --- Game Variables ---
+    let earthquake = false;
+    let timer = 0;
+    let score = 0;
+    let safe = false;
+
+    // Timer
+    setInterval(()=>{
+      if(earthquake) timer++;
+      document.getElementById("timer").innerText = timer;
+    }, 1000);
+
+    // Controls (move player)
+    window.addEventListener("keydown", (e)=>{
+      if(e.key === "ArrowLeft") player.position.x -= 0.2;
+      if(e.key === "ArrowRight") player.position.x += 0.2;
+      if(e.key === "ArrowUp") player.position.z -= 0.2;
+      if(e.key === "ArrowDown") player.position.z += 0.2;
+    });
+
+    // --- Countdown before earthquake ---
+    function startCountdown(seconds){
+      const countdownEl = document.getElementById("countdown");
+      countdownEl.style.display = "block";
+      let count = seconds;
+      countdownEl.innerText = "Earthquake in " + count;
+      const interval = setInterval(()=>{
+        count--;
+        if(count > 0){
+          countdownEl.innerText = "Earthquake in " + count;
+        } else {
+          clearInterval(interval);
+          countdownEl.style.display = "none";
+          earthquake = true;
+        }
+      }, 1000);
+    }
+
+    // Trigger countdown and then earthquake
+    startCountdown(3);
+
+    // Animate
+    function animate() {
+      requestAnimationFrame(animate);
+
+      if(earthquake && !safe){
+        scene.rotation.z = Math.sin(Date.now()*0.01)*0.02;
+
+        // Make debris fall
+        debris.forEach(obj => {
+          if(obj.position.y > 0.25){
+            obj.position.y -= 0.05;
+          } else {
+            // Collision check with player
+            if(Math.abs(player.position.x - obj.position.x) < 0.5 &&
+               Math.abs(player.position.z - obj.position.z) < 0.5){
+              alert("You got hit by falling debris! Game Over");
+              earthquake = false;
+              safe = true;
+            }
+          }
+        });
+
+        // Check if player is under desk
+        if(
+          player.position.x > desk.position.x -1 &&
+          player.position.x < desk.position.x +1 &&
+          player.position.z > desk.position.z -0.5 &&
+          player.position.z < desk.position.z +0.5
+        ){
+          safe = true;
+          score = 100 - timer*5;
+          if(score < 0) score = 0;
+          document.getElementById("score").innerText = score;
+          alert("You are safe! Final Score: " + score);
+        }
+      }
+
+      renderer.render(scene, camera);
+    }
+    animate();
+  </script>
+</body>
+</html>  
