@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.shortcuts import render
 
 # Create your views here.
 # def index(request):
@@ -145,6 +146,12 @@ def weather(request):
 
 def full_map(request):
     return render(request, "map.html")
+
+def drills_simulation(request):
+    return render(request, 'drills_simulation.html')
+def drill_simulation(request):
+    # render the simulation template
+    return render(request, 'drills_simulation.html')
 
 def zones_api(request):
     data = [

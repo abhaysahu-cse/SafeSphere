@@ -19,20 +19,22 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from safe import views
+from django.urls import path, include
+from safe import views as safe_views
 
 from safe.views import index, learn, drills, games, leaderboard, emergency, profile, chat,escape_room,Flood_Safety,earth ,fire_sefty_modules ,Earthquake_Safety ,FireSafety ,Cyclone_Safety ,Firstaid, signup_view, login_view, logout_view
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', index, name='index'),
+    path('', views.index, name='index'),
     path('learn/', learn, name='learn'),
     path('drills/', drills, name='drills'),
     path('games/', games, name='games'),
     path('leaderboard/', leaderboard, name='leaderboard'),
     path('emergency/', emergency, name='emergency'),
     path('chat/', chat, name='chat'),
-    path('profile/', profile, name='profile'),
+    path('profile/', views.profile, name='profile'),
     path("games/escape-room/", escape_room, name="escape_room"),
     # path('games/', games, name='games'),
     path("games/Flood_Safety", Flood_Safety, name="Flood_Safety"),
@@ -48,10 +50,14 @@ urlpatterns = [
     path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
     path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    
     path("weather/", views.weather, name="weather"),
-
     path('map/', views.full_map, name='map'),
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+      # ... existing routes ...
+    path('drills/simulation/', views.drills_simulation, name='drills_simulation'),
+ 
+
     path("api/zones/", views.zones_api, name="zones_api"),
 
 ]
