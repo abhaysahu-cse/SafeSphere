@@ -7,83 +7,31 @@
   <title>Drill Simulation — Flood</title>
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
   <style>
-    /* Page-specific layout */
-    :root {
-      --hud-width: 320px;
-      --page-gap: 28px;
-    }
-    html,body { height:100%; }
+    /* Page-specific layout (unchanged visual style) */
+    :root { --hud-width: 320px; --page-gap: 28px; }
+    html,body { height:100%; margin:0; }
     body {
       background:#f5f7fb;
       font-family: -apple-system, Roboto, "Poppins", sans-serif;
-      margin:0;
       color:#222;
       -webkit-font-smoothing:antialiased;
     }
-    .page-wrap {
-      display:flex;
-      gap:var(--page-gap);
-      padding:28px;
-      align-items:flex-start;
-      max-width:1200px;
-      margin: 0 auto;
-      box-sizing: border-box;
-    }
-
-    /* HUD (left panel) */
-    .hud {
-      width:var(--hud-width);
-      background:rgb(245, 243, 243);
-      border-radius:12px;
-      padding:18px;
-      box-shadow:0 6px 24px rgba(20,30,60,0.08);
-      box-sizing: border-box;
-      flex-shrink:0;
-    }
+    .page-wrap { display:flex; gap:var(--page-gap); padding:28px; align-items:flex-start; max-width:1200px; margin:0 auto; box-sizing:border-box; }
+    .hud { width:var(--hud-width); background:rgb(245,243,243); border-radius:12px; padding:18px; box-shadow:0 6px 24px rgba(20,30,60,0.08); box-sizing:border-box; flex-shrink:0; }
     .hud h3 { margin:0 0 12px 0; font-size:18px; }
     .hud .row { margin:8px 0; display:flex; justify-content:space-between; align-items:center; }
     .hud .stat { font-size:15px; color:#333; }
     .controls { margin-top:12px; }
-    .controls button {
-      margin:6px 6px 6px 0;
-      padding:8px 10px;
-      border-radius:10px;
-      border:1px solid #161717;
-      background:#2ad0d0;
-      cursor:pointer;
-      font-size:13px;
-    }
-    .controls button.active {
-      border-color:#4f46e5;
-      box-shadow: 0 6px 18px rgba(79,70,229,0.08);
-      background: linear-gradient(180deg,#eef2ff,#eef2ff);
-    }
+    .controls button { margin:6px 6px 6px 0; padding:8px 10px; border-radius:10px; border:1px solid #161717; background:#2ad0d0; cursor:pointer; font-size:13px; }
+    .controls button.active { border-color:#4f46e5; box-shadow:0 6px 18px rgba(79,70,229,0.08); background:linear-gradient(180deg,#eef2ff,#eef2ff); }
     .controls .small { padding:6px 8px; font-size:12px; }
-
-    /* Canvas */
-    .map-wrap {
-      flex: 1;
-      display:flex;
-      justify-content:center;
-      align-items:flex-start;
-    }
-    #map-canvas {
-      border-radius:12px;
-      box-shadow:0 10px 30px rgba(6,10,20,0.06);
-      display:block;
-      max-width: 100%;
-      height: auto;
-      background: linear-gradient(#9ad59a,#7ec67c);
-    }
-
+    .map-wrap { flex:1; display:flex; justify-content:center; align-items:flex-start; }
+    #map-canvas { border-radius:12px; box-shadow:0 10px 30px rgba(6,10,20,0.06); display:block; max-width:100%; height:auto; background:linear-gradient(#9ad59a,#7ec67c); }
     .legend { margin-top:16px; font-size:13px; color:#444; }
     .tile-info { margin-top:12px; font-size:13px; color:#333; min-height:40px; }
     .instructions { margin-top:12px; font-size:13px; color:#555; line-height:1.4; }
-
     .back-btn { position:fixed; right:20px; top:20px; background:#222; color:#fff; padding:8px 12px; border-radius:8px; text-decoration:none; z-index:999; }
-
-    /* small responsive */
-    @media (max-width: 920px) {
+    @media (max-width:920px) {
       .page-wrap { flex-direction:column; align-items:center; padding:18px; gap:16px; }
       .hud { width:100%; max-width:720px; display:flex; flex-direction:column; }
       .map-wrap { width:100%; }
@@ -97,7 +45,6 @@
   <a class="back-btn" href="{% url 'drills' %}">← Back</a>
 
   <div class="page-wrap">
-    <!-- HUD -->
     <div class="hud" role="region" aria-label="Simulation controls">
       <h3>Simulation Controls</h3>
 
@@ -112,17 +59,14 @@
       </div>
 
       <div class="controls" aria-hidden="false" aria-label="tools">
-        <!-- Buttons correspond to IDs used in drill_simulation.js -->
         <button id="btn-wood" data-tool="wood" title="Build a wooden house (cheaper, vulnerable)">🏚️ Build Wood (₹500)</button>
         <button id="btn-concrete" data-tool="concrete" title="Build a concrete/hospital (strong shelter)">🏥 Build Concrete (₹2500)</button>
         <button id="btn-levee" data-tool="levee" title="Place a levee to block flood">🧱 Build Levee (₹1200)</button>
         <button id="btn-tree" data-tool="tree" title="Plant vegetation / tree (low cost)">🌳 Plant Tree (₹50)</button>
         <button id="btn-clear" data-tool="clear" title="Clear a tile (refund some cost)">Clear</button>
         <button id="btn-none" class="small" data-tool="none" title="Inspection mode">Inspect</button>
-        <!-- add Shelter & Risk toggle -->
-<button id="btn-shelter" data-tool="shelter" title="Build a safe shelter (expensive, very protective)">🏨 Build Shelter (₹4000)</button>
-<button id="btn-risk-toggle" class="small" title="Toggle risk overlay">Toggle Risk Overlay</button>
-
+        <button id="btn-shelter" data-tool="shelter" title="Build a safe shelter (expensive, very protective)">🏨 Build Shelter (₹4000)</button>
+        <button id="btn-risk-toggle" class="small" title="Toggle risk overlay">Toggle Risk Overlay</button>
 
         <div style="margin-top:10px;">
           <button id="btn-start" style="background:#f97316; color:white; border:none; padding:8px 12px; border-radius:10px;">Start Flood</button>
@@ -134,8 +78,8 @@
         <div style="margin-top:6px;">🟦 water &nbsp; 🟩 land &nbsp; 🧱 levee &nbsp; 🏚️ wood house &nbsp; 🏥 concrete/hospital &nbsp; 🌳 tree</div>
       </div>
 
-      <div class="tile-info" id="simulationTileInfo" aria-live="polite">Click a cell to inspect it.</div>
-
+      <div class="tile-info" id="tileInfo">Click a cell to inspect it.</div>
+      <div id="advisorText" style="margin-top:8px; color:#444; font-size:13px;">Advisor: plan your defenses</div>
 
       <div class="instructions">
         <strong>How to play</strong>
@@ -143,20 +87,16 @@
           <li>Use tools to build houses, levees or plant trees.</li>
           <li>Click <em>Inspect</em> then click any cell to see if it's safe/risky/unsafe.</li>
           <li>When ready press <em>Start Flood</em> and watch how water spreads.</li>
-          <li>Concrete buildings are safer; wooden houses are vulnerable.</li>
+          <li>Concrete buildings and Shelters are safer; wooden houses are vulnerable.</li>
         </ul>
       </div>
     </div>
 
-    <!-- Map -->
     <div class="map-wrap">
-      <!-- canvas size will be managed by JS; initial width/height provided for good defaults -->
       <canvas id="map-canvas" width="720" height="720" role="img" aria-label="Simulation map"></canvas>
     </div>
   </div>
 
-  <!-- drill_simulation.js must be at public/static/Js/drill_simulation.js -->
-  <!-- defer: ensures DOM exists when the script runs -->
   <script src="{% static 'Js/drill_simulation.js' %}" defer></script>
 </body>
 </html>
