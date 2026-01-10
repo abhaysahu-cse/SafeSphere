@@ -74,9 +74,9 @@ WSGI_APPLICATION = 'safespera.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'safeshpere',
-        'USER': 'django_user',
-        'PASSWORD': 'django123',
+       'NAME': 'safeshpere',
+        'USER': 'root',
+        'PASSWORD': 'Aaryan@123',
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }
