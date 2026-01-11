@@ -1,0 +1,84 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Drill Simulation — Wildfire</title>
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <style>
+    /* small page-specific */
+    :root { --hud-width:320px; --gap:24px; }
+    body{font-family: -apple-system, Roboto, "Poppins", sans-serif; margin:0; background:#fbfbf8;}
+    .page-wrap{display:flex;gap:var(--gap);padding:20px;max-width:1200px;margin:0 auto;align-items:flex-start;}
+    .hud{width:var(--hud-width);background:#f6f3f3;border-radius:12px;padding:16px;box-shadow:0 8px 30px rgba(0,0,0,.06);}
+    .hud h3{margin:0 0 8px 0}
+    .row{display:flex;justify-content:space-between;align-items:center;margin:8px 0}
+    .controls button{margin:6px 6px 6px 0;padding:8px 10px;border-radius:8px;border:1px solid #7090d1;background:#09d3f7;cursor:pointer}
+    .controls button.active{border-color:#ef4444;background:#25c0b8}
+    .legend{margin-top:10px;font-size:13px;color:#444}
+    #wildfire-canvas{border-radius:10px;box-shadow:0 10px 30px rgba(6,10,20,0.06); background:linear-gradient(#f9f4e6,#f2e7d0)}
+    .tile-info{margin-top:10px;font-size:13px;color:#333;min-height:42px}
+    .advisor{margin-top:8px;font-size:13px;color:#666}
+    .back-btn{position:fixed;right:20px;top:20px;background:#222;color:#fff;padding:8px 12px;border-radius:8px;text-decoration:none;z-index:99}
+    @media (max-width:920px){ .page-wrap{flex-direction:column} .hud{width:100%} #wildfire-canvas{width:100%}}
+  </style>
+</head>
+<body>
+  <a class="back-btn" href="{% url 'drills' %}">← Back</a>
+
+  <div class="page-wrap">
+    <div class="hud" role="region" aria-label="simulation controls">
+      <h3>Wildfire Simulation</h3>
+
+      <div class="row"><div>Budget</div><div id="budget">₹ 50,000</div></div>
+      <div class="row"><div>Population</div><div id="population">200</div></div>
+      <div class="row"><div>Mode</div><div id="mode">none</div></div>
+
+      <div class="controls" aria-label="tools">
+        <button id="btn-shelter" data-tool="shelter">🏨 Build Shelter (₹4000)</button>
+        <button id="btn-tree" data-tool="tree">🌲 Plant Tree (₹50)</button>
+        <button id="btn-firebreak" data-tool="firebreak">🪓 Firebreak / Clear (₹200)</button>
+        <button id="btn-clear" data-tool="clear">🧹 Clear (refund)</button>
+        <button id="btn-none" data-tool="none" class="small">Inspect</button>
+        <button id="btn-risk-toggle" class="small">Toggle Risk Overlay</button>
+      </div>
+
+      <div style="margin-top:10px;">
+        <button id="btn-start" style="background:#ef4444;color:#fff;border:none;padding:8px 12px;border-radius:8px;">Start Fire</button>
+        <button id="btn-reset" style="margin-left:8px;padding:8px 12px;border-radius:8px;">Reset</button>
+      </div>
+
+      <div class="legend"><strong>Legend:</strong> 🔥 fire &nbsp; 🌲 tree &nbsp; 🔴 dry grass &nbsp; 🟦 water &nbsp; 🏨 shelter</div>
+      <div class="tile-info" id="tileInfo">Click a tile to inspect it.</div>
+      <div class="advisor" id="advisorText">Tip: Plant firebreaks to slow spread. Wind increases spread downwind.</div>
+
+      <div style="margin-top:10px">
+        <strong>Wind:</strong>
+        <div style="margin-top:6px;">
+          <button id="wind-up">↑</button>
+          <button id="wind-left">←</button>
+          <button id="wind-none">•</button>
+          <button id="wind-right">→</button>
+          <button id="wind-down">↓</button>
+        </div>
+      </div>
+
+      <div style="margin-top:12px">
+        <strong>How to play</strong>
+        <ul style="padding-left:18px;margin:8px 0 0 0;font-size:13px;color:#444;">
+          <li>Use tools to build shelters (safe), plant trees, or create firebreaks.</li>
+          <li>Select <em>Inspect</em> and click a tile to see SAFE / RISKY / UNSAFE.</li>
+          <li>Press <em>Start Fire</em> to ignite the map and watch the spread; wind changes spread bias.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="flex:1;display:flex;justify-content:center;align-items:flex-start">
+      <canvas id="wildfire-canvas" width="720" height="720" role="img" aria-label="Wildfire map"></canvas>
+    </div>
+  </div>
+
+  <script src="{% static 'Js/wildfire_simulation.js' %}" defer></script>
+</body>
+</html>

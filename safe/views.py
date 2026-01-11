@@ -153,6 +153,18 @@ def drill_simulation(request):
     # render the simulation template
     return render(request, 'drills_simulation.html')
 
+def flood_simulation(request):
+    return render(request, 'drills_simulation.html')
+
+def wildfire_simulation(request):
+    return render(request, 'wildfire_simulation.html')
+
+def cyclone_simulation(request):
+    return render(request, 'cyclone_simulation.html')
+
+def landslide_simulation(request):
+    return render(request, 'landslide_simulation.html')
+
 def zones_api(request):
     data = [
         {"lat": 23.27, "lng": 77.43, "level": "high", "msg": "Flood-prone area"},

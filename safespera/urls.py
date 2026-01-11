@@ -59,6 +59,11 @@ urlpatterns = [
  
 
     path("api/zones/", views.zones_api, name="zones_api"),
+     path('drills/simulation/', views.drill_simulation, name='drill_simulation'),
+    path('drills/flood/', views.flood_simulation, name='flood_simulation'),
+    path('drills/wildfire/', views.wildfire_simulation, name='wildfire_simulation'),
+    path('drills/cyclone/', views.cyclone_simulation, name='cyclone_simulation'),
+    path('drills/landslide/', views.landslide_simulation, name='landslide_simulation'),
 
 ]
 

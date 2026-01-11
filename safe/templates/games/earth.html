@@ -1,197 +1,464 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Earthquake Safety Simulation</title>
+  <meta charset="utf-8" />
+  <title>Earthquake Safety Simulation — Perfected</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
-    body { margin: 0; overflow: hidden; }
+    html,body { height:100%; margin:0; font-family: Inter, Arial, sans-serif; background:#0b1020; color:#fff; -webkit-font-smoothing:antialiased; }
+    a.back-btn { position:fixed; top:16px; right:16px; z-index:50; background:#222; color:#fff; padding:8px 12px; border-radius:8px; text-decoration:none; }
     #hud {
-      position: absolute;
-      top: 10px; left: 10px;
-      background: rgba(0,0,0,0.6);
-      color: white;
-      padding: 8px;
-      border-radius: 8px;
-      font-family: Arial;
+      position:fixed; left:12px; top:12px; z-index:40;
+      background:rgba(0,0,0,0.55); padding:10px; border-radius:10px; min-width:260px;
+      display:flex; gap:12px; align-items:center; flex-wrap:wrap;
     }
-    #countdown {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 48px;
-      font-weight: bold;
-      background: rgba(0,0,0,0.7);
-      color: yellow;
-      padding: 20px;
-      border-radius: 12px;
-      display: none;
+    #hud .col { display:flex; gap:8px; align-items:center; font-size:14px; color:#e6eef8; }
+    .health-bar { width:110px; height:10px; background:#222; border-radius:6px; overflow:hidden; box-shadow:inset 0 0 6px rgba(0,0,0,0.6); }
+    .health-fill { height:100%; background:linear-gradient(90deg,#22c55e,#16a34a); width:100%; transform-origin:left center; transition:width .25s linear; }
+    #countdown { position:fixed; left:50%; top:48%; transform:translate(-50%,-50%); z-index:45; background:rgba(0,0,0,0.75); padding:18px 22px; border-radius:12px; font-size:22px; color:#ffef8a; display:none; text-align:center; }
+    #controls-touch { position:fixed; left:12px; bottom:12px; z-index:45; display:none; gap:8px; }
+    .touch-row { display:flex; gap:8px; }
+    .touch-btn { width:56px; height:56px; border-radius:10px; background:rgba(255,255,255,0.06); color:#fff; display:flex; align-items:center; justify-content:center; font-size:20px; border:1px solid rgba(255,255,255,0.04); }
+    #endModal { position:fixed; left:0; top:0; right:0; bottom:0; display:none; align-items:center; justify-content:center; z-index:60; background:rgba(0,0,0,0.6); }
+    #endInner { background:#fff; color:#111; padding:20px; border-radius:12px; width:420px; box-shadow:0 18px 60px rgba(2,6,23,0.6); }
+    button.btn { padding:8px 12px; border-radius:8px; border:none; cursor:pointer; }
+    button.primary { background:#0f62ff; color:#fff; }
+    button.ghost { background:#f3f4f6; color:#111; }
+    .small { font-size:13px; padding:6px 8px; border-radius:6px; }
+    .tip { font-size:13px; margin-top:10px; color:#0b1020; }
+    @media (max-width:820px) {
+      #controls-touch { display:flex; flex-direction:column; left:12px; bottom:12px; }
+      #hud { left:12px; right:12px; top:12px; min-width:unset; justify-content:space-between; }
+      #endInner { width:92%; }
     }
   </style>
 </head>
 <body>
-   
-    <a href="{% url 'games' %}" 
-   style="
-      position:absolute;
-      top:20px;
-      right:20px;
-      background:#333;
-      color:white;
-      padding:10px 16px;
-      border-radius:8px;
-      text-decoration:none;
-      font-size:16px;">
-   ⬅ Back
-</a>
+  <a class="back-btn" href="#">⬅ Back</a>
 
-  <div id="hud">Time: <span id="timer">0</span>s | Score: <span id="score">0</span></div>
-  <div id="countdown"></div>
+  <div id="hud" role="status" aria-live="polite">
+    <div class="col">Time: <strong id="timer">0</strong>s</div>
+    <div class="col">Score: <strong id="score">0</strong></div>
+    <div class="col">Health: <div class="health-bar"><div id="healthFill" class="health-fill"></div></div></div>
+    <div class="col">Difficulty:
+      <select id="difficulty" class="small" title="Change difficulty (before start)">
+        <option value="easy">Easy</option>
+        <option value="medium" selected>Medium</option>
+        <option value="hard">Hard</option>
+      </select>
+    </div>
+    <div class="col">
+      <button id="pauseBtn" class="small">Pause</button>
+      <button id="startBtn" class="small primary">Start Drill</button>
+      <button id="resetBtn" class="small">Reset</button>
+    </div>
+  </div>
+
+  <div id="countdown" aria-hidden="true"></div>
+
+  <!-- on-screen touch controls (shown on small screens) -->
+  <div id="controls-touch">
+    <div class="touch-row">
+      <div style="display:flex;gap:8px;">
+        <div id="touch-left" class="touch-btn">◀</div>
+        <div id="touch-up" class="touch-btn">▲</div>
+        <div id="touch-right" class="touch-btn">▶</div>
+        <div id="touch-down" class="touch-btn">▼</div>
+      </div>
+    </div>
+    <div class="touch-row" style="margin-top:8px;">
+      <div id="touch-duck" class="touch-btn">🛡</div>
+    </div>
+  </div>
+
+  <div id="endModal" role="dialog" aria-modal="true">
+    <div id="endInner">
+      <h3 style="margin-top:0">Drill Results</h3>
+      <div>Survived time: <strong id="resTime">0</strong> s</div>
+      <div>Final score: <strong id="resScore">0</strong></div>
+      <div>Damage taken: <strong id="resDamage">0</strong></div>
+      <div id="resultTips" class="tip"></div>
+      <div style="margin-top:12px; text-align:right;">
+        <button id="closeEnd" class="btn ghost">Close</button>
+        <button id="playAgain" class="btn primary">Play Again</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Three.js scene (full window) -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
   <script>
-    // --- Setup Scene ---
+  (function(){
+    // ---------- scene setup ----------
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    const camera = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 0.1, 200);
+    const renderer = new THREE.WebGLRenderer({antialias:true});
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1.5, 2));
     document.body.appendChild(renderer.domElement);
 
-    // Lights
-    const light = new THREE.DirectionalLight(0xffffff, 1);
-    light.position.set(5, 10, 5);
-    scene.add(light);
+    window.addEventListener('resize', ()=>{ camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
 
-    // Floor
-    const floor = new THREE.Mesh(
-      new THREE.PlaneGeometry(20, 20),
-      new THREE.MeshStandardMaterial({color: 0xcccccc})
-    );
-    floor.rotation.x = -Math.PI/2;
-    scene.add(floor);
+    // lights & ambient
+    const amb = new THREE.AmbientLight(0xffffff, 0.6); scene.add(amb);
+    const sun = new THREE.DirectionalLight(0xffffff, 0.9); sun.position.set(4,8,3); scene.add(sun);
 
-    // Desk
-    const desk = new THREE.Mesh(
-      new THREE.BoxGeometry(2, 1, 1),
-      new THREE.MeshStandardMaterial({color: 0x8B4513})
-    );
-    desk.position.set(0, 0.5, 0);
-    scene.add(desk);
+    // floor / walls
+    const floor = new THREE.Mesh(new THREE.PlaneGeometry(18,14), new THREE.MeshStandardMaterial({color:0xdcdcdc}));
+    floor.rotation.x = -Math.PI/2; scene.add(floor);
+    const backWall = new THREE.Mesh(new THREE.PlaneGeometry(18,6), new THREE.MeshStandardMaterial({color:0xcccccc}));
+    backWall.position.set(0,3,-7); scene.add(backWall);
 
-    // Chair
-    const chair = new THREE.Mesh(
-      new THREE.BoxGeometry(0.8, 0.8, 0.8),
-      new THREE.MeshStandardMaterial({color: 0x4444ff})
-    );
-    chair.position.set(2, 0.4, 0);
-    scene.add(chair);
+    // desk and chair (shelter)
+    const desk = new THREE.Mesh(new THREE.BoxGeometry(3.0,0.9,1.4), new THREE.MeshStandardMaterial({color:0x8b4513}));
+    desk.position.set(0,0.45,0); scene.add(desk);
+    const chair = new THREE.Mesh(new THREE.BoxGeometry(0.9,0.9,0.9), new THREE.MeshStandardMaterial({color:0x2d6cdf}));
+    chair.position.set(2.2,0.45,0); scene.add(chair);
 
-    // Player (student)
-    const player = new THREE.Mesh(
-      new THREE.SphereGeometry(0.3, 16, 16),
-      new THREE.MeshStandardMaterial({color: 0xff4444})
-    );
-    player.position.set(2, 0.5, 0);
-    scene.add(player);
+    // safe area bounding box under desk (approx)
+    const deskSafeBox = { minX: desk.position.x - 1.2, maxX: desk.position.x + 1.2, minZ: desk.position.z - 0.6, maxZ: desk.position.z + 0.6 };
 
-    camera.position.set(0, 5, 7);
+    // door zones (front and back) — reaching these during earthquake counts as 'attempted escape'
+    const doorFrontX = 8.0, doorBackX = -8.0, doorZoneRadius = 0.9;
+
+    // player (sphere) with simple low poly body
+    const player = new THREE.Group();
+    const body = new THREE.Mesh(new THREE.CylinderGeometry(0.28,0.28,0.9,12), new THREE.MeshStandardMaterial({color:0xff6b6b}));
+    body.position.y = 0.5;
+    const head = new THREE.Mesh(new THREE.SphereGeometry(0.25,12,12), new THREE.MeshStandardMaterial({color:0xffccb3}));
+    head.position.y = 1.05;
+    player.add(body); player.add(head); player.position.set(-6,0,2); scene.add(player);
+
+    camera.position.set(0,7.5,9.5);
     camera.lookAt(0,0,0);
 
-    // --- Falling Objects ---
+    // debris pool
     const debris = [];
-    function createDebris(x, z) {
-      const box = new THREE.Mesh(
-        new THREE.BoxGeometry(0.5, 0.5, 0.5),
-        new THREE.MeshStandardMaterial({color: 0x999999})
-      );
-      box.position.set(x, 5, z);
-      scene.add(box);
-      debris.push(box);
+    function spawnDebris(x,z, scale=0.5){
+      const mat = new THREE.MeshStandardMaterial({color:0x8a8a8a});
+      const geo = new THREE.BoxGeometry(scale, scale, scale);
+      const box = new THREE.Mesh(geo, mat);
+      box.position.set(x, 4 + Math.random()*2, z);
+      box.userData = { vy: -0.02 - Math.random()*0.06, vx: (Math.random()-0.5)*0.02, vz: (Math.random()-0.5)*0.02, rotSpeed: (Math.random()-0.5)*0.06, hit:false };
+      scene.add(box); debris.push(box);
     }
-    for(let i=0;i<5;i++){
-      createDebris((Math.random()*8)-4, (Math.random()*8)-4);
-    }
+    // initial debris
+    for(let i=0;i<7;i++) spawnDebris((Math.random()*14)-7, (Math.random()*10)-5, 0.35 + Math.random()*0.6);
 
-    // --- Game Variables ---
-    let earthquake = false;
+    // ---------- game state ----------
+    let gamePhase = 'idle'; // idle, countdown, playing, ended
+    let countdownValue = 3;
     let timer = 0;
     let score = 0;
-    let safe = false;
+    let health = 100;
+    let paused = false;
+    let ducking = false; // duck/cover (space or touch)
+    let difficulty = 'medium';
 
-    // Timer
-    setInterval(()=>{
-      if(earthquake) timer++;
-      document.getElementById("timer").innerText = timer;
-    }, 1000);
+    // behavioral stats for feedback
+    let timeUnderDesk = 0;
+    let duckCount = 0;
+    let attemptedEscape = false;
 
-    // Controls (move player)
-    window.addEventListener("keydown", (e)=>{
-      if(e.key === "ArrowLeft") player.position.x -= 0.2;
-      if(e.key === "ArrowRight") player.position.x += 0.2;
-      if(e.key === "ArrowUp") player.position.z -= 0.2;
-      if(e.key === "ArrowDown") player.position.z += 0.2;
-    });
+    // config by difficulty
+    function applyDifficulty(d){
+      difficulty = d;
+      if(d==='easy'){ gravity = -0.03; debrisSpawnRate = 0.01; }
+      else if(d==='medium'){ gravity = -0.05; debrisSpawnRate = 0.02; }
+      else { gravity = -0.08; debrisSpawnRate = 0.035; }
+    }
 
-    // --- Countdown before earthquake ---
-    function startCountdown(seconds){
-      const countdownEl = document.getElementById("countdown");
-      countdownEl.style.display = "block";
-      let count = seconds;
-      countdownEl.innerText = "Earthquake in " + count;
-      const interval = setInterval(()=>{
-        count--;
-        if(count > 0){
-          countdownEl.innerText = "Earthquake in " + count;
-        } else {
-          clearInterval(interval);
-          countdownEl.style.display = "none";
-          earthquake = true;
-        }
+    // physics tunables (modified by difficulty)
+    let gravity = -0.05;
+    let debrisSpawnRate = 0.02;
+
+    // DOM refs
+    const elTimer = document.getElementById('timer');
+    const elScore = document.getElementById('score');
+    const elHealthFill = document.getElementById('healthFill');
+    const elCountdown = document.getElementById('countdown');
+    const elDifficulty = document.getElementById('difficulty');
+    const btnStart = document.getElementById('startBtn');
+    const btnPause = document.getElementById('pauseBtn');
+    const btnReset = document.getElementById('resetBtn');
+    const controlsTouch = document.getElementById('controls-touch');
+    const endModal = document.getElementById('endModal');
+    const resTime = document.getElementById('resTime');
+    const resScore = document.getElementById('resScore');
+    const resDamage = document.getElementById('resDamage');
+    const resultTips = document.getElementById('resultTips');
+
+    // show touch controls on small screens
+    function maybeShowTouch(){
+      if(window.innerWidth < 820) controlsTouch.style.display = 'flex';
+      else controlsTouch.style.display = 'none';
+    }
+    maybeShowTouch(); window.addEventListener('resize', maybeShowTouch);
+
+    // update HUD
+    function updateHUD(){
+      elTimer.textContent = Math.floor(timer);
+      elScore.textContent = Math.floor(score);
+      elHealthFill.style.width = Math.max(0, Math.min(100, health)) + '%';
+    }
+
+    // ---------- game flow ----------
+    function startCountdown(sec=3){
+      if(gamePhase !== 'idle' && gamePhase !== 'ended') return;
+      applyDifficulty(elDifficulty.value || 'medium');
+      // reset behavioral stats
+      timeUnderDesk = 0; duckCount = 0; attemptedEscape = false;
+
+      gamePhase = 'countdown';
+      countdownValue = Math.max(2, sec);
+      elCountdown.style.display = 'block';
+      elCountdown.textContent = 'Earthquake in ' + countdownValue;
+      const t = setInterval(()=>{
+        if(paused) return;
+        countdownValue--;
+        if(countdownValue > 0) elCountdown.textContent = 'Earthquake in ' + countdownValue;
+        else { clearInterval(t); elCountdown.style.display = 'none'; startEarthquake(); }
       }, 1000);
     }
 
-    // Trigger countdown and then earthquake
-    startCountdown(3);
+    function startEarthquake(){
+      if(gamePhase !== 'countdown') return;
+      gamePhase = 'playing';
+      timer = 0; score = 0; health = 100; paused = false;
+      // scatter some debris seeds for dynamic fun
+      for(let i=0;i<4;i++) spawnDebris((Math.random()*14)-7, (Math.random()*10)-5, 0.25 + Math.random()*0.6);
+      console.log('🟠 Earthquake START');
+    }
 
-    // Animate
-    function animate() {
+    function endSimulation(reason='done'){
+      if(gamePhase === 'ended') return;
+      gamePhase = 'ended';
+      // compute final stats
+      const finalScore = Math.max(0, Math.floor(score + (health*0.45) + (timeUnderDesk*2)));
+      resTime.textContent = Math.floor(timer);
+      resScore.textContent = finalScore;
+      resDamage.textContent = Math.max(0, 100 - Math.round(health));
+
+      // generate actionable tips based on player behavior
+      const tips = [];
+      if(timeUnderDesk >= 8) tips.push('Good job: You sheltered under a sturdy desk for ' + Math.round(timeUnderDesk) + 's. That reduces head injuries.');
+      else tips.push('Tip: Drop, Cover, and Hold On — shelter under a table or desk during shaking.');
+      if(duckCount > 0) tips.push('You ducked ' + duckCount + ' time(s) — ducking helps but combine with cover.');
+      if(attemptedEscape) tips.push('Avoid attempting to run outside during shaking — falling debris and collapse are more dangerous.');
+      if(health <= 30) tips.push('You took heavy damage. In real life seek medical help and check for bleeding.');
+      tips.push('After the shaking stops, check for gas leaks, use stairs to evacuate, and expect aftershocks.');
+
+      resultTips.innerHTML = tips.map(t=>'<div>• '+t+'</div>').join('');
+      endModal.style.display = 'flex';
+    }
+
+    function resetSimulation(){
+      // remove debris
+      while(debris.length) {
+        const b = debris.pop(); scene.remove(b);
+      }
+      // respawn some debris & reset player
+      for(let i=0;i<6;i++) spawnDebris((Math.random()*14)-7, (Math.random()*10)-5, 0.35 + Math.random()*0.6);
+      player.position.set(-6,0,2);
+      player.rotation.set(0,0,0);
+      ducking = false;
+      timer = 0; score = 0; health = 100; paused = false; gamePhase = 'idle';
+      timeUnderDesk = 0; duckCount = 0; attemptedEscape = false;
+      endModal.style.display = 'none';
+      updateHUD();
+    }
+
+    // ---------- input ----------
+    const moveSpeed = 0.18;
+    const keys = {};
+    window.addEventListener('keydown', (e)=>{
+      keys[e.key] = true;
+      if(e.key === ' '){ // duck/cover
+        if(!ducking){ duckCount++; }
+        ducking = true;
+        // small visual: lower player
+        player.position.y = 0.05;
+      }
+      // quick-run: if player tries to run to door (press shift) mark attempted escape
+      if(e.key === 'Shift' && gamePhase === 'playing') attemptedEscape = true;
+    });
+    window.addEventListener('keyup', (e)=>{
+      keys[e.key] = false;
+      if(e.key === ' '){
+        ducking = false;
+        player.position.y = 0;
+      }
+    });
+
+    // touch: simple continuous motion while pressed
+    function applyTouchButton(id, onDown, onUp){
+      const el = document.getElementById(id);
+      if(!el) return;
+      let active = false;
+      const down = (ev)=>{ ev.preventDefault(); active=true; onDown(); };
+      const up = (ev)=>{ ev.preventDefault(); active=false; onUp(); };
+      el.addEventListener('touchstart', down); el.addEventListener('mousedown', down);
+      el.addEventListener('touchend', up); el.addEventListener('mouseup', up); el.addEventListener('mouseleave', up);
+      // useful: while active apply in animation loop
+      return ()=>active;
+    }
+    const touchLeftActive = applyTouchButton('touch-left', ()=>keys['ArrowLeft']=true, ()=>keys['ArrowLeft']=false);
+    const touchRightActive = applyTouchButton('touch-right', ()=>keys['ArrowRight']=true, ()=>keys['ArrowRight']=false);
+    const touchUpActive = applyTouchButton('touch-up', ()=>keys['ArrowUp']=true, ()=>keys['ArrowUp']=false);
+    const touchDownActive = applyTouchButton('touch-down', ()=>keys['ArrowDown']=true, ()=>keys['ArrowDown']=false);
+    const touchDuckActive = applyTouchButton('touch-duck', ()=>{ if(!ducking) duckCount++; ducking=true; player.position.y=0.05; }, ()=>{ ducking=false; player.position.y=0; });
+
+    // HUD buttons
+    btnStart.addEventListener('click', ()=> startCountdown(4)); // slightly longer countdown
+    btnPause.addEventListener('click', ()=>{
+      if(gamePhase === 'idle') return;
+      paused = !paused;
+      btnPause.textContent = paused ? 'Resume' : 'Pause';
+    });
+    btnReset.addEventListener('click', resetSimulation);
+    document.getElementById('playAgain').addEventListener('click', ()=>{ resetSimulation(); startCountdown(3); });
+    document.getElementById('closeEnd').addEventListener('click', ()=>{ endModal.style.display='none'; });
+
+    elDifficulty.addEventListener('change', (e)=> applyDifficulty(e.target.value));
+
+    // ---------- physics & collision helpers ----------
+    function isPlayerUnderDesk(){
+      const x = player.position.x, z = player.position.z;
+      return x >= deskSafeBox.minX && x <= deskSafeBox.maxX && z >= deskSafeBox.minZ && z <= deskSafeBox.maxZ && ducking;
+    }
+
+    function boxIntersectsSphere(boxMesh, spherePos, sphereR){
+      const b = new THREE.Box3().setFromObject(boxMesh);
+      const x = Math.max(b.min.x, Math.min(spherePos.x, b.max.x));
+      const y = Math.max(b.min.y, Math.min(spherePos.y, b.max.y));
+      const z = Math.max(b.min.z, Math.min(spherePos.z, b.max.z));
+      const dx = x - spherePos.x, dy = y - spherePos.y, dz = z - spherePos.z;
+      return (dx*dx + dy*dy + dz*dz) <= (sphereR * sphereR);
+    }
+
+    // ---------- main loop ----------
+    let lastTs = performance.now();
+    function animate(now){
       requestAnimationFrame(animate);
+      const dt = Math.min(0.05, (now - lastTs)/1000); lastTs = now;
 
-      if(earthquake && !safe){
-        scene.rotation.z = Math.sin(Date.now()*0.01)*0.02;
+      // movement from keys
+      if(gamePhase === 'playing' && !paused){
+        if(keys['ArrowLeft'] || keys['a']) player.position.x -= moveSpeed * (dt*60);
+        if(keys['ArrowRight'] || keys['d']) player.position.x += moveSpeed * (dt*60);
+        if(keys['ArrowUp'] || keys['w']) player.position.z -= moveSpeed * (dt*60);
+        if(keys['ArrowDown'] || keys['s']) player.position.z += moveSpeed * (dt*60);
+        // clamp to room bounds
+        player.position.x = Math.max(-8.0, Math.min(8.0, player.position.x));
+        player.position.z = Math.max(-5.5, Math.min(5.5, player.position.z));
+        // subtle look direction
+        player.rotation.y = Math.atan2(-(player.position.x - 0), 4) * 0.05;
+      }
 
-        // Make debris fall
-        debris.forEach(obj => {
-          if(obj.position.y > 0.25){
-            obj.position.y -= 0.05;
-          } else {
-            // Collision check with player
-            if(Math.abs(player.position.x - obj.position.x) < 0.5 &&
-               Math.abs(player.position.z - obj.position.z) < 0.5){
-              alert("You got hit by falling debris! Game Over");
-              earthquake = false;
-              safe = true;
-            }
+      // detect attempted escape if player moves into door zones during playing
+      if(gamePhase === 'playing' && !attemptedEscape){
+        if(Math.abs(player.position.x - doorFrontX) < 1.0 || Math.abs(player.position.x - doorBackX) < 1.0){
+          attemptedEscape = true;
+          // running to exit during shaking is dangerous — penalize slightly
+          if(!isPlayerUnderDesk()){
+            health -= 18;
+            score = Math.max(0, score - 12);
           }
-        });
-
-        // Check if player is under desk
-        if(
-          player.position.x > desk.position.x -1 &&
-          player.position.x < desk.position.x +1 &&
-          player.position.z > desk.position.z -0.5 &&
-          player.position.z < desk.position.z +0.5
-        ){
-          safe = true;
-          score = 100 - timer*5;
-          if(score < 0) score = 0;
-          document.getElementById("score").innerText = score;
-          alert("You are safe! Final Score: " + score);
         }
+      }
+
+      // spawn occasional debris during playing (difficulty affects spawn rate)
+      if(gamePhase === 'playing' && Math.random() < debrisSpawnRate * dt * 60){
+        spawnDebris((Math.random()*14)-7, (Math.random()*10)-5, 0.25 + Math.random()*0.6);
+      }
+
+      // debris physics
+      for(let i = debris.length-1; i >= 0; i--){
+        const d = debris[i];
+        // simple gravity & motion
+        d.userData.vy += gravity * (dt*60);
+        d.position.y += d.userData.vy * (dt*60);
+        d.position.x += d.userData.vx * (dt*60);
+        d.position.z += d.userData.vz * (dt*60);
+        d.rotation.x += d.userData.rotSpeed * (dt*60);
+        d.rotation.y += d.userData.rotSpeed * (dt*60);
+
+        // when debris hits floor, it becomes static but still obstructs
+        if(d.position.y <= 0.25){
+          d.position.y = 0.25;
+          d.userData.vy = 0;
+          d.userData.vx = 0;
+          d.userData.vz = 0;
+          d.userData.rotSpeed = 0;
+        }
+
+        // collision with player (sphere radius ~0.45). Only if still moving or hasn't registered hit
+        if(!d.userData.hit && boxIntersectsSphere(d, new THREE.Vector3(player.position.x, player.position.y + 0.9, player.position.z), 0.45)){
+          // if player is under desk and ducking -> safe
+          if(isPlayerUnderDesk()){
+            d.userData.hit = true;
+            d.material.color.setHex(0x444444);
+            score += 12; // reward sheltered behavior
+          } else if(ducking){
+            d.userData.hit = true;
+            health -= 10 + Math.random()*10;
+            score += 6;
+          } else {
+            d.userData.hit = true;
+            health -= 30 + Math.random()*20;
+            // visual rattle
+            player.position.x += (Math.random()-0.5)*0.8;
+            player.position.z += (Math.random()-0.5)*0.8;
+          }
+
+          if(health <= 0){
+            health = 0;
+            endSimulation('injured');
+          }
+        }
+      }
+
+      // timer/score updates during playing
+      if(gamePhase === 'playing' && !paused){
+        timer += dt;
+        // score increases as surviving time (scale by difficulty)
+        const scoreRate = (difficulty === 'easy' ? 6 : difficulty === 'medium' ? 8 : 10);
+        score += scoreRate * dt;
+        // accumulate time sheltered
+        if(isPlayerUnderDesk()){
+          timeUnderDesk += dt;
+          score += 4 * dt; // small bonus for staying sheltered
+        }
+      }
+
+      // check success: if player holds under desk for X seconds (example safe condition)
+      if(gamePhase === 'playing' && isPlayerUnderDesk() && timeUnderDesk > 8){
+        endSimulation('sheltered');
+      }
+
+      updateHUD();
+
+      // camera slight shake when playing
+      if(gamePhase === 'playing' && !paused){
+        const shake = Math.sin(now*0.004) * 0.04;
+        scene.rotation.z = shake * 0.6;
+      } else {
+        scene.rotation.z = 0;
       }
 
       renderer.render(scene, camera);
     }
     animate();
+
+    // ---------- utility: start on load? ----------
+    maybeShowTouch();
+
+    // expose minimal debug on window for quick tweaks
+    window._quake = {
+      spawnDebris, resetSimulation, startCountdown, endSimulation,
+      getState: ()=>({ gamePhase, timer, score, health, debrisCount: debris.length, timeUnderDesk, duckCount, attemptedEscape })
+    };
+  })();
   </script>
 </body>
-</html>  
+</html>

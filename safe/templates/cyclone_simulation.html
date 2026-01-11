@@ -1,0 +1,77 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Drill Simulation — Cyclone</title>
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <style>
+    :root { --hud-width:320px; --gap:24px; }
+    body{font-family: -apple-system, Roboto, "Poppins", sans-serif; margin:0; background:#f2f6fb;}
+    .page-wrap{display:flex;gap:var(--gap);padding:20px;max-width:1200px;margin:0 auto;align-items:flex-start;}
+    .hud{width:var(--hud-width);background:#fff;border-radius:12px;padding:16px;box-shadow:0 8px 30px rgba(0,0,0,.06);}
+    .hud h3{margin:0 0 8px 0}
+    .row{display:flex;justify-content:space-between;align-items:center;margin:8px 0}
+    .controls button{margin:6px 6px 6px 0;padding:8px 10px;border-radius:8px;border:1px solid #e6e9ef;background:#fff;cursor:pointer}
+    .controls button.active{border-color:#0ea5e9;background:#eef9ff}
+    .legend{margin-top:10px;font-size:13px;color:#444}
+    #cyclone-canvas{border-radius:10px;box-shadow:0 10px 30px rgba(6,10,20,0.06); background:linear-gradient(#c8e7ff,#e8f3ff)}
+    .tile-info{margin-top:10px;font-size:13px;color:#333;min-height:42px}
+    .advisor{margin-top:8px;font-size:13px;color:#666}
+    .back-btn{position:fixed;right:20px;top:20px;background:#222;color:#fff;padding:8px 12px;border-radius:8px;text-decoration:none;z-index:99}
+    .select { margin-top:8px; }
+    @media (max-width:920px){ .page-wrap{flex-direction:column} .hud{width:100%} #cyclone-canvas{width:100%} }
+  </style>
+</head>
+<body>
+  <a class="back-btn" href="{% url 'drills' %}">← Back</a>
+
+  <div class="page-wrap">
+    <div class="hud" role="region" aria-label="simulation controls">
+      <h3>Cyclone Simulation</h3>
+
+      <div class="row"><div>Budget</div><div id="budget">₹ 50,000</div></div>
+      <div class="row"><div>Population</div><div id="population">200</div></div>
+      <div class="row"><div>Mode</div><div id="mode">none</div></div>
+
+      <div class="controls" aria-label="tools">
+        <button id="btn-kutcha" data-tool="kutcha">🏚️ Kutcha (₹300)</button>
+        <button id="btn-pucca" data-tool="pucca">🏠 Pucca (₹1500)</button>
+        <button id="btn-shelter" data-tool="shelter">🏨 Shelter (₹4000)</button>
+        <button id="btn-tree" data-tool="tree">🌳 Tree (₹50)</button>
+        <button id="btn-embank" data-tool="embank">🧱 Embankment (₹1200)</button>
+        <button id="btn-clear" data-tool="clear">Clear</button>
+        <button id="btn-none" data-tool="none">Inspect</button>
+      </div>
+
+      <div class="select">
+        <label for="stormStrength">Storm strength:</label>
+        <select id="stormStrength">
+          <option value="low">Low</option>
+          <option value="medium" selected>Medium</option>
+          <option value="high">High</option>
+        </select>
+        <div style="margin-top:8px;">
+          <label><input type="checkbox" id="stormSurge"> Enable storm surge</label>
+        </div>
+      </div>
+
+      <div style="margin-top:10px;">
+        <button id="btn-start" style="background:#0ea5e9;color:#fff;border:none;padding:8px 12px;border-radius:8px;">Start Cyclone</button>
+        <button id="btn-reset" style="margin-left:8px;padding:8px 12px;border-radius:8px;">Reset</button>
+      </div>
+
+      <div class="legend"><strong>Legend:</strong> 🌊 sea &nbsp; 🟩 land &nbsp; 🧱 embankment &nbsp; 🏚️ kutcha &nbsp; 🏠 pucca &nbsp; 🏨 shelter</div>
+      <div class="tile-info" id="tileInfo">Click a tile to inspect it.</div>
+      <div class="advisor" id="advisorText">Tip: Build embankments to block storm surge and shelters for safety.</div>
+    </div>
+
+    <div style="flex:1;display:flex;justify-content:center;align-items:flex-start">
+      <canvas id="cyclone-canvas" width="720" height="720" role="img" aria-label="Cyclone map"></canvas>
+    </div>
+  </div>
+
+  <script src="{% static 'Js/cyclone_simulation.js' %}" defer></script>
+</body>
+</html>

@@ -2,55 +2,96 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>Flood Escape Game</title>
+<title>Flood Escape Game (Enhanced) - Fixed</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <style>
-body {margin:0; overflow:hidden; font-family:Arial;}
-#hud {position:absolute; left:10px; top:10px; background:rgba(0,0,0,0.6); color:#fff; padding:8px; border-radius:8px;}
-#countdown {position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:48px; background:rgba(0,0,0,0.7); color:blue; padding:20px; border-radius:12px; display:none;}
-#message {position:absolute; top:60%; left:50%; transform:translate(-50%,-50%); font-size:28px; background:rgba(0,0,0,0.7); color:white; padding:12px; border-radius:10px; display:none;}
-#restart {position:absolute; top:72%; left:50%; transform:translate(-50%,-50%); padding:8px 12px; border-radius:6px; border:none; background:#28a745; color:#fff; cursor:pointer; display:none;}
+  body {margin:0; overflow:hidden; font-family:Arial, sans-serif; background:#111;}
+  #hud {position:absolute; left:10px; top:10px; background:rgba(0,0,0,0.6); color:#fff; padding:8px; border-radius:8px; z-index:50; display:flex; gap:10px; align-items:center;}
+  #countdown {position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:42px; background:rgba(0,0,0,0.7); color:#fff; padding:18px; border-radius:12px; display:none; z-index:50;}
+  #message {position:absolute; top:60%; left:50%; transform:translate(-50%,-50%); font-size:26px; background:rgba(0,0,0,0.7); color:white; padding:14px; border-radius:10px; display:none; z-index:50;}
+  #restart {position:absolute; top:72%; left:50%; transform:translate(-50%,-50%); padding:8px 12px; border-radius:6px; border:none; background:#28a745; color:#fff; cursor:pointer; display:none; z-index:50;}
+  #door-marker {position:absolute; right:110px; top:100px; z-index:40; background:rgba(255,255,255,0.06); color:#fff; padding:6px 10px; border-radius:8px; font-size:13px;}
+  #door-marker-left {position:absolute; left:110px; top:100px; z-index:40; background:rgba(255,255,255,0.06); color:#fff; padding:6px 10px; border-radius:8px; font-size:13px;}
+  a.back-btn {position:absolute;top:20px;right:20px;background:#333;color:white;padding:10px 16px;border-radius:8px;text-decoration:none;font-size:16px;z-index:50;}
+  .health-bar {width:120px;height:10px;background:#333;border-radius:6px;overflow:hidden;box-shadow:inset 0 0 4px rgba(0,0,0,0.6);}
+  .health-fill {height:100%;background:linear-gradient(90deg,#22c55e,#16a34a);width:100%;}
+  .select {background:rgba(255,255,255,0.04);padding:6px;border-radius:8px;}
+  .btn-small {padding:6px 8px;border-radius:6px;border:none;background:#444;color:white;cursor:pointer;}
+  /* joystick */
+  #joypad { position: fixed; right: 18px; bottom: 90px; width: 110px; height:110px; z-index:60; display:flex; align-items:center; justify-content:center; touch-action:none;}
+  #joy-base { width:100px; height:100px; border-radius:50%; background:rgba(255,255,255,0.06); display:flex; align-items:center; justify-content:center; }
+  #joy-stick { width:48px; height:48px; border-radius:50%; background:rgba(255,255,255,0.12); transform:translate(0,0); transition:transform 0.02s; touch-action:none; }
+  /* dash button and jump */
+  #dashBtn { position: fixed; right: 20px; bottom: 18px; z-index:61; background:#f97316; color:#fff; border:none; padding:12px 14px; border-radius:12px; font-weight:600; }
+  #jumpBtn { position: fixed; left: 20px; bottom: 18px; z-index:61; background:#06b6d4; color:#fff; border:none; padding:12px 14px; border-radius:12px; font-weight:600; }
+  /* small mobile hint */
+  @media (max-width:920px){
+    #hud { font-size:13px; }
+    #joypad { right: 12px; bottom: 80px; }
+  }
 </style>
 </head>
 <body>
-<a href="{% url 'games' %}" 
-   style="
-      position:absolute;
-      top:20px;
-      right:20px;
-      background:#333;
-      color:white;
-      padding:10px 16px;
-      border-radius:8px;
-      text-decoration:none;
-      font-size:16px;">
-   ⬅ Back
-</a>
-<div id="hud">Time: <span id="timer">0</span>s | Score: <span id="score">0</span></div>
+<a class="back-btn" href="#">⬅ Back</a>
+
+<div id="hud">
+  <div class="group">
+    <div>Time: <span id="timer">0</span>s</div>
+    <div>| Score: <span id="score">0</span></div>
+  </div>
+
+  <div class="group">
+    <div>Difficulty:</div>
+    <select id="difficulty" class="select" title="Change difficulty before the flood starts">
+      <option value="low">Low</option>
+      <option value="medium" selected>Medium</option>
+      <option value="high">High</option>
+    </select>
+  </div>
+
+  <div class="group">
+    <button id="pauseBtn" class="btn-small">Pause</button>
+  </div>
+
+  <div class="group">
+    <div style="color:#f1f5f9">Health:</div>
+    <div class="health-bar" title="Your health when partially submerged"><div id="healthFill" class="health-fill"></div></div>
+  </div>
+
+  <div style="margin-left:8px;color:#fff">|</div>
+  <div class="group"><div id="hudInfo" style="color:#ddd;font-size:13px;"></div></div>
+</div>
+
+<div id="door-marker">Exit →</div>
+<div id="door-marker-left">Far Exit ← (bigger bonus)</div>
 <div id="countdown"></div>
 <div id="message"></div>
 <button id="restart">Restart</button>
+
+<!-- joystick + dash/jump -->
+<div id="joypad" aria-hidden="false">
+  <div id="joy-base"><div id="joy-stick"></div></div>
+</div>
+<button id="dashBtn">Dash</button>
+<button id="jumpBtn">Jump</button>
 
 <audio id="floodSound" src="https://cdn.pixabay.com/download/audio/2022/09/15/audio_5e8db3fc2d.mp3?filename=flood-water-river-ambient-110125.mp3"></audio>
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 <script>
-// --- Scene setup ---
+/* -------------------- Scene setup -------------------- */
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({antialias:true});
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio || 1);
 document.body.appendChild(renderer.domElement);
 
-window.addEventListener('resize', ()=>{
-  camera.aspect = window.innerWidth/window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-});
+window.addEventListener('resize', ()=> { camera.aspect = window.innerWidth/window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
 
 scene.add(new THREE.AmbientLight(0xffffff,0.6));
-const dirLight = new THREE.DirectionalLight(0xffffff,0.6);
-dirLight.position.set(5,10,5);
-scene.add(dirLight);
+const dirLight = new THREE.DirectionalLight(0xffffff,0.7);
+dirLight.position.set(5,10,5); scene.add(dirLight);
 
 // Floor & walls
 const floor = new THREE.Mesh(new THREE.PlaneGeometry(20,14), new THREE.MeshStandardMaterial({color:0xe6e6e6}));
@@ -59,22 +100,27 @@ const wallMat = new THREE.MeshStandardMaterial({color:0xd8d8d8});
 const backWall = new THREE.Mesh(new THREE.PlaneGeometry(20,6), wallMat); backWall.position.set(0,3,-7); scene.add(backWall);
 const leftWall = new THREE.Mesh(new THREE.PlaneGeometry(14,6), wallMat); leftWall.position.set(-10,3,0); leftWall.rotation.y=Math.PI/2; scene.add(leftWall);
 
-// Exit Door
-const door = new THREE.Mesh(new THREE.BoxGeometry(1.4,2.4,0.2), new THREE.MeshStandardMaterial({color:0x3333aa}));
+// Exit Doors (two)
+const door = new THREE.Mesh(new THREE.BoxGeometry(1.4,2.4,0.2), new THREE.MeshStandardMaterial({color:0x0b61a4}));
 door.position.set(9.2,1.2,0); scene.add(door);
+const doorLeft = new THREE.Mesh(new THREE.BoxGeometry(1.4,2.4,0.2), new THREE.MeshStandardMaterial({color:0x0b8f61}));
+doorLeft.position.set(-9.2,1.2,0); scene.add(doorLeft);
 
-// Desks/Chairs
-const desks=[];
+// Desks/Chairs (furniture hazards) with velocity metadata
+const desks = [];
 for(let r=-2;r<=2;r++){
   for(let c=-3;c<=1;c++){
     const desk = new THREE.Mesh(new THREE.BoxGeometry(1.6,0.6,1), new THREE.MeshStandardMaterial({color:0x8b4513}));
-    desk.position.set(c*2+0.5,0.3,r*2); scene.add(desk); desks.push(desk);
+    desk.position.set(c*2+0.5,0.3,r*2); scene.add(desk);
     const chair = new THREE.Mesh(new THREE.BoxGeometry(0.7,0.7,0.7), new THREE.MeshStandardMaterial({color:0x4444ff}));
     chair.position.set(c*2+2,0.35,r*2); scene.add(chair);
+    // store push velocity & floating state
+    desk.userData._vx = 0; desk.userData._vz = 0; desk.userData.float = false;
+    desks.push(desk);
   }
 }
 
-// Student
+// Student (player)
 const student = new THREE.Group();
 const body = new THREE.Mesh(new THREE.CylinderGeometry(0.28,0.28,0.9,12), new THREE.MeshStandardMaterial({color:0xffcc99}));
 body.position.y=0.5;
@@ -84,131 +130,495 @@ student.add(body); student.add(head); student.position.set(-8,0,0); scene.add(st
 
 camera.position.set(0,8,12); camera.lookAt(0,0,0);
 
-// --- Flood ---
-let floodHeight=0, floodSpeed=0.003, floodActive=false;
-const waterMat = new THREE.MeshStandardMaterial({color:0x1e90ff, transparent:true, opacity:0.6});
+/* -------------------- Flood & water (state & tunables) -------------------- */
+let floodHeight= -0.02;          // start slightly below floor
+let floodSpeed = 0.18;           // units per second (base)
+let floodAccel = 0.02;           // small acceleration
+let floodActive=false;
+let paused = false;
+let running = false;
+let debrisSpawnProb = 0.02;
+let splashSpawnProb = 0.06;
+
+// NEW: game phase state (idle, countdown, playing, ended)
+let gamePhase = 'idle';
+let countdownInterval = null;
+
+const waterMat = new THREE.MeshStandardMaterial({color:0x1e90ff, transparent:true, opacity:0.55});
 const water = new THREE.Mesh(new THREE.BoxGeometry(20,0.1,14), waterMat);
 water.position.y=floodHeight; scene.add(water);
 
+// audio
 const floodSound = document.getElementById('floodSound');
+floodSound.loop = true; floodSound.volume = 0.25;
 
-// Debris
-const debrisArr=[];
+/* -------------------- Debris & splashes -------------------- */
+const debrisArr = [];
 function spawnDebris(x,z){
-  const size=Math.random()*0.3+0.1;
-  const debris=new THREE.Mesh(new THREE.BoxGeometry(size,0.05,size), new THREE.MeshStandardMaterial({color:0x654321}));
-  debris.position.set(x,floodHeight+0.05,z);
-  scene.add(debris); debrisArr.push({obj:debris, life:15});
+  const size = Math.random()*0.3+0.08;
+  const debris = new THREE.Mesh(new THREE.BoxGeometry(size,0.05,size), new THREE.MeshStandardMaterial({color:0x654321}));
+  debris.position.set(x, water.position.y + 0.05, z);
+  scene.add(debris);
+  debrisArr.push({ obj: debris, life: 8 + Math.random()*8, floatOffset: Math.random()*0.4 - 0.2 });
 }
 
-// Splash particles
-const splashArr=[];
+/* splashes */
+const splashArr = [];
 function spawnSplash(x,z){
-  const sph = new THREE.Mesh(new THREE.SphereGeometry(0.05,6,6), new THREE.MeshStandardMaterial({color:0x1e90ff, transparent:true, opacity:0.6}));
-  sph.position.set(x,floodHeight+0.05,z);
-  scene.add(sph); splashArr.push({obj:sph, life:1, velocityY:0.1+Math.random()*0.1});
+  const sph = new THREE.Mesh(new THREE.SphereGeometry(0.05,6,6), new THREE.MeshStandardMaterial({color:0x98d7ff, transparent:true, opacity:0.7}));
+  sph.position.set(x, water.position.y + 0.05, z);
+  scene.add(sph);
+  splashArr.push({ obj: sph, life: 0.9 + Math.random()*0.6, vy: 0.08+Math.random()*0.12 });
 }
 function updateSplash(dt){
-  for(let i=splashArr.length-1;i>=0;i--){
-    const p=splashArr[i];
-    p.life-=dt;
-    p.obj.position.y+=p.velocityY*dt*10;
-    p.obj.material.opacity=Math.max(0,p.life/1.2*0.6);
-    if(p.life<=0){ scene.remove(p.obj); splashArr.splice(i,1);}
+  for(let i = splashArr.length-1; i>=0; i--){
+    const p = splashArr[i];
+    p.life -= dt;
+    p.obj.position.y += p.vy * dt * 6;
+    p.obj.material.opacity = Math.max(0, (p.life / 1.4) * 0.7);
+    if(p.life <= 0){ scene.remove(p.obj); splashArr.splice(i,1); }
   }
 }
 
-// --- Game Logic ---
-let countdownSec=5, timer=0, score=0, safe=false, gameOver=false;
+/* -------------------- Game state & HUD -------------------- */
+let countdownSec = 9; // increased by +2 seconds from original
+let timer = 0, score = 0, safe = false, gameOver = false;
+let health = 100; // 0..100
 const timerEl=document.getElementById('timer');
 const scoreEl=document.getElementById('score');
 const countdownEl=document.getElementById('countdown');
 const messageEl=document.getElementById('message');
 const restartBtn=document.getElementById('restart');
+const doorMarker = document.getElementById('door-marker');
+const doorMarkerLeft = document.getElementById('door-marker-left');
+const healthFill = document.getElementById('healthFill');
+const difficultyEl = document.getElementById('difficulty');
+const pauseBtn = document.getElementById('pauseBtn');
+const hudInfo = document.getElementById('hudInfo');
 
-function startCountdown(sec){
-  countdownSec=sec; countdownEl.style.display='block';
-  countdownEl.innerText='Flood in '+countdownSec;
-  const interval=setInterval(()=>{
-    countdownSec--;
-    if(countdownSec>0) countdownEl.innerText='Flood in '+countdownSec;
-    else{ clearInterval(interval); countdownEl.style.display='none'; startFlood(); }
-  },1000);
+/* Difficulty */
+function applyDifficulty(val){
+  if(val === 'low'){
+    floodSpeed = 0.12; floodAccel = 0.01;
+    debrisSpawnProb = 0.01; splashSpawnProb = 0.03;
+    hudInfo.textContent = 'Low difficulty';
+  } else if(val === 'medium'){
+    floodSpeed = 0.18; floodAccel = 0.02;
+    debrisSpawnProb = 0.02; splashSpawnProb = 0.06;
+    hudInfo.textContent = 'Medium difficulty';
+  } else {
+    floodSpeed = 0.34; floodAccel = 0.04;
+    debrisSpawnProb = 0.04; splashSpawnProb = 0.12;
+    hudInfo.textContent = 'High difficulty';
+  }
+}
+applyDifficulty(difficultyEl.value);
+difficultyEl.addEventListener('change', (e) => { if(gamePhase === 'idle') applyDifficulty(e.target.value); });
+
+pauseBtn.addEventListener('click', () => {
+  if(gamePhase === 'idle') return;
+  paused = !paused; pauseBtn.textContent = paused ? 'Resume' : 'Pause';
+  if(paused) floodSound.pause(); else { if(floodActive) floodSound.play().catch(()=>{}); }
+});
+
+function updateHUD(){
+  timerEl.textContent = timer;
+  scoreEl.textContent = Math.floor(score);
+  healthFill.style.width = Math.max(0, Math.min(100, health)) + '%';
+}
+updateHUD();
+
+/* -------------------- Movement: keyboard + joystick -------------------- */
+let input = { x:0, z:0 };
+const keys = {};
+window.addEventListener('keydown',(e)=>{ keys[e.key] = true; processKeys(); });
+window.addEventListener('keyup',(e)=>{ keys[e.key] = false; processKeys(); });
+
+function processKeys(){
+  const speed = 1;
+  input.x = 0; input.z = 0;
+  if(keys['ArrowLeft']||keys['a']||keys['A']) input.x = -1;
+  if(keys['ArrowRight']||keys['d']||keys['D']) input.x = 1;
+  if(keys['ArrowUp']||keys['w']||keys['W']) input.z = -1;
+  if(keys['ArrowDown']||keys['s']||keys['S']) input.z = 1;
 }
 
-function startFlood(){ 
-  floodActive=true; 
-  floodSound.currentTime=0; 
-  floodSound.play(); 
+/* joystick implementation */
+const joyBase = document.getElementById('joy-base');
+const joyStick = document.getElementById('joy-stick');
+let joyActive = false;
+let joyPos = { x:0, y:0 };
+const joyRadius = 40;
+
+function setStickPosition(dx, dy){
+  const nx = Math.max(-joyRadius, Math.min(joyRadius, dx));
+  const ny = Math.max(-joyRadius, Math.min(joyRadius, dy));
+  joyStick.style.transform = `translate(${nx}px, ${ny}px)`;
+  joyPos.x = nx / joyRadius; joyPos.y = ny / joyRadius;
+  // map to input with z = -y (screen down is +y)
+  input.x = joyPos.x;
+  input.z = -joyPos.y;
 }
 
-// Controls
-window.addEventListener('keydown',(e)=>{
+function resetStick(){
+  joyStick.style.transform = `translate(0px,0px)`;
+  joyPos = { x:0, y:0 }; input.x = 0; input.z = 0;
+}
+
+/* touch/mouse handlers for joystick */
+function startJoy(ev){
+  ev.preventDefault(); joyActive = true;
+  const rect = joyBase.getBoundingClientRect();
+  const cx = rect.left + rect.width/2;
+  const cy = rect.top + rect.height/2;
+  const clientX = ev.touches ? ev.touches[0].clientX : ev.clientX;
+  const clientY = ev.touches ? ev.touches[0].clientY : ev.clientY;
+  setStickPosition(clientX - cx, clientY - cy);
+}
+function moveJoy(ev){
+  if(!joyActive) return;
+  const rect = joyBase.getBoundingClientRect();
+  const cx = rect.left + rect.width/2;
+  const cy = rect.top + rect.height/2;
+  const clientX = ev.touches ? ev.touches[0].clientX : ev.clientX;
+  const clientY = ev.touches ? ev.touches[0].clientY : ev.clientY;
+  setStickPosition(clientX - cx, clientY - cy);
+}
+function endJoy(ev){ joyActive = false; resetStick(); }
+
+joyBase.addEventListener('touchstart', startJoy);
+joyBase.addEventListener('touchmove', moveJoy);
+joyBase.addEventListener('touchend', endJoy);
+joyBase.addEventListener('mousedown', startJoy);
+window.addEventListener('mousemove', moveJoy);
+window.addEventListener('mouseup', endJoy);
+
+/* -------------------- Dash / Jump */
+const dashBtn = document.getElementById('dashBtn');
+const jumpBtn = document.getElementById('jumpBtn');
+let dashCooldown = 0, dashActive = false, dashTimer = 0;
+const DASH_SPEED = 6.0;
+const DASH_DURATION = 0.18; // seconds
+const DASH_COOLDOWN = 2.2; // seconds
+
+dashBtn.addEventListener('click', doDash);
+jumpBtn.addEventListener('click', doJump);
+
+function doDash(){
+  const now = performance.now();
+  if(dashCooldown > 0) return;
+  // only allow dash if there's a movement direction or joystick pointing
+  if(Math.abs(input.x) < 0.05 && Math.abs(input.z) < 0.05) {
+    // dash forward in camera direction (toward door)
+    // fallback: toward right door if close, else toward center
+    input.x = (door.position.x - student.position.x) > 0 ? 1 : -1;
+    input.z = (door.position.z - student.position.z) > 0 ? 1 : 0;
+  }
+  dashActive = true;
+  dashTimer = DASH_DURATION;
+  dashCooldown = DASH_COOLDOWN;
+  // try to push nearest desk in dash direction
+  pushNearestDesk();
+  // small visual feedback
+  dashBtn.style.opacity = 0.6;
+  setTimeout(()=> dashBtn.style.opacity = 1, 200);
+}
+
+function doJump(){
+  // quick small upward visual hop (no physics)
   if(gameOver) return;
-  const step=0.26;
-  if(e.key==='ArrowLeft') student.position.x-=step;
-  if(e.key==='ArrowRight') student.position.x+=step;
-  if(e.key==='ArrowUp') student.position.z-=step;
-  if(e.key==='ArrowDown') student.position.z+=step;
-  student.position.x=Math.max(-9.5, Math.min(9.5, student.position.x));
-  student.position.z=Math.max(-6.5, Math.min(6.5, student.position.z));
-});
+  const jumpUp = 0.7;
+  const jumpDur = 220;
+  // animate body upward a bit
+  const origY = student.position.y;
+  let t0 = performance.now();
+  (function hop(ts){
+    const dt = ts - t0;
+    if(dt > jumpDur) { student.position.y = origY; return; }
+    const p = Math.sin((dt/jumpDur) * Math.PI) * jumpUp;
+    student.position.y = origY + p;
+    requestAnimationFrame(hop);
+  })();
+}
 
-// Check exit
+/* -------------------- Collisions & furniture push logic -------------------- */
+function pushNearestDesk(){
+  let best = null; let bestDist = 999;
+  for(const d of desks){
+    const dist = Math.hypot(d.position.x - student.position.x, d.position.z - student.position.z);
+    if(dist < 1.4 && dist < bestDist){
+      best = d; bestDist = dist;
+    }
+  }
+  if(!best) return;
+  // apply velocity away from player direction (normalized)
+  let vx = (best.position.x - student.position.x);
+  let vz = (best.position.z - student.position.z);
+  const len = Math.hypot(vx, vz) || 1;
+  vx /= len; vz /= len;
+  // stronger push if dashActive
+  const pushPower = 3.2 + (dashActive ? 4 : 0);
+  best.userData._vx = (best.userData._vx || 0) + vx * pushPower;
+  best.userData._vz = (best.userData._vz || 0) + vz * pushPower;
+  // small nudge for player backwards
+  student.position.x -= vx * 0.06; student.position.z -= vz * 0.06;
+}
+
+/* -------------------- Safety checks & scoring -------------------- */
 function checkExit(){
-  const d=Math.hypot(student.position.x-door.position.x, student.position.z-door.position.z);
-  if(d<1.2 && !gameOver){ safe=true; gameOver=true; score=Math.max(0,200-Math.round(timer*10)); scoreEl.innerText=score; showMessage('You escaped! Score: '+score);}
+  if(gamePhase !== 'playing') return; // guard to prevent early exit
+
+  const dR = Math.hypot(student.position.x - door.position.x, student.position.z - door.position.z);
+  if(dR < 1.2 && !gameOver){
+    safe = true; gameOver = true; gamePhase = 'ended';
+    const quickBonus = Math.max(0, 200 - Math.round(timer * 8));
+    const finalScore = Math.max(0, Math.round(score) + quickBonus + Math.floor(health/5));
+    scoreEl.innerText = finalScore;
+    showMessage('You escaped via near exit! Score: ' + finalScore);
+    stopFloodSound();
+  }
+  const dL = Math.hypot(student.position.x - doorLeft.position.x, student.position.z - doorLeft.position.z);
+  if(dL < 1.2 && !gameOver){
+    safe = true; gameOver = true; gamePhase = 'ended';
+    const quickBonus = Math.max(0, 300 - Math.round(timer * 8)); // bigger bonus for far exit
+    const finalScore = Math.max(0, Math.round(score) + quickBonus + Math.floor(health/4));
+    scoreEl.innerText = finalScore;
+    showMessage('You escaped via far exit! Big bonus — Score: ' + finalScore);
+    stopFloodSound();
+  }
 }
 
-// Check flood collision
 function checkFloodCollision(){
-  if(student.position.y< floodHeight + 0.45 && !gameOver){ gameOver=true; showMessage("You were submerged! Game Over");}
+  if(gamePhase !== 'playing') return; // guard to prevent premature game over
+
+  const headWorldY = student.position.y + head.position.y;
+  const submergedThreshold = headWorldY - 0.25;
+  if(floodHeight >= submergedThreshold && !gameOver){
+    gameOver = true; safe = false; gamePhase = 'ended';
+    const finalScore = Math.max(0, Math.round(score));
+    scoreEl.innerText = finalScore;
+    showMessage("You were submerged! Game Over — Score: " + finalScore);
+    stopFloodSound(); return;
+  }
+  // partial submersion reduces health
+  const partialThreshold = headWorldY - 0.6;
+  if(floodHeight >= partialThreshold && !gameOver && !paused){
+    health -= 15 * Math.min(1, (floodHeight - partialThreshold) + 0.3) * (1/1);
+    if(health <= 0){
+      health = 0; gameOver = true; safe = false; gamePhase = 'ended';
+      const finalScore = Math.max(0, Math.round(score));
+      scoreEl.innerText = finalScore;
+      showMessage("You lost all health. Game Over — Score: " + finalScore);
+      stopFloodSound();
+    }
+  } else {
+    if(health < 100 && !gameOver && !paused) health += 3 * (1/1);
+  }
 }
 
-// Message
-function showMessage(text){ messageEl.style.display='block'; messageEl.innerText=text; restartBtn.style.display='block'; }
+/* -------------------- Timer & HUD tick -------------------- */
+// fixed: only update timer & score while playing
+setInterval(()=> {
+  if(gamePhase === 'playing' && !paused){
+    timer++;
+    score += 1; // score per second while playing
+  }
+  updateHUD();
+}, 1000);
 
-// Restart
-restartBtn.addEventListener('click',()=>{
-  floodHeight=0; water.position.y=floodHeight; floodActive=false;
-  debrisArr.forEach(d=>scene.remove(d.obj)); debrisArr.length=0;
-  splashArr.forEach(s=>scene.remove(s.obj)); splashArr.length=0;
-  messageEl.style.display='none'; restartBtn.style.display='none';
-  student.position.set(-8,0,0);
-  timer=0; score=0; scoreEl.innerText=score; timerEl.innerText=timer;
-  safe=false; gameOver=false;
-  startCountdown(5);
-});
-
-// Timer
-setInterval(()=>{ if(!gameOver) timer++; timerEl.innerText=timer; },1000);
-
-// Start countdown
-startCountdown(5);
-
-// Animate
-let last=performance.now();
+/* -------------------- Fire (flood) tick & animate -------------------- */
+let last = performance.now();
+let movementSpeed = 2.2; // base movement speed (units per second)
 function animate(){
   requestAnimationFrame(animate);
-  const now=performance.now(); const dt=(now-last)/1000; last=now;
+  const now = performance.now(); const dt = (now - last) / 1000; last = now;
 
-  if(floodActive && !gameOver){
-    floodHeight+=0.003;
-    water.position.y=floodHeight;
-
-    if(Math.random()<0.02) spawnDebris(-9+Math.random()*18, -7+Math.random()*14);
-    if(Math.random()<0.05) spawnSplash(-9+Math.random()*18, -7+Math.random()*14);
-
-    checkFloodCollision();
-    desks.forEach((d,i)=>{ d.position.y=Math.sin(now*0.001+i)*0.005; });
+  // update desks: apply velocities and friction; if they reach water area -> become debris
+  for(let i = desks.length-1; i >= 0; i--){
+    const d = desks[i];
+    // move if velocity present
+    if(Math.abs(d.userData._vx) > 0.001 || Math.abs(d.userData._vz) > 0.001){
+      d.position.x += d.userData._vx * dt;
+      d.position.z += d.userData._vz * dt;
+      // friction
+      d.userData._vx *= Math.max(0, 1 - (2.0 * dt));
+      d.userData._vz *= Math.max(0, 1 - (2.0 * dt));
+      // if desk goes beyond room bounds toward water region (z > 5 or x beyond 9) convert to debris
+      if(d.position.z > 5 || Math.abs(d.position.x) > 9.3){
+        // spawn debris at desk position and remove desk
+        spawnDebris(d.position.x, d.position.z);
+        scene.remove(d); desks.splice(i, 1);
+        continue;
+      }
+      // if desk near player while moving, push player a bit
+      const dist = Math.hypot(d.position.x - student.position.x, d.position.z - student.position.z);
+      if(dist < 0.9 && floodHeight > 0.4){
+        student.position.x += (d.userData._vx || 0) * 0.03;
+        student.position.z += (d.userData._vz || 0) * 0.03;
+      }
+    }
   }
 
-  updateSplash(dt);
-  checkExit();
+  // flood update (framerate independent)
+  if(floodActive && !gameOver && !paused){
+    floodHeight += floodSpeed * dt;
+    floodSpeed += floodAccel * dt * 0.02;
+    floodHeight = Math.min(floodHeight, 6.0);
+    water.position.y = floodHeight;
+    // spawn debris/splash using tuned probs
+    if(Math.random() < debrisSpawnProb) spawnDebris(-9 + Math.random()*18, -7 + Math.random()*14);
+    if(Math.random() < splashSpawnProb) spawnSplash(-9 + Math.random()*18, -7 + Math.random()*14);
+    // update splashes
+    updateSplash(dt);
+  }
 
-  renderer.render(scene,camera);
+  // dash timer & cooldown management
+  if(dashCooldown > 0) dashCooldown = Math.max(0, dashCooldown - dt);
+  if(dashActive){
+    dashTimer -= dt;
+    if(dashTimer <= 0) dashActive = false;
+  }
+
+  // movement per frame: combine keyboard and joystick input
+  let mvx = input.x, mvz = input.z;
+  // normalize diagonal
+  const inLen = Math.hypot(mvx, mvz);
+  if(inLen > 1) { mvx /= inLen; mvz /= inLen; }
+  // dash multiplier if active
+  const dashMult = dashActive ? DASH_SPEED : movementSpeed;
+  // update student position
+  if(!gameOver && !paused && (gamePhase === 'playing' || gamePhase === 'countdown')){
+    student.position.x += mvx * dashMult * dt;
+    student.position.z += mvz * dashMult * dt;
+    // keep in bounds
+    student.position.x = Math.max(-9.2, Math.min(9.2, student.position.x));
+    student.position.z = Math.max(-6.8, Math.min(6.8, student.position.z));
+  }
+
+  // desks subtle bobbing for immersion
+  desks.forEach((d,i)=> d.position.y = Math.sin(now*0.001 + i) * 0.004 );
+
+  if(!paused){
+    checkFloodCollision();
+    checkExit();
+  }
+
+  // door markers fade as player approaches
+  const dDist = Math.hypot(student.position.x - door.position.x, student.position.z - door.position.z);
+  doorMarker.style.opacity = dDist < 5 ? Math.max(0.15, (dDist / 5)) : 1;
+  const dLeftDist = Math.hypot(student.position.x - doorLeft.position.x, student.position.z - doorLeft.position.z);
+  doorMarkerLeft.style.opacity = dLeftDist < 5 ? Math.max(0.15, (dLeftDist / 5)) : 1;
+
+  updateHUD();
+  renderer.render(scene, camera);
 }
 animate();
+
+/* -------------------- Start / Reset logic -------------------- */
+function startCountdown(sec){
+  if(gamePhase !== 'idle') return;
+
+  gamePhase = 'countdown';
+  countdownSec = sec;
+  countdownEl.style.display = 'block';
+  countdownEl.innerText = 'Flood in ' + countdownSec;
+
+  if(countdownInterval) clearInterval(countdownInterval);
+  countdownInterval = setInterval(()=>{
+    if(paused) return;
+
+    countdownSec--;
+    if(countdownSec > 0){
+      countdownEl.innerText = 'Flood in ' + countdownSec;
+    } else {
+      clearInterval(countdownInterval); countdownInterval = null;
+      countdownEl.style.display = 'none';
+      startFlood();   // 🔥 only starts here
+    }
+  }, 1000);
+}
+
+function startFlood(){
+  if(gamePhase !== 'countdown') return;
+
+  gamePhase = 'playing';
+  running = true;
+  floodActive = true;
+  paused = false;
+  gameOver = false;
+
+  // reset score growth baseline
+  score = 0;
+
+  // reset water height
+  floodHeight = -0.02;
+  water.position.y = floodHeight;
+
+  // ensure floodSpeed respects selected difficulty (already set by applyDifficulty)
+
+  // delay water sound slightly for clarity
+  setTimeout(() => {
+    if(floodSound) floodSound.play().catch(()=>{});
+  }, 400);
+
+  console.log('🌊 Flood started correctly');
+}
+function stopFloodSound(){ try{ floodSound.pause(); floodSound.currentTime = 0; } catch(e){} }
+
+function showMessage(text){ messageEl.style.display = 'block'; messageEl.innerText = text; restartBtn.style.display = 'block'; }
+restartBtn.addEventListener('click', resetGame);
+
+function resetGame(){
+  // reset state
+  gamePhase = 'idle';
+  running = false;
+  floodActive = false;
+  gameOver = false;
+  paused = false;
+
+  // clear countdown if any
+  if(countdownInterval){ clearInterval(countdownInterval); countdownInterval = null; }
+
+  floodHeight = -0.02;
+  applyDifficulty(difficultyEl.value);
+  water.position.y = floodHeight;
+  debrisArr.forEach(d=>scene.remove(d.obj)); debrisArr.length = 0;
+  splashArr.forEach(s=>scene.remove(s.obj)); splashArr.length = 0;
+  // remove pushed desks and recreate original layout if some were removed
+  // remove all desks/ chairs
+  desks.forEach(d => scene.remove(d));
+  // rebuild desks array fresh
+  desks.length = 0;
+  for(let r=-2;r<=2;r++){
+    for(let c=-3;c<=1;c++){
+      const desk = new THREE.Mesh(new THREE.BoxGeometry(1.6,0.6,1), new THREE.MeshStandardMaterial({color:0x8b4513}));
+      desk.position.set(c*2+0.5,0.3,r*2); scene.add(desk);
+      const chair = new THREE.Mesh(new THREE.BoxGeometry(0.7,0.7,0.7), new THREE.MeshStandardMaterial({color:0x4444ff}));
+      chair.position.set(c*2+2,0.35,r*2); scene.add(chair);
+      desk.userData._vx = 0; desk.userData._vz = 0; desk.userData.float = false;
+      desks.push(desk);
+    }
+  }
+
+  messageEl.style.display = 'none'; restartBtn.style.display = 'none';
+  student.position.set(-8,0,0);
+  timer = 0; score = 0; health = 100;
+  safe = false; gameOver = false; paused = false; running = false;
+  dashCooldown = 0; dashActive = false;
+  pauseBtn.textContent = 'Pause';
+  stopFloodSound();
+  startCountdown(9); // slightly longer countdown
+}
+
+/* -------------------- Joystick & dash accessibility for keyboard */ 
+// (already wired, just expose a quick debug ignite)
+window._floodDebug = {
+  ignite: ()=> { gamePhase = 'countdown'; startFlood(); console.log('flood ignited'); },
+  state: ()=> ({floodActive, running, floodHeight, timer, health, gamePhase})
+};
+
+/* -------------------- Start on load (9s) -------------------- */
+startCountdown(9);
 </script>
 </body>
 </html>
