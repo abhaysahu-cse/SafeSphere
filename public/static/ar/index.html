@@ -1,99 +1,77 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SafeSphere AR — Emergency Drills</title>
+  <meta charset="utf-8">
+  <title>SafeSphere AR</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- A-Frame + AR.js (marker-based) -->
+  <!-- A-Frame + AR.js -->
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-  <script src="https://cdn.rawgit.com/AR-js-org/AR.js/3.3.2/aframe/build/aframe-ar.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.5/aframe/build/aframe-ar.min.js"></script>
 
   <style>
-    html, body { height:100%; margin:0; background:#000; font-family:system-ui,Segoe UI,Roboto,"Helvetica Neue"; }
-    a-scene { height:100vh; width:100vw; }
-    #ui { position: fixed; z-index: 9999; right: 12px; top: 12px; display:flex; flex-direction:column; gap:8px; }
-    .btn { background: rgba(255,255,255,0.95); color:#111; border-radius:10px; padding:8px 12px; font-weight:600;
-           border:none; cursor:pointer; box-shadow:0 6px 18px rgba(0,0,0,.22); min-width:120px; text-align:left; }
-    .hint { position: fixed; top: 12px; left: 12px; z-index:9999;
-           background: rgba(255,255,255,0.92); padding:8px 12px; border-radius:8px; font-size:13px; max-width:calc(100vw - 160px); }
-    .selector { display:flex; flex-direction:column; gap:6px; max-width:220px; }
-    .info-panel { position: fixed; left: 12px; bottom: 12px; z-index:9999; background: rgba(255,255,255,0.95);
-      padding:12px 14px; border-radius:12px; max-width:40vw; box-shadow:0 12px 30px rgba(0,0,0,.25);
-      font-size:13px; color:#111;
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: black;
     }
-    .small { font-size:12px; color:#444; }
-    @media (max-width:640px){ .info-panel { max-width:86vw; } .selector{ max-width:160px } }
+    .hint {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 999;
+      background: rgba(255,255,255,0.9);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+    }
+    
   </style>
 </head>
+
 <body>
   <div class="hint">
-    Tip: Allow camera access. Use the printed <strong>Hiro</strong> marker (or show on another screen) in front of the camera.<br>
-    Marker path: <code>/static/ar/marker/hiro.patt</code>
-    Open console (F12) if something doesn't appear.
+    Allow camera access<br>
+    Show HIRO marker to camera
   </div>
 
-  <div id="ui">
-    <div class="selector" role="toolbar" aria-label="Scenarios">
-      <button class="btn" data-scenario="flood">🌊 Flood</button>
-      <button class="btn" data-scenario="earthquake">🏚 Earthquake</button>
-      <button class="btn" data-scenario="cyclone">🌀 Cyclone</button>
-      <button class="btn" data-scenario="wildfire">🔥 Wildfire</button>
-      <button class="btn" data-scenario="landslide">🏔 Landslide</button>
-      <button class="btn" data-scenario="firstaid">🩹 First Aid</button>
-    </div>
-    <button id="enter-btn" class="btn">Start AR</button>
-    <button id="fullscreen-btn" class="btn">Fullscreen</button>
-  </div>
+  <a-scene
+    embedded
+    arjs="sourceType: webcam; debugUIEnabled: false;"
+    vr-mode-ui="enabled: false">
 
-  <div class="info-panel" id="infoPanel">
-    <strong id="scenarioTitle">Select a scenario</strong>
-    <p id="scenarioText" class="small">Choose a disaster from the buttons to load the 3D model and instructions. When marker is detected, the model and guidance appear.</p>
-    <p class="small">Model path: <code id="modelPath">/static/ar/models/*.glb</code></p>
-    <p class="small">Console logs will show model/network errors.</p>
-  </div>
+    <!-- HIRO marker -->
+    <a-marker type="pattern" url="marker/hiro.patt">
 
-  <!-- A-Frame scene -->
-  <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-    <a-marker type="pattern" url="/static/ar/marker/hiro.patt" id="hiro-marker">
-      <!-- dynamic model entity (set by JS) -->
-      <a-entity id="scenario-model" position="0 0 0" rotation="0 0 0" scale="0.5 0.5 0.5" visible="false"></a-entity>
-
-      <!-- simple fallbacks (hidden unless model missing) -->
-      <a-entity id="fallback-flood" visible="false" position="0 0 0">
-        <a-box depth="1" height="0.2" width="1.2" position="0 0.1 0" opacity="0.9" color="#2b8cff"></a-box>
-        <a-text value="FLOOD — stay on high ground" position="-0.5 0.5 0" width="2"></a-text>
+      <!-- 3D MODEL (optional) -->
+      <a-entity
+        gltf-model="models/extinguisher.glb"
+        scale="0.5 0.5 0.5"
+        position="0 0 0">
       </a-entity>
 
-      <a-entity id="fallback-earthquake" visible="false" position="0 0 0">
-        <a-box color="#888" depth="0.6" height="0.6" width="0.6" position="0 0.3 0"></a-box>
-        <a-text value="EARTHQUAKE — drop, cover, hold on" position="-1 0.9 0" width="3"></a-text>
-      </a-entity>
+      <!-- Fallback BOX -->
+      <a-box
+        color="#ff3333"
+        position="0 0.3 0"
+        height="0.6"
+        width="0.3"
+        depth="0.3"
+        animation="property: rotation; to: 0 360 0; loop: true; dur: 4000">
+      </a-box>
 
-      <a-entity id="fallback-cyclone" visible="false" position="0 0 0">
-        <a-cone height="0.8" radius-bottom="0.4" position="0 0.4 0" color="#7ec8ff"></a-cone>
-        <a-text value="CYCLONE — seek shelter" position="-1 1 0" width="3"></a-text>
-      </a-entity>
-
-      <a-entity id="fallback-wildfire" visible="false" position="0 0 0">
-        <a-cylinder height="0.6" radius="0.2" position="0 0.3 0" color="#ff8a3d"></a-cylinder>
-        <a-text value="WILDFIRE — evacuate upwind" position="-1 1 0" width="3"></a-text>
-      </a-entity>
-
-      <a-entity id="fallback-landslide" visible="false" position="0 0 0">
-        <a-box height="0.4" width="1" depth="0.6" position="0 0.2 0" color="#8d6e63"></a-box>
-        <a-text value="LANDSLIDE — move to safe area" position="-1 0.9 0" width="3"></a-text>
-      </a-entity>
-
-      <a-entity id="fallback-firstaid" visible="false" position="0 0 0">
-        <a-box color="#ff0000" height="0.4" width="0.6" depth="0.3" position="0 0.2 0"></a-box>
-        <a-text value="FIRST AID — follow steps" position="-1 0.9 0" width="3"></a-text>
-      </a-entity>
+      <a-text
+        value="Fire Safety\nUse extinguisher\nAim at base"
+        align="center"
+        position="-0.7 1 0"
+        width="2"
+        color="#ffffff">
+      </a-text>
     </a-marker>
 
     <a-entity camera></a-entity>
   </a-scene>
 
-  <script src="/static/Js/ar.js"></script>
 </body>
 </html>
