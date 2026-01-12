@@ -16,9 +16,20 @@ import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-local-secret-please-change")
-DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+SECRET_KEY = os.environ.get(
+    "DJANGO_SECRET_KEY",
+    "django-insecure-q@to37sgiwh-8m$i#fj+17q36_jmyi-^q*w8#6&)!1bez^sn-+"  # fallback, keep local dev safe
+)
+DEBUG = os.environ.get("DJANGO_DEBUG", "True").lower() in ("1", "true", "yes")
+
+# Allowed hosts from env (comma separated) or fallback to localhost during dev
+_allowed = os.environ.get("DJANGO_ALLOWED_HOSTS", "*")
+if _allowed.strip() == "" or _allowed == "*":
+    ALLOWED_HOSTS = ["*"]
+else:
+    ALLOWED_HOSTS = [h.strip() for h in _allowed.split(",") if h.strip()]
+
+
 
 # Application definition
 INSTALLED_APPS = [
@@ -33,7 +44,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  # serve static files
+    "whitenoise.middleware.WhiteNoiseMiddleware",   # <-- add here (first after SecurityMiddleware)
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -62,13 +73,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "safespera.wsgi.application"
 
-# Database: use DATABASE_URL if provided; otherwise use local sqlite
-DATABASES = {
-    "default": dj_database_url.config(
-        default="sqlite:///" + str(BASE_DIR / "db.sqlite3"),
-        conn_max_age=600,
-    )
-}
+# DATABASE: use DATABASE_URL if present, otherwise default to local sqlite3
+if os.environ.get("DATABASE_URL"):
+    DATABASES = {
+        "default": dj_database_url.parse(os.environ.get("DATABASE_URL"), conn_max_age=600)
+    }
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -84,17 +100,17 @@ TIME_ZONE = "Asia/Kolkata"
 USE_I18N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
+# Static & media (keep your current config — ensure staticfiles works)
 STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"              # collectstatic target
-STATICFILES_DIRS = [BASE_DIR / "public" / "static"] # your dev static content
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "public/static")]
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # WhiteNoise: compressed static files (safe & simple)
 STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
 # Media (if you use file uploads; keep in repo layout)
 MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "public" / "media"
+MEDIA_ROOT = os.path.join(BASE_DIR, "public/static")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
