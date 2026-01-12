@@ -104,6 +104,15 @@
                 <span class="nav-icon">💬</span>
                 <span class="nav-text">AI Assistant</span>
             </a>
+                <a href="{% url 'weather' %}" class="nav-link">
+            <span class="nav-icon">🌦</span>
+            <span class="nav-text">Weather</span>
+        </a>
+        <!-- Map page -->
+        <a href="{% url 'map' %}" class="nav-link">
+            <span class="nav-icon">🗺️</span>
+            <span class="nav-text">full Map</span>
+        </a>
             <a href="{% url 'profile' %}" class="nav-link" data-page="profile">
                 <span class="nav-icon">👤</span>
                 <span class="nav-text">Profile</span>
@@ -182,11 +191,11 @@
 
 <script>
     // *** CONFIGURATION ***
-    const GEMINI_API_KEY = 'AIzaSyBfFCxbDDLyPrPEiNcJ3FPgbky6B18jrwQ'; //api key
+    const GEMINI_API_KEY = 'AIzaSyDCZZX3SD0QHE3HFgynhEVzQt-5MhiWPG4'; //api key
     const GEMINI_MODEL = 'gemini-2.5-flash';
 
     // System Instruction 
-    const SYSTEM_INSTRUCTION = "You are SafeLearn's AI Safety Assistant, an AI-powered disaster preparedness guide for students, teachers, and administrators. Your main responsibilities are: 1. Greet users politely and explain your role briefly. Use Markdown and line breaks for clear, point-based information. 2. Provide step-by-step safety instructions for disasters (earthquake, flood, fire, cyclone, etc.). 3. Share SafeLearn's core services: Learning Modules, Quizzes & Assessments, AR/VR Disaster Simulations, AI Risk Alerts, Resource Hub (Guidelines & Checklists), Gamification & Certificates, and Emergency SOS. 4. Encourage community participation and mental wellbeing. 5. In emergencies, share first-aid and evacuation steps, reminding the user to call the local emergency number (e.g., 112 in India). 6. Be clear, empathetic, and use relevant emojis for alerts (🚨🔥🌊). 7. Reply in English, but if the user asks a simple Hindi question (like 'kese ho'), reply in the Hinglish style (like 'mai theek hu, aap batao'). you are an inian i  agent and try write topic in bold latter ,avoid stars(*).";
+    const SYSTEM_INSTRUCTION = "You are SafeLearn's AI Safety Assistant, an AI-powered disaster preparedness guide for students, teachers, and administrators. Your main responsibilities are: 1. Greet users politely and explain your role briefly. Use Markdown and line breaks for clear, point-based information. 2. Provide step-by-step safety instructions for disasters (earthquake, flood, fire, cyclone, etc.). 3. Share SafeLearn's core services: Learning Modules, Quizzes & Assessments, AR/VR Disaster Simulations, AI Risk Alerts, Resource Hub (Guidelines & Checklists), Gamification & Certificates, and Emergency SOS. 4. Encourage community participation and mental wellbeing. 5. In emergencies, share first-aid and evacuation steps, reminding the user to call the local emergency number (e.g., 112 in India). 6. Be clear, empathetic, and use relevant emojis for alerts (🚨🔥🌊). 7. Reply in English, but if the user asks a simple Hindi question (like 'kese ho'), reply in the Hinglish style (like 'mai theek hu, aap batao'). you are an inian i  agent and try write topic in bold latter ,avoid stars(*). provide answer without using * and # symboll , no use any symboll and give short and minimal Answer";
 
 
     // *** STATE & DOM ELEMENTS ***
