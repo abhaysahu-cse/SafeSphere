@@ -124,17 +124,32 @@
             </a>
         </div>
         <!-- Cyclone Simulation -->
-<div class="drill-card">
-    <span class="drill-icon">🌀</span>
-    <h3 class="drill-title">Cyclone Preparedness Simulation</h3>
-    <p class="drill-description">
-        Experience strong winds, storm surge, and rainfall. Choose safe zones, build shelters, 
-        and survive a powerful cyclone.
-    </p>
-    <a href="{% url 'cyclone_simulation' %}" class="btn btn-warning">
-        Start Cyclone Simulation →
-    </a>
-</div>
+        <div class="drill-card">
+            <span class="drill-icon">🌀</span>
+            <h3 class="drill-title">Cyclone Preparedness Simulation</h3>
+            <p class="drill-description">
+            Experience strong winds, storm surge, and rainfall. Choose safe zones, build shelters,
+             and survive a powerful cyclone.    </p>
+            <a href="{% url 'cyclone_simulation' %}" class="btn btn-warning">
+            Start Cyclone Simulation →
+         </a>
+        </div>
+
+        <!-- AR Safety Drill -->
+         <div class="drill-card">
+            <span class="drill-icon">🕶️</span>
+                <h3 class="drill-title">Augmented Reality (AR) Safety Drills</h3>
+                <p class="drill-description">
+                       Use your mobile device to practice emergency responses in Augmented Reality.
+                       Scan markers to view 3D safety equipment and follow interactive instructions.
+                </p>
+            <a href="{% static 'ar/index.html' %}" class="btn btn-secondary" 
+                   target="_blank" 
+                          rel="noopener">
+                                  Start AR Safety Drills →
+            </a>
+        </div>
+
 
 
 

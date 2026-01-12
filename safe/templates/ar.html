@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SafeSphere AR</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- A-Frame + AR.js -->
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ar.js@3.4.5/aframe/build/aframe-ar.js"></script>
+
+  <style>
+    body { margin: 0; overflow: hidden; }
+    .back-btn {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 999;
+      background: white;
+      padding: 8px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body>
+
+<a href="{% url 'index' %}" class="back-btn">⬅ Dashboard</a>
+
+<a-scene
+  embedded
+  arjs="sourceType: webcam; debugUIEnabled: false;"
+  vr-mode-ui="enabled: false">
+
+  <!-- Marker -->
+  <a-marker preset="hiro">
+    <a-box position="0 0.5 0" material="color: red;"></a-box>
+    <a-text value="SAFE ZONE"
+            position="0 1 0"
+            align="center"
+            color="yellow">
+    </a-text>
+  </a-marker>
+
+  <!-- Camera -->
+  <a-entity camera></a-entity>
+</a-scene>
+
+</body>
+</html>
