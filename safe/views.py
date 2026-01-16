@@ -55,9 +55,6 @@ def  Earthquake_Safety(request):
 def  FireSafety(request):
     return render(request, "learn/Fire-Safety.html")
 
-def  Cyclone_Safety(request):
-    return render(request, "learn/Cyclone_Safety.html")
-
 
 
 def  Firstaid (request):
@@ -164,6 +161,33 @@ def cyclone_simulation(request):
 
 def landslide_simulation(request):
     return render(request, 'landslide_simulation.html')
+
+def vr_videos(request):
+    return render(request, 'vr.html')
+
+
+def Flood_Safety(request):
+    return render(request, "learn/flood.html")
+
+
+
+def Cyclone_Safety(request):
+    return render(request, "learn/Cyclone_Safety.html")
+
+def Tsunami_Safety(request):
+    return render(request, "learn/tsunami.html")
+
+def Tornado_Safety(request):
+    return render(request, "learn/tornado.html")
+
+def HeatWave_Safety(request):
+    return render(request, "learn/heatwave.html")
+
+def FirstAid_Safety(request):
+    return render(request, "learn/firstaid.html")
+
+def Winter_Safety(request):
+    return render(request, "learn/winterstrome.html")
 
 def zones_api(request):
     data = [

@@ -1,0 +1,258 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>VR Safety Videos | SafeSphere</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+  <style>
+    /* Minimal page-specific styles (you can move to styles.css) */
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin: 18px; background:#f7f9fb; color:#111; }
+    .page-container { max-width:1100px; margin: 0 auto; padding-bottom:60px; }
+    h1 { margin-bottom:6px; }
+    p.lead { color:#444; margin-top:0; margin-bottom:18px; }
+    .actions-row { display:flex; gap:10px; align-items:center; margin-bottom:12px; flex-wrap:wrap; }
+    .drills-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(300px,1fr)); gap:18px; }
+    .drill-card { background:#fff; border-radius:12px; box-shadow: 0 8px 20px rgba(20,30,40,0.06); padding:12px; display:flex; flex-direction:column; gap:8px; }
+    .drill-card h3 { margin:6px 0 0 0; font-size:1.02rem; }
+    .drill-desc { color:#555; font-size:0.95rem; margin-bottom:6px; }
+    .video-wrap { position:relative; border-radius:10px; overflow:hidden; background:#000; }
+    video { width:100%; height:auto; display:block; background:#000; }
+    .controls { display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; }
+    .btn { background:#fff; border:1px solid #e6e9ee; padding:8px 10px; border-radius:8px; font-weight:600; cursor:pointer; box-shadow: 0 4px 12px rgba(20,30,40,0.04); }
+    .btn.primary { background:#0066ff; color:#fff; border:none; }
+    .meta { font-size:0.85rem; color:#666; margin-top:4px; }
+    .small { font-size:0.85rem; color:#666; }
+    .back-link { display:inline-block; margin-top:16px; color:#333; text-decoration:none; border:1px solid #ddd; padding:8px 12px; border-radius:8px; background:#fff; }
+    /* VR instruction modal */
+    .vr-modal { position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,0.6); z-index:1200; padding:20px; }
+    .vr-modal .card { width:100%; max-width:720px; background:#fff; padding:18px; border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,0.4); }
+    .vr-modal h3 { margin-top:0; }
+    .close-vr { float:right; cursor:pointer; background:#eee; border-radius:6px; padding:6px 8px; border:none; }
+    @media (max-width:420px){ .controls{ gap:6px; } .btn{ padding:7px 8px; } }
+  </style>
+</head>
+<body>
+  <div class="page-container">
+    <h1>🎥 VR & 360° Safety Videos</h1>
+    <p class="lead">Immersive training videos — best experienced with a VR headset (Google Cardboard / mobile VR). Use the controls to go fullscreen, open in new tab, or download the file for offline use.</p>
+
+    <div class="actions-row">
+      <button class="btn" onclick="openVrInstructions()">VR Instructions</button>
+      <a class="back-link" href="{% url 'drills' %}">⬅ Back to Drills</a>
+    </div>
+
+    <div class="drills-grid">
+
+      <!-- 1 -->
+      <div class="drill-card">
+        <h3>🌊 Flood Safety (360°)</h3>
+        <p class="drill-desc">See floodwater behavior, learn safe evacuation routes and how to move to higher ground safely.</p>
+        <div class="video-wrap" aria-hidden="false">
+          <video id="v-flood" controls playsinline preload="metadata" poster="{% static 'video/thumbs/flood.jpg' %}">
+            <source src="{% static 'video/floodSafety.mp4' %}" type="video/mp4">
+            Your browser does not support the video element.
+          </video>
+        </div>
+        <div class="controls">
+          <button class="btn primary" onclick="goFullscreen('v-flood')">Fullscreen</button>
+          <button class="btn" onclick="openNewTab('{% static 'video/floodSafety.mp4' %}')">Open</button>
+          <button class="btn" onclick="downloadFile('{% static 'video/floodSafety.mp4' %}', 'floodSafety.mp4')">Download</button>
+        </div>
+        <div class="meta"><strong>Length:</strong> check file &nbsp; • &nbsp; <span class="small">Tip: use headset for 360° view</span></div>
+      </div>
+
+      <!-- 2 -->
+      <div class="drill-card">
+        <h3>🏚 Earthquake Drills (360°)</h3>
+        <p class="drill-desc">Simulated earthquake scenario: drop-cover-hold-on, safe exits, and aftershock awareness.</p>
+        <div class="video-wrap">
+          <video id="v-earth" controls playsinline preload="metadata" poster="{% static 'video/thumbs/earthquake.jpg' %}">
+            <!-- corrected filename: earthquake.mp4 (no stray spaces) -->
+            <source src="{% static 'video/earthquake.mp4' %}" type="video/mp4">
+            Your browser does not support the video element.
+          </video>
+        </div>
+        <div class="controls">
+          <button class="btn primary" onclick="goFullscreen('v-earth')">Fullscreen</button>
+          <button class="btn" onclick="openNewTab('{% static 'video/earthquake.mp4' %}')">Open</button>
+          <button class="btn" onclick="downloadFile('{% static 'video/earthquake.mp4' %}', 'earthquake.mp4')">Download</button>
+        </div>
+        <div class="meta"><strong>Focus:</strong> safe cover points, evacuation paths.</div>
+      </div>
+
+      <!-- 3 -->
+      <div class="drill-card">
+        <h3>🚗 Road Safety (Drive / Pedestrian)</h3>
+        <p class="drill-desc">Vehicle & pedestrian safety drilling — lane awareness, crossing safety, and quick reaction tests.</p>
+        <div class="video-wrap">
+          <video id="v-road" controls playsinline preload="metadata" poster="{% static 'video/thumbs/road.jpg' %}">
+            <source src="{% static 'video/RoadSafety.mp4' %}" type="video/mp4">
+          </video>
+        </div>
+        <div class="controls">
+          <button class="btn primary" onclick="goFullscreen('v-road')">Fullscreen</button>
+          <button class="btn" onclick="openNewTab('{% static 'video/RoadSafety.mp4' %}')">Open</button>
+          <button class="btn" onclick="downloadFile('{% static 'video/RoadSafety.mp4' %}', 'roadSafety.mp4')">Download</button>
+        </div>
+      </div>
+
+      <!-- 4 -->
+      <div class="drill-card">
+        <h3>🌪 Tornado / High Wind Safety</h3>
+        <p class="drill-desc">Recognize tornado signs and best sheltering actions during extreme wind events.</p>
+        <div class="video-wrap">
+          <!-- standardized filename: tornadoSafety.mp4 -->
+          <video id="v-tornado" controls playsinline preload="metadata" poster="{% static 'video/thumbs/tornado.jpg' %}">
+            <source src="{% static 'video/tornadoSafety.mp4' %}" type="video/mp4">
+          </video>
+        </div>
+        <div class="controls">
+          <button class="btn primary" onclick="goFullscreen('v-tornado')">Fullscreen</button>
+          <button class="btn" onclick="openNewTab('{% static 'video/tornadoSafety.mp4' %}')">Open</button>
+          <button class="btn" onclick="downloadFile('{% static 'video/tornadoSafety.mp4' %}', 'tornadoSafety.mp4')">Download</button>
+        </div>
+      </div>
+
+      <!-- 5 -->
+      <div class="drill-card">
+        <h3>🌊 Tsunami Awareness</h3>
+        <p class="drill-desc">Tsunami wave behavior, evacuation signage, safe zones and timing for re-entry.</p>
+        <div class="video-wrap">
+          <!-- corrected filename: tsunami.mp4 -->
+          <video id="v-tsunami" controls playsinline preload="metadata" poster="{% static 'video/thumbs/tsunami.jpg' %}">
+            <source src="{% static 'video/tsunami.mp4' %}" type="video/mp4">
+          </video>
+        </div>
+        <div class="controls">
+          <button class="btn primary" onclick="goFullscreen('v-tsunami')">Fullscreen</button>
+          <button class="btn" onclick="openNewTab('{% static 'video/tsunami.mp4' %}')">Open</button>
+          <button class="btn" onclick="downloadFile('{% static 'video/tsunami.mp4' %}', 'tsunami.mp4')">Download</button>
+        </div>
+      </div>
+
+      <!-- 6 -->
+      <div class="drill-card">
+        <h3>🌊 Tsunami Safety (alternate)</h3>
+        <p class="drill-desc">Alternate angle & evacuation demonstration for coastal communities.</p>
+        <div class="video-wrap">
+          <video id="v-tsunami2" controls playsinline preload="metadata" poster="{% static 'video/thumbs/tsunamiSafety.jpg' %}">
+            <source src="{% static 'video/tsunamiSafety.mp4' %}" type="video/mp4">
+          </video>
+        </div>
+        <div class="controls">
+          <button class="btn primary" onclick="goFullscreen('v-tsunami2')">Fullscreen</button>
+          <button class="btn" onclick="openNewTab('{% static 'video/tsunamiSafety.mp4' %}')">Open</button>
+          <button class="btn" onclick="downloadFile('{% static 'video/tsunamiSafety.mp4' %}', 'tsunamiSafety.mp4')">Download</button>
+        </div>
+      </div>
+
+      <!-- 7 -->
+      <div class="drill-card">
+        <h3>🏚 Earthquake (raw/alternate)</h3>
+        <p class="drill-desc">Another earthquake view for comparison and training repetition.</p>
+        <div class="video-wrap">
+          <video id="v-earth2" controls playsinline preload="metadata" poster="{% static 'video/thumbs/earthquake2.jpg' %}">
+            <source src="{% static 'video/earthquake_alt.mp4' %}" type="video/mp4">
+          </video>
+        </div>
+        <div class="controls">
+          <button class="btn primary" onclick="goFullscreen('v-earth2')">Fullscreen</button>
+          <button class="btn" onclick="openNewTab('{% static 'video/earthquake_alt.mp4' %}')">Open</button>
+          <button class="btn" onclick="downloadFile('{% static 'video/earthquake_alt.mp4' %}', 'earthquake_alt.mp4')">Download</button>
+        </div>
+      </div>
+
+    </div> <!-- /.drills-grid -->
+
+    <a href="{% url 'drills' %}" class="back-link">⬅ Back to Drills</a>
+  </div>
+
+  <!-- VR instructions modal -->
+  <div id="vrModal" class="vr-modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="card" role="document">
+      <button class="close-vr" aria-label="Close" onclick="closeVrInstructions()">✕</button>
+      <h3>How to use VR / 360° videos</h3>
+      <p class="small">Follow these quick tips for the best experience:</p>
+      <ul>
+        <li><strong>Use a headset:</strong> For full immersion, insert your phone into a cardboard-style headset (Google Cardboard or similar).</li>
+        <li><strong>Orientation:</strong> Hold the device horizontally (landscape) before inserting into headset.</li>
+        <li><strong>Controls:</strong> Tap the video, then press the headset’s magnet/click (if available) or use the phone screen to pause/play.</li>
+        <li><strong>Fullscreen:</strong> Use the <em>Fullscreen</em> button below each video to expand before placing into a headset.</li>
+        <li><strong>Audio:</strong> Use headphones for clearer sound and safety instructions.</li>
+        <li><strong>Safe space:</strong> Stand still or sit on a swivel chair while viewing to avoid tripping.</li>
+        <li><strong>Not 360?</strong> If the video is not encoded as 360, the headset will show it as a normal movie — still useful for training.</li>
+      </ul>
+      <p class="small">Tip: If a file doesn't play, check the static path or filename in your `static/video/` folder and update the template filenames accordingly.</p>
+      <div style="text-align:right;margin-top:8px">
+        <button class="btn" onclick="closeVrInstructions()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // JS helpers for buttons
+    function _getVideoEl(id) {
+      const el = document.getElementById(id);
+      if (!el) console.warn('video element not found', id);
+      return el;
+    }
+
+    function goFullscreen(videoId) {
+      const v = _getVideoEl(videoId);
+      if (!v) return;
+      // Prefer the video parent (container) for fullscreen so posters/controls remain visible
+      const container = v.parentElement || v;
+      // modern fullscreen API
+      const request = container.requestFullscreen || container.webkitRequestFullscreen || container.msRequestFullscreen;
+      if (request) {
+        request.call(container);
+        // try to play (some browsers require a user gesture; but we attempted fullscreen from a user click)
+        v.play().catch(()=>{/* ignore play error */});
+      } else {
+        // fallback: open in new tab
+        openNewTab(v.querySelector('source')?.src || '');
+      }
+    }
+
+    function openNewTab(url) {
+      if (!url) return;
+      // if Django static returned a relative URL, open it as-is
+      window.open(url, '_blank', 'noopener');
+    }
+
+    function downloadFile(url, filename) {
+      if (!url) return;
+      const a = document.createElement('a');
+      a.href = url;
+      // for cross-origin static assets, browsers may ignore download; still trigger
+      a.setAttribute('download', filename || '');
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+
+    // VR instructions modal
+    function openVrInstructions() {
+      const m = document.getElementById('vrModal');
+      if (!m) return;
+      m.style.display = 'flex';
+      m.setAttribute('aria-hidden', 'false');
+      // trap focus could be added if needed
+    }
+    function closeVrInstructions() {
+      const m = document.getElementById('vrModal');
+      if (!m) return;
+      m.style.display = 'none';
+      m.setAttribute('aria-hidden', 'true');
+    }
+
+    // small accessibility: close modal on ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeVrInstructions();
+    });
+  </script>
+</body>
+</html>

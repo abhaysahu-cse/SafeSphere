@@ -106,7 +106,8 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "public/static")]
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # WhiteNoise: compressed static files (safe & simple)
-STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 
 # Media (if you use file uploads; keep in repo layout)
 MEDIA_URL = "/media/"

@@ -2,284 +2,378 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fire Safety Module</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Fire Safety Module | SafeLearn</title>
+  <meta name="description" content="Fire safety training — prevention, evacuation, extinguisher use, and drills.">
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            line-height: 1.7;
-            background: #f8f9fa;
-            color: #333;
-        }
+  <style>
+    :root {
+      --brand: #d9534f;
+      --muted: #6b7280;
+      --card: #ffffff;
+      --bg: #fff7f6;
+      --maxw: 980px;
+      --accent: #ff9800;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg,#fffafd 0%,#f8f9fa 100%);
+      color: #222;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height: 1.6;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .wrap {
+      width: 100%;
+      max-width: var(--maxw);
+      background: var(--card);
+      border-radius: 12px;
+      box-shadow: 0 14px 40px rgba(8,24,40,0.06);
+      padding: 26px;
+      margin-bottom: 40px;
+    }
 
-        .container {
-            max-width: 900px;
-            margin: auto;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 0 10px #ccc;
-        }
+    .topbar {
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:flex-start;
+      margin-bottom:12px;
+      flex-wrap:wrap;
+    }
+    h1 { margin:0; font-size:1.8rem; color: var(--brand); }
+    p.lead { margin:6px 0 12px; color: var(--muted); font-size:0.98rem; }
+    .meta-row { display:flex; gap:10px; align-items:center; font-size:0.9rem; color:var(--muted); flex-wrap:wrap; }
+    .badge { background:#fff3f3; color:var(--brand); padding:6px 10px; border-radius:999px; font-weight:700; }
 
-        h1, h2, h3 {
-            color: #d9534f;
-        }
+    .grid { display:grid; grid-template-columns: 1fr 320px; gap:18px; align-items:start; }
+    @media (max-width:920px) { .grid { grid-template-columns:1fr; } .sidecard { order:-1 } }
 
-        img {
-            width: 100%;
-            border-radius: 8px;
-            margin: 15px 0;
-        }
+    .section { background:#ffffff; padding:14px; border-radius:10px; margin-top:14px; border:1px solid rgba(10,20,30,0.03); }
+    .section h2 { margin:0 0 8px; color:var(--brand); }
+    ul, ol { margin:8px 0 0 18px; }
+    .info-box { background: linear-gradient(180deg,#fff7f2,#fffdf9); padding:10px; border-radius:8px; border-left:4px solid var(--accent); color:#4a2b15; }
 
-        .nav-buttons {
-            margin-top: 30px;
-            display: flex;
-            justify-content: space-between;
-        }
+    .poster { width:100%; border-radius:8px; display:block; margin-top:8px; }
+    .kit-list { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+    .kit-item { background:#fff6f6; padding:8px 10px; border-radius:8px; border:1px solid rgba(0,0,0,0.03); color:#3a1f1f; }
 
-        button {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            color: white;
-        }
+    .cta-row { display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; }
+    .btn { display:inline-block; padding:10px 14px; border-radius:10px; border:none; cursor:pointer; font-weight:700; text-decoration:none; color:#fff; }
+    .btn-primary { background: var(--brand); }
+    .btn-ghost { background: transparent; color:var(--brand); border:1px solid rgba(8,20,30,0.06); padding:9px 12px; border-radius:10px; }
 
-        .prev-btn { background: #6c757d; }
-        .next-btn { background: #0275d8; }
+    .video-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 12px 0;
+    }
+    .video-container iframe,
+    .video-container video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      object-fit: contain;
+    }
 
-        /* Quiz Section */
-        .quiz-box {
-            margin-top: 40px;
-            padding: 20px;
-            background: #fff7e6;
-            border-left: 5px solid #ff9800;
-            border-radius: 8px;
-        }
+    /* Responsive video container */
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 16 / 9;   /* keeps proper frame */
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+}
 
-        .quiz-box h2 {
-            color: #ff9800;
-        }
+/* Make video fill container properly */
+.video-wrapper video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;   /* ⬅ key line: prevents splitting */
+  display: block;
+}
 
-        .quiz-question {
-            margin-bottom: 15px;
-        }
+    /* Quiz styles */
+    .quiz-box { background:#fffaf0; border-left:5px solid #ffb74d; padding:16px; border-radius:8px; margin-top:12px; }
+    .quiz-box h2 { color:#ff9800; margin-top:0; }
+    .quiz-question { margin-bottom:12px; }
+    .quiz-question p { margin:0 0 8px 0; font-weight:600; }
+    .quiz-options label { display:block; padding:8px 6px; border-radius:6px; cursor:pointer; }
+    .quiz-options input[type="radio"] { margin-right:10px; transform: translateY(1px); }
+    .quiz-options label:hover { background: rgba(255,152,0,0.04); }
+    .submit-btn { background:#5cb85c; color:#fff; padding:10px 14px; border-radius:8px; border:none; cursor:pointer; margin-top:8px; font-weight:800; }
+    .result { font-weight:800; margin-top:10px; }
 
-        .submit-btn {
-            background: #5cb85c;
-            margin-top: 20px;
-        }
-    </style>
+    /* sidecard */
+    .sidecard { position: sticky; top:20px; }
+    .sidecard .section { margin-top:0; }
+    footer { margin-top:18px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
+    .note { font-size:0.9rem; color:var(--muted); }
+
+  </style>
 </head>
 <body>
-    <a href="{% url 'learn' %}" 
-   style="
-      position:absolute;
-      top:20px;
-      right:20px;
-      background:#333;
-      color:white;
-      padding:10px 16px;
-      border-radius:8px;
-      text-decoration:none;
-      font-size:16px;">
-   ⬅ Back
-</a>
-
-    <div class="container">
-
-        <h1>🔥 Fire Safety Module</h1>
-
-        <img src="{% static 'image/doinfire.jpeg' %}" alt="Fire Safety">
-
-        <p>
-            Fire safety is one of the most important life-skills for students. Understanding
-            how fires start, how they spread, and how to respond during an emergency can save
-            your life and the lives of others. This module explains fire types, fire prevention,
-            safe evacuation, and the correct usage of fire extinguishers.
-        </p>
-
-        <hr>
-
-        <h2>1. What is Fire?</h2>
-        <p>Fire is a chemical reaction known as combustion. For a fire to start, it needs:</p>
-
-        <ul>
-            <li>🔥 Fuel (wood, paper, petrol, cloth, etc.)</li>
-            <li>🔥 Heat (matchstick, spark, friction)</li>
-            <li>🔥 Oxygen (air)</li>
-        </ul>
-
-        {% comment %} <img src="/static/images/fire_triangle.jpg" alt="Fire Triangle"> {% endcomment %}
-
-        <p>
-            These three elements form the **Fire Triangle**. Removing even one of them will
-            extinguish the fire. This concept is important in fire-fighting.
-        </p>
-
-        <hr>
-
-        <h2>2. Common Causes of Fire</h2>
-
-        {% comment %} <img src="/static/images/fire_causes.jpg" alt="Fire Causes"> {% endcomment %}
-
-        <ul>
-            <li>⚡ Electrical faults, short circuits</li>
-            <li>🔥 Gas leaks in kitchens</li>
-            <li>🕯️ Unattended candles or incense sticks</li>
-            <li>🚬 Smoking indoors</li>
-            <li>🛢️ Flammable liquids stored improperly</li>
-            <li>⚠️ Overheated devices</li>
-        </ul>
-
-        <hr>
-
-        <h2>3. Classes of Fire</h2>
-{% comment %} 
-        <img src="/static/images/fire_classes.jpg" alt="Fire Types"> {% endcomment %}
-
-        <p>Fires are divided into categories depending on the fuel:</p>
-
-        <ul>
-            <li><b>Class A:</b> Wood, paper, cloth</li>
-            <li><b>Class B:</b> Petrol, oil, diesel, paint</li>
-            <li><b>Class C:</b> LPG, CNG, natural gas</li>
-            <li><b>Class D:</b> Metals like magnesium</li>
-            <li><b>Class E:</b> Electrical fires</li>
-        </ul>
-
-        <p>
-            Using the wrong extinguisher can cause explosions or spread the fire, so this
-            classification is very important.
-        </p>
-
-        <hr>
-
-        <h2>4. How to Use a Fire Extinguisher (PASS Method)</h2>
-
-         <img src="{% static 'image/paas.jpg' %}" alt="Fire Extinguisher"> 
-
-        <p>Remember the **PASS** method:</p>
-
-        <ul>
-            <li><b>P</b> – Pull the pin</li>
-            <li><b>A</b> – Aim at the base of the fire</li>
-            <li><b>S</b> – Squeeze the handle</li>
-            <li><b>S</b> – Sweep from side to side</li>
-        </ul>
-
-        <hr>
-
-        <h2>5. Fire Prevention Tips</h2>
-
-        {% comment %} <img src="/static/images/fire_prevention.jpg" alt="Fire Prevention"> {% endcomment %}
-
-        <ul>
-            <li>Check electrical wiring regularly</li>
-            <li>Do not overload plugs</li>
-            <li>Keep flammable items away from heat</li>
-            <li>Install smoke detectors</li>
-            <li>Keep fire extinguishers accessible</li>
-            <li>Never leave cooking unattended</li>
-        </ul>
-
-        <hr>
-
-        <h2>6. Evacuation Steps During Fire</h2>
-
-        {% comment %} <img src="/staticimages/fire_evacuation.jpg" alt="Fire Evacuation"> {% endcomment %}
-
-        <ul>
-            <li>Stay calm and alert others</li>
-            <li>Use stairs—never elevators</li>
-            <li>Crawl low under smoke</li>
-            <li>Cover mouth with a cloth</li>
-            <li>Follow EXIT signs</li>
-            <li>Call emergency number: <b>101</b></li>
-        </ul>
-
-        <hr>
-
-<!-- VIDEO SECTION -->
-<h2>📺 Fire Safety Training Video</h2>
-
-<div class="video-container">
-    <iframe 
-        src="https://www.youtube.com/embed/2fJ4YvN1kzE" 
-        frameborder="0" 
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-        allowfullscreen>
-    </iframe>
-</div>
- <!-- VIDEO SECTION -->
-<h2>📺 Fire Safety Training Video</h2>
-
-<div class="video-container">
-    <iframe 
-        src="https://www.youtube.com/embed/Vc7ZqtGNmTY" 
-        frameborder="0" 
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-        allowfullscreen>
-    </iframe>
-</div>
-
-       
-        <!-- QUIZ SECTION -->
-        <div class="quiz-box">
-            <h2>📝 Fire Safety Quiz</h2>
-
-            <div class="quiz-question">
-                <p><b>1. What are the three parts of the fire triangle?</b></p>
-                <input type="radio" name="q1"> Fuel, Heat, Oxygen <br>
-                <input type="radio" name="q1"> Smoke, Fuel, Gas <br>
-            </div>
-
-            <div class="quiz-question">
-                <p><b>2. What is the correct method to use an extinguisher?</b></p>
-                <input type="radio" name="q2"> PASS <br>
-                <input type="radio" name="q2"> FIRE <br>
-            </div>
-
-            <div class="quiz-question">
-                <p><b>3. Which fire class involves electrical fires?</b></p>
-                <input type="radio" name="q3"> Class A <br>
-                <input type="radio" name="q3"> Class E <br>
-            </div>
-
-            <button class="submit-btn">Submit Quiz</button>
+  <main class="wrap" role="main" aria-labelledby="pageTitle">
+    <div class="topbar">
+      <div>
+        <h1 id="pageTitle">🔥 Fire Safety — Prevention, Response & Recovery</h1>
+        <p class="lead">Objective: Learn how fires start, how to prevent them, how to evacuate safely, and how to use an extinguisher correctly.</p>
+        <div class="meta-row">
+          <span class="badge">Module • Fire</span>
+          <span class="small">Est. time: 10–18 min</span>
+          <span class="small">Target: Students age 10+</span>
         </div>
+      </div>
 
-        <!-- NAVIGATION -->
-        <div class="nav-buttons">
-            <button class="prev-btn">⬅ Previous Module</button>
-            <button class="next-btn">Next Module ➡</button>
-        </div>
-
+      <div class="cta-row">
+        <a class="btn btn-ghost" href="{% url 'learn' %}">⬅ Back to Modules</a>
+        <a class="btn btn-primary" href="#quiz">Take Quiz →</a>
+      </div>
     </div>
 
+    <div class="grid" role="region" aria-labelledby="hookTitle">
+      <!-- MAIN COLUMN -->
+      <div>
+
+        <!-- HOOK -->
+        <section class="section" id="hook" aria-labelledby="hookTitle">
+          <h2 id="hookTitle">Hook — imagine a kitchen fire</h2>
+          <p>You're cooking and a pan catches fire. Smoke builds up fast. What would you do in the first 30 seconds to protect yourself and others?</p>
+        </section>
+
+        <!-- WHAT -->
+        <section class="section" aria-labelledby="whatIs">
+          <h2 id="whatIs">1. What is Fire?</h2>
+          <p>Fire is combustion — a chemical reaction that needs fuel, heat, and oxygen. Removing one element of the triangle stops the fire.</p>
+          <ul>
+            <li>Fuel: wood, paper, cloth, petrol</li>
+            <li>Heat: spark, friction, matchstick</li>
+            <li>Oxygen: air</li>
+          </ul>
+        </section>
+
+        <!-- CAUSES -->
+        <section class="section" aria-labelledby="causes">
+          <h2 id="causes">2. Common Causes of Fire</h2>
+          <ul>
+            <li>Electrical faults and short circuits</li>
+            <li>Gas leaks and unattended cooking</li>
+            <li>Candles, incense sticks and smoking indoors</li>
+            <li>Flammable liquids stored improperly</li>
+            <li>Overheating devices</li>
+          </ul>
+        </section>
+
+        <!-- CLASSES -->
+        <section class="section" aria-labelledby="classes">
+          <h2 id="classes">3. Classes of Fire</h2>
+          <p>Know the class so you can choose the right extinguisher:</p>
+          <ul>
+            <li><strong>Class A</strong>: Wood, paper, cloth</li>
+            <li><strong>Class B</strong>: Petrol, oil, paint</li>
+            <li><strong>Class C</strong>: LPG, CNG, gas</li>
+            <li><strong>Class D</strong>: Metals (magnesium, etc.)</li>
+            <li><strong>Class E</strong>: Electrical fires</li>
+          </ul>
+        </section>
+
+        <!-- PASS METHOD -->
+        <section class="section" aria-labelledby="pass">
+          <h2 id="pass">4. How to Use a Fire Extinguisher (PASS)</h2>
+          <img src="{% static 'image/paas.jpg' %}" alt="PASS method: Pull Aim Squeeze Sweep" class="poster">
+          <p>Use PASS — Pull pin, Aim low at base, Squeeze handle, Sweep side to side.</p>
+          <div class="info-box" role="status" aria-live="polite">
+            Only attempt to use an extinguisher if the fire is small and you're not in danger. If in doubt, evacuate and call emergency services.
+          </div>
+        </section>
+
+        <!-- PREVENTION -->
+        <section class="section" aria-labelledby="prevention">
+          <h2 id="prevention">5. Fire Prevention Tips</h2>
+          <ul>
+            <li>Check wiring and avoid overloading sockets</li>
+            <li>Keep flammable items away from heat sources</li>
+            <li>Install smoke detectors and test monthly</li>
+            <li>Keep fire extinguishers accessible and know how to use them</li>
+            <li>Never leave cooking unattended</li>
+          </ul>
+        </section>
+
+        <!-- EVACUATION -->
+        <section class="section" aria-labelledby="evac">
+          <h2 id="evac">6. Evacuation Steps During Fire</h2>
+          <ul>
+            <li>Stay calm and shout to alert others</li>
+            <li>Use stairs — never elevators</li>
+            <li>Crawl low under smoke and cover your mouth</li>
+            <li>Close doors behind you to slow fire spread</li>
+            <li>Call emergency number (e.g., <strong>101</strong>) once safe</li>
+          </ul>
+        </section>
+<!-- VIDEO + POSTER -->
+<section class="section" aria-labelledby="videoTitle">
+  <h2 id="videoTitle">Watch: Fire Safety Demo</h2>
+
+  <div class="video-wrapper">
+    <video
+      controls
+      preload="metadata"
+      poster="{% static 'image/fire-poster.jpg' %}"
+
+      playsinline     >
+      <source src="{% static 'video/fire_safety_training.mp4' %}" type="video/mp4">
+    
+    </video>
+  </div>
+
+  <p class="small" style="margin-top:8px">
+    Tip: Play the video in full-screen on mobile to practice evacuation steps with your family.
+  </p>
+</section>
+
+        <!-- PRACTICAL -->
+        <section class="section" aria-labelledby="activities">
+          <h2 id="activities">Activities & Drills</h2>
+          <ol>
+            <li>Classroom drill: timed evacuation to assembly point and roll-call.</li>
+            <li>Extinguisher demo: teacher shows PASS method with a training extinguisher.</li>
+            <li>Family plan: everyone practices escape routes at home and a meeting point.</li>
+          </ol>
+        </section>
+
+        <!-- QUIZ -->
+        <section class="section quiz-box" id="quiz" aria-labelledby="quizHeader">
+          <h2 id="quizHeader">📝 Fire Safety Quiz</h2>
+
+          <form id="quizForm" aria-describedby="quizHelp">
+            <div id="quizHelp" class="small" style="margin-bottom:8px">Choose the best answer and press Submit.</div>
+
+            <div class="quiz-question" role="group" aria-labelledby="q1label">
+              <p id="q1label"><strong>1.</strong> What are the three parts of the fire triangle?</p>
+              <div class="quiz-options">
+                <label><input type="radio" name="q1" value="A"> Fuel, Heat, Oxygen</label>
+                <label><input type="radio" name="q1" value="B"> Smoke, Fuel, Gas</label>
+              </div>
+            </div>
+
+            <div class="quiz-question" role="group" aria-labelledby="q2label">
+              <p id="q2label"><strong>2.</strong> What is the correct method to use an extinguisher?</p>
+              <div class="quiz-options">
+                <label><input type="radio" name="q2" value="A"> PASS</label>
+                <label><input type="radio" name="q2" value="B"> FIRE</label>
+              </div>
+            </div>
+
+            <div class="quiz-question" role="group" aria-labelledby="q3label">
+              <p id="q3label"><strong>3.</strong> Which fire class involves electrical fires?</p>
+              <div class="quiz-options">
+                <label><input type="radio" name="q3" value="A"> Class A</label>
+                <label><input type="radio" name="q3" value="B"> Class E</label>
+              </div>
+            </div>
+
+            <button type="button" class="submit-btn" id="submitQuiz">Submit Quiz</button>
+            <div id="quizResult" class="result" role="status" aria-live="polite"></div>
+          </form>
+        </section>
+
+        <!-- NAVIGATION -->
+        <div class="section" style="display:flex;justify-content:space-between;gap:12px;align-items:center">
+          <a class="btn btn-ghost" href="{% url 'learn' %}">  ⬅ Back to Modules</a>
+
+          
+        </div>
+
+      </div>
+
+      <!-- SIDE COLUMN -->
+      <aside class="sidecard" aria-labelledby="sideTitle">
+        <div class="section" id="sideTitle">
+          <h2>Quick Actions</h2>
+          <p class="small">Tools to prepare and act quickly.</p>
+          <div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap">
+            <button class="btn btn-ghost" onclick="document.getElementById('quiz').scrollIntoView({behavior:'smooth'})">Take Quiz</button>
+            <a class="btn btn-primary" href="{% url 'learn' %}">All Modules</a>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>Poster</h3>
+          <img class="poster" src="{% static 'image/doinfire.jpeg' %}" alt="Fire safety poster">
+          <p class="small">Print or display this in classrooms.</p>
+        </div>
+
+        <div class="section">
+          <h3>Checklist</h3>
+          <ul class="small">
+            <li>Install and test smoke detectors</li>
+            <li>Know two escape routes from each room</li>
+            <li>Keep fire extinguisher accessible</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h3>Emergency Numbers</h3>
+          <p class="small">Save local numbers on every phone.</p>
+          <ul class="small">
+            <li>Fire & Rescue: <strong>101</strong></li>
+            <li>Emergency (general): <strong>112</strong></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      <div class="note">Accessibility: images have alt text; consider adding captions or transcripts for videos and voice prompts for learners who need them.</div>
+      <div></div>
+    </footer>
+  </main>
+
+  <script>
+    (function(){
+      const answers = { q1: 'A', q2: 'A', q3: 'B' };
+
+      function grade() {
+        let correct = 0, total = 3;
+        for (let i=1;i<=total;i++){
+          const name = 'q' + i;
+          const el = document.querySelector('input[name="'+name+'"]:checked');
+          const val = el ? el.value : null;
+          if (val === answers[name]) correct++;
+        }
+        return { correct, total };
+      }
+
+      function showResult() {
+        const r = grade();
+        const pct = Math.round((r.correct / r.total) * 100);
+        const el = document.getElementById('quizResult');
+        let msg = `Score: ${r.correct} / ${r.total} (${pct}%) — `;
+        if (pct === 100) msg += 'Excellent! You have strong fire safety knowledge. ✅';
+        else if (pct >= 70) msg += 'Good — review the module for missed items.';
+        else msg += 'Review the module and practice the drills again.';
+        el.textContent = msg;
+        el.style.color = pct >= 70 ? '#0b7a3c' : '#b45309';
+        // save progress
+        localStorage.setItem('fire_quiz_score', JSON.stringify(r));
+      }
+
+      document.getElementById('submitQuiz').addEventListener('click', showResult);
+    })();
+  </script>
 </body>
 </html>
-
-
-<style>
-.video-container {
-    position: relative;
-    width: 100%;
-    padding-bottom: 56.25%; /* For 16:9 video ratio */
-    margin: 20px 0;
-}
-
- .video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 8px;
-}
-
-</style>

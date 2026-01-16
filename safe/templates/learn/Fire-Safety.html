@@ -1,360 +1,402 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Fire Safety Module — Prevention & Response</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Wildfire Safety — SafeLearn</title>
+  <meta name="description" content="Wildfire safety for students: causes, prevention, evacuation, shelter-in-place, and drills." />
 
-<style>
-  :root{
-    --primary:#c62828;
-    --accent:#ff9800;
-    --bg:#fff7f6;
-    --card:#fff;
-    --muted:#6b7280;
-    --maxw:980px;
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0;
-    font-family:system-ui,Segoe UI,Roboto,Arial;
-    background:linear-gradient(180deg,#fffafa 0%, #fff7f2 100%);
-    color:#111827;
-    line-height:1.6;
-    padding:24px;
-    display:flex;
-    justify-content:center;
-  }
-  .wrap{
-    width:100%;
-    max-width:var(--maxw);
-    background:var(--card);
-    border-radius:10px;
-    box-shadow:0 6px 24px rgba(12,12,20,0.06);
-    padding:26px;
-    position:relative;
-  }
-  a.back{
-    position:absolute;
-    right:20px;
-    top:20px;
-    text-decoration:none;
-    background:#111827;
-    color:white;
-    padding:8px 12px;
-    border-radius:8px;
-    font-size:14px;
-  }
-  h1{color:var(--primary); margin:0 0 6px;}
-  h2{color:var(--primary); margin-top:22px;}
-  p.lead{color:var(--muted); margin-top:6px;}
-  img.hero{width:100%; border-radius:10px; margin:14px 0;}
-  .grid{display:grid; gap:16px; grid-template-columns:repeat(2,1fr);}
-  .single{grid-template-columns:1fr;}
-  .card{
-    background:#fff;
-    border-radius:10px;
-    padding:16px;
-    box-shadow:0 3px 10px rgba(12,12,20,0.03);
-    border:1px solid rgba(15,23,42,0.03);
-  }
-  ul{margin:8px 0 0 18px}
-  .video-container{position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:10px; margin:12px 0;}
-  .video-container iframe{position:absolute; inset:0; width:100%; height:100%; border:0;}
-  .poster-row{display:flex; gap:12px; overflow-x:auto; padding-bottom:8px;}
-  .poster{min-width:160px; background:#fffaf0; border-radius:8px; padding:12px; text-align:center; border:1px solid rgba(0,0,0,0.04);}
-  .poster img{width:100%; height:100px; object-fit:cover; border-radius:6px;}
-  .muted{color:var(--muted); font-size:14px}
-  .kit-list{display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;}
-  .kit-item{background:#fff3e0; color:#7a4c00; padding:8px 10px; border-radius:8px; font-weight:600; font-size:14px;}
-  .drill-list{margin-top:8px;}
-  .drill-list li{margin-bottom:8px}
-  .quiz-box{margin-top:16px; background:linear-gradient(180deg,#fffaf6,#fff7ea); border-left:5px solid var(--accent); padding:12px; border-radius:8px;}
-  .quiz-question{margin-bottom:12px}
-  .btn{display:inline-block; padding:10px 14px; border-radius:8px; border:none; cursor:pointer; font-weight:700;}
-  .btn-primary{background:var(--primary); color:white;}
-  .btn-muted{background:#f3f4f6; color:#111827;}
-  .nav{display:flex; justify-content:space-between; margin-top:20px;}
-  .myth-table{width:100%; border-collapse:collapse; margin-top:8px;}
-  .myth-table th, .myth-table td{border:1px solid rgba(0,0,0,0.06); padding:8px; text-align:left;}
-  .note{background:#fff3f3; padding:10px; border-radius:8px; border-left:4px solid var(--primary); margin-top:12px;}
-  @media (max-width:820px){
-    .grid{grid-template-columns:1fr}
-    .poster{min-width:140px}
-  }
-</style>
+  <style>
+    :root{
+      --brand: #d35400;      /* deep orange */
+      --accent: #ffb74d;
+      --muted: #6b7280;
+      --card: #ffffff;
+      --bg: linear-gradient(180deg,#fffaf6 0%,#fff7f2 100%);
+      --maxw: 980px;
+      --danger: #b22222;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      padding:20px;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: var(--bg);
+      color:#1f2937;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.6;
+      display:flex;
+      justify-content:center;
+    }
+    .wrap{
+      width:100%;
+      max-width:var(--maxw);
+      background:var(--card);
+      border-radius:12px;
+      box-shadow:0 14px 40px rgba(8,24,40,0.06);
+      padding:26px;
+      margin-bottom:40px;
+    }
+
+    /* Topbar */
+    .topbar{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:12px}
+    h1{margin:0;font-size:1.8rem;color:var(--brand)}
+    p.lead{margin:6px 0 12px;color:var(--muted);font-size:0.98rem}
+    .meta-row{display:flex;gap:10px;align-items:center;font-size:0.9rem;color:var(--muted);flex-wrap:wrap}
+    .badge{background:#fff7ed;color:var(--brand);padding:6px 10px;border-radius:999px;font-weight:700}
+
+    /* layout */
+    .grid{display:grid;grid-template-columns:1fr 320px;gap:18px;align-items:start}
+    @media (max-width:920px){.grid{grid-template-columns:1fr}.sidecard{order:-1}}
+
+    .section{background:#ffffff;padding:14px;border-radius:10px;margin-top:14px;border:1px solid rgba(10,20,30,0.03)}
+    .section h2{margin:0 0 8px;color:var(--brand)}
+    ul,ol{margin:8px 0 0 18px}
+
+    .info-box{background: linear-gradient(180deg,#fffaf0,#fffdf6);padding:10px;border-radius:8px;border-left:4px solid var(--accent);color:#4a2b15}
+    .danger-box{background:#fff7f7;padding:10px;border-radius:8px;border-left:4px solid var(--danger);color:#611111}
+
+    .poster{width:100%;border-radius:8px;display:block;margin-top:8px}
+    .kit-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+    .kit-item{background:#fff7ed;padding:8px 10px;border-radius:8px;border:1px solid rgba(0,0,0,0.03);color:#3a1f1f}
+
+    .cta-row{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+    .btn{display:inline-block;padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:700;text-decoration:none;color:#fff}
+    .btn-primary{background:var(--brand)}
+    .btn-ghost{background:transparent;color:var(--brand);border:1px solid rgba(8,20,30,0.06);padding:9px 12px;border-radius:10px}
+
+    /* video */
+    .video-wrapper{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden;margin:12px 0}
+    .video-wrapper video,.video-wrapper iframe{position:absolute;inset:0;width:100%;height:100%;border:0;object-fit:contain;display:block}
+
+    /* quiz */
+    .quiz-box{background:linear-gradient(180deg,#fffaf0,#fff7ea);border-left:5px solid var(--accent);padding:16px;border-radius:8px;margin-top:12px}
+    .quiz-box h2{color:#d97706;margin-top:0}
+    .quiz-question{margin-bottom:12px}
+    .quiz-options label{display:block;padding:8px 6px;border-radius:6px;cursor:pointer}
+    .quiz-options input[type="radio"]{margin-right:10px;transform:translateY(1px)}
+    .submit-btn{background:#16a34a;color:#fff;padding:10px 14px;border-radius:8px;border:none;cursor:pointer;margin-top:8px;font-weight:800}
+    .result{font-weight:800;margin-top:10px}
+
+    /* sidecard */
+    .sidecard{position:sticky;top:20px}
+    .sidecard .section{margin-top:0}
+
+    footer{margin-top:18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+    .note{font-size:0.9rem;color:var(--muted)}
+
+    /* small utilities */
+    .muted{color:var(--muted);font-size:0.95rem}
+    .small{font-size:0.9rem;color:var(--muted)}
+  </style>
 </head>
 <body>
-
-<div class="wrap">
-
-  <a class="back" href="#" onclick="history.back();return false;">⬅ Back</a>
-
-  <h1>🔥 FIRE SAFETY — Prevention & Response</h1>
-  <p class="lead">Complete teaching plan with causes, prevention, response, drills, videos, posters and quizzes — ready for classroom use.</p>
-
-  <img class="hero" src="https://i.ibb.co/PhYt3k4/fire-safety-banner.jpg" alt="Fire Safety Banner">
-
-  <!-- THEORY -->
-  <div class="card">
-    <h2>1. What Students Must Learn</h2>
-
-    <h3>A. What causes fires</h3>
-    <p class="muted">Simple explanations for kids:</p>
-    <ul>
-      <li><strong>Electric short circuits</strong> — faulty wiring or overloaded sockets.</li>
-      <li><strong>Gas leaks</strong> — leaking LPG/CNG combined with a spark can ignite.</li>
-      <li><strong>Stove / candle accidents</strong> — unattended flames.</li>
-      <li><strong>Overheating wires</strong> — old wires or overloaded plugs.</li>
-      <li><strong>Careless burning</strong> — matchsticks, crackers, lit papers.</li>
-    </ul>
-
-    <h3>B. Fire Triangle (Very important)</h3>
-    <p class="muted"><strong>Heat</strong> + <strong>Fuel</strong> + <strong>Oxygen</strong> = Fire. Remove any one and the fire dies.</p>
-
-    <h3>C. Prevention — Everyday Safety Habits</h3>
-    <ul>
-      <li>Do not play with matches, lighters, or switches.</li>
-      <li>Switch off appliances when not in use; unplug chargers.</li>
-      <li>Avoid overloading plugs and extension cords.</li>
-      <li>Keep flammable items away from stoves and heaters.</li>
-      <li>Keep corridors and exits clear of clutter.</li>
-      <li>Teachers/maintenance should check wiring regularly.</li>
-    </ul>
-
-    <h4>Kitchen Safety (for older students)</h4>
-    <ul>
-      <li>Never leave the stove unattended.</li>
-      <li>Check LPG connections and use regulators properly.</li>
-      <li>Do <strong>NOT</strong> pour water on oil fires — use a lid or suitable extinguisher.</li>
-    </ul>
-
-    <h3>D. Response — What to do if fire starts</h3>
-    <p class="muted">Short checklist teachers must teach and rehearse:</p>
-    <ul>
-      <li>Stay calm. Alert teacher/adult and raise alarm.</li>
-      <li>Evacuate immediately — follow evacuation route.</li>
-      <li>If clothes catch fire → <strong>Stop, Drop & Roll</strong>: Stop (don’t run), Drop to ground, Roll to smother flames.</li>
-      <li>Stay low (smoke rises), cover nose & mouth with cloth, avoid lifts, touch doors before opening with back of hand.</li>
-    </ul>
-
-    <h3>E. Using Fire Extinguishers (Teens)</h3>
-    <p class="muted"><strong>PASS</strong> method — Pull pin, Aim at base, Squeeze handle, Sweep side-to-side.</p>
-
-    <h3>F. What NOT to do</h3>
-    <ul>
-      <li>Do NOT hide under beds.</li>
-      <li>Do NOT run toward smoke or flames.</li>
-      <li>Do NOT return inside to fetch belongings.</li>
-      <li>Do NOT pour water on electrical or oil fires.</li>
-    </ul>
-  </div>
-
-  <!-- VIDEOS -->
-  <div class="card" style="margin-top:14px;">
-    <h2>2. Suggested Videos (Show these in class)</h2>
-    <p class="muted">(Search these titles on YouTube or use the provided links below in training.)</p>
-
-    <div class="grid" style="margin-top:10px;">
-      <div class="card">
-        <strong>Fire Safety for Kids (Animated)</strong>
-        <div class="video-container">
-<iframe width="560" height="315" 
-src="https://www.youtube.com/embed/Xgc90CoJbDI?si=HRs0YshubuaMyuus" 
-title="YouTube video player" 
-frameborder="0" allowfullscreen></iframe>        </div>
-      </div>
-
-      <div class="card">
-        <strong>How to Use a Fire Extinguisher — PASS</strong>
-        <div class="video-container">
-          <iframe src="https://www.youtube.com/embed/BCylJxO3J7M" title="PASS extinguisher" allowfullscreen></iframe>
+  <main class="wrap" role="main" aria-labelledby="pageTitle">
+    <div class="topbar">
+      <div>
+        <h1 id="pageTitle">Wildfire Safety — Prevention, Evacuation & Shelter</h1>
+        <p class="lead">Objective: Understand how wildfires start, how to reduce risk, when to evacuate, and how to shelter safely.</p>
+        <div class="meta-row">
+          <span class="badge">Module • Wildfire</span>
+          <span class="small">Est. time: 12–20 min</span>
+          <span class="small">Target: Students age 12+</span>
         </div>
       </div>
 
-      <div class="card">
-        <strong>Stop, Drop, and Roll for Kids</strong>
-        <div class="video-container">
-          <iframe src="https://www.youtube.com/embed/f7eDknyWd18" title="Stop Drop Roll" allowfullscreen></iframe>
+      <div class="cta-row" role="navigation" aria-label="Module actions">
+        <a class="btn btn-ghost" href="{% url 'learn' %}">⬅ Back to Modules</a>
+        <a class="btn btn-primary" href="#quiz">Take Quiz →</a>
+      </div>
+    </div>
+
+    <div class="grid" role="region" aria-labelledby="hookTitle">
+      <!-- MAIN COLUMN -->
+      <div>
+        <!-- HOOK -->
+        <section class="section" id="hook" aria-labelledby="hookTitle">
+          <h2 id="hookTitle">Hook — imagine dry hills and strong winds</h2>
+          <p>You're at home near a forested area and see smoke on a windy afternoon. Within minutes the sky darkens from ash. What should you and your family do first?</p>
+        </section>
+
+        <!-- WHAT IS WILDFIRE -->
+        <section class="section" aria-labelledby="whatIs">
+          <h2 id="whatIs">1. What is a Wildfire?</h2>
+          <p>Wildfire is an uncontrolled fire spreading across vegetation (grass, brush, trees). It moves quickly when conditions are dry, hot, and windy.</p>
+          <ul>
+            <li><strong>Fuels:</strong> dry grass, leaf litter, shrubs, fallen branches</li>
+            <li><strong>Weather:</strong> high heat, low humidity, strong winds accelerate spread</li>
+            <li><strong>Terrain:</strong> fires spread uphill faster; can jump across valleys</li>
+          </ul>
+        </section>
+
+        <!-- CAUSES -->
+        <section class="section" aria-labelledby="causes">
+          <h2 id="causes">2. Common Causes of Wildfire</h2>
+          <ul>
+            <li>Human activity: unattended campfires, discarded cigarettes, sparks from machinery</li>
+            <li>Powerline faults and electrical equipment</li>
+            <li>Burning debris on windy days</li>
+            <li>Deliberate arson</li>
+            <li>Lightning strikes in dry seasons</li>
+          </ul>
+        </section>
+
+        <!-- REDUCE RISK -->
+        <section class="section" aria-labelledby="prevention">
+          <h2 id="prevention">3. How to Reduce Risk (At Home & School)</h2>
+          <ul>
+            <li>Create a 10–30 metre defensible space by removing dry vegetation near buildings.</li>
+            <li>Store firewood and flammable materials >10 m from structures.</li>
+            <li>Clear gutters, roofs, and verandas of leaves and debris.</li>
+            <li>Use spark arrestors on chimneys and exhausts; maintain machinery to prevent sparks.</li>
+            <li>Follow local burn bans; do not burn waste during high-risk days.</li>
+            <li>Install smoke alarms and keep emergency kit ready (see checklist).</li>
+          </ul>
+          <div class="info-box" role="note" aria-live="polite">
+            Tip: Know your local wildfire alert levels and sign up for official SMS/phone alerts.
+          </div>
+        </section>
+
+        <!-- EVACUATE VS SHELTER -->
+        <section class="section" aria-labelledby="evac">
+          <h2 id="evac">4. Evacuate or Shelter-in-Place — Decision Guide</h2>
+          <p class="muted">Official instructions come from local authorities. If told to evacuate, leave immediately. If told to shelter, follow these steps.</p>
+
+          <h3>If you are ordered to evacuate</h3>
+          <ol>
+            <li>Take your emergency kit, important documents, water, and masks (N95 if available).</li>
+            <li>Wear long sleeves, long pants, sturdy shoes; cover face with a damp cloth or mask.</li>
+            <li>Close all windows and doors, but do not lock them; turn off gas and electricity if time permits.</li>
+            <li>Follow designated evacuation routes — avoid driving through heavy smoke.</li>
+            <li>Keep radio/phone on and check-in at the assembly point.</li>
+          </ol>
+
+          <h3>If you are instructed to shelter (stay inside)</h3>
+          <ol>
+            <li>Close windows, vents, and doors; seal gaps with wet towels if smoke is heavy.</li>
+            <li>Move to an interior room without windows or to a room with the fewest openings.</li>
+            <li>Turn off air conditioning or forced ventilation if it draws smoke.</li>
+            <li>Keep pets inside and have carriers ready.</li>
+            <li>Monitor official channels for further instructions.</li>
+          </ol>
+
+          <div class="danger-box" role="alert">
+            If you feel your home is in immediate danger — do not wait: evacuate now. Fire behaviour can change rapidly.
+          </div>
+        </section>
+
+        <!-- VIDEO -->
+        <section class="section" aria-labelledby="videoTitle">
+          <h2 id="videoTitle">Watch: Wildfire Preparedness Demo</h2>
+          <div class="video-wrapper" aria-hidden="false">
+            <!-- Use your static video or embed a trusted video; keep fallback poster -->
+            <video controls preload="metadata" poster="{% static 'image/wildfire-poster.jpg' %}" playsinline>
+              <source src="{% static 'video/wildfire_safety_training.mp4' %}" type="video/mp4">
+              <!-- Fallback text -->
+              Your browser does not support embedded video. See the training playlist on your school's device.
+            </video>
+          </div>
+          <p class="small" style="margin-top:8px">Tip: Run the video at full screen with your class and pause to discuss evacuation steps.</p>
+        </section>
+
+        <!-- ACTIVITIES -->
+        <section class="section" aria-labelledby="activities">
+          <h2 id="activities">5. Activities & Drills</h2>
+          <ol>
+            <li>Evacuation drill: timed route to a safe assembly area on low wind days; record and improve timings.</li>
+            <li>Defensible space workshop: students map nearby vegetation and propose a clearing plan.</li>
+            <li>Role-play: receive an evacuation order and practice packing and leaving calmly.</li>
+            <li>Communication drill: practice contacting guardians and reporting attendance after evacuation.</li>
+          </ol>
+        </section>
+
+        <!-- EMERGENCY KIT -->
+        <section class="section" aria-labelledby="kit">
+          <h2 id="kit">6. Emergency Kit (Wildfire)</h2>
+          <p class="muted">Keep these items in an easy-to-grab bag for every household and classroom:</p>
+          <div class="kit-list" role="list" aria-label="Wildfire emergency kit items">
+            <div class="kit-item" role="listitem">N95 mask / cloth</div>
+            <div class="kit-item" role="listitem">Water (1–2 litres per person)</div>
+            <div class="kit-item" role="listitem">First-aid</div>
+            <div class="kit-item" role="listitem">Flashlight & batteries</div>
+            <div class="kit-item" role="listitem">Emergency contact list</div>
+            <div class="kit-item" role="listitem">Important documents (copies)</div>
+            <div class="kit-item" role="listitem">Basic tools / whistle</div>
+          </div>
+        </section>
+
+        <!-- POSTERS -->
+        <section class="section" aria-labelledby="posters">
+          <h2 id="posters">7. Posters & Classroom Materials</h2>
+          <p class="muted">Download and display these near exits and notice boards.</p>
+          <img class="poster" src="{% static 'image/wildfire_poster1.jpg' %}" alt="Wildfire safety poster: Evacuation steps">
+          <img class="poster" src="{% static 'image/wildfire_defensible_space.jpg' %}" alt="Defensible space poster">
+        </section>
+
+        <!-- QUIZ -->
+        <section class="section quiz-box" id="quiz" aria-labelledby="quizHeader">
+          <h2 id="quizHeader">Quiz — Test Your Wildfire Knowledge</h2>
+          <form id="quizForm" aria-describedby="quizHelp">
+            <div id="quizHelp" class="small" style="margin-bottom:8px">Choose the best answer and press Submit. Progress is saved locally.</div>
+
+            <div class="quiz-question" role="group" aria-labelledby="q1label">
+              <p id="q1label"><strong>1.</strong> Which condition greatly increases wildfire spread?</p>
+              <div class="quiz-options">
+                <label><input type="radio" name="q1" value="A"> High humidity and calm winds</label>
+                <label><input type="radio" name="q1" value="B"> Dry vegetation and strong winds</label>
+              </div>
+            </div>
+
+            <div class="quiz-question" role="group" aria-labelledby="q2label">
+              <p id="q2label"><strong>2.</strong> If authorities order evacuation, you should:</p>
+              <div class="quiz-options">
+                <label><input type="radio" name="q2" value="A"> Wait until ash falls</label>
+                <label><input type="radio" name="q2" value="B"> Leave immediately with your emergency kit</label>
+              </div>
+            </div>
+
+            <div class="quiz-question" role="group" aria-labelledby="q3label">
+              <p id="q3label"><strong>3.</strong> When sheltering inside during smoke, you should:</p>
+              <div class="quiz-options">
+                <label><input type="radio" name="q3" value="A"> Open windows to let smoke out</label>
+                <label><input type="radio" name="q3" value="B"> Close windows, vents and turn off ventilation</label>
+              </div>
+            </div>
+
+            <div class="quiz-question" role="group" aria-labelledby="q4label">
+              <p id="q4label"><strong>4.</strong> Which of these reduces the chance of structure ignition?</p>
+              <div class="quiz-options">
+                <label><input type="radio" name="q4" value="A"> Store dry leaves next to the house</label>
+                <label><input type="radio" name="q4" value="B"> Create defensible space and remove debris</label>
+              </div>
+            </div>
+
+            <div class="quiz-question" role="group" aria-labelledby="q5label">
+              <p id="q5label"><strong>5.</strong> Emergency numbers to save (India):</p>
+              <div class="quiz-options">
+                <label><input type="radio" name="q5" value="A"> 101 or 112</label>
+                <label><input type="radio" name="q5" value="B"> 9999</label>
+              </div>
+            </div>
+
+            <button type="button" class="submit-btn" id="submitQuiz">Submit Quiz</button>
+            <div id="quizResult" class="result" role="status" aria-live="polite"></div>
+          </form>
+        </section>
+
+        <!-- NAVIGATION -->
+        <div class="section" style="display:flex;justify-content:space-between;gap:12px;align-items:center">
+          <a class="btn btn-ghost" href="{% url 'learn' %}">⬅ Back to Modules</a>
+          <div class="small muted">Last updated: January 2026</div>
         </div>
       </div>
 
-      <div class="card">
-        <strong>Classroom Fire Drill Simulation</strong>
-        <div class="video-container">
-          <iframe src="https://www.youtube.com/embed/JHe5aMlYq7I" title="Classroom Drill" allowfullscreen></iframe>
+      <!-- SIDE COLUMN -->
+      <aside class="sidecard" aria-labelledby="sideTitle">
+        <div class="section" id="sideTitle">
+          <h2>Quick Actions</h2>
+          <p class="small">Tools and quick references for rapid response.</p>
+          <div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap">
+            <button class="btn btn-ghost" onclick="document.getElementById('quiz').scrollIntoView({behavior:'smooth'})">Take Quiz</button>
+            <a class="btn btn-primary" href="{% url 'learn' %}">All Modules</a>
+          </div>
         </div>
-      </div>
 
-      <div class="card">
-        <strong>Domestic Fire Safety (Indian context)</strong>
-        <div class="video-container">
-          <iframe src="https://www.youtube.com/embed/sf_8kD8e1YE" title="Domestic Fire Safety" allowfullscreen></iframe>
+        <div class="section" aria-labelledby="checkTitle">
+          <h3 id="checkTitle">Wildfire Checklist</h3>
+          <ul class="small">
+            <li>Keep an emergency kit ready and accessible</li>
+            <li>Know two evacuation routes from your home and school</li>
+            <li>Practice a family evacuation plan</li>
+            <li>Keep car fuel at least half tank during fire season</li>
+          </ul>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- POSTERS -->
-  <div class="card" style="margin-top:14px;">
-    <h2>3. Images & Posters to Display</h2>
-    <div class="poster-row" aria-hidden="false" role="list">
-      <div class="poster" role="listitem">
-        <img src="https://i.ibb.co/FqZ7T9Z/fire-triangle.jpg" alt="Fire Triangle">
-        <div style="margin-top:8px;font-weight:700">Fire Triangle</div>
-      </div>
-      <div class="poster" role="listitem">
-        <img src="https://i.ibb.co/9rQw2tN/stop-drop-roll.jpg" alt="Stop Drop Roll">
-        <div style="margin-top:8px;font-weight:700">Stop, Drop & Roll</div>
-      </div>
-      <div class="poster" role="listitem">
-        <img src="https://i.ibb.co/8xWjG8t/pass-extinguisher.jpg" alt="PASS Method">
-        <div style="margin-top:8px;font-weight:700">PASS Extinguisher Steps</div>
-      </div>
-      <div class="poster" role="listitem">
-        <img src="https://i.ibb.co/bNx8vQf/evacuation-map.jpg" alt="Evacuation Map">
-        <div style="margin-top:8px;font-weight:700">Evacuation Route</div>
-      </div>
+        <div class="section" aria-labelledby="numbers">
+          <h3 id="numbers">Emergency Numbers</h3>
+          <p class="small">Contact these when you need help.</p>
+          <ul class="small">
+            <li>Fire & Rescue: <strong>101</strong></li>
+            <li>Emergency (general): <strong>112</strong></li>
+          </ul>
+        </div>
+
+        <div class="section" aria-labelledby="resources">
+          <h3 id="resources">Additional Resources</h3>
+          <p class="small">Place links to local authority pages, school emergency plans, and printable posters here.</p>
+        </div>
+      </aside>
     </div>
 
-    <p class="muted" style="margin-top:10px">Print these posters and place them near classroom exits, next to fire extinguishers and in the kitchen area.</p>
-  </div>
+    <footer>
+      <div class="note">Accessibility: images have alt text; consider adding transcripts for videos and clear voice prompts for learners who need them.</div>
+      <div class="small muted">Prepared by SafeLearn — Classroom-ready materials</div>
+    </footer>
+  </main>
 
-  <!-- ACTIVITIES & DRILLS -->
-  <div class="card" style="margin-top:14px;">
-    <h2>4. Activities & Drills (Practical)</h2>
+  <script>
+    (function(){
+      // quiz answers
+      const answers = { q1: 'B', q2: 'B', q3: 'B', q4: 'B', q5: 'A' };
 
-    <h3>A. Mock Fire Drill</h3>
-    <ol class="drill-list">
-      <li>Sound the alarm; students perform Stop, Drop & Roll if needed.</li>
-      <li>Evacuate to assembly point quietly and line up.</li>
-      <li>Teacher performs attendance check and reports missing students.</li>
-      <li>Discuss mistakes and improvements for next drill.</li>
-    </ol>
-    <p class="muted">Do this every 2–3 months.</p>
+      function grade() {
+        let correct = 0, total = 0;
+        for (let key in answers) {
+          total++;
+          const el = document.querySelector('input[name="'+key+'"]:checked');
+          const val = el ? el.value : null;
+          if (val === answers[key]) correct++;
+        }
+        return { correct, total };
+      }
 
-    <h3>B. Demonstration of Fire Extinguisher (Grades 6+)</h3>
-    <ul>
-      <li>Teacher demonstrates PASS with an expired/empty extinguisher or training unit.</li>
-      <li>Explain difference: CO₂ vs Foam vs Dry Powder.</li>
-      <li>Students practice pulling pin and aiming at base (simulation).</li>
-    </ul>
+      function showResult() {
+        const r = grade();
+        const pct = Math.round((r.correct / r.total) * 100);
+        const el = document.getElementById('quizResult');
+        let msg = 'Score: ' + r.correct + ' / ' + r.total + ' (' + pct + '%) — ';
+        if (pct === 100) msg += 'Excellent understanding of wildfire safety.';
+        else if (pct >= 70) msg += 'Good — review missed items.';
+        else msg += 'Review the module and practice the drills again.';
+        el.textContent = msg;
+        el.style.color = pct >= 70 ? '#0b7a3c' : '#b45309';
+        // save progress to localStorage
+        try {
+          localStorage.setItem('wildfire_quiz_score', JSON.stringify({score: r, date: new Date().toISOString()}));
+        } catch (e) {
+          // ignore storage errors (e.g., private mode)
+        }
+      }
 
-    <h3>C. Role Play</h3>
-    <p class="muted">Group activities where students act out scenarios: LPG leak, kitchen fire, clothes on fire, corridor smoke.</p>
+      document.getElementById('submitQuiz').addEventListener('click', showResult);
 
-    <h3>D. Drawing Activity (Younger Kids)</h3>
-    <p class="muted">Topic: "How I will be safe in a fire". Display best drawings on the notice board.</p>
-  </div>
+      // restore any previous saved score summary (optional)
+      (function restore(){
+        try {
+          const s = localStorage.getItem('wildfire_quiz_score');
+          if (!s) return;
+          const data = JSON.parse(s);
+          if (data && data.score) {
+            const r = data.score;
+            const pct = Math.round((r.correct / r.total) * 100);
+            const el = document.getElementById('quizResult');
+            el.textContent = 'Previous score: ' + r.correct + ' / ' + r.total + ' (' + pct + '%)';
+            el.style.color = pct >= 70 ? '#0b7a3c' : '#b45309';
+          }
+        } catch(e){}
+      })();
 
-  <!-- EMERGENCY KIT -->
-  <div class="card" style="margin-top:14px;">
-    <h2>5. Emergency Kit & Checklists</h2>
-    <p class="muted">Basic items every classroom and home should have:</p>
-    <div class="kit-list">
-      <div class="kit-item">Whistle</div>
-      <div class="kit-item">Water bottle</div>
-      <div class="kit-item">First-aid</div>
-      <div class="kit-item">Torch</div>
-      <div class="kit-item">Emergency contact card</div>
-      <div class="kit-item">Power bank</div>
-      <div class="kit-item">Small snacks</div>
-    </div>
-
-    <div class="note" style="margin-top:12px">
-      <strong>Teacher checklist:</strong> Mark fire extinguisher inspection date, check alarm system, remove loose wiring and ensure exits are clear.
-    </div>
-  </div>
-
-  <!-- MYTHS VS FACTS -->
-  <div class="card" style="margin-top:14px;">
-    <h2>6. Myths vs Facts</h2>
-    <table class="myth-table" role="table" aria-label="Myths vs Facts">
-      <thead><tr><th>Myth</th><th>Fact</th></tr></thead>
-      <tbody>
-        <tr><td>Stand in doorway is safest</td><td>Modern doorways are not engineered as shelter; find sturdy cover.</td></tr>
-        <tr><td>Running outside is safer</td><td>Most injuries occur while running; evacuate in order.</td></tr>
-        <tr><td>You can predict fires</td><td>Prevention is best; prediction is not possible.</td></tr>
-        <tr><td>Always use water on any fire</td><td>Water on oil/electrical fires is dangerous; use correct extinguisher.</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- QUIZ -->
-  <div class="card" style="margin-top:14px;">
-    <h2>7. Quiz — Test Learning (Instant scoring)</h2>
-    <div class="quiz-box" id="quizBox">
-      <!-- Questions for all ages; you can show/hide per class -->
-      <div class="quiz-question">
-        <p><strong>1. What should you do if your clothes catch fire?</strong></p>
-        <label><input type="radio" name="q1" value="A"> A) Run</label><br>
-        <label><input type="radio" name="q1" value="B"> B) Jump</label><br>
-        <label><input type="radio" name="q1" value="C"> C) Stop, Drop & Roll</label>
-      </div>
-
-      <div class="quiz-question">
-        <p><strong>2. Which method is used for using a fire extinguisher?</strong></p>
-        <label><input type="radio" name="q2" value="A"> A) PASS</label><br>
-        <label><input type="radio" name="q2" value="B"> B) PUSH</label><br>
-        <label><input type="radio" name="q2" value="C"> C) PULL</label>
-      </div>
-
-      <div class="quiz-question">
-        <p><strong>3. Smoke moves which direction?</strong></p>
-        <label><input type="radio" name="q3" value="A"> A) Down</label><br>
-        <label><input type="radio" name="q3" value="B"> B) Up</label>
-      </div>
-
-      <div class="quiz-question">
-        <p><strong>4. Emergency fire number (India)?</strong></p>
-        <label><input type="radio" name="q4" value="A"> A) 102</label><br>
-        <label><input type="radio" name="q4" value="B"> B) 108</label><br>
-        <label><input type="radio" name="q4" value="C"> C) 101</label>
-      </div>
-
-      <div class="quiz-question">
-        <p><strong>5. What should you NEVER use during a fire?</strong></p>
-        <label><input type="radio" name="q5" value="A"> A) Stairs</label><br>
-        <label><input type="radio" name="q5" value="B"> B) Lift</label>
-      </div>
-
-      <button class="btn btn-primary" onclick="gradeQuiz()">Submit Quiz</button>
-      <div id="quizResult" style="margin-top:12px;font-weight:700;"></div>
-    </div>
-  </div>
-
-  <!-- NAV -->
-  <div class="nav">
-    <button class="btn btn-muted prev-btn" onclick="history.back();">⬅ Previous</button>
-    <button class="btn btn-primary next-btn" onclick="alert('Go to next module (implement navigation in your app)')">Next Module ➡</button>
-  </div>
-
-</div>
-
-<script>
-  function gradeQuiz(){
-    const answers = { q1:'C', q2:'A', q3:'B', q4:'C', q5:'B' };
-    let total = 0, correct = 0;
-    for(let k in answers){
-      total += 1;
-      const sel = document.querySelector('input[name="'+k+'"]:checked');
-      if(sel && sel.value === answers[k]) correct += 1;
-    }
-    const score = Math.round((correct/total)*100);
-    const resultEl = document.getElementById('quizResult');
-    resultEl.textContent = 'Score: ' + correct + ' / ' + total + ' ('+score+'%)';
-    if(score === 100){
-      resultEl.style.color = 'green';
-      resultEl.textContent += ' — Excellent! ✅';
-    } else if(score >= 60){
-      resultEl.style.color = '#0b6b00';
-      resultEl.textContent += ' — Good. Discuss wrong answers.';
-    } else {
-      resultEl.style.color = '#b45309';
-      resultEl.textContent += ' — Needs improvement. Review module.';
-    }
-  }
-</script>
-
+      // accessibility: allow Enter key to submit when focus inside form
+      document.getElementById('quizForm').addEventListener('keydown', function(e){
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          showResult();
+        }
+      });
+    })();
+  </script>
 </body>
 </html>

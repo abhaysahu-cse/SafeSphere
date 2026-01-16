@@ -1,154 +1,504 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hurricane / Cyclone Safety</title>
-<style>
-body {
-  font-family: Arial, sans-serif;
-  margin: 20px;
-  padding: 20px;
-  background: #eef7ff;
-  line-height: 1.6;
-}
-h1, h2, h3 {
-  color: #0057b7;
-  text-align: center;
-}
-.section {
-  background: #ffffff;
-  padding: 15px;
-  margin-bottom: 15px;
-  border-radius: 10px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.1);
-}
-ul { margin-left: 20px; }
-.video-links a {
-  display: block;
-  margin: 5px 0;
-  color: #b30000;
-  font-weight: bold;
-}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cyclone / Hurricane Safety — SafeLearn</title>
+  <meta name="description" content="Cyclone and hurricane safety training for students: prevention, preparation, evacuation, sheltering, and drills." />
+
+  <style>
+    :root{
+      --page-maxw:1100px;
+      --surface: rgba(255,255,255,0.96);
+      --muted:#6b7280;
+      --heading-blue:#0066cc;
+      --heading-green:#178f26;
+      --accent:#ffb74d;
+      --card-radius:12px;
+      --shadow:0 14px 40px rgba(8,24,40,0.06);
+      --fab-bg: #0b6b9a;
+    }
+
+    /* Basic reset & accessible focus outlines */
+    *,*::before,*::after{box-sizing:border-box}
+    html { scroll-behavior: smooth; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color:#111827;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      background:#f3f7fb;
+      line-height:1.6;
+      min-height:100vh;
+    }
+    a:focus, button:focus, input:focus { outline: 3px solid #9fd2ff; outline-offset: 2px; }
+
+    .sr-only { position:absolute; width:1px; height:1px; padding:0; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+
+    /* Background video (fixed) + overlay */
+    #bgVideo {
+      position: fixed;
+      inset: 0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      z-index: -2;
+      filter: brightness(0.56) saturate(0.95);
+      pointer-events: none;
+    }
+    .bg-overlay {
+      position:fixed;
+      inset:0;
+      z-index:-1;
+      background: linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.28));
+      pointer-events:none;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #bgVideo { display:none; }
+      body { background-image: url("{% static 'image/cyclone_poster.jpg' %}"); background-size:cover; background-position:center; }
+      .bg-overlay { background: rgba(0,0,0,0.28); }
+    }
+
+    /* Page container (keeps document flow for scrolling) */
+    .page { width:100%; max-width:var(--page-maxw); margin:28px auto; padding:0 16px; }
+    main.wrap {
+      background:var(--surface);
+      border-radius: var(--card-radius);
+      box-shadow: var(--shadow);
+      padding:26px;
+      backdrop-filter: blur(4px);
+      overflow:visible;
+    }
+
+    /* Skip link */
+    .skip-link { position:absolute; left:8px; top:8px; background:#fff; color:#000; padding:8px 12px; border-radius:6px; z-index:9999; transform:translateY(-120%); transition:transform .18s ease; }
+    .skip-link:focus { transform:translateY(0); }
+
+    /* Topbar */
+    .topbar{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:12px}
+    h1{margin:0;font-size:1.9rem;color:var(--heading-blue);line-height:1.1}
+    .lead{margin:6px 0 12px;color:var(--muted);font-size:0.98rem}
+    .meta-row{display:flex;gap:10px;align-items:center;font-size:0.92rem;color:var(--muted);flex-wrap:wrap}
+    .badge{background:#fff3e6;color:#b45309;padding:6px 10px;border-radius:999px;font-weight:700}
+
+    .cta-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .btn{display:inline-block;padding:9px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:700;text-decoration:none;color:#fff;background:var(--heading-blue)}
+    .btn-ghost{background:transparent;color:var(--heading-blue);border:1px solid rgba(8,20,40,0.06);padding:9px 12px;border-radius:10px}
+
+    /* Layout: grid + sidecard */
+    .grid{display:grid;grid-template-columns:1fr 340px;gap:18px;align-items:start}
+    @media (max-width:980px){ .grid{grid-template-columns:1fr} .sidecard{order:-1} }
+
+    .section{
+      background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.95));
+      padding:14px;border-radius:10px;margin-top:14px;border:1px solid rgba(10,20,30,0.03);
+    }
+    .section h2{margin:0 0 8px;color:var(--heading-green)}
+    .section h3{margin:6px 0;color:var(--heading-blue)}
+    ul, ol { margin:8px 0 0 18px; }
+    .info-box{ background: linear-gradient(180deg,#fffdf6,#fff8f1); padding:10px; border-radius:8px; border-left:4px solid var(--accent); color:#5a3b15; margin-top:8px; }
+
+    .poster{ width:100%; border-radius:8px; display:block; margin-top:8px; }
+    .kit-list{ display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+    .kit-item{ background:#fffaf0; padding:8px 10px; border-radius:8px; border:1px solid rgba(0,0,0,0.03); color:#3a1f1f; font-weight:600; }
+
+    /* video wrapper for content video */
+    .video-wrapper{ position:relative; width:100%; aspect-ratio:16/9; background:#000; border-radius:10px; overflow:hidden; margin:12px 0; }
+    .video-wrapper video, .video-wrapper iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; object-fit:cover; display:block; }
+
+    /* Quiz */
+    .quiz-box{ background:linear-gradient(180deg,#fffaf0,#fff7ea); border-left:5px solid var(--accent); padding:16px; border-radius:8px; margin-top:12px; }
+    .quiz-question{ margin-bottom:12px; }
+    .quiz-options label{ display:block; padding:8px 6px; border-radius:6px; cursor:pointer; }
+    .quiz-options input[type="radio"]{ margin-right:10px; transform: translateY(1px); }
+    .submit-btn{ background:#16a34a; color:#fff; padding:10px 14px; border-radius:8px; border:none; cursor:pointer; margin-top:8px; font-weight:800; }
+    .result{ font-weight:800; margin-top:10px; }
+
+    /* sidecard */
+    .sidecard{ position:sticky; top:120px; }
+    @media (max-width:980px){ .sidecard{ position:static; top:auto } }
+
+    footer{ margin-top:18px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
+    .note{ font-size:0.9rem; color:var(--muted); }
+
+    /* Floating action buttons (FAB) group */
+    .fab { position: fixed; right: 18px; bottom: 18px; display:flex; flex-direction:column; gap:10px; z-index:9999; }
+    .fab button, .fab a { background: var(--fab-bg); color:#fff; border:none; padding:10px 12px; border-radius:999px; font-weight:700; box-shadow:0 8px 20px rgba(8,24,40,0.18); text-decoration:none; display:inline-flex; gap:8px; align-items:center; }
+    .fab .ghost { background: #fff; color: var(--fab-bg); border: 1px solid rgba(0,0,0,0.06); }
+
+    /* reduced motion: hide autoplay video and use poster */
+    .bg-disabled #bgVideo { display:none !important; }
+  </style>
 </head>
 <body>
+  <a href="#pageMain" class="skip-link">Skip to content</a>
 
-<h1>🌪 Hurricane / Cyclone Safety – Complete Learning Module</h1>
+  <!-- Background video (optional). Replace static paths if needed. -->
+  <video id="bgVideo" autoplay muted loop playsinline poster="{% static 'image/cyclone_poster.jpg' %}" aria-hidden="true">
+    <source src="{% static 'video/cyclone_bg.mp4' %}" type="video/mp4">
+    <!-- fallback: browser ignores if not present -->
+  </video>
+  <div class="bg-overlay" aria-hidden="true"></div>
 
-<div class="section">
-<h2>1. What Students Must Learn (Clear Theory)</h2>
-<h3>⭐ A. What is a Hurricane?</h3>
-<p>A hurricane is a very powerful storm with strong winds, heavy rain, and flooding.<br>
-Also called <b>Cyclone</b> in India, <b>Typhoon</b> in Asia.</p>
-<p>Hurricanes can damage buildings, trees, and cause water flooding.</p>
-<b>Show diagram concepts:</b>
-<ul>
-<li>Eye of hurricane</li>
-<li>Rainbands</li>
-<li>Wind circulation</li>
-</ul>
-</div>
+  <div class="page">
+    <main id="pageMain" class="wrap" role="main" aria-labelledby="pageTitle">
+      <div class="topbar">
+        <div>
+          <h1 id="pageTitle">Cyclone & Hurricane Safety — Prevention, Evacuation & Sheltering</h1>
+          <p class="lead">Learn how cyclones form, how to prepare at home and school, when to evacuate and how to shelter safely. Includes classroom activities and a short quiz.</p>
+          <div class="meta-row">
+            <span class="badge">Module • Cyclone</span>
+            <span class="small">Est. time: 12–20 min</span>
+            <span class="small">Target: Students age 10+</span>
+          </div>
+        </div>
 
-<div class="section">
-<h2>🌤 2. BEFORE a Hurricane – Preparation & Prevention</h2>
+        <div class="cta-row" role="toolbar" aria-label="Module actions">
+          <a class="btn-ghost" href="{% url 'learn' %}" aria-label="Back to modules">⬅ Back to Modules</a>
+          <a class="btn" href="#quiz" aria-label="Take quiz">Take Quiz</a>
+          <button id="toggleBgBtn" class="btn-ghost" aria-pressed="false" title="Disable or enable animated background">Disable background</button>
+        </div>
+      </div>
 
-<h3>A. Home Preparation</h3>
-<ul>
-<li>Close windows and doors securely.</li>
-<li>Bring inside loose items like plants, toys, bicycles.</li>
-<li>Turn off electricity/gas if instructed.</li>
-<li>Charge phones & power banks.</li>
-<li>Store 3 days of food, water & medicines.</li>
-<li>Prepare an Emergency Kit.</li>
-</ul>
+      <div class="grid" role="region" aria-labelledby="hookTitle">
+        <!-- MAIN COLUMN -->
+        <div>
+          <!-- Hook -->
+          <section class="section" id="hook" aria-labelledby="hookTitle">
+            <h2 id="hookTitle">Hook — imagine heavy wind and dark skies</h2>
+            <p>You're at home and hear strong wind gusts with heavy rain; visibility drops and phone lines may fail. What is the first thing your family should do?</p>
+          </section>
 
-<h3>B. Emergency Kit Items</h3>
-<ul>
-<li>Water bottles, dry food</li>
-<li>First aid kit</li>
-<li>Flashlight + batteries</li>
-<li>Whistle, powerbank</li>
-<li>Important documents in waterproof bag</li>
-<li>Raincoat, clothes</li>
-</ul>
+          <!-- What -->
+          <section class="section" aria-labelledby="whatIs">
+            <h2 id="whatIs">1. What is a Cyclone / Hurricane?</h2>
+            <p>Cyclone (also called hurricane or typhoon depending on region) is a large rotating storm system that brings powerful winds, heavy rain, storm surge and flooding. It forms over warm ocean water and can move inland causing extensive damage.</p>
+            <ul>
+              <li><strong>Eye:</strong> calm center</li>
+              <li><strong>Rainbands:</strong> spiralling bands of thunderstorms</li>
+              <li><strong>Wind circulation:</strong> rotates due to Coriolis effect</li>
+            </ul>
+          </section>
 
-<h3>C. Family Communication Plan</h3>
-<ul>
-<li>Know emergency phone numbers</li>
-<li>Decide meeting point</li>
-<li>Know nearest shelter location</li>
-</ul>
+          <!-- Causes -->
+          <section class="section" aria-labelledby="causes">
+            <h2 id="causes">2. Causes & Risk Factors</h2>
+            <ul>
+              <li>Warm ocean water fuels the storm</li>
+              <li>Low atmospheric pressure at the center</li>
+              <li>Strong winds and dry land conditions increase damage risk</li>
+            </ul>
+          </section>
 
-<h3>D. In School</h3>
-<ul>
-<li>Discuss safety rules</li>
-<li>Teacher creates evacuation map</li>
-<li>Conduct mock drill yearly</li>
-</ul>
-</div>
+          <!-- Preparation -->
+          <section class="section" aria-labelledby="prevention">
+            <h2 id="prevention">3. Before the Cyclone — Preparation</h2>
+            <h3>Home Preparation</h3>
+            <ul>
+              <li>Store 3 days of water, food, and medicines</li>
+              <li>Secure loose objects outside; bring indoors</li>
+              <li>Charge phones and power banks; keep torches and batteries ready</li>
+              <li>Know evacuation routes and nearest shelters</li>
+              <li>Keep vehicle fuel at least half full if evacuation likely</li>
+            </ul>
 
-<div class="section">
-<h2>🌪 3. DURING a Hurricane – Safety Actions</h2>
+            <h3>Emergency Kit</h3>
+            <div class="kit-list" role="list" aria-label="Emergency kit items">
+              <div class="kit-item" role="listitem">Water (1–2 L per person/day)</div>
+              <div class="kit-item" role="listitem">Dry food</div>
+              <div class="kit-item" role="listitem">First aid</div>
+              <div class="kit-item" role="listitem">Torch & batteries</div>
+              <div class="kit-item" role="listitem">Important documents (waterproof)</div>
+              <div class="kit-item" role="listitem">Masks / raincoats</div>
+            </div>
 
-<h3>⭐ If Indoors</h3>
-<ul>
-<li>Stay inside in an interior room</li>
-<li>Away from glass & windows</li>
-<li>Unplug electronics</li>
-<li>Use blankets for protection</li>
-</ul>
+            <div class="info-box" role="note">
+              Sign up for local official alerts (SMS, radio) and follow instructions from authorities.
+            </div>
+          </section>
 
-<h3>⭐ If Outdoors</h3>
-<ul>
-<li>Stay away from trees, poles</li>
-<li>Move to strong building</li>
-<li>Avoid rivers, beaches, low areas</li>
-</ul>
+          <!-- During -->
+          <section class="section" aria-labelledby="during">
+            <h2 id="during">4. During the Cyclone — Stay Safe</h2>
+            <h3>If indoors</h3>
+            <ul>
+              <li>Move to an interior, windowless room</li>
+              <li>Stay away from glass, doors and windows</li>
+              <li>Turn off gas and electricity only if instructed and if safe</li>
+              <li>Keep listening to official sources for updates</li>
+            </ul>
 
-<h3>⭐ Evacuation</h3>
-<ul>
-<li>Follow instructions calmly</li>
-<li>Carry emergency kit</li>
-<li>Take safe route</li>
-</ul>
-</div>
+            <h3>If outdoors / in a vehicle</h3>
+            <ul>
+              <li>Seek a sturdy shelter immediately</li>
+              <li>Avoid moving water, bridges and low-lying areas</li>
+              <li>Do not drive through flooded roads</li>
+            </ul>
 
-<div class="section">
-<h2>🌧 4. AFTER a Hurricane</h2>
-<ul>
-<li>Do not go outside until allowed</li>
-<li>Avoid flood water</li>
-<li>Do not touch fallen wires</li>
-<li>Stay away from damaged buildings</li>
-<li>Throw spoiled food</li>
-<li>Help elders and children</li>
-</ul>
-</div>
+            <h3>Evacuation guidance</h3>
+            <ul>
+              <li>Evacuate promptly if ordered — do not wait</li>
+              <li>Carry the emergency kit, IDs and medicines</li>
+              <li>Assist children, elderly, and persons with mobility needs</li>
+            </ul>
+          </section>
 
-<div class="section video-links">
-<h2>🎥 5. Video Resources (YouTube)</h2>
-<a href="https://www.youtube.com/watch?v=6dM7-T1iPVg" target="_blank">Hurricane Safety for Kids – Animated</a>
-<a href="https://www.youtube.com/watch?v=b_NTPPzVx3o" target="_blank">Hurricanes Explained</a>
-<a href="https://www.youtube.com/watch?v=SZpZp1VLZAI" target="_blank">Cyclone Safety Tips (India)</a>
-<a href="https://www.youtube.com/watch?v=wvFJ0tDI72U" target="_blank">Emergency Kit Preparation</a>
-<a href="https://www.youtube.com/watch?v=A5izSaq2aMY" target="_blank">Evacuation & Shelter Safety</a>
-</div>
+          <!-- Video demo -->
+          <section class="section" aria-labelledby="videoTitle">
+            <h2 id="videoTitle">Watch: Cyclone Safety Demonstration</h2>
+            <div class="video-wrapper" role="region" aria-label="Cyclone safety video">
+              <video controls preload="metadata" poster="{% static 'image/cyclone_poster.jpg' %}" playsinline>
+                <source src="{% static 'video/hurricane.mp4' %}" type="video/mp4">
+                <!-- If you have captions use <track kind="captions" src="..." srclang="en" label="English"> -->
+                Your browser does not support the video element. Use the provided resources or YouTube links.
+              </video>
+            </div>
+            <p class="small">Tip: Pause at decision points and ask students what they should do next. <a href="{% static 'docs/cyclone_transcript.txt' %}">Transcript</a></p>
+          </section>
 
-<div class="section">
-<h2>🧪 6. Activities & Drills</h2>
-<ul>
-<li><b>Mock Evacuation Drill</b></li>
-<li><b>Emergency Kit Making Activity</b></li>
-<li><b>Role Play Scenarios</b></li>
-<li><b>Drawing: “My Safety Plan for Cyclone”</b></li>
-<li><b>Map marking safe zones</b></li>
-</ul>
-</div>
+          <!-- Activities -->
+          <section class="section" aria-labelledby="activities">
+            <h2 id="activities">5. Activities & Drills</h2>
+            <ol>
+              <li>Mock evacuation to the shelter and roll-call</li>
+              <li>Emergency kit building workshop (students assemble kits)</li>
+              <li>Role-play: family communication and decision making</li>
+              <li>Mapping: mark home and school evacuation routes on a map</li>
+            </ol>
+          </section>
 
-<div class="section">
-<h2>📝 7. Quiz – Quick Check</h2>
-<ol>
-<li>A hurricane is also called: <b>Cyclone ✔</b></li>
-<li>What should you prepare before a hurricane? <b>Emergency Kit ✔</b></li>
-<li>During hurrica
+          <!-- Quiz -->
+          <section class="section quiz-box" id="quiz" aria-labelledby="quizHeader">
+            <h2 id="quizHeader">Quiz — Quick Knowledge Check</h2>
+            <form id="quizForm" aria-describedby="quizHelp">
+              <div id="quizHelp" class="small" style="margin-bottom:8px">Choose the best answer and press Submit. Scores are saved locally (browser).</div>
+
+              <div class="quiz-question" role="group" aria-labelledby="q1label">
+                <p id="q1label"><strong>1.</strong> Which condition increases cyclone formation?</p>
+                <div class="quiz-options">
+                  <label><input type="radio" name="q1" value="A"> Cold ocean water and high pressure</label>
+                  <label><input type="radio" name="q1" value="B"> Warm ocean water and low pressure</label>
+                </div>
+              </div>
+
+              <div class="quiz-question" role="group" aria-labelledby="q2label">
+                <p id="q2label"><strong>2.</strong> If authorities order evacuation, you should:</p>
+                <div class="quiz-options">
+                  <label><input type="radio" name="q2" value="A"> Stay at home and wait</label>
+                  <label><input type="radio" name="q2" value="B"> Leave immediately with your emergency kit</label>
+                </div>
+              </div>
+
+              <div class="quiz-question" role="group" aria-labelledby="q3label">
+                <p id="q3label"><strong>3.</strong> Where should you shelter inside?</p>
+                <div class="quiz-options">
+                  <label><input type="radio" name="q3" value="A"> Near windows</label>
+                  <label><input type="radio" name="q3" value="B"> Interior room without windows</label>
+                </div>
+              </div>
+
+              <div class="quiz-question" role="group" aria-labelledby="q4label">
+                <p id="q4label"><strong>4.</strong> Which items are essential in a kit?</p>
+                <div class="quiz-options">
+                  <label><input type="radio" name="q4" value="A"> Water, first aid, torch</label>
+                  <label><input type="radio" name="q4" value="B"> Only toys</label>
+                </div>
+              </div>
+
+              <div class="quiz-question" role="group" aria-labelledby="q5label">
+                <p id="q5label"><strong>5.</strong> Emergency numbers to save (India):</p>
+                <div class="quiz-options">
+                  <label><input type="radio" name="q5" value="A"> 101 or 112</label>
+                  <label><input type="radio" name="q5" value="B"> 9999</label>
+                </div>
+              </div>
+
+              <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+                <button type="button" class="submit-btn" id="submitQuiz">Submit Quiz</button>
+                <button type="button" class="btn-ghost" id="retakeQuiz" style="display:none">Retake Quiz</button>
+                <div id="quizResult" class="result" role="status" aria-live="polite" style="margin-left:8px"></div>
+              </div>
+            </form>
+          </section>
+
+          <!-- footer nav inside main column -->
+          <div class="section" style="display:flex;justify-content:space-between;gap:12px;align-items:center">
+            <a class="btn-ghost" href="{% url 'learn' %}">Back to Modules</a>
+            <div class="small muted">Last updated: January 2026</div>
+          </div>
+        </div>
+
+        <!-- SIDE COLUMN -->
+        <aside class="sidecard" aria-labelledby="sideTitle">
+          <div class="section" id="sideTitle">
+            <h2>Quick Actions</h2>
+            <p class="small">Tools to prepare and act quickly.</p>
+            <div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap">
+              <button class="btn-ghost" onclick="document.getElementById('quiz').scrollIntoView({behavior:'smooth'})">Take Quiz</button>
+              <a class="btn" href="{% url 'learn' %}">All Modules</a>
+            </div>
+          </div>
+
+          <div class="section">
+            <h3>Posters</h3>
+            <img class="poster" src="{% static 'image/cyclone_poster1.jpg' %}" alt="Cyclone safety poster: Evacuation steps">
+            <p class="small">Print & display near exits and notice boards.</p>
+          </div>
+
+          <div class="section">
+            <h3>Checklist</h3>
+            <ul class="small">
+              <li>Prepare emergency kit</li>
+              <li>Know two evacuation routes</li>
+              <li>Keep fuel tank > half during season</li>
+              <li>Keep contact numbers accessible</li>
+            </ul>
+          </div>
+
+          <div class="section">
+            <h3>Emergency Numbers</h3>
+            <p class="small">Save these locally</p>
+            <ul class="small">
+              <li>Fire & Rescue: <strong>101</strong></li>
+              <li>General Emergency: <strong>112</strong></li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+
+      <footer>
+        <div class="note">Accessibility: images have alt text; add captions and transcripts for videos when publishing. Consider voice prompts for learners who need them.</div>
+        <div class="small muted">Prepared by SafeLearn — Classroom-ready materials</div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Floating action buttons -->
+  <div class="fab" role="navigation" aria-label="Quick actions">
+    <a class="ghost" href="{% url 'learn' %}" title="Back to modules">⬅ Modules</a>
+    <button id="backTopBtn" title="Back to top">↑ Top</button>
+    <button id="toggleFab" title="Toggle background">Toggle BG</button>
+    <button id="printBtn" title="Print page">Print</button>
+  </div>
+
+  <script>
+    (function(){
+      // elements
+      const bgVideo = document.getElementById('bgVideo');
+      const toggleBtnTop = document.getElementById('toggleBgBtn');
+      const toggleFab = document.getElementById('toggleFab');
+      const backTopBtn = document.getElementById('backTopBtn');
+      const printBtn = document.getElementById('printBtn');
+      const submitBtn = document.getElementById('submitQuiz');
+      const retakeBtn = document.getElementById('retakeQuiz');
+      const quizResult = document.getElementById('quizResult');
+
+      // background toggle (works from topbar button and FAB)
+      function setBgEnabled(enabled) {
+        if (enabled) {
+          document.body.classList.remove('bg-disabled');
+          if (bgVideo) try { bgVideo.play().catch(()=>{}); } catch(e){}
+          if (toggleBtnTop) { toggleBtnTop.textContent = 'Disable background'; toggleBtnTop.setAttribute('aria-pressed','false'); }
+          if (toggleFab) toggleFab.textContent = 'Toggle BG';
+        } else {
+          document.body.classList.add('bg-disabled');
+          if (bgVideo) { bgVideo.pause(); bgVideo.style.display = 'none'; }
+          if (toggleBtnTop) { toggleBtnTop.textContent = 'Enable background'; toggleBtnTop.setAttribute('aria-pressed','true'); }
+          if (toggleFab) toggleFab.textContent = 'Toggle BG';
+        }
+        try { localStorage.setItem('cyclone_bg_enabled', JSON.stringify(enabled)); } catch(e){}
+      }
+
+      // attach events
+      toggleBtnTop && toggleBtnTop.addEventListener('click', function(){
+        const enabled = !(document.body.classList.contains('bg-disabled'));
+        setBgEnabled(!enabled);
+      });
+      toggleFab && toggleFab.addEventListener('click', function(){ // toggle for fab
+        const enabled = !(document.body.classList.contains('bg-disabled'));
+        setBgEnabled(!enabled);
+      });
+
+      // restore background preference
+      try {
+        const saved = JSON.parse(localStorage.getItem('cyclone_bg_enabled'));
+        if (typeof saved === 'boolean') setBgEnabled(saved);
+      } catch(e){}
+
+      // back-to-top and print
+      backTopBtn && backTopBtn.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+      printBtn && printBtn.addEventListener('click', function(){ window.print(); });
+
+      // QUIZ logic: simple grading & persistence
+      const answers = { q1: 'B', q2: 'B', q3: 'B', q4: 'A', q5: 'A' };
+
+      function grade() {
+        let correct = 0, total = 0;
+        Object.keys(answers).forEach(function(k){
+          total++;
+          const el = document.querySelector('input[name="'+k+'"]:checked');
+          const val = el ? el.value : null;
+          if (val === answers[k]) correct++;
+        });
+        return { correct, total };
+      }
+
+      function showResult(){
+        const r = grade();
+        const pct = Math.round((r.correct / r.total) * 100);
+        let msg = 'Score: ' + r.correct + ' / ' + r.total + ' (' + pct + '%) — ';
+        if (pct === 100) msg += 'Excellent — strong cyclone safety knowledge.';
+        else if (pct >= 70) msg += 'Good — review missed items.';
+        else msg += 'Needs improvement — review the module and practice drills.';
+        quizResult.textContent = msg;
+        quizResult.style.color = pct >= 70 ? '#0b7a3c' : '#b45309';
+
+        // disable inputs and show retake
+        document.querySelectorAll('#quizForm input').forEach(i => i.disabled = true);
+        if (submitBtn) submitBtn.style.display = 'none';
+        if (retakeBtn) retakeBtn.style.display = 'inline-block';
+
+        // save to localStorage
+        try {
+          localStorage.setItem('cyclone_quiz_score', JSON.stringify({score: r.correct, total: r.total, pct, time: new Date().toISOString()}));
+          const best = JSON.parse(localStorage.getItem('cyclone_quiz_best') || 'null');
+          if (!best || r.correct > best.score) {
+            localStorage.setItem('cyclone_quiz_best', JSON.stringify({score: r.correct, total: r.total, pct, time: new Date().toISOString()}));
+          }
+        } catch(e){}
+      }
+
+      submitBtn && submitBtn.addEventListener('click', showResult);
+
+      // Retake: reset inputs
+      retakeBtn && retakeBtn.addEventListener('click', function(){
+        document.querySelectorAll('#quizForm input').forEach(i => { i.disabled = false; i.checked = false; });
+        if (submitBtn) submitBtn.style.display = '';
+        retakeBtn.style.display = 'none';
+        quizResult.textContent = '';
+      });
+
+      // restore last attempt summary (if any)
+      (function restoreScore(){
+        try {
+          const s = localStorage.getItem('cyclone_quiz_score');
+          if (!s) return;
+          const d = JSON.parse(s);
+          if (d && typeof d.score === 'number') {
+            quizResult.textContent = 'Previous score: ' + d.score + ' / ' + d.total + ' (' + d.pct + '%) — Retake to improve.';
+            quizResult.style.color = d.pct >= 70 ? '#0b7a3c' : '#b45309';
+          }
+        } catch(e){}
+      })();
+
+      // Accessibility: prevent Enter from submitting form unexpectedly
+      const quizForm = document.getElementById('quizForm');
+      quizForm && quizForm.addEventListener('keydown', function(e){
+        if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') e.preventDefault();
+      });
+    })();
+  </script>
+</body>
+</html>

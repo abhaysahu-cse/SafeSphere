@@ -24,6 +24,7 @@ from safe import views as safe_views
 
 from safe.views import index, learn, drills, games, leaderboard, emergency, profile, chat,escape_room,Flood_Safety,earth ,fire_sefty_modules ,Earthquake_Safety ,FireSafety ,Cyclone_Safety ,Firstaid, signup_view, login_view, logout_view
 from django.contrib.auth import views as auth_views
+from safe import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -59,12 +60,23 @@ urlpatterns = [
  
 
     path("api/zones/", views.zones_api, name="zones_api"),
-     path('drills/simulation/', views.drill_simulation, name='drill_simulation'),
+    path('drills/simulation/', views.drill_simulation, name='drill_simulation'),
     path('drills/flood/', views.flood_simulation, name='flood_simulation'),
     path('drills/wildfire/', views.wildfire_simulation, name='wildfire_simulation'),
     path('drills/cyclone/', views.cyclone_simulation, name='cyclone_simulation'),
+    path('vr/', views.vr_videos, name='vr_videos'),
     path('drills/landslide/', views.landslide_simulation, name='landslide_simulation'),
+    
 
+    
+    path('learn/flood/', views.Flood_Safety, name='flood'),
+   
+   
+    path('learn/Cyclone_Safety/', views.Cyclone_Safety, name='Cyclone_Safety'),
+    path('learn/tsunami/', views.Tsunami_Safety, name='Tsunami_Safety'),
+    path('learn/tornado/', views.Tornado_Safety, name='Tornado_Safety'),
+    path('learn/heatwave/', views.HeatWave_Safety, name='HeatWave_Safety'),
+    path('learn/firstaid/', views.FirstAid_Safety, name='FirstAid_Safety'),
 ]
 
 # Serve static files during development

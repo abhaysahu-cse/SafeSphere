@@ -138,16 +138,28 @@
         <!-- AR Safety Drill -->
          <div class="drill-card">
             <span class="drill-icon">🕶️</span>
-                <h3 class="drill-title">Augmented Reality (AR) Safety Drills</h3>
-                <p class="drill-description">
-                       Use your mobile device to practice emergency responses in Augmented Reality.
-                       Scan markers to view 3D safety equipment and follow interactive instructions.
-                </p>
+            <h3 class="drill-title">Augmented Reality (AR) Safety Drills</h3>
+            <p class="drill-description">
+             Use your mobile device to practice emergency responses in Augmented Reality.
+             Scan markers to view 3D safety equipment and follow interactive instructions.
+            </p>
             <a href="{% static 'ar/index.html' %}" class="btn btn-secondary" 
-                   target="_blank" 
-                          rel="noopener">
-                                  Start AR Safety Drills →
+             target="_blank" 
+             rel="noopener">
+             Start AR Safety Drills →
             </a>
+        </div>
+
+        <div class="drill-card">
+         <span class="drill-icon">🎥</span>
+          <h3 class="drill-title">Virtual Reality (VR) Safety Videos</h3>
+          <p class="drill-description">
+          Experience immersive 360° safety training videos designed for VR headsets.
+          Learn disaster response through realistic virtual environments.
+         </p>
+         <a href="{% url 'vr_videos' %}" class="btn btn-secondary">
+          Start VR Safety Videos →
+         </a>
         </div>
 
 

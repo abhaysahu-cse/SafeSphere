@@ -200,21 +200,12 @@
                 progress: 0,
                 xp: 140
             },
+            
             {
-                id: 'FirstAid',
-                title: 'Psychological First Aid',
-                description: 'Support mental health during and after disasters',
-                icon: '💙',
-                difficulty: 'advanced',
-                duration: 28,
-                progress: 0,
-                xp: 190
-            },
-            {
-                id: 'pets-safety',
-                title: 'Pet Safety Planning',
-                description: 'Include your pets in your emergency preparedness',
-                icon: '🐕',
+                id: 'HeatWave-safety',
+                title: 'Heat Wave Safety Planning',
+                description: 'Protect yourself and others during extreme heat events',
+                icon: '🔥🌡️',
                 difficulty: 'beginner',
                 duration: 12,
                 progress: 0,
@@ -285,20 +276,25 @@
     if (moduleId === 'fire_sefty') {
         window.location.href = "{% url 'fire_sefty_modules' %}";
     }
- else if (moduleId === 'Earthquake_Safety') {
+
+    else if (moduleId === 'flood-response') {
+        window.location.href = "{% url 'flood' %}";
+    }
+    
+    else if (moduleId === 'Earthquake_Safety') {
         window.location.href = "{% url 'Earthquake_Safety' %}";
     }
 
     else if (moduleId === 'wildfire-escape') {
         window.location.href = "{% url 'FireSafety' %}";
     }
-
+    
     
     else if (moduleId === 'hurricane-prep') {
         window.location.href = "{% url 'Cyclone_Safety' %}";
     }
 
-    else if (moduleId === 'FirstAid') {
+    else if (moduleId === 'first-aid') {
         window.location.href = "{% url 'Firstaid' %}";
     }
 }

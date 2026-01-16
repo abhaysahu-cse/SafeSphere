@@ -1,161 +1,691 @@
-<!DOCTYPE html>
+{% load static %}
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Emergency First Aid Safety</title>
-<style>
-body {
-  font-family: Arial, sans-serif;
-  background:#f4fbff;
-  margin:20px;
-  padding:20px;
-  line-height:1.6;
-}
-h1, h2, h3{color:#c00000;text-align:center;}
-.section {
-  background:#ffffff;
-  padding:15px;
-  border-radius:10px;
-  margin-bottom:15px;
-  box-shadow:0 0 8px rgba(0,0,0,0.1);
-}
-ul{margin-left:20px;}
-.video-links a{
-  display:block;
-  font-weight:bold;
-  margin:5px 0;
-  color:#004aad;
-}
-</style>
+  <meta charset="utf-8" />
+  <title>First Aid Module | SafeLearn</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Comprehensive First Aid training module for students: CPR, bleeding control, burns, fractures, choking, poisoning, shock, and emergency response." />
+  <style>
+    /* ----------------- THEME & LAYOUT ----------------- */
+    :root{
+      --brand: #0b6b9a;
+      --accent: #1aa3a3;
+      --muted: #6b7280;
+      --danger: #d9534f;
+      --card: #ffffff;
+      --bg: linear-gradient(180deg,#f8fdff 0%,#eef9fb 100%);
+      --maxw: 1100px;
+      --radius: 12px;
+      --gap: 18px;
+      --text: #102028;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:var(--bg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;color:var(--text);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+    .wrap{width:100%;max-width:var(--maxw);margin:22px auto;padding:26px;background:var(--card);border-radius:var(--radius);box-shadow:0 18px 46px rgba(6,22,34,0.06)}
+    .topbar{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    h1{margin:0;font-size:1.6rem;color:var(--brand)}
+    .lead{margin:6px 0;color:var(--muted)}
+    .meta-row{display:flex;gap:10px;align-items:center;font-size:0.9rem;color:var(--muted);flex-wrap:wrap}
+    .badge{background:#e6f6fb;color:var(--brand);padding:6px 10px;border-radius:999px;font-weight:700}
+    .grid{display:grid;grid-template-columns:1fr 340px;gap:var(--gap);margin-top:18px}
+    @media (max-width:920px){.grid{grid-template-columns:1fr}.sidecard{order:-1}}
+    .section{background:#fff;padding:16px;border-radius:10px;border:1px solid rgba(3,10,18,0.04);margin-top:14px}
+    .section h2{margin:0 0 8px;color:var(--brand)}
+    ul,ol{margin:6px 0 0 18px}
+    .poster{width:100%;border-radius:8px;margin-top:8px}
+    .info{background:linear-gradient(180deg,#f0fffb,#effffb);padding:10px;border-left:4px solid var(--accent);border-radius:8px;margin-top:10px}
+    .tip{background:#fff7e6;padding:8px;border-left:4px solid #ffb74d;border-radius:8px;margin-top:10px;color:#5a3b00}
+    .small{font-size:0.9rem;color:var(--muted)}
+    .kbd{display:inline-block;padding:3px 6px;border-radius:6px;background:#f1f5f9;border:1px solid rgba(0,0,0,0.04);font-family:monospace;font-size:0.9rem}
+
+    /* ----------------- VIDEO ----------------- */
+    .video-wrapper{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:10px;overflow:hidden;margin-top:12px}
+    .video-wrapper video,.video-wrapper iframe{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;border:0}
+
+    /* ----------------- QUIZ ----------------- */
+    .quiz-box{background:#fffaf0;border-left:5px solid #ffd54f;padding:16px;border-radius:8px}
+    .quiz-question{margin-bottom:12px}
+    .quiz-options label{display:block;padding:8px 10px;border-radius:8px;cursor:pointer;margin-bottom:6px;border:1px solid rgba(0,0,0,0.03)}
+    .quiz-options input[type="radio"]{margin-right:10px;transform:translateY(1px)}
+    .submit-btn{background:var(--brand);color:#fff;border:none;padding:10px 16px;border-radius:9px;font-weight:800;cursor:pointer}
+    .result{font-weight:800;margin-top:10px}
+    .explain{margin-top:10px;background:#f7f9fc;padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.03)}
+    .correct{color:var(--accent);font-weight:700}
+    .incorrect{color:var(--danger);font-weight:700}
+
+    /* ----------------- SIDE ----------------- */
+    .sidecard{position:sticky;top:20px}
+    .btn{display:inline-block;padding:10px 14px;border-radius:9px;text-decoration:none;font-weight:700}
+    .btn-primary{background:var(--brand);color:#fff}
+    .btn-ghost{background:transparent;color:var(--brand);border:1px solid rgba(3,10,18,0.06);padding:9px 12px;border-radius:9px}
+
+    /* ----------------- PRINTABLE CHECKLIST ----------------- */
+    #printable-checklist{display:none}
+    @media print{body{background:#fff}.wrap{box-shadow:none}.no-print{display:none}.grid{grid-template-columns:1fr} #printable-checklist{display:block}}
+
+    /* ----------------- FOOTER ----------------- */
+    footer{margin-top:18px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+    .note{font-size:0.9rem;color:var(--muted)}
+  </style>
 </head>
-
 <body>
+  <main class="wrap" role="main" aria-labelledby="title">
+    <div class="topbar">
+      <div>
+        <h1 id="title">🩺 First Aid — Comprehensive Student Module</h1>
+        <p class="lead">Practice-ready first aid guidance: CPR, bleeding control, burns, fractures, choking, poisoning, shock, and how to act until help arrives.</p>
+        <div class="meta-row">
+          <span class="badge">Module • First Aid</span>
+          <span class="small">Est. time: 25–40 min</span>
+          <span class="small">Target: Students 10+</span>
+        </div>
+      </div>
+      <div class="no-print">
+        <a class="btn btn-ghost" href="{% url 'learn' %}">⬅ Back to Modules</a>
+        <a class="btn btn-primary" href="#quiz">Take Quiz →</a>
+      </div>
+    </div>
 
-<h1>🚑 Emergency First Aid – Critical Life-Saving Techniques</h1>
+    <div class="grid" role="region" aria-labelledby="title">
 
-<div class="section">
-<h2>✅ 1. Core Theory Students Must Learn</h2>
+      <!-- MAIN COLUMN -->
+      <div>
 
-<h3>⭐ A. Check — Call — Care</h3>
-<ul>
-<li>CHECK surroundings – ensure safety</li>
-<li>CALL 108 or emergency help</li>
-<li>CARE and give first aid till help arrives</li>
-</ul>
+        <!-- HOOK -->
+        <section class="section" aria-labelledby="hookTitle">
+          <h2 id="hookTitle">Hook — a seconds-long decision can save a life</h2>
+          <p>Imagine a classmate collapses in the playground. What do you check first? How will you safely respond while waiting for an ambulance? This module walks you through those steps, including hands-on drills you can run with students.</p>
+        </section>
 
-<h3>⭐ B. ABC of First Aid</h3>
-<ul>
-<li><b>A – Airway</b>: Is the airway open?</li>
-<li><b>B – Breathing</b>: Is breathing normal?</li>
-<li><b>C – Circulation</b>: Check bleeding / heartbeat</li>
-</ul>
+        <!-- WHAT -->
+        <section class="section" aria-labelledby="whatTitle">
+          <h2 id="whatTitle">What is First Aid?</h2>
+          <p>First aid is the immediate assistance provided to an injured or ill person before professional medical help arrives. The aim is to:</p>
+          <ul>
+            <li>Preserve life</li>
+            <li>Prevent condition worsening</li>
+            <li>Promote recovery</li>
+            <li>Provide reassurance</li>
+          </ul>
+        </section>
 
-<h3>⭐ C. First Aid Golden Rule</h3>
-<p><b>Do no further harm</b> — Don’t move victim unless unsafe.</p>
-</div>
+        <!-- CORE PRINCIPLES -->
+        <section class="section" aria-labelledby="principles">
+          <h2 id="principles">Core Principles — Check • Call • Care</h2>
+          <ol>
+            <li><strong>Check</strong> the scene for danger — ensure you and the victim are safe.</li>
+            <li><strong>Call</strong> emergency services immediately (108 / 112) or your local number.</li>
+            <li><strong>Care</strong> for the victim — follow the ABCs (Airway, Breathing, Circulation) and other guidance below.</li>
+          </ol>
+          <div class="info" role="status" aria-live="polite">If there is immediate danger (fire, electrical hazard), move to a safe distance before approaching. Only move a person if remaining will put them at greater risk.</div>
+        </section>
 
-<div class="section">
-<h2>🚨 2. Life-Saving First Aid Techniques</h2>
+        <!-- ABC & SAMPLE CHECK -->
+        <section class="section" aria-labelledby="abcTitle">
+          <h2 id="abcTitle">Airway • Breathing • Circulation (ABC)</h2>
+          <ul>
+            <li><strong>Airway:</strong> Open the airway using head-tilt / chin-lift (unless spinal injury suspected).</li>
+            <li><strong>Breathing:</strong> Look, listen and feel for breathing for up to 10 seconds.</li>
+            <li><strong>Circulation:</strong> Stop heavy bleeding, check for pulse (if trained).</li>
+          </ul>
+          <h3>Quick responsiveness check</h3>
+          <ol>
+            <li>Ask loudly: "Are you okay?"</li>
+            <li>Gently tap the shoulders.</li>
+            <li>If no response, shout for help and call emergency services.</li>
+          </ol>
+        </section>
 
-<h3>🔵 A. CPR (Hands-Only)</h3>
-<ul>
-<li>Flat surface → Kneel → Interlock hands</li>
-<li>Push hard/fast in chest center</li>
-<li>Rate: <b>100–120 / min</b></li>
-<li>Continue until help arrives</li>
-</ul>
+        <!-- CPR -->
+        <section class="section" aria-labelledby="cpr">
+          <h2 id="cpr">Cardiopulmonary Resuscitation (CPR) — Hands Only</h2>
+          <p>Use hands-only CPR if you are not trained in rescue breaths, or if you're unsure:</p>
+          <ol>
+            <li>Place victim on their back on a firm surface.</li>
+            <li>Call emergency services (108/112) and ask for an AED if available.</li>
+            <li>Place the heel of one hand in the center of the chest, place your other hand on top and interlock fingers.</li>
+            <li>Keep arms straight and push hard & fast — 100 to 120 compressions per minute.</li>
+            <li>Allow chest to fully recoil between compressions.</li>
+            <li>Continue until help arrives or the person shows signs of life.</li>
+          </ol>
+          <div class="tip">If trained and safe to do so, combine compressions with rescue breaths (30 compressions : 2 breaths) following your certified training.</div>
+          <div class="info">If an AED (defibrillator) is available, follow the voice prompts immediately after powering on the device.</div>
+        </section>
 
-<h3>🔵 B. Severe Bleeding</h3>
-<ul>
-<li>Apply firm pressure with cloth</li>
-<li>Raise injured part</li>
-<li>Do not remove soaked cloth</li>
-</ul>
+        <!-- BLEEDING -->
+        <section class="section" aria-labelledby="bleed">
+          <h2 id="bleed">Severe Bleeding — Control & Care</h2>
+          <p>Rapid and correct action controls bleeding and reduces shock risk.</p>
+          <ol>
+            <li>Apply direct pressure to the wound using a sterile dressing or clean cloth.</li>
+            <li>If blood soaks through, do not remove — add more layers and continue pressure.</li>
+            <li>Raise the injured limb above heart level if no fracture suspected.</li>
+            <li>If bleeding is from an arm or leg and uncontrolled, consider a tourniquet only if trained and as last resort.</li>
+            <li>Send for medical help immediately.</li>
+          </ol>
+          <div class="explain"><strong>Why avoid removing embedded objects:</strong> They may be tamponading (blocking) the bleeding; cutting around and stabilizing is safer.</div>
+        </section>
 
-<h3>🔵 C. Fractures</h3>
-<ul>
-<li>Don’t move injured part</li>
-<li>Use splint (stick / cardboard)</li>
-<li>Use sling & tie around limb</li>
-</ul>
+        <!-- BURNS -->
+        <section class="section" aria-labelledby="burns">
+          <h2 id="burns">Burns — Minor & Major</h2>
+          <h3>Minor burns (small, superficial)</h3>
+          <ul>
+            <li>Cool under running water for 10–20 minutes.</li>
+            <li>Cover with sterile, non-stick dressing.</li>
+            <li>Pain relief (paracetamol) if appropriate for age.</li>
+          </ul>
+          <h3>Major burns (deep, large area, face, hands, feet, genitals)</h3>
+          <ul>
+            <li>Call emergency services immediately.</li>
+            <li>Protect from contamination — cover with clean cloth but do NOT apply creams or ice.</li>
+            <li>Monitor for shock and keep warm.</li>
+          </ul>
+        </section>
 
-<h3>🔵 D. Burns</h3>
-<ul>
-<li>Cool water 10–20 min</li>
-<li>Cover with clean cloth</li>
-<li>No ghee/oil/paste/ice</li>
-</ul>
+        <!-- FRACTURES & SPRAINS -->
+        <section class="section" aria-labelledby="fracture">
+          <h2 id="fracture">Fractures, Dislocations & Sprains</h2>
+          <p>Stabilize and limit movement until medical evaluation.</p>
+          <ul>
+            <li>Immobilize with splints (cardboard, rolled newspapers) and a sling.</li>
+            <li>Apply cold compress for swelling (not directly on skin).</li>
+            <li>Do not attempt to realign bones or push protruding bones back in.</li>
+          </ul>
+          <div class="info">If a limb is pale, cold, or numb, seek emergency care quickly.</div>
+        </section>
 
-<h3>🔵 E. Drowning</h3>
-<ul>
-<li>Lay on back → Check breathing</li>
-<li>Start CPR if needed</li>
-<li>Turn head sideways to drain water</li>
-</ul>
+        <!-- CHOKING -->
+        <section class="section" aria-labelledby="choke">
+          <h2 id="choke">Choking — Adult & Child Techniques</h2>
+          <p>Assess ability to cough/speak. If ineffective coughing — act immediately.</p>
+          <h3>Adult/Child (>1 year)</h3>
+          <ol>
+            <li>Stand behind the person; deliver abdominal thrusts (Heimlich manoeuvre) until object is expelled.</li>
+            <li>If person becomes unconscious, start CPR and call emergency services.</li>
+          </ol>
+          <h3>Infant (<1 year)</h3>
+          <ol>
+            <li>5 back blows with the heel of your hand, then 5 chest thrusts (use two fingers).</li>
+            <li>Alternate until object is expelled.</li>
+          </ol>
+        </section>
 
-<h3>🔵 F. Electric Shock</h3>
-<ul>
-<li>Switch off power first</li>
-<li>Don’t touch directly</li>
-<li>Use wood/dry cloth</li>
-</ul>
+        <!-- POISONING -->
+        <section class="section" aria-labelledby="poison">
+          <h2 id="poison">Poisoning & Overdose</h2>
+          <ul>
+            <li>Move victim away from the poison source (if safe).</li>
+            <li>Call your local poison control or emergency number immediately — provide product name, age, weight, time of exposure.</li>
+            <li>Do not induce vomiting unless instructed by experts.</li>
+            <li>If chemical on skin, remove contaminated clothing and rinse thoroughly with water.</li>
+          </ul>
+        </section>
 
-<h3>🔵 G. Choking – Heimlich</h3>
-<ul>
-<li>Fist above navel → Upward thrusts</li>
-<li>Children: 5 back blows + 5 chest thrusts</li>
-</ul>
+        <!-- ELECTRIC SHOCK -->
+        <section class="section" aria-labelledby="shockTitle">
+          <h2 id="shockTitle">Electric Shock</h2>
+          <ul>
+            <li>Switch off power source before touching the victim.</li>
+            <li>Call emergency services and monitor breathing and pulse.</li>
+            <li>Be aware of secondary injuries from falls.</li>
+          </ul>
+        </section>
 
-<h3>🔵 H. Snake Bite</h3>
-<ul>
-<li>Keep still</li>
-<li>Tie bandage above bite</li>
-<li>Don’t cut or suck</li>
-<li>Hospital immediately</li>
-</ul>
-</div>
+        <!-- STROKE & HEART ATTACK -->
+        <section class="section" aria-labelledby="stroke">
+          <h2 id="stroke">Stroke & Heart Attack — FAST & Recognition</h2>
+          <p><strong>FAST</strong> helps recognize stroke symptoms:</p>
+          <ul>
+            <li><b>F</b>ace drooping</li>
+            <li><b>A</b>rm weakness</li>
+            <li><b>S</b>peech difficulty</li>
+            <li><b>T</b>ime to call emergency services</li>
+          </ul>
+          <p>For suspected heart attack — call emergency services immediately, keep the person calm and seated, and monitor breathing. Aspirin may be given if advised by a professional.</p>
+        </section>
 
-<div class="section">
-<h2>🎒 3. First Aid Kit Must Include</h2>
-<ul>
-<li>Bandages, gauze, antiseptic</li>
-<li>Scissors, gloves</li>
-<li>Flashlight, whistle</li>
-<li>ORS, pain relievers</li>
-<li>Emergency numbers card</li>
-</ul>
-</div>
+        <!-- SHOCK -->
+        <section class="section" aria-labelledby="shock">
+          <h2 id="shock">Shock — Recognize & Manage</h2>
+          <p>Shock can follow severe bleeding, burns, sepsis, or multiple injuries.</p>
+          <ul>
+            <li>Signs: pale, cold, clammy skin; weak pulse; rapid breathing; confusion.</li>
+            <li>Lay victim down, raise legs (unless spinal injury suspected), keep warm, and call emergency services.</li>
+          </ul>
+        </section>
 
-<div class="section video-links">
-<h2>🎥 4. YouTube Training Videos</h2>
-<a href="https://www.youtube.com/watch?v=7lf5j5g2rj8" target="_blank">Basic First Aid for Kids</a>
-<a href="https://www.youtube.com/watch?v=MJ5uG8Y6uK4" target="_blank">Hands Only CPR</a>
-<a href="https://www.youtube.com/watch?v=6R4BY5mPPjM" target="_blank">Wound & Bleeding Control</a>
-<a href="https://www.youtube.com/watch?v=5qGK_3jFq9E" target="_blank">Burns First Aid</a>
-<a href="https://www.youtube.com/watch?v=dXDkZQ3X2I4" target="_blank">Fractures & Splints</a>
-</div>
+        <!-- FIRST AID KIT -->
+        <section class="section" aria-labelledby="kit">
+          <h2 id="kit">Assemble a Reliable First Aid Kit</h2>
+          <ol>
+            <li>Sterile gauze, adhesive dressings (various sizes)</li>
+            <li>Adhesive tape, scissors, safety pins</li>
+            <li>Antiseptic wipes & solution</li>
+            <li>Disposable gloves (nitrile), face shields</li>
+            <li>Thermometer, tweezers, CPR mask</li>
+            <li>Instant cold packs, elastic bandage</li>
+            <li>Basic oral medications (paracetamol), ORS sachets</li>
+            <li>Emergency contact card and class roster (for schools)</li>
+          </ol>
+          <div class="tip">Check kit monthly; replace used or expired items.</div>
+        </section>
 
-<div class="section">
-<h2>🧪 5. Activities & Drills</h2>
-<ul>
-<li>⭐ CPR practice with pillow</li>
-<li>⭐ Bandage & splint workshop</li>
-<li>⭐ Role play emergency scenes</li>
-<li>⭐ Group first aid kit creation</li>
-</ul>
-</div>
+        <!-- ACTIVITIES -->
+        <section class="section" aria-labelledby="activities">
+          <h2 id="activities">Activities & Drills (Classroom & Home)</h2>
+          <ol>
+            <li>CPR practice sessions with adult supervision (use cushions or manikins).</li>
+            <li>Bandage relay: teams practice correct bandaging under time limits.</li>
+            <li>Choking drill role-play (without real obstruction) to rehearse instructions and calm response.</li>
+            <li>First aid kit scavenger hunt: students assemble missing items from a list.</li>
+          </ol>
+        </section>
 
-<div class="section">
-<h2>📝 6. Quiz</h2>
-<ol>
-<li>First first-aid step? <b>Check scene ✔</b></li>
-<li>CPR rate? <b>100–120/min ✔</b></li>
-<li>For bleeding use: <b>Direct pressure ✔</b></li>
-<li>Burn treatment: <b>Cool running water ✔</b></li>
-<li>Snake bite – Never: <b>Cut/suck ✔</b></li>
-</ol>
-</div>
+        <!-- VIDEO PLACEHOLDERS -->
+        <!-- VIDEO + POSTER -->
 
+       <section class="section" aria-labelledby="videoTitle">
+  <h2 id="videoTitle">Watch: First Aid Safety Demo</h2>
+
+  <!-- Poster Image (separate, normal image) -->
+  <img 
+    src="{% static 'image/basicFristaid.jpg' %}" 
+    alt="First Aid Safety Poster" 
+    class="poster"
+  />
+
+  <!-- Video Container -->
+  <div class="video-wrapper">
+    <video
+      controls
+      preload="metadata"
+      playsinline
+      poster="{% static 'image/basicFristaid.jpg' %}"
+    >
+      <source src="{% static 'video/FirstAidProcedures.mp4' %}" type="video/mp4">
+      Your browser does not support HTML5 video.
+    </video>
+  </div>
+
+  <p class="small" style="margin-top:8px">
+    Tip: Watch carefully and practice these first aid steps during drills.
+  </p>
+</section>
+
+
+        <!-- PRACTICAL CHECKLIST (printable) -->
+        <section class="section" aria-labelledby="checklist">
+          <h2 id="checklist">Printable Checklist & Quick Guide</h2>
+          <p>Click <button id="printChecklist" class="submit-btn" type="button">Print Checklist</button> to print a one-page quick guide for your classroom wall.</p>
+          <div id="printable-checklist" aria-hidden="true">
+            <h3>First Aid Quick Guide</h3>
+            <ul>
+              <li>Check the scene</li>
+              <li>Call emergency services (108 / 112)</li>
+              <li>Open airway — check breathing</li>
+              <li>Stop heavy bleeding (direct pressure)</li>
+              <li>Perform CPR if no breathing</li>
+              <li>Cool burns — do not apply grease</li>
+              <li>Immobilize fractures</li>
+              <li>Keep patient warm and reassured</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- QUIZ -->
+        <section class="section quiz-box" id="quiz" aria-labelledby="quizHeader">
+          <h2 id="quizHeader">📝 First Aid Quiz — 12 Questions</h2>
+          <p class="small">Choose best answers. Explanations show after submission. Your score is saved locally.</p>
+
+          <form id="quizForm" aria-describedby="quizHelp">
+            <div id="quizHelp" class="small" style="margin-bottom:10px">Use keyboard tab / arrow keys to select then press Submit.</div>
+
+            <!-- Q1 -->
+            <div class="quiz-question" role="group" aria-labelledby="q1label">
+              <p id="q1label"><strong>1.</strong> The first action when you find an unconscious person is:</p>
+              <div class="quiz-options">
+                <label><input type="radio" name="q1" value="A"> Move them to another room</label>
+                <label><input type="radio" name="q1" value="B"> Check responsiveness and breathing</label>
+                <label><input type="radio" name="q1" value="C"> Give water</label>
+              </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="quiz-question">
+              <p><strong>2.</strong> Hands-only CPR compression rate is approximately:</p>
+              <div class="quiz-options">
+                <label><input type="radio" name="q2" value="A"> 40–60 / min</label>
+                <label><input type="radio" name="q2" value="B"> 100–120 / min</label>
+                <label><input type="radio" name="q2" value="C"> 160–180 / min</label>
+              </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="quiz-question">
+              <p><strong>3.</strong> To control severe external bleeding, do you:</p>
+              <div class="quiz-options">
+                <label><input type="radio" name="q3" value="A"> Apply direct pressure</label>
+                <label><input type="radio" name="q3" value="B"> Remove all dressings to see the wound</label>
+                <label><input type="radio" name="q3" value="C"> Give victim an aspirin</label>
+              </div>
+            </div>
+
+            <!-- Q4 -->
+            <div class="quiz-question">
+              <p><strong>4.</strong> Best immediate treatment for a minor burn is:</p>
+              <div class="quiz-options">
+                <label><input type="radio" name="q4" value="A"> Apply butter or oil</label>
+                <label><input type="radio" name="q4" value="B"> Cool under running water 10–20 minutes</label>
+                <label><input type="radio" name="q4" value="C"> Burst any blisters</label>
+              </div>
+            </div>
+
+            <!-- Q5 -->
+            <div class="quiz-question">
+              <p><strong>5.</strong> For a suspected spinal injury you should:</p>
+              <div class="quiz-options">
+                <label><input type="radio" name="q5" value="A"> Move the person quickly to a seated position</label>
+                <label><input type="radio" name="q5" value="B"> Keep them still and call emergency services</label>
+                <label><input type="radio" name="q5" value="C"> Perform abdominal thrusts</label>
+              </div>
+            </div>
+
+            <!-- Q6 -->
+            <div class="quiz-question">
+              <p><strong>6.</strong> If someone is choking but still coughing forcefully you should:</p>
+              <div class="quiz-options">
+                <label><input type="radio" name="q6" value="A"> Encourage them to keep coughing</label>
+                <label><input type="radio" name="q6" value="B"> Immediately begin abdominal thrusts</label>
+                <label><input type="radio" name="q6" value="C"> Give them water</label>
+              </div>
+            </div>
+
+            <!-- Q7 -->
+            <div class="quiz-question">
+              <p><strong>7.</strong> In an electrical injury the first step is to:</p>
+              <div class="quiz-options">
+                <label><input type="radio" name="q7" value="A"> Touch the victim to move them away</label>
+                <label><input type="radio" name="q7" value="B"> Switch off the power source if safe</label>
+                <label><input type="radio" name="q7" value="C"> Spray water to cool them</label>
+              </div>
+            </div>
+
+            <!-- Q8 -->
+            <div class="quiz-question">
+              <p><strong>8.</strong> Poisoning at home requires you to:</p>
+              <div class="quiz-options">
+                <label><input type="radio" name="q8" value="A"> Induce vomiting immediately</label>
+                <label><input type="radio" name="q8" value="B"> Call poison control/emergency services and follow instructions</label>
+                <label><input type="radio" name="q8" value="C"> Give milk or oil</label>
+              </div>
+            </div>
+
+            <!-- Q9 -->
+            <div class="quiz-question">
+              <p><strong>9.</strong> If an object is embedded in a wound you should:</p>
+              <div class="quiz-options">
+                <label><input type="radio" name="q9" value="A"> Remove it immediately</label>
+                <label><input type="radio" name="q9" value="B"> Stabilize and seek immediate medical care</label>
+                <label><input type="radio" name="q9" value="C"> Push it further in</label>
+              </div>
+            </div>
+
+            <!-- Q10 -->
+            <div class="quiz-question">
+              <p><strong>10.</strong> Signs of shock include:</p>
+              <div class="quiz-options">
+                <label><input type="radio" name="q10" value="A"> Warm, pink skin and alertness</label>
+                <label><input type="radio" name="q10" value="B"> Pale, cold, clammy skin and confusion</label>
+                <label><input type="radio" name="q10" value="C"> Slowed breathing and sleeping</label>
+              </div>
+            </div>
+
+            <!-- Q11 -->
+            <div class="quiz-question">
+              <p><strong>11.</strong> For a suspected heart attack you should:</p>
+              <div class="quiz-options">
+                <label><input type="radio" name="q11" value="A"> Make them exercise</label>
+                <label><input type="radio" name="q11" value="B"> Call emergency services immediately and keep them calm</label>
+                <label><input type="radio" name="q11" value="C"> Give them aspirin without asking</label>
+              </div>
+            </div>
+
+            <!-- Q12 -->
+            <div class="quiz-question">
+              <p><strong>12.</strong> The best way to manage a nosebleed is to:</p>
+              <div class="quiz-options">
+                <label><input type="radio" name="q12" value="A"> Tilt head back and pack tissue in nose</label>
+                <label><input type="radio" name="q12" value="B"> Sit forward and pinch the soft part of the nose for 10 minutes</label>
+                <label><input type="radio" name="q12" value="C"> Blow nose hard</label>
+              </div>
+            </div>
+
+            <button type="button" id="submitQuiz" class="submit-btn" aria-describedby="quizHelp">Submit Quiz</button>
+            <div id="quizResult" class="result" role="status" aria-live="polite"></div>
+            <div id="quizExplanations" class="explain" style="display:none"></div>
+          </form>
+        </section>
+
+      </div>
+
+      <!-- SIDE COLUMN -->
+      <aside class="sidecard" aria-labelledby="sideTitle">
+        <div class="section" id="sideTitle">
+          <h3>Quick Actions</h3>
+          <p class="small">Use these to quickly jump to drills, print resources, or save progress.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+            <button class="btn btn-ghost" onclick="document.getElementById('quiz').scrollIntoView({behavior:'smooth'})">Take Quiz</button>
+            <a class="btn btn-primary" href="#activities">Start Drill</a>
+            <button class="btn btn-ghost" id="downloadChecklist">Download Checklist</button>
+            <button class="btn btn-ghost" id="saveProgressBtn">Save Progress</button>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>Poster</h3>
+          <img class="poster" src="{% static 'image/firstaid-poster.jpg' %}" alt="First Aid Poster">
+          <p class="small">Print and display this poster in classrooms and corridors.</p>
+        </div>
+
+        <div class="section">
+          <h3>Emergency Numbers</h3>
+          <p class="small">Save these on every phone & in the kit.</p>
+          <ul class="small">
+            <li>Ambulance: <strong>108</strong></li>
+            <li>Emergency: <strong>112</strong></li>
+            <li>Poison Helpline: <strong>National / local</strong></li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h3>Checklist</h3>
+          <ul class="small">
+            <li>Monthly kit check</li>
+            <li>Quarterly drills for staff & students</li>
+            <li>Store video & training schedule</li>
+            <li>Contact list & medical info card</li>
+          </ul>
+        </div>
+      </aside>
+
+    </div>
+
+    <footer class="no-print">
+      <div class="note">Accessibility: images have alt text; videos should include captions. Keyboard navigation and screen reader compatibility supported.</div>
+      <div class="small">Module version 1.0 • Use responsibly — this is training guidance, not a replacement for certified first aid courses.</div>
+    </footer>
+  </main>
+
+  <!-- ----------------- SCRIPTS: QUIZ, CHECKLIST, STORAGE ----------------- -->
+  <script>
+    // ----------------- Quiz answers & explanations -----------------
+    const QUIZ_ANSWERS = {
+      q1: 'B',
+      q2: 'B',
+      q3: 'A',
+      q4: 'B',
+      q5: 'B',
+      q6: 'A',
+      q7: 'B',
+      q8: 'B',
+      q9: 'B',
+      q10: 'B',
+      q11: 'B',
+      q12: 'B'
+    };
+
+    const QUIZ_EXPLANATIONS = {
+      q1: 'Check responsiveness and breathing first so you know whether to call emergency services and begin life support.',
+      q2: '100–120 compressions per minute is the recommended rate for effective CPR.',
+      q3: 'Direct pressure controls bleeding. Removing dressings may worsen bleeding or remove clotting material.',
+      q4: 'Cooling with water reduces tissue damage. Do NOT apply grease or home remedies.',
+      q5: 'Suspected spinal injuries require immobilization and urgent professional care to prevent further damage.',
+      q6: 'If coughing forcefully, allow the person to keep coughing to try to clear the airway themselves.',
+      q7: 'Switch off the power source before touching the victim to avoid becoming injured yourself.',
+      q8: 'Poison control or emergency services provide precise advice for the substance involved; inducing vomiting can be harmful.',
+      q9: 'Embedded objects may be stopping bleeding; stabilize and seek medical care rather than removing.',
+      q10: 'Pale, cold, clammy skin and confusion are classic signs of shock — treat promptly.',
+      q11: 'Call emergency services and keep the person calm; do not make them exercise.',
+      q12: 'Sit forward and pinch the soft part of the nose for 10 minutes to control bleeding; do not tilt the head back.'
+    };
+
+    function gradeQuiz() {
+      const result = { correct: 0, total: Object.keys(QUIZ_ANSWERS).length, details: {} };
+      for (let i = 1; i <= result.total; i++) {
+        const name = 'q' + i;
+        const el = document.querySelector('input[name="' + name + '"]:checked');
+        const val = el ? el.value : null;
+        const ok = val === QUIZ_ANSWERS[name];
+        result.details[name] = { selected: val, correct: QUIZ_ANSWERS[name], ok, explanation: QUIZ_EXPLANATIONS[name] };
+        if (ok) result.correct++;
+      }
+      return result;
+    }
+
+    function renderQuizResult() {
+      const r = gradeQuiz();
+      const pct = Math.round((r.correct / r.total) * 100);
+      const el = document.getElementById('quizResult');
+      el.textContent = `Score: ${r.correct} / ${r.total} (${pct}%)`;
+      el.style.color = pct >= 75 ? 'var(--accent)' : (pct >= 50 ? '#b45309' : 'var(--danger)');
+
+      const ex = document.getElementById('quizExplanations');
+      ex.style.display = 'block';
+      ex.innerHTML = '<strong>Answer explanations</strong>';
+      const ul = document.createElement('ul');
+      ul.style.margin = '8px 0 0 18px';
+      for (const [k, v] of Object.entries(r.details)) {
+        const li = document.createElement('li');
+        const correctText = v.ok ? '<span class="correct">Correct</span>' : `<span class="incorrect">Incorrect</span> (Correct: ${v.correct})`;
+        li.innerHTML = `<strong>${k.toUpperCase()}</strong> — ${correctText}. ${v.explanation}`;
+        ul.appendChild(li);
+      }
+      ex.appendChild(ul);
+
+      // Save last score in localStorage
+      const stored = { time: new Date().toISOString(), score: r.correct, total: r.total, pct };
+      try { localStorage.setItem('firstaid_quiz_result', JSON.stringify(stored)); } catch (e) {}
+    }
+
+    document.getElementById('submitQuiz').addEventListener('click', function(){
+      renderQuizResult();
+      // Smooth scroll to explanations
+      document.getElementById('quizExplanations').scrollIntoView({behavior:'smooth'});
+    });
+
+    // ----------------- Save progress button -----------------
+    document.getElementById('saveProgressBtn').addEventListener('click', function(){
+      const saved = { savedAt: new Date().toISOString(), module: 'firstaid' };
+      try {
+        localStorage.setItem('firstaid_module_progress', JSON.stringify(saved));
+        alert('Progress saved locally.');
+      } catch(e){ alert('Unable to save progress: ' + e.message); }
+    });
+
+    // ----------------- Download printable checklist -----------------
+    document.getElementById('downloadChecklist').addEventListener('click', function(){
+      const content = [
+        'FIRST AID CHECKLIST',
+        '',
+        '1) Check the scene & call emergency services (108 / 112)',
+        '2) ABC: Airway - Breathing - Circulation',
+        '3) Control heavy bleeding with direct pressure',
+        '4) Perform CPR if no breathing (100-120/min)',
+        '5) Cool burns under running water (10-20 min)',
+        '6) Immobilize fractures and seek medical care',
+        '7) For choking: back blows/abdominal thrusts (age appropriate)',
+        '8) For poisoning: call poison control before giving anything',
+        '9) Keep first aid kit updated monthly',
+        '10) Keep emergency numbers visible'
+      ].join('\\n');
+
+      const blob = new Blob([content], {type:'text/plain'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'first_aid_checklist.txt';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    // ----------------- Print checklist button -----------------
+    document.getElementById('printChecklist').addEventListener('click', function(){
+      window.print();
+    });
+
+    // ----------------- Basic keyboard support for quiz radio navigation -----------------
+    (function keyboardAssist(){
+      // Allow arrow keys to move between radio options within a question group
+      document.addEventListener('keydown', function(e){
+        if (!['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)) return;
+        const active = document.activeElement;
+        if (active && active.tagName === 'INPUT' && active.type === 'radio') {
+          e.preventDefault();
+          const radios = Array.from(document.querySelectorAll('input[name="'+active.name+'"]'));
+          const idx = radios.indexOf(active);
+          let nextIdx = idx;
+          if (e.key === 'ArrowDown' || e.key === 'ArrowRight') nextIdx = (idx + 1) % radios.length;
+          if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') nextIdx = (idx - 1 + radios.length) % radios.length;
+          radios[nextIdx].focus();
+          radios[nextIdx].checked = true;
+        }
+      });
+    })();
+
+    // ----------------- accessibility enhancement: focus outlines -----------------
+    (function focusOutline(){
+      const style = document.createElement('style');
+      style.innerHTML = 'input:focus, button:focus, a:focus{outline:3px dashed rgba(11,107,154,0.18);outline-offset:3px}';
+      document.head.appendChild(style);
+    })();
+
+    // ----------------- Remember last quiz score display on load -----------------
+    (function showLastScore(){
+      try {
+        const raw = localStorage.getItem('firstaid_quiz_result');
+        if (!raw) return;
+        const parsed = JSON.parse(raw);
+        const el = document.getElementById('quizResult');
+        if (el && parsed) {
+          el.textContent = `Last saved score: ${parsed.score} / ${parsed.total} (${parsed.pct}%) — ${new Date(parsed.time).toLocaleString()}`;
+        }
+      } catch(e){}
+    })();
+
+    // ----------------- prevent accidental navigation during quiz (optional) -----------------
+    window.addEventListener('beforeunload', function(e){
+      // If the user has filled some radios but not submitted, warn them
+      const anyChecked = !!document.querySelector('input[type="radio"]:checked');
+      if (anyChecked) {
+        e.preventDefault();
+        e.returnValue = '';
+        return '';
+      }
+    });
+  </script>
 </body>
 </html>

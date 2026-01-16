@@ -1,0 +1,586 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Flood Safety Module | SafeLearn</title>
+  <meta name="description" content="Flood preparedness and response module — steps to stay safe before, during and after floods.">
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+  <style>
+    /* Local module styles (keeps module self-contained and easy to tweak) */
+    :root{
+      --brand:#0b6b9a;
+      --accent:#0b9a7a;
+      --muted:#6b7280;
+      --card:#ffffff;
+      --bg:#f3fbff;
+      --maxw:980px;
+      --success:#0b7a3c;
+      --warn:#b45309;
+      --danger:#d9534f;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg, #f8fdff 0%, #eef9fb 100%);
+      color:#0b2b3a;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.6;
+      padding:20px;
+      display:flex;
+      justify-content:center;
+    }
+    .wrap{
+      width:100%;
+      max-width:var(--maxw);
+      background:var(--card);
+      border-radius:12px;
+      box-shadow:0 14px 40px rgba(8,24,40,0.06);
+      padding:26px;
+      margin-bottom:40px;
+    }
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:12px;
+    }
+    h1{margin:0;font-size:1.9rem;color:var(--brand)}
+    p.lead{margin:6px 0 12px;color:var(--muted);font-size:0.98rem}
+    .meta-row{display:flex;gap:10px;align-items:center;font-size:0.9rem;color:var(--muted)}
+    .badge{background:#eef8f6;color:var(--accent);padding:6px 10px;border-radius:999px;font-weight:700}
+    .section{background:#ffffff;padding:14px;border-radius:10px;margin-top:14px;border:1px solid rgba(10,20,25,0.03)}
+    .section h2{margin:0 0 8px;color:var(--brand)}
+    .grid{display:grid;grid-template-columns:1fr 320px;gap:18px;align-items:start}
+    @media (max-width:920px){ .grid{grid-template-columns:1fr} .sidecard{order:-1} }
+    .sidecard{position:sticky;top:20px}
+    ul{margin:8px 0 0 18px}
+    ol{margin:8px 0 0 18px}
+    .video-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;   /* keeps perfect video shape */
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;       /* prevents overflow */
+}
+
+.video-container video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;    /* use "cover" if you want edge-to-edge */
+  border-radius: 12px;
+}
+
+    .poster{width:100%;border-radius:8px;display:block}
+    .cta-row{display:flex;gap:10px;margin-top:12px}
+    .btn{display:inline-block;padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:700}
+    .btn-primary{background:var(--brand);color:#fff}
+    .btn-ghost{background:transparent;border:1px solid rgba(8,20,30,0.06);color:var(--brand)}
+    .info-box{background:linear-gradient(180deg,#f0fcff,#f5fffb);padding:10px;border-radius:8px;border-left:4px solid var(--accent);color:#062c2a}
+    .quiz-box{background:#fffaf0;border-left:5px solid #ffb74d;padding:12px;border-radius:8px;margin-top:12px}
+    .quiz-question{margin-bottom:10px;padding:8px;border-radius:8px}
+    .quiz-question .q-title{margin:0 0 8px}
+    .result{font-weight:800;margin-top:10px}
+    table.myths{width:100%;border-collapse:collapse;margin-top:8px}
+    table.myths th, table.myths td{border:1px solid rgba(10,20,30,0.05);padding:8px;text-align:left}
+    .small{font-size:0.9rem;color:var(--muted)}
+    .kit-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+    .kit-item{background:#f5f9fa;padding:8px 10px;border-radius:8px;border:1px solid rgba(0,0,0,0.03)}
+    footer{margin-top:18px;display:flex;justify-content:space-between;align-items:center}
+    .note{font-size:0.9rem;color:var(--muted)}
+
+    /* Added quiz feedback styles */
+    .label-inline {
+      /* make each answer a full-width stacked row */
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:8px 10px;
+      width:100%;
+      border-radius:8px;
+      background:transparent;
+      margin:6px 0;
+      cursor:pointer;
+      box-sizing:border-box;
+    }
+
+    /* ensure label wraps to new line and stack vertically */
+    .quiz-question label { display:block; width:100%; }
+
+    /* radio alignment */
+    .label-inline input[type="radio"] {
+      flex:0 0 auto;
+      width:18px;
+      height:18px;
+      margin:0;
+    }
+    .label-inline span { flex:1 1 auto; display:inline-block; }
+
+    .correct-answer { background: #e6ffed; border-left:4px solid var(--success); }
+    .wrong-answer { background: #fff3f1; border-left:4px solid var(--danger); }
+    .muted-answer { opacity:0.88; }
+
+    .answer-feedback { font-size:0.9rem; margin-top:6px; color:var(--muted); }
+    .quiz-controls { margin-top:12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap }
+    .sr-only { position:absolute; width:1px; height:1px; padding:0; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+  </style>
+</head>
+<body>
+  <main class="wrap" role="main" aria-labelledby="pageTitle">
+    <div class="topbar">
+      <div>
+        <h1 id="pageTitle">🌊 Flood Safety — Prepare, Respond & Recover</h1>
+        <p class="lead">Objective: Understand flood risk, prepare an emergency plan, and act safely during flooding and flash floods.</p>
+        <div class="meta-row">
+          <span class="badge">Module • Flood</span>
+          <span class="small">Est. time: 12–20 min</span>
+          <span class="small">Target: Students age 10+</span>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <a class="btn btn-ghost" href="{% url 'learn' %}">⬅ Back to Modules</a>
+        <a class="btn btn-primary" href="#quiz">Take Quiz →</a>
+      </div>
+    </div>
+
+    <div class="grid" role="region" aria-labelledby="whatWhy">
+      <!-- MAIN COLUMN -->
+      <div>
+
+        <!-- HOOK -->
+        <section class="section" id="whatWhy" aria-labelledby="hookTitle">
+          <h2 id="hookTitle">Hook — what if the water rises?</h2>
+          <p>Imagine heavy rain for several hours; water starts entering ground-floor rooms and roads become impassable.
+            Quick decisions about where to go and what to save decide safety.</p>
+        </section>
+
+        <!-- WHAT & WHY -->
+        <section class="section" aria-labelledby="whatWhyTitle">
+          <h2 id="whatWhyTitle">What & Why — Floods in plain language</h2>
+          <ul>
+            <li>Floods happen when water overflows rivers, drains or coastal surge after heavy rain or storms.</li>
+            <li>Flash floods are sudden and fast — they can sweep away people and cars within minutes.</li>
+            <li>Most harm comes from being caught in moving water, contaminated water, and damaged infrastructure.</li>
+          </ul>
+        </section>
+
+        <!-- CORE SAFETY RULE -->
+        <section class="section" aria-labelledby="coreRule">
+          <h2 id="coreRule">Core Safety Rule — Move to high ground & avoid moving water</h2>
+          <ol>
+            <li><strong>Move quickly</strong> to higher ground or upper floors if water encroaches.</li>
+            <li><strong>Avoid walking/driving</strong> through moving water — it may be deeper and faster than it looks.</li>
+            <li><strong>Follow local warnings</strong> and evacuation instructions from authorities.</li>
+          </ol>
+
+          <div class="info-box" role="status" aria-live="polite" style="margin-top:10px">
+            Quick tip: 30 cm (1 foot) of moving water can knock over an adult; 60 cm can carry away most cars.
+          </div>
+        </section>
+
+        <!-- DO / DON'T -->
+        <section class="section" aria-labelledby="doDont">
+          <h2 id="doDont">Do / Don’t</h2>
+          <div style="display:flex;gap:18px;flex-wrap:wrap">
+            <div style="flex:1;min-width:220px">
+              <h3>✅ DO</h3>
+              <ul>
+                <li>Move people to higher floors or safe points immediately.</li>
+                <li>Turn off electricity at main if safe and dry it off later.</li>
+                <li>Take essential kit (water, phone, meds) if you must move.</li>
+              </ul>
+            </div>
+            <div style="flex:1;min-width:220px">
+              <h3>❌ DON’T</h3>
+              <ul>
+                <li>Do not walk or drive through floodwater.</li>
+                <li>Don’t enter flooded buildings with structural damage.</li>
+                <li>Never use candles in waterlogged spaces — risk of short-circuits.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- SITUATIONAL TIPS -->
+        <section class="section" aria-labelledby="situations">
+          <h2 id="situations">Situational Tips (Home, School, Outside)</h2>
+          <ul>
+            <li><strong>Home:</strong> Raise appliances, move valuables to upper rooms, switch off electricity if necessary from a dry location.</li>
+            <li><strong>School:</strong> Follow evacuation route to assembly point; teachers should carry class list and first-aid kit.</li>
+            <li><strong>Outside/Travel:</strong> Avoid low-lying roads; do not attempt to cross bridges or flooded fords.</li>
+          </ul>
+        </section>
+
+        <!-- VIDEO + POSTER -->
+        <section class="section" aria-labelledby="videoTitle">
+          <h2 id="videoTitle">Watch: Flood Safety Demo</h2>
+
+          <div class="video-container" aria-hidden="false">
+            <video controls preload="metadata" poster="{% static 'image/flood-poster.jpg' %}">
+              <source src="{% static 'video/floodSafetyTraning.mp4' %}" type="video/mp4">
+              Your browser does not support HTML5 video. See poster and instructions below.
+            </video>
+          </div>
+
+          <p class="small" style="margin-top:8px">Tip: Play the video on full-screen on a mobile to practice evacuation steps with your family.</p>
+        </section>
+
+        <!-- AFTER EVENT -->
+        <section class="section" aria-labelledby="afterEvent">
+          <h2 id="afterEvent">After the Flood — Recovery Steps</h2>
+          <ul>
+            <li>Only return when authorities say it is safe.</li>
+            <li>Avoid floodwater — it may be contaminated and contain debris.</li>
+            <li>Report gas leaks, electrical faults or structural damage to officials.</li>
+            <li>Use boiled or bottled water until supply is declared safe.</li>
+          </ul>
+        </section>
+
+        <!-- EMERGENCY KIT -->
+        <section class="section" aria-labelledby="kit">
+          <h2 id="kit">Emergency Kit for Floods</h2>
+          <div class="kit-list" role="list">
+            <div class="kit-item" role="listitem">Bottled water (3 days)</div>
+            <div class="kit-item" role="listitem">First-aid kit</div>
+            <div class="kit-item" role="listitem">Portable radio / phone power bank</div>
+            <div class="kit-item" role="listitem">Flashlight & spare batteries</div>
+            <div class="kit-item" role="listitem">Important documents in waterproof bag</div>
+            <div class="kit-item" role="listitem">Emergency blankets</div>
+          </div>
+        </section>
+
+        <!-- MYTHS VS FACTS -->
+        <section class="section" aria-labelledby="myths">
+          <h2 id="myths">Myths vs Facts</h2>
+          <table class="myths" role="table">
+            <thead><tr><th>Myth</th><th>Fact</th></tr></thead>
+            <tbody>
+              <tr><td>Flood water is just dirty rain</td><td>Flood water often contains sewage, chemicals, and hidden hazards.</td></tr>
+              <tr><td>It's OK to drive slowly through shallow water</td><td>Even shallow moving water can stall or sweep vehicles away.</td></tr>
+              <tr><td>Buildings float — stay upstairs</td><td>If the structure is badly damaged, upper floors may collapse; follow official advice.</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- PRACTICAL ACTIVITIES -->
+        <section class="section" aria-labelledby="activities">
+          <h2 id="activities">Activities & Drills (Classroom / Home)</h2>
+          <ol>
+            <li>Family plan: everyone practices the route to higher ground and a meeting point.</li>
+            <li>Classroom drill: teachers run a timed "move to assembly" drill with roll-call.</li>
+            <li>Check kit: students bring one item on the kit list and explain why it helps.</li>
+          </ol>
+        </section>
+
+        <!-- RESOURCES -->
+        <section class="section" aria-labelledby="resources">
+          <h2 id="resources">Resources & Further Reading</h2>
+          <ul>
+            <li><a href="#" target="_blank" rel="noopener">Local emergency number and municipal flood guidance</a></li>
+            <li><a href="#" target="_blank" rel="noopener">How to make a family evacuation plan (PDF)</a></li>
+            <li><a href="#" target="_blank" rel="noopener">Simple home floodproofing checklist</a></li>
+          </ul>
+        </section>
+
+        <!-- QUIZ -->
+        <section class="section quiz-box" id="quiz" aria-labelledby="quizHeader">
+          <h2 id="quizHeader">📝 Flood Safety Quiz (10 questions)</h2>
+
+          <form id="quizForm" aria-describedby="quizHelp" role="region">
+            <div id="quizHelp" class="small" style="margin-bottom:8px">Select the best answer for each question and press Submit to score.</div>
+
+            <div class="quiz-question" data-q="q1">
+              <p class="q-title"><strong>1.</strong> What is the first thing to do when water starts entering your home?</p>
+              <label class="label-inline"><input type="radio" name="q1" value="A"> <span>Move to higher ground / upper floor</span></label>
+              <label class="label-inline"><input type="radio" name="q1" value="B"> <span>Try to mop all water immediately</span></label>
+              <label class="label-inline"><input type="radio" name="q1" value="C"> <span>Stand in the doorway</span></label>
+              <div class="answer-feedback" aria-live="polite"></div>
+            </div>
+
+            <div class="quiz-question" data-q="q2">
+              <p class="q-title"><strong>2.</strong> When is it safe to drive through floodwater?</p>
+              <label class="label-inline"><input type="radio" name="q2" value="A"> <span>Always if the car is small</span></label>
+              <label class="label-inline"><input type="radio" name="q2" value="B"> <span>Only if you know the road well</span></label>
+              <label class="label-inline"><input type="radio" name="q2" value="C"> <span>Never drive through moving flood water</span></label>
+              <div class="answer-feedback" aria-live="polite"></div>
+            </div>
+
+            <div class="quiz-question" data-q="q3">
+              <p class="q-title"><strong>3.</strong> What should you avoid switching on after a flood?</p>
+              <label class="label-inline"><input type="radio" name="q3" value="A"> <span>Television</span></label>
+              <label class="label-inline"><input type="radio" name="q3" value="B"> <span>Electrical mains until inspected</span></label>
+              <label class="label-inline"><input type="radio" name="q3" value="C"> <span>Radio</span></label>
+              <div class="answer-feedback" aria-live="polite"></div>
+            </div>
+
+            <div class="quiz-question" data-q="q4">
+              <p class="q-title"><strong>4.</strong> Floodwater may contain:</p>
+              <label class="label-inline"><input type="radio" name="q4" value="A"> <span>Clean water only</span></label>
+              <label class="label-inline"><input type="radio" name="q4" value="B"> <span>Sewage, oil, debris and sharp objects</span></label>
+              <label class="label-inline"><input type="radio" name="q4" value="C"> <span>Only leaves</span></label>
+              <div class="answer-feedback" aria-live="polite"></div>
+            </div>
+
+            <div class="quiz-question" data-q="q5">
+              <p class="q-title"><strong>5.</strong> If you must go upstairs during a flood, you should:</p>
+              <label class="label-inline"><input type="radio" name="q5" value="A"> <span>Take important documents and kit</span></label>
+              <label class="label-inline"><input type="radio" name="q5" value="B"> <span>Close the door and hide</span></label>
+              <label class="label-inline"><input type="radio" name="q5" value="C"> <span>Stay in the basement</span></label>
+              <div class="answer-feedback" aria-live="polite"></div>
+            </div>
+
+            <div class="quiz-question" data-q="q6">
+              <p class="q-title"><strong>6.</strong> Which item is NOT essential in a flood emergency kit?</p>
+              <label class="label-inline"><input type="radio" name="q6" value="A"> <span>Bottled water</span></label>
+              <label class="label-inline"><input type="radio" name="q6" value="B"> <span>Waterproof container for documents</span></label>
+              <label class="label-inline"><input type="radio" name="q6" value="C"> <span>Heavy fireworks</span></label>
+              <div class="answer-feedback" aria-live="polite"></div>
+            </div>
+
+            <div class="quiz-question" data-q="q7">
+              <p class="q-title"><strong>7.</strong> Why avoid walking through floodwater?</p>
+              <label class="label-inline"><input type="radio" name="q7" value="A"> <span>It’s cold</span></label>
+              <label class="label-inline"><input type="radio" name="q7" value="B"> <span>It can contain hidden currents and hazards</span></label>
+              <label class="label-inline"><input type="radio" name="q7" value="C"> <span>It makes shoes wet</span></label>
+              <div class="answer-feedback" aria-live="polite"></div>
+            </div>
+
+            <div class="quiz-question" data-q="q8">
+              <p class="q-title"><strong>8.</strong> After a flood, what should you do before using tap water?</p>
+              <label class="label-inline"><input type="radio" name="q8" value="A"> <span>Use it immediately</span></label>
+              <label class="label-inline"><input type="radio" name="q8" value="B"> <span>Boil or use bottled water until tested safe</span></label>
+              <label class="label-inline"><input type="radio" name="q8" value="C"> <span>Add detergent to it</span></label>
+              <div class="answer-feedback" aria-live="polite"></div>
+            </div>
+
+            <div class="quiz-question" data-q="q9">
+              <p class="q-title"><strong>9.</strong> A safe evacuation assembly point should be:</p>
+              <label class="label-inline"><input type="radio" name="q9" value="A"> <span>Low-lying area near a river</span></label>
+              <label class="label-inline"><input type="radio" name="q9" value="B"> <span>High ground away from flood paths</span></label>
+              <label class="label-inline"><input type="radio" name="q9" value="C"> <span>Under a shallow bridge</span></label>
+              <div class="answer-feedback" aria-live="polite"></div>
+            </div>
+
+            <div class="quiz-question" data-q="q10">
+              <p class="q-title"><strong>10.</strong> Who should you check on first after a flood?</p>
+              <label class="label-inline"><input type="radio" name="q10" value="A"> <span>Neighbours and vulnerable people</span></label>
+              <label class="label-inline"><input type="radio" name="q10" value="B"> <span>Only yourself</span></label>
+              <label class="label-inline"><input type="radio" name="q10" value="C"> <span>The nearest shop</span></label>
+              <div class="answer-feedback" aria-live="polite"></div>
+            </div>
+
+            <div class="quiz-controls">
+              <button type="button" class="btn btn-primary" id="submitQuiz">Submit Quiz</button>
+              <button type="button" class="btn btn-ghost" id="retakeQuiz" style="display:none">Retake Quiz</button>
+              <div id="quizResult" class="result" role="status" aria-live="polite"></div>
+            </div>
+          </form>
+        </section>
+
+      </div>
+
+      <!-- SIDE COLUMN -->
+      <aside class="sidecard" aria-labelledby="sideTitle">
+        <div class="section" id="sideTitle">
+          <h2>Quick Actions</h2>
+          <p class="small">Use these at home or school to speed up your preparation.</p>
+          <div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap">
+            <button class="btn btn-ghost" onclick="document.getElementById('quiz').scrollIntoView({behavior:'smooth'})">Take Quiz</button>
+            <a class="btn btn-primary" href="{% url 'map' %}">View Flood Zones</a>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>Poster</h3>
+          <img class="poster" src="{% static 'image/flood-poster.jpg' %}" alt="Flood safety poster: move to higher ground">
+          <p class="small">Download and print this poster for classroom display.</p>
+        </div>
+
+        <div class="section">
+          <h3>Checklist</h3>
+          <ul class="small">
+            <li>Identify your nearest high ground / safe assembly point</li>
+            <li>Store documents in waterproof bags</li>
+            <li>Keep phone charged & power bank handy</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h3>Emergency Numbers</h3>
+          <p class="small">Save local emergency numbers and the community helpline on your phone.</p>
+          <ul class="small">
+            <li>Local emergency: <strong>108 / 112</strong></li>
+            <li>Municipal flood desk: <strong>—</strong> (add local)</li>
+          </ul>
+        </div>
+
+      </aside>
+    </div>
+
+    <footer>
+      <div class="note">Accessibility: Images have alt text; videos should include captions when published. Consider adding voice prompts for students with visual impairment.</div>
+      <div>
+        <a class="btn btn-ghost" href="{% url 'fire_sefty_modules' %}">Next: Fire Safety →</a>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    // Quiz logic: enhanced with per-question feedback, highlight, and persistence.
+    (function(){
+      const answers = {
+        q1: 'A', q2: 'C', q3: 'B', q4: 'B', q5: 'A',
+        q6: 'C', q7: 'B', q8: 'B', q9: 'B', q10: 'A'
+      };
+
+      // Utility: find label element for a given input element
+      function findParentLabel(input) {
+        if (!input) return null;
+        if (input.parentElement && input.parentElement.tagName.toLowerCase() === 'label') return input.parentElement;
+        const labels = document.querySelectorAll('label');
+        for (const lab of labels) {
+          if (lab.contains(input)) return lab;
+        }
+        return null;
+      }
+
+      function grade() {
+        let correct = 0, total = 10;
+        const details = {};
+        for (let i=1;i<=10;i++){
+          const name = 'q' + i;
+          const el = document.querySelector('input[name="'+name+'"]:checked');
+          const val = el ? el.value : null;
+          if (val === answers[name]) correct++;
+          details[name] = val;
+        }
+        return { correct, total, details };
+      }
+
+      function clearFeedback() {
+        document.querySelectorAll('.quiz-question').forEach(q => {
+          q.classList.remove('correct-answer', 'wrong-answer');
+          const feedback = q.querySelector('.answer-feedback');
+          if (feedback) feedback.textContent = '';
+          q.querySelectorAll('label').forEach(l => {
+            l.classList.remove('correct-answer','wrong-answer','muted-answer');
+          });
+        });
+        const result = document.getElementById('quizResult');
+        if (result) { result.textContent = ''; result.style.color = ''; }
+      }
+
+      function showResult() {
+        const r = grade();
+        const pct = Math.round((r.correct / r.total) * 100);
+        const el = document.getElementById('quizResult');
+        let msg = `Score: ${r.correct} / ${r.total} (${pct}%) — `;
+        if (pct === 100) msg += 'Excellent! You have strong flood safety knowledge. ✅';
+        else if (pct >= 70) msg += 'Good — review the module for missed items.';
+        else msg += 'Review the module and practice the drills again.';
+        el.textContent = msg;
+        el.style.color = pct >= 70 ? '#0b7a3c' : '#b45309';
+
+        // Per-question highlighting & feedback
+        for (let i=1;i<=10;i++){
+          const name = 'q'+i;
+          const qDiv = document.querySelector(`.quiz-question[data-q="${name}"]`);
+          if (!qDiv) continue;
+          const selected = document.querySelector(`input[name="${name}"]:checked`);
+          const selectedVal = selected ? selected.value : null;
+          const correctVal = answers[name];
+
+          qDiv.querySelectorAll('label').forEach(label => {
+            const input = label.querySelector('input');
+            if (!input) return;
+            const v = input.value;
+            if (v === correctVal) {
+              label.classList.add('correct-answer');
+            } else if (v === selectedVal && v !== correctVal) {
+              label.classList.add('wrong-answer');
+            } else {
+              label.classList.add('muted-answer');
+            }
+          });
+
+          const feedback = qDiv.querySelector('.answer-feedback');
+          if (feedback) {
+            if (!selectedVal) {
+              feedback.textContent = `No answer selected. Correct: ${qDiv.querySelector('label.correct-answer span').innerText}.`;
+            } else if (selectedVal === correctVal) {
+              feedback.textContent = `Correct — ${qDiv.querySelector('label.correct-answer span').innerText}.`;
+            } else {
+              feedback.textContent = `Incorrect. Correct: ${qDiv.querySelector('label.correct-answer span').innerText}.`;
+            }
+          }
+        }
+
+        document.querySelectorAll('#quizForm input').forEach(inp => inp.disabled = true);
+        document.getElementById('submitQuiz').style.display = 'none';
+        const retake = document.getElementById('retakeQuiz');
+        retake.style.display = 'inline-block';
+
+        const payload = { score: r.correct, total: r.total, pct, time: (new Date()).toISOString() };
+        localStorage.setItem('flood_quiz_score', JSON.stringify(payload));
+        const bestJSON = localStorage.getItem('flood_quiz_best');
+        const best = bestJSON ? JSON.parse(bestJSON) : null;
+        if (!best || payload.score > best.score) {
+          localStorage.setItem('flood_quiz_best', JSON.stringify(payload));
+        }
+        el.setAttribute('tabindex','-1');
+        el.focus({ preventScroll: true });
+      }
+
+      function retake() {
+        document.querySelectorAll('#quizForm input').forEach(inp => { inp.checked = false; inp.disabled = false; });
+        document.getElementById('submitQuiz').style.display = 'inline-block';
+        document.getElementById('retakeQuiz').style.display = 'none';
+        clearFeedback();
+        document.getElementById('quizResult').textContent = '';
+      }
+
+      document.getElementById('submitQuiz').addEventListener('click', function(){
+        showResult();
+      });
+
+      document.getElementById('retakeQuiz').addEventListener('click', function(){
+        retake();
+        document.getElementById('quiz').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+
+      (function initFromStorage(){
+        try {
+          const last = localStorage.getItem('flood_quiz_score');
+          const best = localStorage.getItem('flood_quiz_best');
+          if (last) {
+            const p = JSON.parse(last);
+            const el = document.getElementById('quizResult');
+            el.textContent = `Last attempt: ${p.score}/${p.total} (${p.pct}%) — Retake to improve.`;
+            el.style.color = p.pct >= 70 ? '#0b7a3c' : '#b45309';
+          }
+          if (best) {
+            const b = JSON.parse(best);
+            const node = document.createElement('div');
+            node.className = 'small';
+            node.style.marginTop = '8px';
+            node.textContent = `Best score: ${b.score}/${b.total} (${b.pct}%)`;
+            document.querySelector('.quiz-controls').appendChild(node);
+          }
+        } catch (e) {
+          // ignore storage issues
+        }
+      })();
+
+    })();
+  </script>
+</body>
+</html>
