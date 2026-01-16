@@ -32,7 +32,7 @@
       <div class="sidebar-header">
         <div class="logo">
           <span class="logo-icon">🛡️</span>
-          <span class="logo-text">SafeLearn</span>
+          <span class="logo-text">SafeSphere</span>
         </div>
         <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
       </div>
@@ -41,9 +41,13 @@
         <a href="{% url 'learn' %}" class="nav-link"><span class="nav-icon">📚</span><span class="nav-text">Learn</span></a>
         <a href="{% url 'games' %}" class="nav-link"><span class="nav-icon">🎮</span><span class="nav-text">Games</span></a>
         <a href="{% url 'drills' %}" class="nav-link"><span class="nav-icon">🚨</span><span class="nav-text">Drills</span></a>
-        <a href="{% url 'leaderboard' %}" class="nav-link active"><span class="nav-icon">🏆</span><span class="nav-text">Leaderboard</span></a>
+        
         <a href="{% url 'emergency' %}" class="nav-link emergency-link"><span class="nav-icon">🆘</span><span class="nav-text">Emergency</span></a>
         <a href="{% url 'chat' %}" class="nav-link"><span class="nav-icon">💬</span><span class="nav-text">AI Assistant</span></a>
+        <a href="{% url 'weather' %}" class="nav-link"> <span class="nav-icon">🌦</span>  <span class="nav-text">Weather</span>  </a>
+        <a href="{% url 'map' %}" class="nav-link"><span class="nav-icon">🗺️</span><span class="nav-text">Safety Map</span></a>
+        
+        <a href="{% url 'leaderboard' %}" class="nav-link active"><span class="nav-icon">🏆</span><span class="nav-text">Leaderboard</span></a>
         <a href="{% url 'profile' %}" class="nav-link"><span class="nav-icon">👤</span><span class="nav-text">Profile</span></a>
       </nav>
     </aside>

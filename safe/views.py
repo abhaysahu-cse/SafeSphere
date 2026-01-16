@@ -40,7 +40,7 @@ def escape_room(request):
 
 
 def  Flood_Safety(request):
-    return render(request, "games/Flood_Safety.html")
+    return render(request, "games/Flood_SafetyG.html")
 
 def  earth(request):
     return render(request, "games/earth.html")
@@ -54,6 +54,9 @@ def  Earthquake_Safety(request):
 
 def  FireSafety(request):
     return render(request, "learn/Fire-Safety.html")
+
+def  Cyclone_Safety(request):
+    return render(request, "learn/Cyclone_Safety.html")
 
 
 
@@ -166,13 +169,14 @@ def vr_videos(request):
     return render(request, 'vr.html')
 
 
-def Flood_Safety(request):
+def Flood_SafetyL(request):
     return render(request, "learn/flood.html")
 
-
+def Fire_Safety(request):
+    return render(request, "learn/fire.html")
 
 def Cyclone_Safety(request):
-    return render(request, "learn/Cyclone_Safety.html")
+    return render(request, "learn/cyclone.html")
 
 def Tsunami_Safety(request):
     return render(request, "learn/tsunami.html")
@@ -185,9 +189,6 @@ def HeatWave_Safety(request):
 
 def FirstAid_Safety(request):
     return render(request, "learn/firstaid.html")
-
-def Winter_Safety(request):
-    return render(request, "learn/winterstrome.html")
 
 def zones_api(request):
     data = [

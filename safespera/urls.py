@@ -38,7 +38,7 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     path("games/escape-room/", escape_room, name="escape_room"),
     # path('games/', games, name='games'),
-    path("games/Flood_Safety", Flood_Safety, name="Flood_Safety"),
+    path("games/Flood_SafetyG", Flood_Safety, name="Flood_Safety"),
     path("games/earth", earth, name="earth"),
     path("learn/fire_sefty", fire_sefty_modules, name="fire_sefty_modules"),
     path("learn/Earthquake_Safety", Earthquake_Safety, name="Earthquake_Safety"),
@@ -67,9 +67,8 @@ urlpatterns = [
     path('vr/', views.vr_videos, name='vr_videos'),
     path('drills/landslide/', views.landslide_simulation, name='landslide_simulation'),
     
-
+    path('learn/flood/', views.Flood_SafetyL, name='flood'),
     
-    path('learn/flood/', views.Flood_Safety, name='flood'),
    
    
     path('learn/Cyclone_Safety/', views.Cyclone_Safety, name='Cyclone_Safety'),

@@ -11,6 +11,21 @@
 </head>
 <body>
 
+ <!-- {% load static %} -->
+<!-- GLOBAL BACKGROUND (place immediately after <body>) -->
+<!-- <div class="site-bg" aria-hidden="true">
+  <video class="site-bg-video"
+         autoplay
+         muted
+         loop
+         playsinline
+         poster="{% static 'bg/site-bg.png' %}">
+    <source src="{% static 'bg/site-bg.mp4' %}" type="video/mp4">
+  </video>
+  <div class="site-bg-overlay" aria-hidden="true"></div>
+</div> -->
+
+
 <!-- Sidebar -->
 <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
@@ -40,10 +55,7 @@
             <span class="nav-icon">🚨</span>
             <span class="nav-text">Drills</span>
         </a>
-        <a href="{% url 'leaderboard' %}" class="nav-link">
-            <span class="nav-icon">🏆</span>
-            <span class="nav-text">Leaderboard</span>
-        </a>
+        
         <a href="{% url 'emergency' %}" class="nav-link emergency-link">
             <span class="nav-icon">🆘</span>
             <span class="nav-text">Emergency</span>
@@ -62,6 +74,10 @@
         <a href="{% url 'map' %}" class="nav-link">
             <span class="nav-icon">🗺️</span>
             <span class="nav-text">full Map</span>
+        </a>
+        <a href="{% url 'leaderboard' %}" class="nav-link">
+            <span class="nav-icon">🏆</span>
+            <span class="nav-text">Leaderboard</span>
         </a>
         <a href="{% url 'profile' %}" class="nav-link">
             <span class="nav-icon">👤</span>
@@ -112,6 +128,7 @@
                 <p class="stat-label">Total XP</p>
             </div>
         </div>
+        
 
         <div class="stat-card stat-card-yellow">
             <div class="stat-icon">🔥</div>

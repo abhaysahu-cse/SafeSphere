@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SafeLearn - Emergency Drills</title>
+    <title>SafeSphere - Emergency Drills</title>
     <meta name="description" content="Practice emergency response through realistic drills">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <script src="script.js" defer></script>
@@ -16,7 +16,7 @@
         <div class="sidebar-header">
             <div class="logo">
                 <span class="logo-icon">🛡️</span>
-                <span class="logo-text">SafeLearn</span>
+                <span class="logo-text">SafeSphere</span>
             </div>
             <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
                 <span class="toggle-icon">☰</span>
@@ -40,10 +40,7 @@
                 <span class="nav-icon">🚨</span>
                 <span class="nav-text">Drills</span>
             </a>
-            <a href="{% url 'leaderboard' %}" class="nav-link" data-page="leaderboard">
-                <span class="nav-icon">🏆</span>
-                <span class="nav-text">Leaderboard</span>
-            </a>
+           
             <a href="{% url 'emergency' %}" class="nav-link emergency-link" data-page="emergency">
                 <span class="nav-icon">🆘</span>
                 <span class="nav-text">Emergency</span>
@@ -61,6 +58,11 @@
             <span class="nav-icon">🗺️</span>
             <span class="nav-text">full Map</span>
         </a>
+         <a href="{% url 'leaderboard' %}" class="nav-link" data-page="leaderboard">
+                <span class="nav-icon">🏆</span>
+                <span class="nav-text">Leaderboard</span>
+            </a>
+
             <a href="{% url 'profile' %}" class="nav-link" data-page="profile">
                 <span class="nav-icon">👤</span>
                 <span class="nav-text">Profile</span>

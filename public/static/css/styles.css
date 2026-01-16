@@ -2642,3 +2642,35 @@ body {
   border-left:4px solid #f59e0b;
   font-size:0.95rem;
 }
+
+/* ==========================================
+   BACKGROUND VIDEO
+   ========================================== */
+   
+/* .site-bg {
+  position: fixed !important;
+  inset: 0;                
+  z-index: -9999;           
+  overflow: hidden;
+  pointer-events: none;
+}
+.site-bg-video { 
+  position: absolute !important;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  transform: translate(-50%,-50%);
+  object-fit: cover;
+  pointer-events: none;
+}
+.site-bg-overlay { position:absolute; inset:0; background: linear-gradient( rgba(15,23,42,0.25), rgba(15,23,42,0.5) ); pointer-events:none; }
+
+.sidebar { z-index: 200; position: fixed; }
+.main-content { position: relative; z-index: 201; }
+
+@media (max-width: 900px), (prefers-reduced-motion:reduce) {
+  .site-bg-video { display:none !important; }
+  .site-bg { background: url("{% static 'bg/site-bg.png' %}") center / cover no-repeat fixed; }
+}
+ */
