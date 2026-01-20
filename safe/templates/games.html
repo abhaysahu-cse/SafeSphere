@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SafeLearn - Games</title>
+    <title>SafeSphere - Games</title>
     <meta name="description" content="Practice disaster preparedness through interactive games">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <script src="script.js" defer></script>
@@ -61,7 +61,7 @@
         <!-- Map page -->
         <a href="{% url 'map' %}" class="nav-link">
             <span class="nav-icon">🗺️</span>
-            <span class="nav-text">full Map</span>
+            <span class="nav-text">Safety Map</span>
         </a>
         <a href="{% url 'leaderboard' %}" class="nav-link" data-page="leaderboard">
                 <span class="nav-icon">🏆</span>
@@ -270,8 +270,9 @@ function openGame(gameId) {
     }
 
     else if (gameId === 'Flood-Safety') {
-        window.location.href = "{% url 'Flood_Safety' %}";
-    }
+    window.location.href = "{% url 'Flood_SafetyG' %}";
+}
+
 
     else if (gameId === 'earthquake') {
         window.location.href = "{% url 'earth' %}";
