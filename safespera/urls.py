@@ -38,7 +38,7 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     path("games/escape-room/", escape_room, name="escape_room"),
     # path('games/', games, name='games'),
-    path("games/Flood_SafetyG", Flood_Safety, name="Flood_Safety"),
+    path("games/Flood_SafetyG", Flood_Safety, name="Flood_SafetyG"),
     path("games/earth", earth, name="earth"),
     path("learn/fire_sefty", fire_sefty_modules, name="fire_sefty_modules"),
     path("learn/Earthquake_Safety", Earthquake_Safety, name="Earthquake_Safety"),
@@ -76,6 +76,12 @@ urlpatterns = [
     path('learn/tornado/', views.Tornado_Safety, name='Tornado_Safety'),
     path('learn/heatwave/', views.HeatWave_Safety, name='HeatWave_Safety'),
     path('learn/firstaid/', views.FirstAid_Safety, name='FirstAid_Safety'),
+     path(
+        'learn/winterstorm/',
+        views.WinterStorms_Safety,
+        name='WinterStorms_Safety'
+    ),
+
 ]
 
 # Serve static files during development

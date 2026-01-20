@@ -57,17 +57,18 @@
         <!-- Map page -->
         <a href="{% url 'map' %}" class="nav-link">
             <span class="nav-icon">🗺️</span>
-            <span class="nav-text">full Map</span>
+            <span class="nav-text">Safety Map</span>
         </a>
 
         <a href="{% url 'leaderboard' %}" class="nav-link" data-page="leaderboard">
             <span class="nav-icon">🏆</span>
             <span class="nav-text">Leaderboard</span>
         </a>
-            <a href="{% url 'profile' %}" class="nav-link" data-page="profile">
-                <span class="nav-icon">👤</span>
-                <span class="nav-text">Profile</span>
-            </a>
+
+        <a href="{% url 'profile' %}" class="nav-link" data-page="profile">
+            <span class="nav-icon">👤</span>
+            <span class="nav-text">Profile</span>
+        </a>
         </nav>
     </aside>
 
@@ -298,6 +299,18 @@
 
     else if (moduleId === 'first-aid') {
         window.location.href = "{% url 'Firstaid' %}";
+    }
+    else if (moduleId === 'HeatWave-safety') {
+    window.location.href = "{% url 'HeatWave_Safety' %}";
+   }
+   else if (moduleId === 'tornado-safety') {
+        window.location.href = "{% url 'Cyclone_Safety' %}";
+    }
+    else if (moduleId === 'winter-storms'){
+        window.location.href = "{% url 'WinterStorms_Safety' %}";
+    }
+    else {
+        alert('Module page not found.');
     }
 }
 

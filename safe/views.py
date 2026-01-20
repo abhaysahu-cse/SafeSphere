@@ -175,8 +175,8 @@ def Flood_SafetyL(request):
 def Fire_Safety(request):
     return render(request, "learn/fire.html")
 
-def Cyclone_Safety(request):
-    return render(request, "learn/cyclone.html")
+# def Cyclone_Safety(request):
+#     return render(request, "learn/cyclone.html")
 
 def Tsunami_Safety(request):
     return render(request, "learn/tsunami.html")
@@ -187,8 +187,13 @@ def Tornado_Safety(request):
 def HeatWave_Safety(request):
     return render(request, "learn/heatwave.html")
 
+
 def FirstAid_Safety(request):
     return render(request, "learn/firstaid.html")
+def WinterStorms_Safety(request):
+    return render(request, "learn/winterstorm.html")
+
+
 
 def zones_api(request):
     data = [
