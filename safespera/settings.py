@@ -12,8 +12,20 @@ Environment variables used:
 from pathlib import Path
 import os
 import dj_database_url
+from django.utils.translation import gettext_lazy as _
+
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+LANGUAGES = [
+    ('en', _('English')),
+    ('hi', _('Hindi')),
+]
+
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
 
 # SECURITY
 SECRET_KEY = os.environ.get(
@@ -46,11 +58,13 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",   # <-- add here (first after SecurityMiddleware)
     "django.contrib.sessions.middleware.SessionMiddleware",
+    'django.middleware.locale.LocaleMiddleware',
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    
 ]
 
 ROOT_URLCONF = "safespera.urls"
@@ -74,17 +88,32 @@ TEMPLATES = [
 WSGI_APPLICATION = "safespera.wsgi.application"
 
 # DATABASE: use DATABASE_URL if present, otherwise default to local sqlite3
-if os.environ.get("DATABASE_URL"):
-    DATABASES = {
-        "default": dj_database_url.parse(os.environ.get("DATABASE_URL"), conn_max_age=600)
+# if os.environ.get("DATABASE_URL"):
+#     DATABASES = {
+#         "default": dj_database_url.parse(os.environ.get("DATABASE_URL"), conn_max_age=600)
+#     }
+# else:
+#     DATABASES = {
+#         'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'safeshpere',
+#         'USER': 'django_user',
+#         'PASSWORD': 'Aaryan@123',
+#         'HOST': '127.0.0.1',
+#         'PORT': '3306',
+#     }
+#     }
+
+DATABASES = {
+    'default': {
+      'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'safeshpere',
+        'USER': 'root',
+        'PASSWORD': 'Aaryan@123',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
-    }
+}
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -95,15 +124,25 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Internationalization
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "en"
 TIME_ZONE = "Asia/Kolkata"
 USE_I18N = True
+USE_L10N = True
 USE_TZ = True
+LANGUAGE_COOKIE_NAME = 'django_language'
 
 # Static & media (keep your current config — ensure staticfiles works)
-STATIC_URL = "/static/"
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "public/static")]
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+# STATIC_URL = "/static/"
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, "public/static")]
+# STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'public' / 'static'
+]
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 
 # WhiteNoise: compressed static files (safe & simple)
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
@@ -111,7 +150,9 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Media (if you use file uploads; keep in repo layout)
 MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "public/static")
+# MEDIA_ROOT = os.path.join(BASE_DIR, "public/static")
+MEDIA_ROOT = BASE_DIR / 'media'
+
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
