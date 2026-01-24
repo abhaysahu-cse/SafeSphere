@@ -1,12 +1,13 @@
-# safespera/settings.py
+# safespera/safespera/settings.py
 """
 Django settings for safespera project — production-ready defaults.
 
-Environment variables used:
-- DJANGO_SECRET_KEY (recommended)
-- DJANGO_DEBUG (True/False)
+Environment variables used (recommended):
+- DJANGO_SECRET_KEY (optional; fallback used if not set)
+- DJANGO_DEBUG (True/False string)
 - DJANGO_ALLOWED_HOSTS (comma-separated)
-- DATABASE_URL (optional; if not set, uses local sqlite)
+- USE_REMOTE_DB (set to "1" to enable DATABASE_URL usage)
+- DATABASE_URL (optional; only used when USE_REMOTE_DB == "1")
 """
 
 from pathlib import Path
@@ -14,36 +15,24 @@ import os
 import dj_database_url
 from django.utils.translation import gettext_lazy as _
 
-
-
+# --- Paths ---
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-LANGUAGES = [
-    ('en', _('English')),
-    ('hi', _('Hindi')),
-]
-
-LOCALE_PATHS = [
-    BASE_DIR / 'locale',
-]
-
-# SECURITY
+# --- Security ---
 SECRET_KEY = os.environ.get(
     "DJANGO_SECRET_KEY",
-    "django-insecure-q@to37sgiwh-8m$i#fj+17q36_jmyi-^q*w8#6&)!1bez^sn-+"  # fallback, keep local dev safe
+    "django-insecure-fallback-for-local-dev-only"  # keep local dev safe
 )
 DEBUG = os.environ.get("DJANGO_DEBUG", "True").lower() in ("1", "true", "yes")
 
-# Allowed hosts from env (comma separated) or fallback to localhost during dev
+# Allowed hosts
 _allowed = os.environ.get("DJANGO_ALLOWED_HOSTS", "*")
 if _allowed.strip() == "" or _allowed == "*":
     ALLOWED_HOSTS = ["*"]
 else:
     ALLOWED_HOSTS = [h.strip() for h in _allowed.split(",") if h.strip()]
 
-
-
-# Application definition
+# --- Application definition ---
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -56,15 +45,14 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",   # <-- add here (first after SecurityMiddleware)
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    'django.middleware.locale.LocaleMiddleware',
+    "django.middleware.locale.LocaleMiddleware",  # required for i18n
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    
 ]
 
 ROOT_URLCONF = "safespera.urls"
@@ -72,12 +60,13 @@ ROOT_URLCONF = "safespera.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        # add a top-level templates dir if you decide to use it
         "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.request",
+                "django.template.context_processors.i18n",
+                "django.template.context_processors.static",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
@@ -87,35 +76,26 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "safespera.wsgi.application"
 
-# DATABASE: use DATABASE_URL if present, otherwise default to local sqlite3
-# if os.environ.get("DATABASE_URL"):
-#     DATABASES = {
-#         "default": dj_database_url.parse(os.environ.get("DATABASE_URL"), conn_max_age=600)
-#     }
-# else:
-#     DATABASES = {
-#         'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'safeshpere',
-#         'USER': 'django_user',
-#         'PASSWORD': 'Aaryan@123',
-#         'HOST': '127.0.0.1',
-#         'PORT': '3306',
-#     }
-#     }
+# --- DATABASES: Local-first (SQLite). Only use DATABASE_URL if USE_REMOTE_DB == "1" ---
+# This makes local development reliable and prevents accidental MySQL connection attempts.
+USE_REMOTE_DB = os.environ.get("USE_REMOTE_DB", "0") == "1"
+DATABASE_URL = os.environ.get("DATABASE_URL", "").strip()
 
-DATABASES = {
-    'default': {
-      'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'safeshpere',
-        'USER': 'root',
-        'PASSWORD': 'Aaryan@123',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
+if USE_REMOTE_DB and DATABASE_URL:
+    # explicit opt-in to use remote DB
+    DATABASES = {
+        "default": dj_database_url.parse(DATABASE_URL, conn_max_age=600)
     }
-}
+else:
+    # default local SQLite (DB-lite)
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
-# Password validation
+# --- Password validation ---
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
@@ -123,38 +103,35 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-# Internationalization
+# --- Internationalization ---
 LANGUAGE_CODE = "en"
 TIME_ZONE = "Asia/Kolkata"
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
-LANGUAGE_COOKIE_NAME = 'django_language'
 
-# Static & media (keep your current config — ensure staticfiles works)
-# STATIC_URL = "/static/"
-# STATICFILES_DIRS = [os.path.join(BASE_DIR, "public/static")]
-# STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATIC_URL = '/static/'
-
-STATICFILES_DIRS = [
-    BASE_DIR / 'public' / 'static'
+LANGUAGES = [
+    ("en", _("English")),
+    ("hi", _("हिन्दी")),
 ]
 
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+LOCALE_PATHS = [
+    BASE_DIR / "locale",
+]
 
-
-# WhiteNoise: compressed static files (safe & simple)
+# --- Static & Media ---
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "public/static")]
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-
-# Media (if you use file uploads; keep in repo layout)
 MEDIA_URL = "/media/"
-# MEDIA_ROOT = os.path.join(BASE_DIR, "public/static")
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, "public/static")
 
-
+# Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# Security / proxy settings (useful on many hosts)
+# Security / proxy
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+# ---- End of settings.py ----

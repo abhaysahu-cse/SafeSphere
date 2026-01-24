@@ -1,10 +1,11 @@
 {% load static %}
+{% load i18n %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ LANGUAGE_CODE|default:'en' }}">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Earthquake Safety Module</title>
+    <title>{% trans "Earthquake Safety Module" %}</title>
 
     <style>
         body {
@@ -22,224 +23,257 @@
             border-radius: 8px;
             box-shadow: 0px 0px 10px #b5c8e1;
         }
-        h1, h2 {
-            color: #0057a3;
-        }
-        img {
-            width: 100%;
-            border-radius: 8px;
-            margin: 12px 0;
-        }
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            margin: 20px 0;
-        }
-        .video-container iframe {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 10px;
-        }
-        .quiz-box {
-            margin-top: 40px;
-            padding: 20px;
-            background: #fffbe7;
-            border-left: 5px solid #ffb300;
-            border-radius: 8px;
-        }
-        .quiz-box h2 { color: #ff8800; }
-
-        button {
-            margin-top: 15px;
-            padding: 12px 20px;
-            border: none;
-            background: #007bff;
-            color: white;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .nav-buttons {
-            margin-top: 30px;
-            display: flex;
-            justify-content: space-between;
-        }
+        h1, h2, h3 { color: #0057a3; }
+        img { width: 100%; border-radius: 8px; margin: 12px 0; }
+        .quiz-box { margin-top: 40px; padding: 20px; background: #fffbe7; border-left: 5px solid #ffb300; border-radius: 8px; }
+        .quiz-box h2 { color: #ff8800; margin-top: 0; }
+        .quiz-question { margin-bottom: 14px; }
+        .quiz-option { display:block; margin:6px 0; }
+        .result { margin-top: 12px; font-weight:700; }
+        button { margin-top: 15px; padding: 12px 20px; border: none; background: #007bff; color: white; border-radius: 8px; cursor: pointer; font-size: 16px; }
+        .nav-buttons { margin-top: 30px; display: flex; justify-content: space-between; }
         .prev-btn { background: #6c757d; }
         .next-btn { background: #0275d8; }
+        a.btn-link { text-decoration:none; }
+        table.mvf { border-collapse: collapse; width:100%; }
+        table.mvf th, table.mvf td { border:1px solid #ccc; padding:8px; text-align:left; }
     </style>
-
 </head>
 <body>
 
-<a href="{% url 'learn' %}" style="position:absolute; right:20px; top:20px; background:#333; padding:10px 16px; color:#fff; border-radius:8px; text-decoration:none;">⬅ Back</a>
+<!-- BACK BUTTON (works and is translatable) -->
+<a href="{% url 'learn' %}" class="btn-link" style="position:absolute; right:20px; top:20px;">
+    <button style="background:#333; padding:10px 16px; color:#fff; border-radius:8px; border:none; cursor:pointer;">⬅ {% trans "Back" %}</button>
+</a>
 
 <div class="container">
 
-<h1>🌍 Earthquake Safety Basics</h1>
-<p>Learn essential preparedness, safety rules, and real-life response techniques for earthquakes.</p>
+    <h1>🌍 {% trans "Earthquake Safety Basics" %}</h1>
+    <p>{% trans "Learn essential preparedness, safety rules, and real-life response techniques for earthquakes." %}</p>
 
-<hr>
+    <hr>
 
-<h2>1. What is an Earthquake?</h2>
-<p>
-Earthquakes happen when plates below Earth’s surface move. Energy builds up due to friction, and when released suddenly, the ground shakes.
-</p>
+    <h2>{% trans "1. What is an Earthquake?" %}</h2>
+    <p>{% trans "An earthquake occurs when tectonic plates beneath the Earth’s surface suddenly move. This releases energy and causes the ground to shake." %}</p>
 
-<ul>
-    <li>🌋 Caused by movement of tectonic plates</li>
-    <li>⚡ Sudden release of pressure</li>
-    <li>🌍 No one can predict exact time</li>
-</ul>
+    <ul>
+        <li>🌋 {% trans "Caused by movement of tectonic plates" %}</li>
+        <li>⚡ {% trans "Sudden release of built-up energy" %}</li>
+        <li>🌍 {% trans "Exact time cannot be predicted" %}</li>
+    </ul>
 
-<img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.sciencelearn.org.nz%2Fresources%2F340-seismic-waves&psig=AOvVaw1QlB8BxzeTxtN-5-h26PhL&ust=1764867510264000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCJiwhv7xoZEDFQAAAAAdAAAAABAE" alt="Earth layers">
+    <hr>
 
-<hr>
+    <h2>{% trans "2. What You May Feel During an Earthquake" %}</h2>
+    <ul>
+        <li>{% trans "Light shaking of the ground" %}</li>
+        <li>{% trans "Furniture and windows vibrating" %}</li>
+        <li>{% trans "Fans and hanging objects swinging" %}</li>
+        <li>{% trans "Strong earthquakes may make standing difficult" %}</li>
+    </ul>
 
-<h2>2. What You May Feel During Earthquake</h2>
+    <hr>
 
-<ul>
-<li>Light shaking of the floor</li>
-<li>Furniture & windows vibrating</li>
-<li>Fans & hanging objects swinging</li>
-<li>Strong quakes: difficult to walk or stand</li>
-</ul>
+    <h2>{% trans "3. The Golden Rule: DROP – COVER – HOLD ON" %}</h2>
 
-<hr>
+    <img src="{% static 'image/erathquek.jpeg' %}" alt="{% trans 'Drop Cover Hold' %}">
 
-<h2>3. The Most Important Rule: DROP – COVER – HOLD ON</h2>
+    <ul>
+        <li>⬇ <b>{% trans "DROP" %}</b> – {% trans "Drop to your knees to prevent falling" %}</li>
+        <li>🛡 <b>{% trans "COVER" %}</b> – {% trans "Protect head and neck under a table or with arms" %}</li>
+        <li>✊ <b>{% trans "HOLD ON" %}</b> – {% trans "Hold until shaking completely stops" %}</li>
+    </ul>
 
-<img src="{% static 'image/erathquek.jpeg' %}" alt="Drop Cover Hold">
+    <h3>{% trans "Never do this:" %}</h3>
+    <ul>
+        <li>❌ {% trans "Do not run outside during shaking" %}</li>
+        <li>❌ {% trans "Stay away from windows and glass" %}</li>
+        <li>❌ {% trans "Avoid cupboards, shelves, and ceiling fans" %}</li>
+        <li>❌ {% trans "Never use elevators" %}</li>
+    </ul>
 
-<ul>
-<li>⬇ <b>DROP</b> to your knees – prevents falling</li>
-<li>🛡 <b>COVER</b> head & neck under table or using arms</li>
-<li>✊ <b>HOLD ON</b> until shaking stops</li>
-</ul>
+    <hr>
 
-<h3>Never do this:</h3>
-<ul>
-<li>❌ Do NOT run outside</li>
-<li>❌ Stay away from windows & glass</li>
-<li>❌ Do not stand near cupboards or fans</li>
-<li>❌ Never use elevators</li>
-</ul>
+    <h2>{% trans "4. What to Do in Different Situations" %}</h2>
 
-<hr>
+    <h3>{% trans "Inside a building:" %}</h3>
+    <ul>
+        <li>{% trans "Drop, Cover, and Hold On" %}</li>
+        <li>{% trans "Stay inside until shaking stops" %}</li>
+    </ul>
 
-<h2>4. What to Do in Different Places</h2>
+    <h3>{% trans "In bed:" %}</h3>
+    <ul><li>{% trans "Stay in bed and protect your head with a pillow" %}</li></ul>
 
-<h3>If inside a building:</h3>
-<ul>
-<li>Drop, Cover, Hold On</li>
-<li>Stay away from windows & lights</li>
-<li>Stay inside until shaking stops</li>
-</ul>
+    <h3>{% trans "Outside:" %}</h3>
+    <ul><li>{% trans "Move to open ground" %}</li><li>{% trans "Stay away from buildings and electric poles" %}</li></ul>
 
-<h3>If in bed:</h3>
-<ul>
-<li>Stay in bed & cover your head with a pillow</li>
-</ul>
+    <h3>{% trans "In a vehicle:" %}</h3>
+    <ul><li>{% trans "Stop safely and remain inside the vehicle" %}</li><li>{% trans "Avoid bridges, flyovers, and tunnels" %}</li></ul>
 
-<h3>If outside:</h3>
-<ul>
-<li>Go to open ground</li>
-<li>Away from buildings, trees & electric poles</li>
-</ul>
+    <hr>
 
-<h3>If in a vehicle:</h3>
-<ul>
-<li>Stop vehicle safely, stay inside</li>
-<li>Avoid bridges, flyovers, tunnels</li>
-</ul>
+    <h2>{% trans "5. After the Earthquake" %}</h2>
+    <ul>
+        <li>{% trans "Stay calm and check for injuries" %}</li>
+        <li>{% trans "Be careful of aftershocks" %}</li>
+        <li>{% trans "Avoid damaged buildings" %}</li>
+        <li>{% trans "Follow school or community evacuation plans" %}</li>
+    </ul>
 
-<hr>
+    <hr>
 
-<h2>5. After the Earthquake</h2>
+    <h2>{% trans "6. Earthquake Emergency Kit" %}</h2>
+    <ul>
+        <li>🧴 {% trans "First Aid Kit" %}</li>
+        <li>📱 {% trans "Emergency contact list" %}</li>
+        <li>🔦 {% trans "Torch" %}</li>
+        <li>📢 {% trans "Whistle" %}</li>
+        <li>🚰 {% trans "Drinking water" %}</li>
+        <li>🔋 {% trans "Power bank" %}</li>
+    </ul>
 
-<ul>
-<li>Stay calm & evacuate safely</li>
-<li>Follow school evacuation route</li>
-<li>Do not run or push others</li>
-<li>Watch for broken glass and wires</li>
-<li>Go to assembly point</li>
-</ul>
+    <hr>
 
-<hr>
+    <h2>📺 {% trans "Training Video" %}</h2>
+    <video width="100%" controls>
+        <source src="{% static 'video/Earthquake_Drills_vid.mp4' %}" type="video/mp4">
+    </video>
 
-<h2>6. Earthquake Emergency Kit</h2>
+    <hr>
 
-<ul>
-<li>🧴 First Aid Kit</li>
-<li>📱 Emergency contact card</li>
-<li>🔦 Torch</li>
-<li>📢 Whistle</li>
-<li>🚰 Water bottle</li>
-<li>📦 Snacks</li>
-<li>🔋 Power bank</li>
-</ul>
+    <h2>🧠 {% trans "Myths vs Facts" %}</h2>
+    <table class="mvf">
+        <tr><th>{% trans "Myth" %}</th><th>{% trans "Fact" %}</th></tr>
+        <tr><td>{% trans "Stand in doorway" %}</td><td>{% trans "Not safe in modern buildings" %}</td></tr>
+        <tr><td>{% trans "Run outside" %}</td><td>{% trans "Most injuries happen while running" %}</td></tr>
+        <tr><td>{% trans "Earthquakes can be predicted" %}</td><td>{% trans "No one can predict exact time" %}</td></tr>
+        <tr><td>{% trans "Tall buildings always fall" %}</td><td>{% trans "Designed to sway safely" %}</td></tr>
+    </table>
 
-<hr>
+    <hr>
 
-<h2>📺 Training Videos</h2>
+    <!-- QUIZ: accessible, translatable, and client-side scoring -->
+    <div class="quiz-box">
+        <h2>📝 {% trans "Earthquake Safety Quiz" %}</h2>
 
-{% comment %} <div class="video-container">
-<iframe src="https://www.youtube.com/embed/YWTsoSU1BMg" allowfullscreen></iframe>
-</div> {% endcomment %}
+        <form id="quiz-form" onsubmit="return false;">
+            <div class="quiz-question">
+                <strong>1.</strong> {% trans "During shaking, what is the best action?" %}
+                <label class="quiz-option"><input type="radio" name="q1" value="correct"> {% trans "Drop, Cover, Hold On" %}</label>
+                <label class="quiz-option"><input type="radio" name="q1" value="wrong"> {% trans "Run outside immediately" %}</label>
+            </div>
 
-{% comment %} <div class="video-container">
-<iframe src="https://www.youtube.com/embed/jPR8HHmpeXE" allowfullscreen></iframe>
-</div> {% endcomment %}
+            <div class="quiz-question">
+                <strong>2.</strong> {% trans "Which part should you protect first?" %}
+                <label class="quiz-option"><input type="radio" name="q2" value="correct"> {% trans "Head and neck" %}</label>
+                <label class="quiz-option"><input type="radio" name="q2" value="wrong"> {% trans "Hands and feet" %}</label>
+            </div>
 
-<video width="1000" controls>
-    <source src="{% static 'video/Earthquake_Drills_vid.mp4' %}" type="video/mp4">
-   
-</video>
+            <div class="quiz-question">
+                <strong>3.</strong> {% trans "Which place is unsafe during shaking?" %}
+                <label class="quiz-option"><input type="radio" name="q3" value="correct"> {% trans "Near windows or glass" %}</label>
+                <label class="quiz-option"><input type="radio" name="q3" value="wrong"> {% trans "Under a sturdy table" %}</label>
+            </div>
 
+            <div class="quiz-question">
+                <strong>4.</strong> {% trans "Earthquake strength is measured by which scale?" %}
+                <label class="quiz-option"><input type="radio" name="q4" value="correct"> {% trans "Richter scale" %}</label>
+                <label class="quiz-option"><input type="radio" name="q4" value="wrong"> {% trans "Celsius scale" %}</label>
+            </div>
 
-<hr>
+            <div class="quiz-question">
+                <strong>5.</strong> {% trans "What should you expect after a main quake?" %}
+                <label class="quiz-option"><input type="radio" name="q5" value="correct"> {% trans "Aftershocks" %}</label>
+                <label class="quiz-option"><input type="radio" name="q5" value="wrong"> {% trans "No further movement" %}</label>
+            </div>
 
-<h2>🧠 Myths vs Facts</h2>
-<table border="1" width="100%" cellpadding="8">
-<tr><th>Myth</th><th>Fact</th></tr>
-<tr><td>Stand in doorway</td><td>Not safe in modern buildings</td></tr>
-<tr><td>Run outside</td><td>Most injuries happen while running</td></tr>
-<tr><td>Earthquakes can be predicted</td><td>No one can predict exact time</td></tr>
-<tr><td>Tall buildings always fall</td><td>Designed to sway safely</td></tr>
-</table>
+            <div class="quiz-question">
+                <strong>6.</strong> {% trans "If you are in a vehicle, what is correct?" %}
+                <label class="quiz-option"><input type="radio" name="q6" value="correct"> {% trans "Stop safely and stay inside" %}</label>
+                <label class="quiz-option"><input type="radio" name="q6" value="wrong"> {% trans "Speed up and leave the road" %}</label>
+            </div>
 
-<hr>
+            <button id="submit-quiz" type="button">{% trans "Submit Quiz" %}</button>
+            <button id="retry-quiz" type="button" style="display:none; margin-left:10px;" onclick="resetQuiz()">{% trans "Try Again" %}</button>
 
-<div class="quiz-box">
-<h2>📝 Earthquake Safety Quiz</h2>
+            <div id="quiz-result" class="result" aria-live="polite"></div>
+        </form>
+    </div>
 
-<p><b>1. What should you do during shaking?</b></p>
-<input type="radio" name="q1"> Drop, Cover, Hold On ✔<br>
-<input type="radio" name="q1"> Run outside<br><br>
+    <div class="nav-buttons">
+        <!-- Use named URL 'learn' for previous; replace if you have a different view name -->
+        <a href="{% url 'learn' %}" class="btn-link"><button class="prev-btn">⬅ {% trans "Previous Module" %}</button></a>
 
-<p><b>2. What part of body must be protected?</b></p>
-<input type="radio" name="q2"> Head & Neck ✔<br>
-<input type="radio" name="q2"> Feet<br><br>
+        <!-- Next module currently links to 'learn' as a safe fallback.
+             Replace 'learn' with the correct url name for the next module if available. -->
+        <a href="{% url 'learn' %}" class="btn-link"><button class="next-btn">{% trans "Next Module" %} ➡</button></a>
+    </div>
 
-<p><b>3. What is unsafe?</b></p>
-<input type="radio" name="q3"> Window ✔<br>
-<input type="radio" name="q3"> Under desk<br><br>
-
-<p><b>4. Earthquake magnitude is measured on?</b></p>
-<input type="radio" name="q4"> Richter scale ✔<br>
-<input type="radio" name="q4"> Thermometer<br><br>
-
-<button>Submit Quiz</button>
 </div>
 
-<!-- NAVIGATION -->
-<div class="nav-buttons">
-<button class="prev-btn">⬅ Previous Module</button>
-<button class="next-btn">Next Module ➡</button>
-</div>
+<!-- Client-side grading script (text is translatable) -->
+<script>
+(function() {
+    const submitBtn = document.getElementById('submit-quiz');
+    const retryBtn = document.getElementById('retry-quiz');
+    const resultDiv = document.getElementById('quiz-result');
 
-</div>
+    // Translated strings (rendered server-side)
+    const STR = {
+        scorePrefix: "{% trans 'You scored' %}",
+        outOf: "{% trans 'out of' %}",
+        wellDone: "{% trans 'Great job!' %}",
+        tryAgain: "{% trans 'Try again to improve your score.' %}",
+        noAnswers: "{% trans 'Please answer all questions before submitting.' %}"
+    };
+
+    function gradeQuiz() {
+        const total = 6;
+        let answered = 0;
+        let correct = 0;
+        for (let i = 1; i <= total; i++) {
+            const radios = document.getElementsByName('q' + i);
+            let found = false;
+            for (const r of radios) {
+                if (r.checked) {
+                    found = true;
+                    answered++;
+                    if (r.value === 'correct') correct++;
+                    break;
+                }
+            }
+            if (!found) {
+                // continue counting but we will warn user
+            }
+        }
+
+        if (answered < total) {
+            resultDiv.innerText = STR.noAnswers;
+            return;
+        }
+
+        // Show result text with translations
+        resultDiv.innerText = STR.scorePrefix + ' ' + correct + ' ' + STR.outOf + ' ' + total + '. ' +
+                              (correct >= Math.ceil(total * 0.7) ? STR.wellDone : STR.tryAgain);
+
+        // show retry
+        retryBtn.style.display = 'inline-block';
+    }
+
+    window.resetQuiz = function() {
+        const total = 6;
+        for (let i = 1; i <= total; i++) {
+            const radios = document.getElementsByName('q' + i);
+            for (const r of radios) r.checked = false;
+        }
+        resultDiv.innerText = '';
+        retryBtn.style.display = 'none';
+    };
+
+    submitBtn.addEventListener('click', gradeQuiz);
+})();
+</script>
+
 </body>
 </html>
-

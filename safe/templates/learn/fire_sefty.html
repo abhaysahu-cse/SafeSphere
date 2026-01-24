@@ -17,6 +17,7 @@
       --accent: #ff9800;
     }
     * { box-sizing: border-box; }
+    html, body { height: 100%; }
     body {
       margin: 0;
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
@@ -28,7 +29,58 @@
       padding: 20px;
       display: flex;
       justify-content: center;
+      transition: box-shadow .2s ease;
+      /* leave room for the alert bar (48px) */
+      padding-top: 68px;
     }
+
+    /* LIVE DISASTER ALERT BAR */
+    #disaster-alert-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 48px;
+      z-index: 9999;
+      font-size: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      box-shadow: 0 6px 18px rgba(8,24,40,0.06);
+      padding: 6px 12px;
+      text-align: center;
+      transition: transform .25s ease, opacity .25s ease;
+    }
+    #disaster-alert-bar .alert-inner { display:flex; gap:10px; align-items:center; justify-content:center; max-width:1200px; width:100%; padding:0 12px; }
+    #disaster-alert-bar .icon { font-size:18px; line-height:1; }
+
+    .alert-normal {
+      background: linear-gradient(90deg, #1e7e34, #28a745);
+      color: white;
+    }
+    .alert-warning {
+      background: linear-gradient(90deg, #ff9800, #ffc107);
+      color: #222;
+    }
+    .alert-danger {
+      background: linear-gradient(90deg, #c62828, #e53935);
+      color: white;
+    }
+    /* small dismiss button for teachers/demo */
+    #disaster-alert-bar .dismiss {
+      margin-left: auto;
+      opacity: .9;
+      font-size: 13px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 8px;
+      padding: 6px 8px;
+      cursor: pointer;
+      border: none;
+      color: inherit;
+    }
+
     .wrap {
       width: 100%;
       max-width: var(--maxw);
@@ -37,6 +89,13 @@
       box-shadow: 0 14px 40px rgba(8,24,40,0.06);
       padding: 26px;
       margin-bottom: 40px;
+    }
+
+    /* module relevance glow when active (heatwave relevance) */
+    .wrap.module-relevant {
+      box-shadow: 0 18px 60px rgba(217,83,79,0.12), 0 6px 24px rgba(255,152,0,0.06);
+      border: 1px solid rgba(217,83,79,0.06);
+      transform: translateY(-2px);
     }
 
     .topbar {
@@ -66,7 +125,7 @@
 
     .cta-row { display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; }
     .btn { display:inline-block; padding:10px 14px; border-radius:10px; border:none; cursor:pointer; font-weight:700; text-decoration:none; color:#fff; }
-    .btn-primary { background: var(--brand); }
+    .btn-primary { background: var(--brand); color: #fff; }
     .btn-ghost { background: transparent; color:var(--brand); border:1px solid rgba(8,20,30,0.06); padding:9px 12px; border-radius:10px; }
 
     .video-container {
@@ -89,23 +148,23 @@
     }
 
     /* Responsive video container */
-.video-wrapper {
-  position: relative;
-  width: 100%;
-  max-width: 100%;
-  aspect-ratio: 16 / 9;   /* keeps proper frame */
-  background: #000;
-  border-radius: 12px;
-  overflow: hidden;
-}
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+    }
 
-/* Make video fill container properly */
-.video-wrapper video {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;   /* ⬅ key line: prevents splitting */
-  display: block;
-}
+    /* Make video fill container properly */
+    .video-wrapper video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
 
     /* Quiz styles */
     .quiz-box { background:#fffaf0; border-left:5px solid #ffb74d; padding:16px; border-radius:8px; margin-top:12px; }
@@ -124,9 +183,20 @@
     footer { margin-top:18px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
     .note { font-size:0.9rem; color:var(--muted); }
 
+    /* small helper */
+    .small { font-size:0.88rem; color:var(--muted); }
   </style>
 </head>
 <body>
+  <!-- Live Disaster Alert Bar -->
+  <div id="disaster-alert-bar" class="alert-normal" role="status" aria-live="polite" aria-atomic="true">
+    <div class="alert-inner">
+      <span class="icon" id="alertIcon">🟢</span>
+      <span id="alertText">Weather is normal. Stay prepared.</span>
+      <button class="dismiss" id="dismissAlert" title="Dismiss alert (will return on next load)">Dismiss</button>
+    </div>
+  </div>
+
   <main class="wrap" role="main" aria-labelledby="pageTitle">
     <div class="topbar">
       <div>
@@ -224,26 +294,25 @@
             <li>Call emergency number (e.g., <strong>101</strong>) once safe</li>
           </ul>
         </section>
-<!-- VIDEO + POSTER -->
-<section class="section" aria-labelledby="videoTitle">
-  <h2 id="videoTitle">Watch: Fire Safety Demo</h2>
 
-  <div class="video-wrapper">
-    <video
-      controls
-      preload="metadata"
-      poster="{% static 'image/fire-poster.jpg' %}"
+        <!-- VIDEO + POSTER -->
+        <section class="section" aria-labelledby="videoTitle">
+          <h2 id="videoTitle">Watch: Fire Safety Demo</h2>
 
-      playsinline     >
-      <source src="{% static 'video/fire_safety_training.mp4' %}" type="video/mp4">
-    
-    </video>
-  </div>
+          <div class="video-wrapper">
+            <video
+              controls
+              preload="metadata"
+              poster="{% static 'image/fire-poster.jpg' %}"
+              playsinline>
+              <source src="{% static 'video/fire_safety_training.mp4' %}" type="video/mp4">
+            </video>
+          </div>
 
-  <p class="small" style="margin-top:8px">
-    Tip: Play the video in full-screen on mobile to practice evacuation steps with your family.
-  </p>
-</section>
+          <p class="small" style="margin-top:8px">
+            Tip: Play the video in full-screen on mobile to practice evacuation steps with your family.
+          </p>
+        </section>
 
         <!-- PRACTICAL -->
         <section class="section" aria-labelledby="activities">
@@ -294,8 +363,6 @@
         <!-- NAVIGATION -->
         <div class="section" style="display:flex;justify-content:space-between;gap:12px;align-items:center">
           <a class="btn btn-ghost" href="{% url 'learn' %}">  ⬅ Back to Modules</a>
-
-          
         </div>
 
       </div>
@@ -345,6 +412,7 @@
 
   <script>
     (function(){
+      /* --- Quiz logic (kept intact, small tidy) --- */
       const answers = { q1: 'A', q2: 'A', q3: 'B' };
 
       function grade() {
@@ -369,10 +437,118 @@
         el.textContent = msg;
         el.style.color = pct >= 70 ? '#0b7a3c' : '#b45309';
         // save progress
-        localStorage.setItem('fire_quiz_score', JSON.stringify(r));
+        try { localStorage.setItem('fire_quiz_score', JSON.stringify(r)); } catch(e) {}
       }
 
       document.getElementById('submitQuiz').addEventListener('click', showResult);
+
+      /* --- Disaster Alert & Context-aware highlight --- */
+
+      const alertBar = document.getElementById('disaster-alert-bar');
+      const alertText = document.getElementById('alertText');
+      const alertIcon = document.getElementById('alertIcon');
+      const dismissBtn = document.getElementById('dismissAlert');
+      const mainWrap = document.querySelector('.wrap');
+
+      // Dismiss temporarily (per-page)
+      dismissBtn.addEventListener('click', () => {
+        alertBar.style.transform = 'translateY(-110%)';
+        setTimeout(() => alertBar.style.opacity = '0', 260);
+      });
+
+      /**
+       * updateDisasterAlertFromWeather(data)
+       * Accepts an object: { temp: Number (°C), wind: Number (m/s or km/h), description: String }
+       * This function intentionally does not call external APIs. It is safe to call from your global weather code.
+       */
+      function updateDisasterAlertFromWeather(data) {
+        if (!data || typeof data !== 'object') return;
+
+        // Normalise temperature key names (temp or temperature)
+        let temp = data.temp ?? data.temperature ?? null;
+        let wind = data.wind ?? data.wind_speed ?? data.windSpeed ?? 0;
+        let desc = data.description ?? data.weather ?? '';
+
+        // try to parse strings (if any)
+        temp = (typeof temp === 'string') ? parseFloat(temp) : temp;
+        wind = (typeof wind === 'string') ? parseFloat(wind) : wind;
+
+        // Default: normal
+        alertBar.className = 'alert-normal';
+        alertIcon.innerText = '🟢';
+        alertText.innerText = gettext ? gettext('Weather is normal. Stay prepared.') : 'Weather is normal. Stay prepared.';
+        mainWrap.classList.remove('module-relevant');
+
+        // Heatwave - make module relevant
+        if (temp !== null && !Number.isNaN(temp) && temp >= 42) {
+          alertBar.className = 'alert-danger';
+          alertIcon.innerText = '🔥';
+          alertText.innerText = gettext ? gettext('Extreme Heatwave Alert! Avoid going outside. Drink water regularly.') : 'Extreme Heatwave Alert! Avoid going outside. Drink water regularly.';
+          // highlight module as especially relevant
+          mainWrap.classList.add('module-relevant');
+        }
+
+        // Storm / Cyclone risk (high wind)
+        else if (wind >= 15) {
+          alertBar.className = 'alert-warning';
+          alertIcon.innerText = '🌪️';
+          alertText.innerText = gettext ? gettext('Strong wind alert! Stay indoors and secure loose objects.') : 'Strong wind alert! Stay indoors and secure loose objects.';
+          mainWrap.classList.remove('module-relevant');
+        }
+
+        // Heavy rain / flood risk - (heuristic)
+        else if ((desc && /rain|storm|flood/i.test(desc)) || (wind >= 10 && temp <= 20)) {
+          alertBar.className = 'alert-warning';
+          alertIcon.innerText = '🌧️';
+          alertText.innerText = gettext ? gettext('Heavy rain risk! Avoid low-lying areas.') : 'Heavy rain risk! Avoid low-lying areas.';
+          mainWrap.classList.remove('module-relevant');
+        }
+
+        // if description contains 'smoke' or 'fire' show small educational prompt (non-alarm)
+        else if (desc && /smoke|fire/i.test(desc)) {
+          alertBar.className = 'alert-warning';
+          alertIcon.innerText = '⚠️';
+          alertText.innerText = gettext ? gettext('Smoke detected nearby. Review evacuation steps and stay low in smoky rooms.') : 'Smoke detected nearby. Review evacuation steps and stay low in smoky rooms.';
+        }
+
+        // ensure visible
+        alertBar.style.transform = '';
+        alertBar.style.opacity = '1';
+      }
+
+      // expose function for global scripts to call (non-destructive)
+      window.updateDisasterAlertFromWeather = updateDisasterAlertFromWeather;
+
+      // Listen for custom event: window.dispatchEvent(new CustomEvent('safe:weather:update', { detail: { temp:.., wind:.. } }))
+      window.addEventListener('safe:weather:update', function(e){
+        if (e && e.detail) updateDisasterAlertFromWeather(e.detail);
+      });
+
+      // Try to pick up existing global objects (if your main weather script sets these)
+      // Non-blocking and safe: we only read and call if available
+      try {
+        if (window.safeWeather && typeof window.safeWeather === 'object') {
+          updateDisasterAlertFromWeather(window.safeWeather);
+        } else if (window.currentWeather && typeof window.currentWeather === 'object') {
+          updateDisasterAlertFromWeather(window.currentWeather);
+        } else if (typeof window.getCurrentWeather === 'function') {
+          // if you expose a function, call it and update when it returns
+          const maybe = window.getCurrentWeather();
+          if (maybe && typeof maybe.then === 'function') {
+            // promise
+            maybe.then(updateDisasterAlertFromWeather).catch(()=>{});
+          } else updateDisasterAlertFromWeather(maybe);
+        }
+      } catch (err) {
+        // never crash page if weather objects are not available
+        console.warn('SafeSphere alert init:', err && err.message ? err.message : err);
+      }
+
+      // Small accessibility: allow keyboard focus to dismiss
+      dismissBtn.addEventListener('keyup', (ev) => {
+        if (ev.key === 'Enter' || ev.key === ' ') dismissBtn.click();
+      });
+
     })();
   </script>
 </body>
