@@ -78,22 +78,19 @@ WSGI_APPLICATION = "safespera.wsgi.application"
 
 # --- DATABASES: Local-first (SQLite). Only use DATABASE_URL if USE_REMOTE_DB == "1" ---
 # This makes local development reliable and prevents accidental MySQL connection attempts.
-USE_REMOTE_DB = os.environ.get("USE_REMOTE_DB", "0") == "1"
-DATABASE_URL = os.environ.get("DATABASE_URL", "").strip()
+# USE_REMOTE_DB = os.environ.get("USE_REMOTE_DB", "0") == "1"
+# DATABASE_URL = os.environ.get("DATABASE_URL", "").strip()
 
-if USE_REMOTE_DB and DATABASE_URL:
-    # explicit opt-in to use remote DB
-    DATABASES = {
-        "default": dj_database_url.parse(DATABASE_URL, conn_max_age=600)
+DATABASES = {
+    'default': {
+      'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'safeshpere',
+        'USER': 'root',
+        'PASSWORD': 'Aaryan@123',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
-else:
-    # default local SQLite (DB-lite)
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
-    }
+}
 
 # --- Password validation ---
 AUTH_PASSWORD_VALIDATORS = [

@@ -334,9 +334,6 @@ msgstr "भूकंप सुरक्षा मॉड्यूल"
 msgid "Back"
 msgstr "वापस"
 
-msgid "Earthquake Safety Basics"
-msgstr "भूकंप सुरक्षा की मूल बातें"
-
 msgid "Learn essential preparedness, safety rules, and real-life response techniques for earthquakes."
 msgstr "भूकंप के लिए आवश्यक तैयारी, सुरक्षा नियम और वास्तविक जीवन की प्रतिक्रिया तकनीकें सीखें।"
 
