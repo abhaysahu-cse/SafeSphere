@@ -1,55 +1,51 @@
-// weather.js — robust, fallback-friendly
-// 1) Put your OpenWeather API key here (optional). If not provided, code falls back to Open-Meteo (no key).
-// 2) This file immediately defines window.fetchWeather so the button will never throw "not defined".
+// weather.js - full-featured Weather + AQI + Pupil-focused recommendations
+// Supports: Open-Meteo (weather) + Open-Meteo (air-quality) by default.
+// Optional: Put your OpenWeather API key if you prefer OpenWeather for weather.
 
-/* ========= CONFIG ========= */
-const OPENWEATHER_API_KEY = ""; // <-- put your OpenWeather key here (optional)
-const DEFAULT_LAT = 23.2599;
+// =================== CONFIG ===================
+const OPENWEATHER_API_KEY = ""; // <-- optional: add key to use OpenWeather first
+const DEFAULT_LAT = 23.2599;   // default (Bhopal) if geolocation blocked
 const DEFAULT_LON = 77.4126;
-const CACHE_KEY = "safesphere_weather_cache_v2";
+const CACHE_KEY = "safesphere_weather_cache_v3";
+const AQI_CACHE_KEY = "safesphere_aqi_cache_v3";
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
+// =================== SAFE STUBS ===================
+// Expose safe stubs immediately so any inline onClick won't throw while JS loads.
+window.fetchWeather = window.fetchWeather || (async function (force = false) {
+  console.warn("fetchWeather called before initialization finished.");
+  const el = document.getElementById("weather-error");
+  if (el) el.textContent = "Starting update...";
+});
+window.fetchAQIForCurrent = window.fetchAQIForCurrent || (async function (force = false) {
+  console.warn("fetchAQIForCurrent called before initialization finished.");
+  const el = document.getElementById("aqi-updated");
+  if (el) el.textContent = "Updating...";
+});
 
-
-/* ======= SAFETY: define stub immediately so onclick won't fail ======= */
-window.fetchWeather = async function (force = false) {
-  // temporary safe no-op until real implementation loads/overrides
-  console.warn("fetchWeather called before weather.js initialization finished.");
-  const errEl = document.getElementById("weather-error");
-  if (errEl) errEl.textContent = "Updating...";
-
-  // If the real implementation hasn't loaded within 1s, try to reload the page
-  setTimeout(() => {
-    if (window.__weather_initialized !== true) {
-      console.warn("weather.js initialization delayed — reloading to recover.");
-      // don't forcibly reload during dev; comment out if unwanted:
-      // location.reload();
-    }
-  }, 1000);
-};
-
-/* ======= Helper DOM funcs ======= */
+// =================== HELPERS ===================
 function $id(id) { return document.getElementById(id); }
 function nowStr() { return new Date().toLocaleString(); }
-function saveCache(data) {
-  try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data })); } catch(e) {}
+function safeJSONParse(raw) { try { return JSON.parse(raw); } catch (e) { return null; } }
+function saveCache(key, data) {
+  try { localStorage.setItem(key, JSON.stringify({ ts: Date.now(), data })); } catch (e) { /* ignore */ }
 }
-function loadCache() {
+function loadCacheKey(key) {
   try {
-    const raw = localStorage.getItem(CACHE_KEY);
+    const raw = localStorage.getItem(key);
     if (!raw) return null;
-    const obj = JSON.parse(raw);
-    if (!obj.ts || !obj.data) return null;
+    const obj = safeJSONParse(raw);
+    if (!obj || !obj.ts || !obj.data) return null;
     if (Date.now() - obj.ts > CACHE_TTL) return null;
     return obj.data;
-  } catch(e) { return null; }
+  } catch (e) { return null; }
 }
 
-/* ======= Normalizer: make a unified "weather-like" object for updateUI ======= */
+// =================== NORMALIZERS ===================
 function normalizeOpenWeather(obj) {
-  // obj is the OpenWeather response
+  // If you enable OPENWEATHER_API_KEY and fetch /weather, this normalizer maps fields.
   return {
-    ok: obj && obj.cod === 200,
+    ok: obj && (obj.cod === 200 || obj.cod === "200" || obj.cod === undefined),
     name: obj.name || `${obj.sys?.country || ""}`,
     coord: obj.coord || null,
     main: obj.main || {},
@@ -58,13 +54,11 @@ function normalizeOpenWeather(obj) {
     raw: obj
   };
 }
-
 function normalizeOpenMeteo(obj, lat, lon) {
-  // open-meteo current_weather: {temperature, windspeed, winddirection, time}
   const cw = obj?.current_weather || null;
   return {
     ok: !!cw,
-    name: `Lat:${lat.toFixed(3)}, Lon:${lon.toFixed(3)}`,
+    name: obj?.timezone || `Lat:${lat.toFixed(3)}, Lon:${lon.toFixed(3)}`,
     coord: { lat, lon },
     main: { temp: cw ? cw.temperature : null, feels_like: null, humidity: null },
     weather: [{ description: cw ? "Current conditions" : "Unknown", icon: null }],
@@ -73,108 +67,477 @@ function normalizeOpenMeteo(obj, lat, lon) {
   };
 }
 
-/* ======= UI updater ======= */
-function updateUI(data) {
+// =================== UI UPDATE HELPERS ===================
+function updateWeatherUI(data) {
   if (!data) {
     if ($id("weather-location")) $id("weather-location").innerText = "Weather unavailable";
-    if ($id("weather-error")) $id("weather-error").innerText = "No data";
+    if ($id("weather-temp")) $id("weather-temp").innerText = "--°C";
+    if ($id("weather-desc")) $id("weather-desc").innerText = "—";
+    if ($id("weather-wind")) $id("weather-wind").innerText = "—";
+    if ($id("weather-feels")) $id("weather-feels").innerText = "—";
+    if ($id("weather-humidity")) $id("weather-humidity").innerText = "—";
+    if ($id("weather-updated")) $id("weather-updated").innerText = "—";
+    if ($id("weather-error")) $id("weather-error").innerText = "No weather data available.";
     return;
   }
 
   const name = data.name || "Unknown location";
-  const temp = data.main?.temp ?? "--";
+  const temp = data.main?.temp ?? null;
   const desc = (data.weather && data.weather[0]?.description) || "—";
-  const wind = data.wind?.speed ?? "—";
-  const feels = data.main?.feels_like ?? "—";
-  const humidity = data.main?.humidity ?? "—";
+  const wind = data.wind?.speed ?? null;
+  const feels = data.main?.feels_like ?? null;
+  const humidity = data.main?.humidity ?? null;
 
   if ($id("weather-location")) $id("weather-location").innerText = name;
   if ($id("weather-temp")) $id("weather-temp").innerText = (temp === null ? "--°C" : `${Math.round(temp)}°C`);
   if ($id("weather-desc")) $id("weather-desc").innerText = desc;
-  if ($id("weather-wind")) $id("weather-wind").innerText = `Wind: ${wind} m/s`;
+  if ($id("weather-wind")) $id("weather-wind").innerText = (wind === null ? "—" : `${wind} m/s`);
   if ($id("weather-feels")) $id("weather-feels").innerText = (feels === null ? "—" : `${Math.round(feels)}°C`);
   if ($id("weather-humidity")) $id("weather-humidity").innerText = (humidity === null ? "—" : `${humidity}%`);
   if ($id("weather-updated")) $id("weather-updated").innerText = nowStr();
+  if ($id("weather-error")) $id("weather-error").innerText = "";
 
-  // ✅ SAFETY GUIDANCE (CORRECT PLACE)
-  if (typeof updateSafetyGuidance === "function") {
-    if (Number.isFinite(temp) && Number.isFinite(wind)) {
-      updateSafetyGuidance(temp, wind);
-    } else {
-      const box = document.getElementById("safety-text");
-      if (box) box.innerText = "⚠️ Safety guidance unavailable (invalid data).";
-    }
-  }
-
-  // icon if available
+  // icon (openweathermap style if present)
   if ($id("weather-icon")) {
     const icon = data.weather?.[0]?.icon;
     if (icon) {
-      $id("weather-icon").innerHTML = `<img alt="${desc}" src="https://openweathermap.org/img/wn/${icon}@2x.png" style="width:48px;height:48px">`;
+      $id("weather-icon").innerHTML = `<img alt="${desc}" src="https://openweathermap.org/img/wn/${icon}@2x.png" style="width:64px;height:64px">`;
     } else {
-      // keep simple text/icon
       $id("weather-icon").textContent = "⛅";
     }
   }
 
-  // clear error
-  if ($id("weather-error")) $id("weather-error").textContent = "";
-
-  // notify map
-  if (data.coord && data.coord.lat && data.coord.lon) {
-    window.latestWeatherCoords = { lat: parseFloat(data.coord.lat), lon: parseFloat(data.coord.lon) };
+  // store coords for AQI fetching
+  if (data.coord && (data.coord.lat !== undefined) && (data.coord.lon !== undefined)) {
+    window.latestWeatherCoords = { lat: Number(data.coord.lat), lon: Number(data.coord.lon) };
+    // notify listeners
     document.dispatchEvent(new CustomEvent("weather:updated", { detail: window.latestWeatherCoords }));
   }
 }
 
-/* ======= Fetch helpers ======= */
+// =================== AQI HANDLING ===================
+function categorizePM25(pm25) {
+  if (pm25 === null || pm25 === undefined || isNaN(pm25)) {
+    return { cat: "Unknown", color: "#777", health: "AQI data unavailable." };
+  }
+  const v = Number(pm25);
+  if (v <= 12.0) return { cat: "Good", color: "#2e8b57", health: "Air is clean." };
+  if (v <= 35.4) return { cat: "Moderate", color: "#ffd24a", health: "Sensitive people: reduce prolonged outdoor exertion." };
+  if (v <= 55.4) return { cat: "Unhealthy for Sensitive Groups", color: "#ff8c00", health: "Sensitive groups should limit prolonged outdoor exertion." };
+  if (v <= 150.4) return { cat: "Unhealthy", color: "#ff3e3e", health: "Reduce outdoor activity; consider masks if sensitive." };
+  if (v <= 250.4) return { cat: "Very Unhealthy", color: "#99004c", health: "Avoid outdoor activity; keep windows closed; use filtration if possible." };
+  return { cat: "Hazardous", color: "#6b0018", health: "Serious health risk. Stay indoors; seek medical help if symptoms appear." };
+}
+function updateAQIUI(aqiObj) {
+  const valueEl = $id("aqi-value");
+  const categoryEl = $id("aqi-category");
+  const pm25El = $id("aqi-pm25");
+  const pm10El = $id("aqi-pm10");
+  const healthEl = $id("aqi-health");
+  const updatedEl = $id("aqi-updated");
+
+  if (!aqiObj) {
+    if (valueEl) valueEl.innerText = "--";
+    if (categoryEl) { categoryEl.innerText = "Unavailable"; categoryEl.style.color = "#777"; }
+    if (pm25El) pm25El.innerText = "—";
+    if (pm10El) pm10El.innerText = "—";
+    if (healthEl) healthEl.innerText = "AQI data not available for your location.";
+    if (updatedEl) updatedEl.innerText = "—";
+    return;
+  }
+
+  const pm25 = aqiObj.pm25;
+  const pm10 = aqiObj.pm10;
+  const time = aqiObj.time || new Date().toISOString();
+  const cat = categorizePM25(pm25);
+
+  if (valueEl) valueEl.innerText = Number.isFinite(pm25) ? Math.round(pm25) : "--";
+  if (categoryEl) { categoryEl.innerText = cat.cat; categoryEl.style.color = cat.color; }
+  if (pm25El) pm25El.innerText = Number.isFinite(pm25) ? Math.round(pm25) : "—";
+  if (pm10El) pm10El.innerText = Number.isFinite(pm10) ? Math.round(pm10) : "—";
+  if (healthEl) healthEl.innerText = cat.health;
+  if (updatedEl) {
+    try { updatedEl.innerText = (new Date(time)).toLocaleString(); } catch (e) { updatedEl.innerText = nowStr(); }
+  }
+}
+
+// =================== TEMPERATURE-BASED GUIDANCE ===================
+// Returns { title, bullets[] } tailored for pupils/students
+function tempGuidanceCelsius(tempC) {
+  // tempC is a number (Celsius). If not finite, return neutral.
+  if (!Number.isFinite(tempC)) {
+    return {
+      title: "Temperature unknown",
+      bullets: ["Temperature data unavailable — follow standard common-sense precautions: hydrate, dress in layers, and supervise outdoor activities carefully."]
+    };
+  }
+
+  const t = Math.round(tempC);
+  // Guidance tailored for students/pupils and school activities
+  if (t <= -10) {
+    return {
+      title: "Extreme Cold (≤ -10°C)",
+      bullets: [
+        "Cancel outdoor drills, keep students indoors.",
+        "Ensure warm clothing (thermal layers, hats, gloves) and warm drinks.",
+        "Check heating in classrooms and avoid prolonged exposure.",
+        "Watch for hypothermia signs (shivering, confusion) and move affected students to warmth immediately."
+      ]
+    };
+  }
+  if (t <= 0) {
+    return {
+      title: "Severe Cold (0°C or below)",
+      bullets: [
+        "Move outdoor activities indoors. Minimize exposure outside.",
+        "Students should wear warm layers and waterproof outer garments.",
+        "Provide warm fluids; avoid cold packed meals.",
+        "Monitor vulnerable students (young, medical conditions) closely."
+      ]
+    };
+  }
+  if (t <= 10) {
+    return {
+      title: "Cold (1–10°C)",
+      bullets: [
+        "Limit long outdoor drills; prefer short supervised sessions.",
+        "Students should wear jackets, hats, and warm footwear.",
+        "Encourage light warm-ups before physical activities to prevent strains.",
+        "Provide warm breaks inside and warm refreshments as needed."
+      ]
+    };
+  }
+  if (t <= 16) {
+    return {
+      title: "Cool (11–16°C)",
+      bullets: [
+        "Suitable for most outdoor physical activities with light layers.",
+        "Ensure students can remove layers if they warm up during activity.",
+        "Keep a quick indoor warm-up plan for any prolonged outdoor event."
+      ]
+    };
+  }
+  if (t <= 22) {
+    return {
+      title: "Mild / Pleasant (17–22°C)",
+      bullets: [
+        "Excellent for outdoor drills, PE, and games. Hydration recommended.",
+        "Avoid intense activity in direct sun for long periods; schedule breaks.",
+        "Encourage light warm-up and cool-down to prevent injuries."
+      ]
+    };
+  }
+  if (t <= 28) {
+    return {
+      title: "Warm (23–28°C)",
+      bullets: [
+        "Good for outdoor training; increase water breaks and shade periods.",
+        "Schedule strenuous drills in morning or late afternoon, avoid midday heat.",
+        "Students should wear breathable clothing and hats."
+      ]
+    };
+  }
+  if (t <= 34) {
+    return {
+      title: "Hot (29–34°C)",
+      bullets: [
+        "Limit prolonged intense exercise; prefer low-intensity drills.",
+        "Increase water/electrolyte breaks every 15–20 minutes.",
+        "Watch for heat exhaustion signs (dizziness, headache); move affected students to shade & cool them."
+      ]
+    };
+  }
+  if (t <= 40) {
+    return {
+      title: "Very Hot (35–40°C)",
+      bullets: [
+        "Cancel strenuous outdoor drills; keep students indoors in cool areas.",
+        "If outdoor presence is necessary, shorten sessions drastically and keep constant hydration.",
+        "Consider rescheduling heavy activities to cooler days/times."
+      ]
+    };
+  }
+  // >40
+  return {
+    title: "Extreme Heat (>40°C)",
+    bullets: [
+      "Stop all outdoor activities; maintain indoor cooling and hydration.",
+      "Use air-conditioned or shaded safe rooms; monitor students continuously.",
+      "Seek medical help immediately for anyone showing severe heat illness signs."
+    ]
+  };
+}
+
+// =================== COMBINED GUIDANCE (Weather + AQI) ===================
+// This function decides final message for pupils by merging temperature guidance and AQI guidance.
+// It returns HTML string to insert into safety-text container.
+function combinedSafetyHtml(tempC, windKmhOrMs, aqiObj) {
+  // Normalize wind to km/h for human readable (if wind seems small assume m/s convert *3.6)
+  let windNum = Number(windKmhOrMs);
+  if (Number.isFinite(windNum)) {
+    if (windNum <= 25) windNum = Math.round(windNum * 3.6); // treat as m/s -> km/h
+    else windNum = Math.round(windNum); // treat as km/h already
+  } else {
+    windNum = null;
+  }
+
+  // Temperature guidance
+  const tempBlock = tempGuidanceCelsius(tempC);
+
+  // AQI guidance
+  let aqiBlock;
+  if (!aqiObj || !Number.isFinite(aqiObj.pm25)) {
+    aqiBlock = {
+      title: "Air quality: Unknown",
+      bullets: ["AQI data unavailable. If local alerts say air pollution is high, reduce outdoor activity and use masks for vulnerable students."]
+    };
+  } else {
+    const cat = categorizePM25(aqiObj.pm25);
+    // Pupils-specific advice by AQI category
+    switch (cat.cat) {
+      case "Good":
+        aqiBlock = {
+          title: "Air quality: Good",
+          bullets: ["Air quality is good. Normal outdoor activities are safe for all pupils.", "No special precautions required."]
+        };
+        break;
+      case "Moderate":
+        aqiBlock = {
+          title: "Air quality: Moderate",
+          bullets: ["Air quality is acceptable for most pupils.", "Unusually sensitive students (asthma, severe allergies) should consider reducing prolonged outdoor exertion."]
+        };
+        break;
+      case "Unhealthy for Sensitive Groups":
+        aqiBlock = {
+          title: "Air quality: Unhealthy for Sensitive Groups",
+          bullets: ["Sensitive pupils (asthma, respiratory/cardiac conditions) should avoid prolonged outdoor exertion.", "Consider smaller groups outdoors and provide masks if available."]
+        };
+        break;
+      case "Unhealthy":
+        aqiBlock = {
+          title: "Air quality: Unhealthy",
+          bullets: ["Reduce outdoor activities for all pupils; postpone strenuous drills.", "Keep windows closed in classrooms if outside air is dusty; run indoor air filtration if available."]
+        };
+        break;
+      case "Very Unhealthy":
+        aqiBlock = {
+          title: "Air quality: Very Unhealthy",
+          bullets: ["Avoid outdoor activity; keep pupils indoors.", "Use masks (N95) for essential movements outside; arrange indoor activities instead."]
+        };
+        break;
+      case "Hazardous":
+        aqiBlock = {
+          title: "Air quality: Hazardous",
+          bullets: ["Serious health risk — keep everyone indoors and avoid physical exertion.", "If symptoms occur (wheezing, chest pain), seek medical attention immediately."]
+        };
+        break;
+      default:
+        aqiBlock = {
+          title: "Air quality: Unknown",
+          bullets: ["AQI category unclear — when in doubt limit outdoor exertion for vulnerable pupils."]
+        };
+    }
+  }
+
+  // Combine and pick stricter actions:
+  // Strategy: If AQI suggests "Avoid outdoor activity" or temp suggests "Cancel outdoor", pick highest restriction.
+  const restrictionPriority = { "Unknown": 0, "Good": 1, "Moderate": 2, "Unhealthy for Sensitive Groups": 3, "Unhealthy": 4, "Very Unhealthy": 5, "Hazardous": 6 };
+  const aqCat = (aqiObj && Number.isFinite(aqiObj.pm25)) ? categorizePM25(aqiObj.pm25).cat : "Unknown";
+  const aqPriority = restrictionPriority[aqCat] ?? 0;
+
+  // From temp guidance, set a numeric priority (rough):
+  let tempPriority = 1;
+  if (!Number.isFinite(tempC)) tempPriority = 1;
+  else if (tempC <= 0) tempPriority = 5;
+  else if (tempC <= 10) tempPriority = 3;
+  else if (tempC <= 22) tempPriority = 1;
+  else if (tempC <= 34) tempPriority = 2;
+  else if (tempC <= 40) tempPriority = 4;
+  else tempPriority = 5;
+
+  // Decide final note — pick more restrictive from AQI vs Temp
+  const finalPriority = Math.max(aqPriority, tempPriority);
+
+  // Build an HTML block with: headline, top-line combined advice, then breakdown with temp + AQI details and bullets
+  let topLine = "";
+  if (finalPriority >= 5) {
+    topLine = "🚨 High risk: Cancel or move outdoor activities indoors. Follow strict precautions.";
+  } else if (finalPriority >= 4) {
+    topLine = "⚠️ Very cautious: Avoid intense outdoor activity; prioritize indoor activities.";
+  } else if (finalPriority >= 3) {
+    topLine = "⚠️ Caution: Limit prolonged outdoor exertion for sensitive pupils.";
+  } else {
+    topLine = "✅ Conditions acceptable: Normal supervised outdoor activities permitted with standard precautions.";
+  }
+
+  // Compose lists (merge both bullet arrays but emphasize the higher-priority items)
+  const combinedBullets = [];
+  // If AQI is severe (priority >=4), include AQI bullets first
+  if (aqPriority >= tempPriority) {
+    (aqiBlock.bullets || []).forEach(b => combinedBullets.push({ source: "AQI", text: b }));
+    (tempBlock.bullets || []).forEach(b => combinedBullets.push({ source: "Temp", text: b }));
+  } else {
+    (tempBlock.bullets || []).forEach(b => combinedBullets.push({ source: "Temp", text: b }));
+    (aqiBlock.bullets || []).forEach(b => combinedBullets.push({ source: "AQI", text: b }));
+  }
+
+  // Helper to render bullets as HTML
+  function bulletsHtml(list) {
+    if (!list || !list.length) return "";
+    return `<ul style="margin:8px 0 0 18px;padding:0;">` +
+      list.map(item => `<li style="margin:6px 0;line-height:1.45">${escapeHtml(item.text)}</li>`).join("") +
+      `</ul>`;
+  }
+
+  // Small info lines with numeric readout
+  const tempLine = Number.isFinite(tempC) ? `Temp: ${Math.round(tempC)}°C` : "Temp: —";
+  const windLine = (windNum !== null) ? `Wind: ${windNum} km/h` : "Wind: —";
+  const aqiLine = (aqiObj && Number.isFinite(aqiObj.pm25)) ? `PM2.5: ${Math.round(aqiObj.pm25)} µg/m³` : "PM2.5: —";
+
+  // Build final HTML
+  const html = `
+    <div style="font-size:0.98rem;">
+      <strong style="display:block;margin-bottom:8px;">${topLine}</strong>
+      <div style="font-size:0.95rem;color:#333;margin-bottom:6px;">
+        <em>${escapeHtml(tempBlock.title)} • ${escapeHtml(aqiBlock.title)}</em>
+      </div>
+      ${bulletsHtml(combinedBullets)}
+      <div style="margin-top:10px;font-size:0.90rem;color:#444">
+        <div style="margin-top:6px;"><strong>Quick readouts:</strong> ${escapeHtml(tempLine)} · ${escapeHtml(windLine)} · ${escapeHtml(aqiLine)}</div>
+      </div>
+    </div>
+  `;
+  return html;
+}
+
+// small helper to escape HTML
+function escapeHtml(s) {
+  if (s === null || s === undefined) return "";
+  return String(s).replace(/[&<>"']/g, function (m) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+  });
+}
+
+// Update safety guidance DOM element
+function updateSafetyGuidance(tempC, windRaw, aqiObj) {
+  const box = $id("safety-text");
+  if (!box) return;
+  try {
+    const html = combinedSafetyHtml(tempC, windRaw, aqiObj);
+    box.innerHTML = html;
+  } catch (e) {
+    console.warn("updateSafetyGuidance error:", e);
+    box.innerText = "Safety guidance unavailable.";
+  }
+}
+
+// =================== FETCH IMPLEMENTATIONS ===================
 async function fetchOpenWeather(lat, lon) {
   if (!OPENWEATHER_API_KEY) throw new Error("No OpenWeather key configured");
   const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${OPENWEATHER_API_KEY}`;
   const r = await fetch(url);
-  if (!r.ok) {
-    const text = await r.text().catch(()=>"");
-    throw new Error(`OpenWeather failed: ${r.status} ${text}`);
-  }
+  if (!r.ok) throw new Error(`OpenWeather failed: ${r.status}`);
   const j = await r.json();
   return normalizeOpenWeather(j);
 }
-
-async function fetchOpenMeteo(lat, lon) {
-  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`;
+async function fetchOpenMeteoWeather(lat, lon) {
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&timezone=auto`;
   const r = await fetch(url);
-  if (!r.ok) throw new Error("Open-Meteo failed");
+  if (!r.ok) throw new Error("Open-Meteo weather failed");
   const j = await r.json();
   return normalizeOpenMeteo(j, lat, lon);
 }
 
-/* ======= Main obtainWeather flow ======= */
+// Open-Meteo Air Quality endpoint (hourly pm2_5 and pm10)
+async function fetchAQI(lat, lon) {
+  try {
+    const endpoint = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&hourly=pm10,pm2_5&timezone=auto`;
+    const r = await fetch(endpoint);
+    if (!r.ok) throw new Error("Air-quality API failed");
+    const j = await r.json();
+    const times = j?.hourly?.time || [];
+    const pm25Arr = j?.hourly?.pm2_5 || [];
+    const pm10Arr = j?.hourly?.pm10 || [];
+
+    if (!pm25Arr.length || !times.length) return null;
+    // find last non-null sample
+    for (let i = pm25Arr.length - 1; i >= 0; --i) {
+      const val = pm25Arr[i];
+      if (val !== null && val !== undefined) {
+        const time = times[i] || new Date().toISOString();
+        const pm10v = (pm10Arr && pm10Arr[i] !== undefined) ? pm10Arr[i] : null;
+        return { pm25: Number(val), pm10: (pm10v === null ? null : Number(pm10v)), time };
+      }
+    }
+    return null;
+  } catch (e) {
+    console.warn("fetchAQI error:", e);
+    return null;
+  }
+}
+
+// Public AQI wrapper (exposed)
+async function fetchAQIForCurrentImpl(force = false) {
+  try {
+    const coords = window.latestWeatherCoords || { lat: DEFAULT_LAT, lon: DEFAULT_LON };
+    const cached = loadCacheKey(AQI_CACHE_KEY);
+    if (!force && cached) {
+      updateAQIUI(cached);
+      // update safety guidance using cached + cached weather (if present)
+      const cachedWeather = loadCacheKey(CACHE_KEY);
+      updateSafetyGuidance(cachedWeather?.main?.temp ?? null, cachedWeather?.wind?.speed ?? null, cached);
+      return cached;
+    }
+    const a = await fetchAQI(coords.lat, coords.lon);
+    if (a) {
+      saveCache(AQI_CACHE_KEY, a);
+      updateAQIUI(a);
+      // update safety guidance with new AQI + latest weather (from cache/last weather)
+      const cachedWeather = loadCacheKey(CACHE_KEY);
+      updateSafetyGuidance(cachedWeather?.main?.temp ?? null, cachedWeather?.wind?.speed ?? null, a);
+      return a;
+    } else {
+      updateAQIUI(null);
+      return null;
+    }
+  } catch (e) {
+    console.warn("fetchAQIForCurrentImpl error:", e);
+    updateAQIUI(null);
+    return null;
+  }
+}
+window.fetchAQIForCurrent = fetchAQIForCurrentImpl; // expose globally
+
+// =================== MAIN WEATHER FLOW ===================
 async function obtainWeather(force = false) {
-  // try cache
+  // try cached first
   if (!force) {
-    const cached = loadCache();
+    const cached = loadCacheKey(CACHE_KEY);
     if (cached) {
-      console.log("weather.js: using cache");
-      updateUI(cached);
+      updateWeatherUI(cached);
+      // if AQI cached, show that too
+      const cachedAQI = loadCacheKey(AQI_CACHE_KEY);
+      if (cachedAQI) updateAQIUI(cachedAQI);
+      // Update safety guidance using cache (both)
+      updateSafetyGuidance(cached?.main?.temp ?? null, cached?.wind?.speed ?? null, cachedAQI ?? null);
       return cached;
     }
   }
 
   let lat = DEFAULT_LAT, lon = DEFAULT_LON;
-  // try geolocation
+  // try geolocation (non-blocking fallback)
   try {
-    const position = await new Promise((resolve, reject) => {
+    const pos = await new Promise((resolve, reject) => {
       if (!navigator.geolocation) return reject("no-geolocation");
       navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 8000 });
     });
-    lat = position.coords.latitude;
-    lon = position.coords.longitude;
+    lat = pos.coords.latitude;
+    lon = pos.coords.longitude;
     console.log("weather.js: geolocation success", lat, lon);
   } catch (e) {
-    console.warn("weather.js: geolocation failed, using defaults.", e);
+    console.warn("geolocation failed or denied — using defaults", e);
   }
 
-  // try OpenWeather first (if key provided), otherwise Open-Meteo
   try {
     let normalized;
     if (OPENWEATHER_API_KEY) {
@@ -183,201 +546,62 @@ async function obtainWeather(force = false) {
         console.log("weather.js: fetched from OpenWeather");
       } catch (owErr) {
         console.warn("OpenWeather failed, falling back to Open-Meteo:", owErr);
-        normalized = await fetchOpenMeteo(lat, lon);
+        normalized = await fetchOpenMeteoWeather(lat, lon);
       }
     } else {
-      // no key -> directly use open-meteo
-      normalized = await fetchOpenMeteo(lat, lon);
+      normalized = await fetchOpenMeteoWeather(lat, lon);
       console.log("weather.js: fetched from Open-Meteo (no key)");
     }
 
     if (normalized && normalized.ok !== false) {
-      saveCache(normalized);
-      updateUI(normalized);
-      return normalized;
+      saveCache(CACHE_KEY, normalized);
+      updateWeatherUI(normalized);
     } else {
-      throw new Error("No valid weather payload");
+      updateWeatherUI(null);
     }
+
+    // async: fetch AQI after weather (do not block page)
+    fetchAQIForCurrent(false).catch(e => console.warn("AQI fetch error:", e));
+
+    return normalized;
   } catch (err) {
-    console.error("weather.js: obtainWeather error:", err);
-    if ($id("weather-error")) $id("weather-error").textContent = "⚠ Could not fetch weather. Try refresh or check network.";
-    // still update UI with some fallback text
-    updateUI(null);
+    console.error("obtainWeather error:", err);
+    if ($id("weather-error")) $id("weather-error").textContent = "⚠ Could not fetch weather. Try refresh.";
+    updateWeatherUI(null);
+    updateAQIUI(null);
+    updateSafetyGuidance(null, null, null);
     return null;
   }
 }
 
-/* ======= Bootstrap ======= */
+// expose fetchWeather globally (override stub)
+window.fetchWeather = async function (force = false) {
+  try {
+    if ($id("weather-updated")) $id("weather-updated").innerText = "Updating...";
+    await obtainWeather(force);
+    if ($id("weather-updated")) $id("weather-updated").innerText = nowStr();
+  } catch (e) {
+    console.warn("global fetchWeather wrapper error:", e);
+  }
+};
+
+// =================== BOOTSTRAP: DOM wiring ===================
 document.addEventListener("DOMContentLoaded", () => {
   try {
-    console.log("✅ weather.js loaded successfully");
-    // override the safe stub with the real function
-    window.fetchWeather = async function (force = false) {
-      // small UI feedback
-      if ($id("weather-updated")) $id("weather-updated").textContent = "Updating...";
-      await obtainWeather(force);
-    };
+    // button wiring: check presence first to avoid 'null'.addEventListener errors
+    const bW = $id("btn-refresh-weather");
+    if (bW) bW.addEventListener("click", () => window.fetchWeather(true));
+    const bA = $id("btn-refresh-aqi");
+    if (bA) bA.addEventListener("click", () => window.fetchAQIForCurrent(true));
+    const bA2 = $id("btn-refresh-aqi-2");
+    if (bA2) bA2.addEventListener("click", () => window.fetchAQIForCurrent(true));
 
-    // mark initialized
+    // Auto-run initial fetch
     window.__weather_initialized = true;
-
-    // auto-run
-    window.fetchWeather(false).catch(e => {
-      console.warn("Initial weather fetch failed:", e);
-    });
+    window.fetchWeather(false).catch(e => console.warn("Initial weather fetch failed:", e));
+    console.log("✅ weather.js initialized");
   } catch (e) {
-    console.error("weather.js initialization error:", e);
-    // keep stub in place so onclick won't throw
+    console.error("weather.js DOMContentLoaded error:", e);
     if ($id("weather-error")) $id("weather-error").textContent = "Initialization error";
   }
 });
-
-function updateSafetyGuidance(temp, wind) {
-  // temp = Celsius number, wind = either m/s or km/h (we try to detect & normalize to km/h)
-  const box = document.getElementById("safety-text");
-  if (!box) return;
-
-  // helper to render an array as a bullet list
-  function makeList(arr) {
-    return '<ul style="margin:6px 0 0 18px;padding:0;">' + arr.map(i => `<li style="margin:6px 0">${i}</li>`).join('') + '</ul>';
-  }
-
-  // --- Normalize inputs ---
-  const tempNum = (temp === null || temp === undefined) ? NaN : Number(temp);
-  let windNum = (wind === null || wind === undefined) ? NaN : Number(wind);
-
-  // Heuristic to decide unit:
-  // - OpenWeather gives wind in m/s (typical values 0-30)
-  // - Open-Meteo gives wind in km/h (typical values 0-100)
-  // If windNum <= 25 => likely m/s, convert to km/h (x3.6). If >25 assume it's already km/h.
-  // This heuristic works well in practice for mixed sources.
-  let windKmh = NaN;
-  if (!Number.isFinite(windNum)) {
-    windKmh = NaN;
-  } else if (windNum <= 25) {
-    windKmh = Math.round(windNum * 3.6); // assume m/s -> km/h
-  } else {
-    windKmh = Math.round(windNum); // assume already km/h
-  }
-
-  // fallback defaults for display if missing
-  const tempForLogic = Number.isFinite(tempNum) ? tempNum : null;
-  const windForLogic = Number.isFinite(windKmh) ? windKmh : null;
-
-  const advice = [];
-  const details = [];
-
-  // TEMPERATURE-BASED GUIDANCE (kept all original messages)
-  if (tempForLogic !== null && tempForLogic >= 40) {
-    advice.push("🔥 Extreme heat: Avoid outdoor activity, stay hydrated, and seek cool shaded/air-conditioned places.");
-    details.push(
-      "Limit outdoor work between 11:00–16:00.",
-      "Drink water regularly (even before feeling thirsty).",
-      "Wear light, loose, breathable clothing and a hat.",
-      "Use sunscreen (SPF 30+) on exposed skin.",
-      "Recognize heat exhaustion: headache, nausea, dizziness — rest immediately.",
-      "Avoid heavy meals & alcohol during peak heat.",
-      "Cool towels or showers help lower body temperature.",
-      "Keep vulnerable people (elderly, infants) in cool places.",
-      "Have a fan or cooling plan; seek medical help if needed.",
-      "Never leave anyone in a parked vehicle."
-    );
-  } else if (tempForLogic !== null && tempForLogic >= 33) {
-    advice.push("🔥 Very hot: Reduce strenuous activity, hydrate frequently, and seek shade during peak sun.");
-    details.push(
-      "Reduce exercise intensity; move workouts to early morning/evening.",
-      "Hydrate and replace electrolytes if sweating heavily.",
-      "Wear UV-protective clothing and sunglasses.",
-      "Check on neighbors who may be vulnerable."
-    );
-  } else if (tempForLogic !== null && tempForLogic >= 25) {
-    advice.push("🌤 Warm (good for jogging/walks): stay hydrated and avoid the midday sun for long runs.");
-    details.push(
-      "Best activities: jogging, brisk walking, outdoor sports (avoid midday if sunny).",
-      "Wear breathable activewear, keep water with you.",
-      "Take short rest breaks to cool down."
-    );
-  } else if (tempForLogic !== null && tempForLogic >= 16) {
-    advice.push("🙂 Mild/pleasant (great for outdoor exercise): jogging, cycling, long walks are fine.");
-    details.push(
-      "Recommended: jogging, walking, cycling, outdoor drills.",
-      "Light warm-up and cool-down to prevent muscle strain."
-    );
-  } else if (tempForLogic !== null && tempForLogic >= 11) {
-    advice.push("🧥 Cool: Wear light layers; consider a warm jacket for longer outdoor sessions.");
-    details.push(
-      "Layer clothing so you can remove layers as you warm up.",
-      "Good for brisk walks and moderate exercise with a light jacket."
-    );
-  } else if (tempForLogic !== null && tempForLogic >= 0) {
-    advice.push("❄ Cold: Dress warmly and limit exposure — wind can make it feel much colder.");
-    // Ten specific safety precautions for cold (user requested)
-    details.push(
-      "Layer clothing (base thermal + insulating mid-layer + windproof outer).",
-      "Cover head, hands, and feet — extremities lose heat fast.",
-      "Keep clothing dry (wet clothes lose insulation).",
-      "Stay active to maintain circulation, but avoid sweating heavily.",
-      "Eat warm, high-energy foods and drink warm fluids (no alcohol).",
-      "Carry emergency blanket / warm pack if going far from shelter.",
-      "Insulate sleeping/bedding if overnight (use closed cells or foam).",
-      "Use safe heating sources and ensure ventilation (avoid CO risk).",
-      "Check on vulnerable people (elderly, infants) frequently.",
-      "Know hypothermia signs: shivering, slurred speech, confusion — seek help."
-    );
-  } else if (tempForLogic !== null) { // temp < 0
-    advice.push("❄ Severe cold: Minimize outdoor time, extreme precautions required.");
-    details.push(
-      "All cold precautions above PLUS:",
-      "Limit time outdoors to short, essential tasks only.",
-      "Watch for frostbite on exposed skin (numbness, white/gray skin).",
-      "Have a communication plan and emergency kit (food, water, warm clothing)."
-    );
-  } else {
-    // temp unknown: provide neutral suggestion
-    advice.push("ℹ️ Temperature data unavailable — follow local common-sense precautions.");
-    details.push("If unsure, dress in layers and avoid prolonged exposure until conditions are known.");
-  }
-
-  // WIND-BASED ADVICE (appended to temperature guidance) — kept original messages
-  if (windForLogic !== null && windForLogic >= 80) {
-    advice.push("🌬️ Very severe winds (>=80 km/h): Danger — avoid outdoors, stay in sturdy shelter.");
-  } else if (windForLogic !== null && windForLogic >= 60) {
-    advice.push("🌪 Very strong winds (60–79 km/h): Secure loose objects, avoid travel if possible.");
-  } else if (windForLogic !== null && windForLogic >= 40) {
-    advice.push("💨 Strong winds (40–59 km/h): Avoid open areas and unsecured structures.");
-  } else if (windForLogic !== null && windForLogic >= 20) {
-    advice.push("🌬 Breezy (20–39 km/h): Caution for bikes, light debris possible.");
-  } else if (windForLogic !== null) {
-    advice.push("🍃 Light winds: no special wind safety required.");
-  } else {
-    // wind unknown
-    advice.push("ℹ️ Wind data unavailable.");
-  }
-
-  // Compose output
-  // Primary short advice (first 2 items)
-  const topAdvice = advice.slice(0, 2).join(" — ");
-  let html = `<strong>${topAdvice}</strong><br>`;
-
-  // Additional bulleted details for clarity (show up to 10)
-  if (details.length) {
-    html += makeList(details.slice(0, 10));
-  }
-
-  // Add explicit wind number if available
-  if (windForLogic !== null) {
-    html += `<div style="margin-top:8px;font-size:0.92rem;color:#333"><em>Wind: ${windForLogic} km/h</em></div>`;
-  }
-
-  // Add temperature readout if available
-  if (tempForLogic !== null) {
-    html += `<div style="margin-top:6px;font-size:0.92rem;color:#333"><em>Temp: ${Math.round(tempForLogic)}°C</em></div>`;
-  }
-
-  // Small note if units were guessed
-  if (Number.isFinite(windNum) && windNum <= 25) {
-    html += `<div style="margin-top:6px;font-size:0.85rem;color:#666">Note: wind value interpreted as m/s and converted to km/h.</div>`;
-  }
-
-  box.innerHTML = html;
-}

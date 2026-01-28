@@ -2,120 +2,230 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Weather Updates | SafeSphere</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- Global styles -->
+  <meta charset="utf-8" />
+  <title>Weather & Air Quality | SafeSphere</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
   <style>
-    .weather-container {
-      max-width: 520px;
-      margin: 40px auto;
-      background: #ffffff;
-      padding: 24px;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-      text-align: center;
+    :root{
+      --sidebar-width: 260px;
+      --bg-grad-start: #eef2fb;
+      --bg-grad-end:   #e9f1ff;
+      --card-bg: #ffffff;
+      --muted: #666;
+      --accent: #5b4bff;
+      --shadow: 0 10px 30px rgba(10,20,40,0.06);
+      --radius: 12px;
     }
 
-    .weather-temp {
-      font-size: 3rem;
-      font-weight: bold;
-      margin: 10px 0;
+    html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+    body{ background: linear-gradient(180deg,var(--bg-grad-start),var(--bg-grad-end)); color:#111; }
+
+    /* FIX: make sidebar fixed and push content right so cards don't collide */
+    aside.sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: var(--sidebar-width);
+      padding: 20px 12px;
+      box-sizing: border-box;
+      background: transparent; /* keep existing look from your main stylesheet */
+      z-index: 999;
+      overflow: auto;
     }
 
-    .weather-meta {
-      color: #555;
-      margin: 6px 0;
-      font-size: 0.95rem;
+    /* content area pushed to the right of the fixed sidebar */
+    main.content {
+      margin-left: calc(var(--sidebar-width) + 24px); /* space between sidebar and content */
+      padding-top: 12px;
+      padding-bottom: 48px;
+      max-width: calc(100% - var(--sidebar-width) - 48px);
+      box-sizing: border-box;
     }
 
-    .weather-error {
-      color: red;
-      margin-top: 10px;
+    /* for small screens, stop fixing sidebar and stack normally */
+    @media (max-width:1100px){
+      aside.sidebar { position: static; width: auto; height: auto; }
+      main.content { margin-left: 0; max-width: 100%; padding: 0 12px 32px; }
     }
 
-    .safety-box {
-      margin-top: 20px;
-      padding: 14px;
-      border-radius: 10px;
-      background: #f5f7fa;
-      font-size: 0.95rem;
-      text-align: left;
+    /* PANEL ROW */
+    .panel-row {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 20px;
+      align-items: start;
+      max-width: 1200px;
+      margin: 28px 0;
+    }
+    @media (max-width:880px) { .panel-row { grid-template-columns: 1fr; } }
+
+    /* CARDS */
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
     }
 
-    .safety-box strong {
-      display: block;
-      margin-bottom: 6px;
+    /* Weather hero and AQI styles (unchanged - same look) */
+    .weather-hero { display:flex; gap:20px; align-items:center; flex-wrap:wrap; }
+    #weather-icon { width:84px; height:84px; display:flex; align-items:center; justify-content:center; font-size:36px; }
+    #weather-icon img{ width:84px; height:84px; object-fit:contain; }
+    .weather-temp { font-size:56px; font-weight:800; margin:0; }
+    .muted { color:var(--muted); font-size:0.95rem; }
+    .controls { margin-top:18px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .btn { border-radius:10px; padding:10px 14px; font-weight:700; cursor:pointer; border:none; }
+    .btn-primary { background:var(--accent); color:#fff; box-shadow:0 6px 14px rgba(0,0,0,0.06); }
+    .btn-outline { background:transparent; border:1px solid #e6e9f2; color:#111; }
+
+    /* matching min-height so two columns look balanced */
+    .weather-card, .aqi-card { min-height: 360px; box-sizing:border-box; }
+
+    /* tiny responsive tweaks */
+    @media (max-width:580px){
+      .weather-temp { font-size:40px; }
+      #weather-icon{ width:56px; height:56px; }
+      .weather-hero { gap:12px; }
+      .controls { justify-content:flex-start; }
     }
   </style>
 </head>
-
 <body>
 
-<!-- Sidebar (unchanged, CLEAN) -->
-<aside class="sidebar" id="sidebar">
-  <div class="sidebar-header">
-    <div class="logo">
-      <span class="logo-icon">🛡️</span>
-      <span class="logo-text">SafeSphere</span>
+  <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <span class="logo-icon">🛡️</span>
+                <span class="logo-text">SafeSphere</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+                <span class="toggle-icon">☰</span>
+            </button>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="{% url 'index' %}" class="nav-link" data-page="dashboard">
+                <span class="nav-icon">📊</span>
+                <span class="nav-text">Dashboard</span>
+            </a>
+            <a href="{% url 'learn' %}" class="nav-link" data-page="learn">
+                <span class="nav-icon">📚</span>
+                <span class="nav-text">Learn</span>
+            </a>
+            <a href="{% url 'games' %}" class="nav-link" data-page="games">
+                <span class="nav-icon">🎮</span>
+                <span class="nav-text">Games</span>
+            </a>
+            <a href="{% url 'drills' %}" class="nav-link" data-page="drills">
+                <span class="nav-icon">🚨</span>
+                <span class="nav-text">Drills</span>
+            </a>
+            
+            <a href="{% url 'emergency' %}" class="nav-link emergency-link" data-page="emergency">
+                <span class="nav-icon">🆘</span>
+                <span class="nav-text">Emergency</span>
+            </a>
+            <a href="{% url 'chat' %}" class="nav-link active" data-page="chat">
+                <span class="nav-icon">💬</span>
+                <span class="nav-text">AI Assistant</span>
+            </a>
+                <a href="{% url 'weather' %}" class="nav-link">
+            <span class="nav-icon">🌦</span>
+            <span class="nav-text">Weather</span>
+        </a>
+        <!-- Map page -->
+        <a href="{% url 'map' %}" class="nav-link">
+            <span class="nav-icon">🗺️</span>
+            <span class="nav-text"> Safety Map</span>
+        </a>
+        <a href="{% url 'leaderboard' %}" class="nav-link" data-page="leaderboard">
+                <span class="nav-icon">🏆</span>
+                <span class="nav-text">Leaderboard</span>
+            </a>
+
+            <a href="{% url 'profile' %}" class="nav-link" data-page="profile">
+                <span class="nav-icon">👤</span>
+                <span class="nav-text">Profile</span>
+            </a>
+        </nav>
+    </aside>
+
+  <!-- Content moved right of fixed sidebar -->
+  <main class="content">
+    <div class="panel-row">
+      <!-- WEATHER -->
+      <section class="card weather-card" id="weather-main" aria-live="polite">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div>
+            <h1 style="margin:0;font-size:1.4rem;">🌦 Real-Time Weather & Air Quality</h1>
+            <div class="muted">Live weather and AQI to support disaster preparedness</div>
+          </div>
+        </div>
+
+        <hr style="margin:14px 0;border:none;border-top:1px solid #f1f4fb">
+
+        <h2 id="weather-location" style="margin:6px 0 0;">Loading location…</h2>
+
+        <div class="weather-hero" style="margin-top:6px;">
+          <div id="weather-icon" aria-hidden="true">⛅</div>
+
+          <div>
+            <p class="weather-temp" id="weather-temp">--°C</p>
+            <div id="weather-desc" class="muted">—</div>
+            <div class="muted" id="weather-subline" style="margin-top:8px;">
+              Feels like: <span id="weather-feels">—</span> · Humidity: <span id="weather-humidity">—</span> · Wind: <span id="weather-wind">—</span>
+              <div style="margin-top:6px;font-size:0.9rem;color:var(--muted);">Last updated: <span id="weather-updated">—</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button id="btn-refresh-weather" class="btn btn-primary">🔄 Refresh Weather</button>
+          <button id="btn-refresh-aqi" class="btn btn-outline">🔄 Refresh AQI</button>
+          <a href="{% url 'index' %}" class="btn btn-outline" style="margin-left:auto;">⬅ Back</a>
+        </div>
+
+        <p id="weather-error" style="color:#c02727;margin-top:12px"></p>
+
+        <div class="safety" id="safety-guidance" aria-live="polite">
+          <strong>🛡 Safety Guidance</strong>
+          <div id="safety-text" style="margin-top:8px;">Loading safety advice…</div>
+        </div>
+      </section>
+
+      <!-- AQI -->
+      <aside class="card aqi-card" id="aqi-card" aria-live="polite">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div>
+            <div style="font-size:0.92rem;color:var(--muted);">Air Quality (PM₂.₅)</div>
+            <div class="aqi-value" id="aqi-value">--</div>
+            <div class="aqi-category" id="aqi-category">—</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:0.85rem;color:var(--muted);">Updated</div>
+            <div id="aqi-updated" style="font-size:0.92rem;color:#222;">—</div>
+          </div>
+        </div>
+
+        <div class="aqi-meta" id="aqi-meta" style="margin-top:12px;">
+          PM2.5: <span id="aqi-pm25">—</span> µg/m³ · PM10: <span id="aqi-pm10">—</span> µg/m³
+        </div>
+
+        <div class="aqi-health" id="aqi-health" style="margin-top:12px;">Air quality guidance will appear here.</div>
+
+        <div style="margin-top:auto;text-align:right;">
+          <button id="btn-refresh-aqi-2" class="btn btn-primary" style="margin-top:18px;">🔄 Refresh AQI</button>
+        </div>
+      </aside>
     </div>
-  </div>
+  </main>
 
-  <nav class="sidebar-nav">
-        <a href="{% url 'index' %}" class="nav-link"><span class="nav-icon">📊</span><span class="nav-text">Dashboard</span></a>
-        <a href="{% url 'learn' %}" class="nav-link"><span class="nav-icon">📚</span><span class="nav-text">Learn</span></a>
-        <a href="{% url 'games' %}" class="nav-link"><span class="nav-icon">🎮</span><span class="nav-text">Games</span></a>
-        <a href="{% url 'drills' %}" class="nav-link"><span class="nav-icon">🚨</span><span class="nav-text">Drills</span></a>
-        
-        <a href="{% url 'emergency' %}" class="nav-link emergency-link"><span class="nav-icon">🆘</span><span class="nav-text">Emergency</span></a>
-        <a href="{% url 'chat' %}" class="nav-link"><span class="nav-icon">💬</span><span class="nav-text">AI Assistant</span></a>
-        <a href="{% url 'weather' %}" class="nav-link"> <span class="nav-icon">🌦</span>  <span class="nav-text">Weather</span>  </a>
-        <a href="{% url 'map' %}" class="nav-link"><span class="nav-icon">🗺️</span><span class="nav-text">Safety Map</span></a>
-        
-        <a href="{% url 'leaderboard' %}" class="nav-link active"><span class="nav-icon">🏆</span><span class="nav-text">Leaderboard</span></a>
-        <a href="{% url 'profile' %}" class="nav-link"><span class="nav-icon">👤</span><span class="nav-text">Profile</span></a>
-      </nav>
-</aside>
-
-<!-- MAIN CONTENT -->
-<main class="weather-container">
-  <h1>🌦 Real-Time Weather Updates</h1>
-  <p class="weather-meta">Live weather conditions for disaster preparedness</p>
-
-  <h2 id="weather-location">Loading location…</h2>
-
-  <div id="weather-icon">⛅</div>
-  <div class="weather-temp" id="weather-temp">--°C</div>
-  <p id="weather-desc">—</p>
-
-  <div class="weather-meta">
-    Feels like: <span id="weather-feels">—</span><br>
-    Humidity: <span id="weather-humidity">—</span><br>
-    Wind speed: <span id="weather-wind">—</span><br>
-    Last updated: <span id="weather-updated">—</span>
-  </div>
-
-  <button class="btn btn-primary" onclick="fetchWeather(true)">
-    🔄 Refresh Weather
-  </button>
-
-  <p id="weather-error" class="weather-error"></p>
-
-  <!-- SAFETY GUIDANCE -->
-  <div class="safety-box" id="safety-guidance">
-    <strong>🛡 Safety Guidance</strong>
-    <p id="safety-text">Loading safety advice…</p>
-  </div>
-
-  <br>
-  <a href="{% url 'index' %}" class="btn btn-outline">⬅ Back to Dashboard</a>
-</main>
-
-<!-- Correct JS load -->
-<script src="{% static 'js/weather.js' %}"></script>
-
+  <script src="{% static 'js/weather.js' %}"></script>
 </body>
 </html>
