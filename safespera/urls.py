@@ -25,16 +25,15 @@ from safe import views as safe_views
 from safe.views import index, learn, drills, games, leaderboard, emergency, profile, chat,escape_room,Flood_Safety,earth ,fire_sefty_modules ,Earthquake_Safety ,FireSafety ,Cyclone_Safety ,Firstaid, signup_view, login_view, logout_view
 from django.contrib.auth import views as auth_views
 
-from django.conf.urls.i18n import i18n_patterns
-from django.conf.urls.i18n import set_language
+
 
 
 urlpatterns = [
   
-    path("i18n/", include("django.conf.urls.i18n")),
-]
+   
 
-urlpatterns += i18n_patterns(
+
+
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
     path('learn/', learn, name='learn'),
@@ -84,12 +83,8 @@ urlpatterns += i18n_patterns(
     path('learn/tornado/', views.Tornado_Safety, name='Tornado_Safety'),
     path('learn/heatwave/', views.HeatWave_Safety, name='HeatWave_Safety'),
     path('learn/firstaid/', views.FirstAid_Safety, name='FirstAid_Safety'),
-    path(
-        'learn/winterstorm/',
-        views.WinterStorms_Safety,
-        name='WinterStorms_Safety'
-    ),
-    )
+    path('learn/winterstorm/', views.WinterStorms_Safety, name='WinterStorms_Safety'),
+    ]
 
 # Serve static files during development
 if settings.DEBUG:

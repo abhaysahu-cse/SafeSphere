@@ -9,6 +9,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.shortcuts import render
 
+
 # Create your views here.
 # def index(request):
 #     return render(request, "index.html")
@@ -202,3 +203,7 @@ def zones_api(request):
         {"lat": 23.22, "lng": 77.41, "level": "safe", "msg": "Relief shelter"},
     ]
     return JsonResponse(data, safe=False)
+
+
+
+

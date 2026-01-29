@@ -10,13 +10,29 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <script src="script.js" defer></script>
 </head>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement(
+    {
+      pageLanguage: 'en',
+      includedLanguages: 'en,hi,ta,te,bn,gu,kn,ml,mr,pa,ur',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+    },
+    'google_translate_element'
+  );
+}
+</script>
+
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 <body>
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="logo">
                 <span class="logo-icon">🛡️</span>
-                <span class="logo-text">SafeSphere</span>
+                <span class="logo-text">{{ "SafeSphere" }}</span>
             </div>
             <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
                 <span class="toggle-icon">☰</span>
@@ -26,50 +42,50 @@
         <nav class="sidebar-nav">
             <a href="{% url 'index' %}" class="nav-link" data-page="dashboard">
                 <span class="nav-icon">📊</span>
-                <span class="nav-text">Dashboard</span>
+                <span class="nav-text">{{ "Dashboard" }}</span>
             </a>
             <a href="{% url 'learn' %}" class="nav-link" data-page="learn">
                 <span class="nav-icon">📚</span>
-                <span class="nav-text">Learn</span>
+                <span class="nav-text">{{ "Learn" }}</span>
             </a>
             <a href="{% url 'games' %}" class="nav-link active" data-page="games">
                 <span class="nav-icon">🎮</span>
-                <span class="nav-text">Games</span>
+                <span class="nav-text">{{ "Games" }}</span>
             </a>
             <a href="/static/ar/index.html" class="nav-link" target="_blank">
                 <span class="nav-icon">📱</span>
-                <span class="nav-text">AR Practice</span>
+                <span class="nav-text">{{ "AR Practice" }}</span>
             </a>
 
             <a href="{% url 'drills' %}" class="nav-link" data-page="drills">
                 <span class="nav-icon">🚨</span>
-                <span class="nav-text">Drills</span>
+                <span class="nav-text">{{ "Drills" }}</span>
             </a>
             
             <a href="{% url 'emergency' %}" class="nav-link emergency-link" data-page="emergency">
                 <span class="nav-icon">🆘</span>
-                <span class="nav-text">Emergency</span>
+                <span class="nav-text">{{ "Emergency" }}</span>
             </a>
             <a href="{% url 'chat' %}" class="nav-link" data-page="chat">
                 <span class="nav-icon">💬</span>
-                <span class="nav-text">AI Assistant</span>
+                <span class="nav-text">{{ "AI Assistant" }}</span>
             </a>
                 <a href="{% url 'weather' %}" class="nav-link">
             <span class="nav-icon">🌦</span>
-            <span class="nav-text">Weather</span>
+            <span class="nav-text">{{ "Weather" }}</span>
         </a>
         <!-- Map page -->
         <a href="{% url 'map' %}" class="nav-link">
             <span class="nav-icon">🗺️</span>
-            <span class="nav-text">Safety Map</span>
+            <span class="nav-text">{{ "Safety Map" }}</span>
         </a>
         <a href="{% url 'leaderboard' %}" class="nav-link" data-page="leaderboard">
                 <span class="nav-icon">🏆</span>
-                <span class="nav-text">Leaderboard</span>
+                <span class="nav-text">{{ "Leaderboard" }}</span>
         </a>     
         <a href="{% url 'profile' %}" class="nav-link" data-page="profile">
                 <span class="nav-icon">👤</span>
-                <span class="nav-text">Profile</span>
+                <span class="nav-text">{{ "Profile" }}</span>
         </a>
         </nav>
     </aside>
@@ -79,9 +95,10 @@
         <!-- Purple Banner -->
         <div class="games-banner animate-fade-up">
             <div class="banner-content">
-                <h1 class="banner-title">🎮 Learning Games</h1>
-                <p class="banner-subtitle">Practice makes perfect! Test your knowledge through fun challenges</p>
+                <h1 class="banner-title">🎮 {{ "Learning Games" }}</h1>
+                <p class="banner-subtitle">{{ "Practice makes perfect! Test your knowledge through fun challenges" }}</p>
             </div>
+            <div id="google_translate_element" class="lang-fixed"></div>
             <div class="banner-decoration">🏆⭐🎯</div>
         </div>
 
@@ -91,21 +108,21 @@
                 <span class="games-stat-icon">🎮</span>
                 <div class="games-stat-content">
                     <h3 class="games-stat-value" id="gamesPlayed">28</h3>
-                    <p class="games-stat-label">Games Played</p>
+                    <p class="games-stat-label">{{ "Games Played" }}</p>
                 </div>
             </div>
             <div class="games-stat-item">
                 <span class="games-stat-icon">🌟</span>
                 <div class="games-stat-content">
                     <h3 class="games-stat-value" id="bestScore">9,450</h3>
-                    <p class="games-stat-label">Best Score</p>
+                    <p class="games-stat-label">{{ "Best Score" }}</p>
                 </div>
             </div>
             <div class="games-stat-item">
                 <span class="games-stat-icon">⭐</span>
                 <div class="games-stat-content">
                     <h3 class="games-stat-value" id="averageRating">4.6</h3>
-                    <p class="games-stat-label">Avg Rating</p>
+                    <p class="games-stat-label">{{ "Avg Rating" }}</p>
                 </div>
             </div>
         </section>
@@ -113,7 +130,7 @@
         <!-- Games Grid -->
         <section class="section">
             <div class="section-header">
-                <h2 class="section-title">Available Games</h2>
+                <h2 class="section-title">{{ "Available Games" }}</h2>
             </div>
             
             <div class="games-grid" id="gamesGrid">

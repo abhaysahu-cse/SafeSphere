@@ -1,384 +1,366 @@
-{% load static %}
-{% load i18n %}
+ {% load static %}
 
 <!DOCTYPE html>
-<html lang="{{ LANGUAGE_CODE|default:'en' }}">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% trans "SafeLearn - Learning Modules" %}</title>
-    <meta name="description" content="{% trans 'Browse and complete disaster preparedness learning modules' %}">
+    <title>SafeLearn - Learning Modules</title>
+    <meta name="description" content="Browse and complete disaster preparedness learning modules">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <script src="{% static 'js/script.js' %}" defer></script>
+    <script src="script.js" defer></script>
 </head>
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement(
+    {
+      pageLanguage: 'en',
+      includedLanguages: 'en,hi,ta,te,bn,gu,kn,ml,mr,pa,ur',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+    },
+    'google_translate_element'
+  );
+}
+</script>
+
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 <body>
-<form action="/i18n/setlang/" method="post" style="display:inline;">
-  {% csrf_token %}
-  <input name="next" type="hidden" value="{{ request.get_full_path }}">
-  <label for="language_select" class="sr-only">{% trans "Choose language" %}</label>
-  <select name="language" id="language_select" onchange="this.form.submit()">
-      <option value="en"{% if LANGUAGE_CODE == 'en' %} selected{% endif %}>{% trans "English" %}</option>
-      <option value="hi"{% if LANGUAGE_CODE == 'hi' %} selected{% endif %}>{% trans "Hindi" %}</option>
-  </select>
-</form>
-
-<aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-        <div class="logo">
-            <span class="logo-icon">🛡️</span>
-            <span class="logo-text">SafeSphere</span>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <span class="logo-icon">🛡️</span>
+                <span class="logo-text">SafeLearn</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+                <span class="toggle-icon">☰</span>
+            </button>
         </div>
-        <button class="sidebar-toggle" id="sidebarToggle" aria-label="{% trans 'Toggle sidebar' %}">
-            <span class="toggle-icon">☰</span>
-        </button>
-    </div>
+        
+        <nav class="sidebar-nav">
+            <a href="{% url 'index' %}" class="nav-link" data-page="dashboard">
+                <span class="nav-icon">📊</span>
+                <span class="nav-text">Dashboard</span>
+            </a>
+            <a href="{% url 'learn' %}" class="nav-link active" data-page="learn">
+                <span class="nav-icon">📚</span>
+                <span class="nav-text">Learn</span>
+            </a>
+            <a href="{% url 'games' %}" class="nav-link" data-page="games">
+                <span class="nav-icon">🎮</span>
+                <span class="nav-text">Games</span>
+            </a>
+            <a href="{% url 'drills' %}" class="nav-link" data-page="drills">
+                <span class="nav-icon">🚨</span>
+                <span class="nav-text">Drills</span>
+            </a>
+            <a href="{% url 'leaderboard' %}" class="nav-link" data-page="leaderboard">
+                <span class="nav-icon">🏆</span>
+                <span class="nav-text">Leaderboard</span>
+            </a>
+            <a href="{% url 'emergency' %}" class="nav-link emergency-link" data-page="emergency">
+                <span class="nav-icon">🆘</span>
+                <span class="nav-text">Emergency</span>
+            </a>
+            <a href="{% url 'chat' %}" class="nav-link" data-page="chat">
+                <span class="nav-icon">💬</span>
+                <span class="nav-text">AI Assistant</span>
+            </a>
 
-    <nav class="sidebar-nav">
-        <a href="{% url 'index' %}" class="nav-link" data-page="dashboard">
-            <span class="nav-icon">📊</span>
-            <span class="nav-text">{% trans "Dashboard" %}</span>
-        </a>
-        <a href="{% url 'learn' %}" class="nav-link active" data-page="learn">
-            <span class="nav-icon">📚</span>
-            <span class="nav-text">{% trans "Learn" %}</span>
-        </a>
-        <a href="{% url 'games' %}" class="nav-link" data-page="games">
-            <span class="nav-icon">🎮</span>
-            <span class="nav-text">{% trans "Games" %}</span>
-        </a>
-        <a href="{% url 'drills' %}" class="nav-link" data-page="drills">
-            <span class="nav-icon">🚨</span>
-            <span class="nav-text">{% trans "Drills" %}</span>
-        </a>
-        <a href="{% url 'emergency' %}" class="nav-link emergency-link" data-page="emergency">
-            <span class="nav-icon">🆘</span>
-            <span class="nav-text">{% trans "Emergency" %}</span>
-        </a>
-        <a href="{% url 'chat' %}" class="nav-link" data-page="chat">
-            <span class="nav-icon">💬</span>
-            <span class="nav-text">{% trans "AI Assistant" %}</span>
-        </a>
+            <!-- Weather page -->
         <a href="{% url 'weather' %}" class="nav-link">
             <span class="nav-icon">🌦</span>
-            <span class="nav-text">{% trans "Weather" %}</span>
+            <span class="nav-text">Weather</span>
         </a>
+        <!-- Map page -->
         <a href="{% url 'map' %}" class="nav-link">
             <span class="nav-icon">🗺️</span>
-            <span class="nav-text">{% trans "Safety Map" %}</span>
+            <span class="nav-text">full Map</span>
         </a>
-        <a href="{% url 'leaderboard' %}" class="nav-link" data-page="leaderboard">
-            <span class="nav-icon">🏆</span>
-            <span class="nav-text">{% trans "Leaderboard" %}</span>
-        </a>
-        <a href="{% url 'profile' %}" class="nav-link" data-page="profile">
-            <span class="nav-icon">👤</span>
-            <span class="nav-text">{% trans "Profile" %}</span>
-        </a>
-    </nav>
-</aside>
+        
+            <a href="{% url 'profile' %}" class="nav-link" data-page="profile">
+                <span class="nav-icon">👤</span>
+                <span class="nav-text">Profile</span>
+            </a>
+        </nav>
+    </aside>
 
-<main class="main-content">
-    <header class="page-header">
-        <div class="header-content">
-            <h1 class="page-title">{% trans "Learning Modules" %} 📚</h1>
-            <p class="page-subtitle">{% trans "Master disaster preparedness one module at a time" %}</p>
-        </div>
-    </header>
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="page-header">
+            <div id="google_translate_element"  class="lang-fixed"></div>
 
-    <div class="filter-tabs animate-fade-up">
-        <button class="filter-tab active" data-filter="all">{% trans "All Modules" %}</button>
-        <button class="filter-tab" data-filter="beginner">{% trans "Beginner" %}</button>
-        <button class="filter-tab" data-filter="intermediate">{% trans "Intermediate" %}</button>
-        <button class="filter-tab" data-filter="advanced">{% trans "Advanced" %}</button>
-    </div>
-
-    <section class="section">
-        <div class="learn-modules-grid" id="modulesGrid">
-            <!-- Modules generated by JS -->
-        </div>
-    </section>
-</main>
-
-<div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-{# --- small JS strings for translation --- #}
-{% trans 'Play Now →' as play_now_text %}
-{% trans 'Module page not found.' as module_not_found_text %}
-{% trans 'Progress:' as progress_label_text %}
-{% trans 'Module completed!' as module_completed_text %}
-{% trans '+10 XP earned!' as ten_xp_text %}
-{% trans 'min' as min_text %}
-{% trans 'XP' as xp_text %}
-{% trans 'complete' as complete_text %}
-{% trans 'Beginner' as d_beginner %}
-{% trans 'Intermediate' as d_intermediate %}
-{% trans 'Advanced' as d_advanced %}
-
-{# --- module titles/descriptions translated and escaped for JS safety --- #}
-{% trans "Earthquake Safety Basics" as t_eq_title %}
-{% trans "Learn essential earthquake preparedness and response techniques" as t_eq_desc %}
-
-{% trans "Fire Safety" as t_fire_title %}
-{% trans "Prevention and response strategies for fire emergencies" as t_fire_desc %}
-
-{% trans "Flood Response" as t_flood_title %}
-{% trans "Stay safe during flooding events and water emergencies" as t_flood_desc %}
-
-{% trans "Hurricane Preparation" as t_hurr_title %}
-{% trans "Before, during, and after hurricane safety protocols" as t_hurr_desc %}
-
-{% trans "Emergency First Aid" as t_aid_title %}
-{% trans "Critical first aid techniques for disaster scenarios" as t_aid_desc %}
-
-{% trans "Tornado Safety" as t_torn_title %}
-{% trans "Recognize warnings and take shelter effectively" as t_torn_desc %}
-
-{% trans "Winter Storm Survival" as t_winter_title %}
-{% trans "Navigate extreme cold and snow emergencies" as t_winter_desc %}
-
-{% trans "Wildfire Evacuation" as t_wildfire_title %}
-{% trans "Plan and execute safe evacuation during wildfires" as t_wildfire_desc %}
-
-{% trans "Emergency Kit Essentials" as t_kit_title %}
-{% trans "Build a comprehensive 72-hour emergency kit" as t_kit_desc %}
-
-{% trans "Emergency Communication" as t_comm_title %}
-{% trans "Maintain contact during infrastructure failures" as t_comm_desc %}
-
-{% trans "Heat Wave Safety Planning" as t_heat_title %}
-{% trans "Protect yourself and others during extreme heat events" as t_heat_desc %}
-
-<script>
-    const PLAY_NOW_TEXT = "{{ play_now_text|escapejs }}";
-    const MODULE_NOT_FOUND_TEXT = "{{ module_not_found_text|escapejs }}";
-    const PROGRESS_LABEL = "{{ progress_label_text|escapejs }}";
-    const MODULE_COMPLETED_TEXT = "{{ module_completed_text|escapejs }}";
-    const TEN_XP_TEXT = "{{ ten_xp_text|escapejs }}";
-    const MIN_TEXT = "{{ min_text|escapejs }}";
-    const XP_TEXT = "{{ xp_text|escapejs }}";
-    const COMPLETE_TEXT = "{{ complete_text|escapejs }}";
-
-    const DIFFICULTY_LABELS = {
-        'beginner': "{{ d_beginner|escapejs }}",
-        'intermediate': "{{ d_intermediate|escapejs }}",
-        'advanced': "{{ d_advanced|escapejs }}"
-    };
-
-    const modules = [
-        {
-            id: 'Earthquake_Safety',
-            title: "{{ t_eq_title|escapejs }}",
-            description: "{{ t_eq_desc|escapejs }}",
-            icon: '🌍',
-            difficulty: 'beginner',
-            duration: 15,
-            progress: 65,
-            xp: 100
-        },
-        {
-            id: 'fire_sefty',
-            title: "{{ t_fire_title|escapejs }}",
-            description: "{{ t_fire_desc|escapejs }}",
-            icon: '🔥',
-            difficulty: 'beginner',
-            duration: 15,
-            progress: 100,
-            xp: 100
-        },
-        {
-            id: 'flood-response',
-            title: "{{ t_flood_title|escapejs }}",
-            description: "{{ t_flood_desc|escapejs }}",
-            icon: '🌊',
-            difficulty: 'intermediate',
-            duration: 20,
-            progress: 40,
-            xp: 150
-        },
-        {
-            id: 'hurricane-prep',
-            title: "{{ t_hurr_title|escapejs }}",
-            description: "{{ t_hurr_desc|escapejs }}",
-            icon: '💨',
-            difficulty: 'beginner',
-            duration: 18,
-            progress: 0,
-            xp: 120
-        },
-        {
-            id: 'first-aid',
-            title: "{{ t_aid_title|escapejs }}",
-            description: "{{ t_aid_desc|escapejs }}",
-            icon: '🏥',
-            difficulty: 'intermediate',
-            duration: 25,
-            progress: 20,
-            xp: 180
-        },
-        {
-            id: 'tornado-safety',
-            title: "{{ t_torn_title|escapejs }}",
-            description: "{{ t_torn_desc|escapejs }}",
-            icon: '🌪️',
-            difficulty: 'beginner',
-            duration: 12,
-            progress: 0,
-            xp: 90
-        },
-        {
-            id: 'winter-storms',
-            title: "{{ t_winter_title|escapejs }}",
-            description: "{{ t_winter_desc|escapejs }}",
-            icon: '❄️',
-            difficulty: 'intermediate',
-            duration: 22,
-            progress: 0,
-            xp: 160
-        },
-        {
-            id: 'wildfire-escape',
-            title: "{{ t_wildfire_title|escapejs }}",
-            description: "{{ t_wildfire_desc|escapejs }}",
-            icon: '🔥',
-            difficulty: 'advanced',
-            duration: 30,
-            progress: 0,
-            xp: 200
-        },
-        {
-            id: 'emergency-kit',
-            title: "{{ t_kit_title|escapejs }}",
-            description: "{{ t_kit_desc|escapejs }}",
-            icon: '🎒',
-            difficulty: 'beginner',
-            duration: 10,
-            progress: 80,
-            xp: 80
-        },
-        {
-            id: 'communication',
-            title: "{{ t_comm_title|escapejs }}",
-            description: "{{ t_comm_desc|escapejs }}",
-            icon: '📡',
-            difficulty: 'intermediate',
-            duration: 18,
-            progress: 0,
-            xp: 140
-        },
-        {
-            id: 'HeatWave-safety',
-            title: "{{ t_heat_title|escapejs }}",
-            description: "{{ t_heat_desc|escapejs }}",
-            icon: '🔥🌡️',
-            difficulty: 'beginner',
-            duration: 12,
-            progress: 0,
-            xp: 85
-        }
-    ];
-
-    function loadModuleProgress() {
-        const savedProgress = localStorage.getItem('moduleProgress');
-        if (savedProgress) {
-            const progressData = JSON.parse(savedProgress);
-            modules.forEach(module => {
-                if (progressData[module.id] !== undefined) {
-                    module.progress = progressData[module.id];
-                }
-            });
-        }
-    }
-
-    function saveModuleProgress(moduleId, progress) {
-        const savedProgress = localStorage.getItem('moduleProgress');
-        const progressData = savedProgress ? JSON.parse(savedProgress) : {};
-        progressData[moduleId] = progress;
-        localStorage.setItem('moduleProgress', JSON.stringify(progressData));
-    }
-
-    function renderModules(filter = 'all') {
-        loadModuleProgress();
-        const grid = document.getElementById('modulesGrid');
-        const filteredModules = filter === 'all' ? modules : modules.filter(m => m.difficulty === filter);
-
-        grid.innerHTML = filteredModules.map(module => `
-            <div class="learn-module-card animate-fade-up" data-difficulty="${module.difficulty}">
-                <div class="module-header">
-                    <span class="module-icon">${module.icon}</span>
-                    <span class="module-tag tag-${module.difficulty}">${DIFFICULTY_LABELS[module.difficulty] || module.difficulty}</span>
-                </div>
-                <h3 class="module-title">${module.title}</h3>
-                <p class="module-description">${module.description}</p>
-                <div class="module-meta">
-                    <span class="meta-item">⏱️ ${module.duration} ${MIN_TEXT}</span>
-                    <span class="meta-item">⭐ ${module.xp} ${XP_TEXT}</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: ${module.progress}%"></div>
-                </div>
-                <p class="progress-text">${module.progress}% ${COMPLETE_TEXT}</p>
-                <button class="btn btn-primary" onclick="openModule('${module.id}')">
-                    ${PLAY_NOW_TEXT}
-                </button>
+            <div class="header-content">
+                <h1 class="page-title">Learning Modules 📚</h1>
+                <p class="page-subtitle">Master disaster preparedness one module at a time</p>
             </div>
-        `).join('');
+        </header>
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs animate-fade-up">
+            <button class="filter-tab active" data-filter="all">All Modules</button>
+            <button class="filter-tab" data-filter="beginner">Beginner</button>
+            <button class="filter-tab" data-filter="intermediate">Intermediate</button>
+            <button class="filter-tab" data-filter="advanced">Advanced</button>
+        </div>
+
+        <!-- Modules Grid -->
+        <section class="section">
+            <div class="learn-modules-grid" id="modulesGrid">
+                <!-- Modules will be generated by JS -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Mobile Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <script>
+        // Module data
+        const modules = [
+            {
+                id: 'Earthquake_Safety',
+                title: 'Earthquake Safety Basics',
+                description: 'Learn essential earthquake preparedness and response techniques',
+                icon: '🌍',
+                difficulty: 'beginner',
+                duration: 15,
+                progress: 65,
+                xp: 100
+            },
+            {
+                id: 'fire_sefty',
+                title: 'Fire Safety',
+                description: 'Prevention and response strategies for fire emergencies',
+                icon: '🔥',
+                difficulty: 'beginner',
+                duration: 15,
+                progress: 100,
+                xp: 100
+            },
+            {
+                id: 'flood-response',
+                title: 'Flood Response',
+                description: 'Stay safe during flooding events and water emergencies',
+                icon: '🌊',
+                difficulty: 'intermediate',
+                duration: 20,
+                progress: 40,
+                xp: 150
+            },
+            {
+                id: 'hurricane-prep',
+                title: 'Hurricane Preparation',
+                description: 'Before, during, and after hurricane safety protocols',
+                icon: '💨',
+                difficulty: 'beginner',
+                duration: 18,
+                progress: 0,
+                xp: 120
+            },
+            {
+                id: 'first-aid',
+                title: 'Emergency First Aid',
+                description: 'Critical first aid techniques for disaster scenarios',
+                icon: '🏥',
+                difficulty: 'intermediate',
+                duration: 25,
+                progress: 20,
+                xp: 180
+            },
+            {
+                id: 'tornado-safety',
+                title: 'Tornado Safety',
+                description: 'Recognize warnings and take shelter effectively',
+                icon: '🌪️',
+                difficulty: 'beginner',
+                duration: 12,
+                progress: 0,
+                xp: 90
+            },
+            {
+                id: 'winter-storms',
+                title: 'Winter Storm Survival',
+                description: 'Navigate extreme cold and snow emergencies',
+                icon: '❄️',
+                difficulty: 'intermediate',
+                duration: 22,
+                progress: 0,
+                xp: 160
+            },
+            {
+                id: 'wildfire-escape',
+                title: 'Wildfire Evacuation',
+                description: 'Plan and execute safe evacuation during wildfires',
+                icon: '🔥',
+                difficulty: 'advanced',
+                duration: 30,
+                progress: 0,
+                xp: 200
+            },
+            {
+                id: 'emergency-kit',
+                title: 'Emergency Kit Essentials',
+                description: 'Build a comprehensive 72-hour emergency kit',
+                icon: '🎒',
+                difficulty: 'beginner',
+                duration: 10,
+                progress: 80,
+                xp: 80
+            },
+            {
+                id: 'communication',
+                title: 'Emergency Communication',
+                description: 'Maintain contact during infrastructure failures',
+                icon: '📡',
+                difficulty: 'intermediate',
+                duration: 18,
+                progress: 0,
+                xp: 140
+            },
+            {
+                id: 'FirstAid',
+                title: 'Psychological First Aid',
+                description: 'Support mental health during and after disasters',
+                icon: '💙',
+                difficulty: 'advanced',
+                duration: 28,
+                progress: 0,
+                xp: 190
+            },
+            {
+                id: 'pets-safety',
+                title: 'Pet Safety Planning',
+                description: 'Include your pets in your emergency preparedness',
+                icon: '🐕',
+                difficulty: 'beginner',
+                duration: 12,
+                progress: 0,
+                xp: 85
+            }
+        ];
+
+        // Load module progress from localStorage
+        function loadModuleProgress() {
+            const savedProgress = localStorage.getItem('moduleProgress');
+            if (savedProgress) {
+                const progressData = JSON.parse(savedProgress);
+                modules.forEach(module => {
+                    if (progressData[module.id] !== undefined) {
+                        module.progress = progressData[module.id];
+                    }
+                });
+            }
+        }
+
+        // Save module progress
+        function saveModuleProgress(moduleId, progress) {
+            const savedProgress = localStorage.getItem('moduleProgress');
+            const progressData = savedProgress ? JSON.parse(savedProgress) : {};
+            progressData[moduleId] = progress;
+            localStorage.setItem('moduleProgress', JSON.stringify(progressData));
+        }
+
+        // Render modules
+        function renderModules(filter = 'all') {
+            loadModuleProgress();
+            const grid = document.getElementById('modulesGrid');
+            const filteredModules = filter === 'all' 
+                ? modules 
+                : modules.filter(m => m.difficulty === filter);
+
+            grid.innerHTML = filteredModules.map(module => `
+                <div class="learn-module-card animate-fade-up" data-difficulty="${module.difficulty}">
+                    <div class="module-header">
+                        <span class="module-icon">${module.icon}</span>
+                        <span class="module-tag tag-${module.difficulty}">${module.difficulty}</span>
+                    </div>
+                    <h3 class="module-title">${module.title}</h3>
+                    <p class="module-description">${module.description}</p>
+                    <div class="module-meta">
+                        <span class="meta-item">⏱️ ${module.duration} min</span>
+                        <span class="meta-item">⭐ ${module.xp} XP</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${module.progress}%"></div>
+                    </div>
+                    <p class="progress-text">${module.progress}% complete</p>
+
+
+ <button class="btn btn-primary" onclick="openModule('${module.id}')">
+    Play Now →
+</button>
+
+
+                </div>
+            `).join('');
+        }
+
+
+
+      function openModule(moduleId) {
+
+    if (moduleId === 'fire_sefty') {
+        window.location.href = "{% url 'fire_sefty_modules' %}";
+    }
+ else if (moduleId === 'Earthquake_Safety') {
+        window.location.href = "{% url 'Earthquake_Safety' %}";
     }
 
-    function openModule(moduleId) {
-        if (moduleId === 'fire_sefty') {
-            window.location.href = "{% url 'fire_sefty_modules' %}";
-        } else if (moduleId === 'flood-response') {
-            window.location.href = "{% url 'flood' %}";
-        } else if (moduleId === 'Earthquake_Safety') {
-            window.location.href = "{% url 'Earthquake_Safety' %}";
-        } else if (moduleId === 'wildfire-escape') {
-            window.location.href = "{% url 'FireSafety' %}";
-        } else if (moduleId === 'hurricane-prep') {
-            window.location.href = "{% url 'Cyclone_Safety' %}";
-        } else if (moduleId === 'first-aid') {
-            window.location.href = "{% url 'Firstaid' %}";
-        } else if (moduleId === 'HeatWave-safety') {
-            window.location.href = "{% url 'HeatWave_Safety' %}";
-        } else if (moduleId === 'tornado-safety') {
-            window.location.href = "{% url 'Cyclone_Safety' %}";
-        } else if (moduleId === 'winter-storms') {
-            window.location.href = "{% url 'WinterStorms_Safety' %}";
-        } else {
-            alert(MODULE_NOT_FOUND_TEXT);
-        }
+    else if (moduleId === 'wildfire-escape') {
+        window.location.href = "{% url 'FireSafety' %}";
     }
 
-    function startModule(moduleId, currentProgress) {
-        const module = modules.find(m => m.id === moduleId);
-        if (!module) return;
-
-        const newProgress = Math.min(currentProgress + 10, 100);
-        saveModuleProgress(moduleId, newProgress);
-
-        if (newProgress > currentProgress) {
-            const currentXP = parseInt(localStorage.getItem('totalXP') || '2450');
-            localStorage.setItem('totalXP', currentXP + 10);
-        }
-
-        let msg = `📚 ${module.title}\n\n${PROGRESS_LABEL} ${newProgress}%\n`;
-        if (newProgress === 100) {
-            msg += `${MODULE_COMPLETED_TEXT} +${module.xp} ${XP_TEXT}`;
-        } else {
-            msg += `${TEN_XP_TEXT}`;
-        }
-        alert(msg);
-        renderModules();
+    
+    else if (moduleId === 'hurricane-prep') {
+        window.location.href = "{% url 'Cyclone_Safety' %}";
     }
 
-    document.querySelectorAll('.filter-tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-            document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            renderModules(tab.dataset.filter);
+    else if (moduleId === 'FirstAid') {
+        window.location.href = "{% url 'Firstaid' %}";
+    }
+    else if (moduleId ===  'winter-strome'){
+        window.location.href = "{% url 'WinterStorms_Safety' %}";
+    }
+    else if (moduleId === 'flood-response'){
+        window.location.href ="{% url 'flood' %}";
+    }
+}
+
+        // Start or continue module
+        function startModule(moduleId, currentProgress) {
+            const module = modules.find(m => m.id === moduleId);
+            if (!module) return;
+
+            // Simulate progress increase
+            const newProgress = Math.min(currentProgress + 10, 100);
+            saveModuleProgress(moduleId, newProgress);
+            
+            // Update XP
+            if (newProgress > currentProgress) {
+                const currentXP = parseInt(localStorage.getItem('totalXP') || '2450');
+                localStorage.setItem('totalXP', currentXP + 10);
+            }
+
+            // Show feedback
+            alert(`📚 ${module.title}\n\nProgress: ${newProgress}%\n${newProgress === 100 ? '🎉 Module completed! +' + module.xp + ' XP' : '+10 XP earned!'}`);
+            
+            renderModules();
+        }
+
+        // Filter functionality
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                renderModules(tab.dataset.filter);
+            });
         });
-    });
 
-    renderModules();
-</script>
+        // Initial render
+        renderModules();
+    </script>
 </body>
-</html>
+</html> 
+ 
