@@ -95,6 +95,20 @@
     }
   </style>
 </head>
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement(
+    {
+      pageLanguage: 'en',
+      includedLanguages: 'en,hi,ta,te,bn,gu,kn,ml,mr,pa,ur',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+    },
+    'google_translate_element'
+  );
+}
+</script>
+
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <body>
 
   <!-- Sidebar -->
@@ -159,6 +173,7 @@
   <!-- Content moved right of fixed sidebar -->
   <main class="content">
     <div class="panel-row">
+       <div id="google_translate_element" class="lang-selector"></div> 
       <!-- WEATHER -->
       <section class="card weather-card" id="weather-main" aria-live="polite">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;">
