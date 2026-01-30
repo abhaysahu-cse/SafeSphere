@@ -10,6 +10,20 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <script src="script.js" defer></script>
 </head>
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement(
+    {
+      pageLanguage: 'en',
+      includedLanguages: 'en,hi,ta,te,bn,gu,kn,ml,mr,pa,ur',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+    },
+    'google_translate_element'
+  );
+}
+</script>
+
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <body>
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
@@ -73,6 +87,8 @@
     <!-- Main Content -->
     <main class="main-content">
         <!-- Emergency SOS Button -->
+         <div id="google_translate_element" class="translator"></div>
+
         <div class="emergency-sos-container animate-fade-up">
             {% comment %} <button class="sos-button" id="sosButton">
 
