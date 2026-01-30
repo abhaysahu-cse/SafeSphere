@@ -194,6 +194,30 @@ def WinterStorms_Safety(request):
     return render(request, "learn/winterstorm.html")
 
 
+def ar_hub(request):
+    return render(request, "ar/index.html")
+
+
+
+def protect_index(request):
+    """
+    Role selection page: Protect Home, Farm & Livelihood
+    """
+    return render(request, "protect/index.html")
+
+def protect_farmers(request):
+    return render(request, "protect/farmers.html")
+
+def protect_households(request):
+    return render(request, "protect/households.html")
+
+def protect_community(request):
+    return render(request, "protect/community.html")
+
+def protect_schools(request):
+    return render(request, "protect/schools.html")
+
+
 
 def zones_api(request):
     data = [

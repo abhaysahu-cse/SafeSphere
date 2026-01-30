@@ -1,0 +1,48 @@
+<!-- safe/templates/protect/index.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Protect Home, Farm & Livelihood - SafeSphere</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+  {% include 'partials/sidebar.html' %}
+
+  <main class="main-content">
+    <header class="page-header">
+      <h1>Protect Home, Farm & Livelihood</h1>
+      <p>Choose who you are to see tailored lessons and checklists.</p>
+    </header>
+
+    <section class="role-cards grid">
+      <a class="card" href="{% url 'protect_farmers' %}">
+        <div class="card-icon">👨‍🌾</div>
+        <h2>Farmers & Livelihoods</h2>
+        <p>Protect crops, animals & income before and after disasters.</p>
+      </a>
+
+      <a class="card" href="{% url 'protect_households' %}">
+        <div class="card-icon">🏠</div>
+        <h2>Households & Property Owners</h2>
+        <p>Save valuables, documents and strengthen homes.</p>
+      </a>
+
+      <a class="card" href="{% url 'protect_community' %}">
+        <div class="card-icon">🧑‍🤝‍🧑</div>
+        <h2>Community & Local Leaders</h2>
+        <p>Organize shelters, tools and evacuation routes.</p>
+      </a>
+
+      <a class="card" href="{% url 'protect_schools' %}">
+        <div class="card-icon">👩‍🏫</div>
+        <h2>Teachers & Schools</h2>
+        <p>Protect children and school infrastructure.</p>
+      </a>
+    </section>
+  </main>
+
+  <script src="{% static 'js/sidebar-toggle.js' %}"></script>
+</body>
+</html>
