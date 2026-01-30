@@ -194,8 +194,8 @@ def WinterStorms_Safety(request):
     return render(request, "learn/winterstorm.html")
 
 
-def ar_hub(request):
-    return render(request, "ar/index.html")
+# def ar_hub(request):
+#     return render(request, "ar/index.html")
 
 
 

@@ -1,0 +1,177 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Community & Local Leaders | SafeSphere</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Community-level disaster preparedness: shelters, evacuation, grain banks and drills." />
+
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+  <style>
+    /* Page-scoped styling (safe & non-destructive) */
+    .main-content {
+      padding: 24px;
+      min-height: 90vh;
+    }
+
+    .page-header h1 {
+      font-size: 2rem;
+      color: #14213d;
+      margin-bottom: 6px;
+    }
+
+    .page-header p { color: #64748b; margin-bottom: 18px; }
+
+    /* Module grid - same layout as farmers */
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 10px;
+    }
+
+    .module-card {
+      background: linear-gradient(180deg,#ffffff,#f6f9ff);
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 8px 22px rgba(20,33,61,0.06);
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      min-height:200px;
+      text-decoration:none;
+      color:inherit;
+      overflow:hidden;
+    }
+
+    .module-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 40px rgba(20,33,61,0.12);
+    }
+
+    .module-icon { font-size:34px; margin-bottom:8px; }
+    .module-card h3 { margin:6px 0 8px; font-size:1.05rem; color:#0f2440; }
+    .module-card p { margin:0; color:#475569; line-height:1.4; flex-grow:1; }
+
+    .module-meta { margin-top:10px; color:#6b7280; font-size:0.9rem; }
+
+    /* Quick actions panel */
+    .community-help {
+      margin-top: 22px;
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .help-card {
+      background:#fff;
+      padding:12px;
+      border-radius:10px;
+      box-shadow:0 6px 16px rgba(20,33,61,0.04);
+    }
+
+    .help-card h4 { margin:0 0 6px; color:#14213d; font-size:1rem; }
+    .help-card p { margin:0; color:#475569; font-size:0.95rem; }
+    .help-card a { display:inline-block; margin-top:8px; color:#5b21b6; font-weight:600; text-decoration:none; }
+
+    @media (max-width:720px) {
+      .main-content { padding:18px; }
+      .module-card { min-height:170px; }
+    }
+  </style>
+</head>
+
+<body>
+  {% include 'partials/sidebar.html' %}
+
+  <main class="main-content" role="main">
+    <header class="page-header">
+      <h1>🧑‍🤝‍🧑 Community & Local Leaders</h1>
+      <p>Guidance for organising shelters, grain banks, rescue teams and community drills so vulnerable people stay safe.</p>
+    </header>
+
+    <!-- Community modules -->
+    <section class="modules-grid" aria-label="Community modules">
+
+      <a class="module-card" href="#" title="Shelters & Relief">
+        <div>
+          <div class="module-icon">🏚️</div>
+          <h3>Shelters & Relief Management</h3>
+          <p>How to set up safe shelters, maintain basic supplies, organise shelter-rosters and manage entry points for quick response.</p>
+        </div>
+        <div class="module-meta">Shelter setup · Supplies · Roster management</div>
+      </a>
+
+      <a class="module-card" href="#" title="Evacuation planning">
+        <div>
+          <div class="module-icon">🗺️</div>
+          <h3>Evacuation Planning & Routes</h3>
+          <p>Map safe routes, mark assembly points, plan for people with mobility needs and keep boat/vehicle staging areas ready.</p>
+        </div>
+        <div class="module-meta">Routes · Assembly points · Special needs</div>
+      </a>
+
+      <a class="module-card" href="#" title="Grain & Seed Banks">
+        <div>
+          <div class="module-icon">🌾</div>
+          <h3>Grain & Seed Banks</h3>
+          <p>Ideas for building raised grain stores, seed preservation techniques, and rules to distribute emergency seed quickly after flood/drought.</p>
+        </div>
+        <div class="module-meta">Raised storage · Seed preservation · Distribution</div>
+      </a>
+
+      <a class="module-card" href="#" title="Rescue & boats">
+        <div>
+          <div class="module-icon">🛶</div>
+          <h3>Rescue Tools, Boats & Safety Kits</h3>
+          <p>Keep boats, ropes, life-jackets and basic medical kits ready and train a small rescue team to operate safely in floodwaters.</p>
+        </div>
+        <div class="module-meta">Boats · Ropes · Safety training</div>
+      </a>
+
+      <a class="module-card" href="#" title="WASH">
+        <div>
+          <div class="module-icon">🚰</div>
+          <h3>Water, Sanitation & Hygiene (WASH)</h3>
+          <p>Protect drinking water sources, set up emergency sanitation in shelters and prevent water-borne diseases after floods.</p>
+        </div>
+        <div class="module-meta">Water safety · Sanitation · Disease prevention</div>
+      </a>
+
+      <a class="module-card" href="#" title="Community drills">
+        <div>
+          <div class="module-icon">🧯</div>
+          <h3>Community Drills & Training</h3>
+          <p>How to organise simple mock drills, alert volunteers, and practise evacuation with schools and elderly groups.</p>
+        </div>
+        <div class="module-meta">Mock drills · Volunteer training</div>
+      </a>
+
+    </section>
+
+    <!-- Quick help cards -->
+    <section class="community-help" aria-label="Community quick actions">
+      <div class="help-card">
+        <h4>📋 Community Checklist</h4>
+        <p>Open the community checklist for shelter setup, tools and roles. Use it in drills and on community boards.</p>
+        <a href="{% url 'protect' %}">Open checklist →</a>
+      </div>
+
+      <div class="help-card">
+        <h4>🧭 Map Shelters</h4>
+        <p>Mark shelters and safe routes on the map so everyone knows where to go in an emergency.</p>
+        <a href="{% url 'map' %}">Open Safety Map →</a>
+      </div>
+
+      <div class="help-card">
+        <h4>🧪 Organise a Drill</h4>
+        <p>Run a small evacuation drill with the village school and local volunteers once a year.</p>
+        <a href="{% url 'drills' %}">Open Drills →</a>
+      </div>
+    </section>
+
+  </main>
+</body>
+</html>

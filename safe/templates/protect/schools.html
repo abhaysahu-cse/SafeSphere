@@ -1,0 +1,323 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Teachers & Schools | SafeSphere</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="School safety: infrastructure audits, evacuation plans, drills and using schools safely as shelters." />
+
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+  <style>
+    :root {
+      --accent: #5b21b6;
+      --muted: #64748b;
+      --card-bg: linear-gradient(180deg,#fff,#f6f9ff);
+      --text: #0b2545;
+    }
+    body { font-family: Inter, system-ui, Arial, sans-serif; }
+
+    .main-content { padding:22px; min-height:88vh; }
+
+    .page-header h1 { margin:0 0 6px 0; font-size:1.9rem; color:var(--text); }
+    .page-header p { margin:0 0 12px 0; color:var(--muted); }
+
+    /* Modules grid */
+    .modules-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+      gap:14px;
+      margin-top:12px;
+      align-items:start;
+    }
+
+    .module-card {
+      background:var(--card-bg);
+      padding:16px;
+      border-radius:12px;
+      box-shadow:0 10px 22px rgba(8,12,40,0.04);
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      min-height:170px;
+      text-decoration:none;
+      color:inherit;
+      transition:transform .14s ease, box-shadow .14s ease;
+      overflow:hidden;
+    }
+    .module-card:hover { transform:translateY(-6px); box-shadow:0 20px 40px rgba(8,12,40,0.08); }
+
+    .module-icon { font-size:32px; margin-bottom:8px; }
+    .module-title { margin:6px 0 8px; font-size:1.05rem; color:var(--text); }
+    .module-desc { margin:0; color:#475569; font-size:0.95rem; line-height:1.35; flex:1 1 auto; }
+
+    .module-meta { margin-top:10px; color:var(--muted); font-size:0.9rem; }
+
+    /* Quick actions / help */
+    .help-grid { margin-top:18px; display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; }
+    .help-card { background:#fff; padding:12px; border-radius:10px; box-shadow:0 6px 18px rgba(8,12,40,0.04); }
+    .help-card h4 { margin:0 0 6px 0; font-size:1rem; color:var(--text); }
+    .help-card p { margin:0; color:#475569; font-size:0.95rem; }
+    .help-card a { display:inline-block; margin-top:8px; color:var(--accent); font-weight:700; text-decoration:none; }
+
+    /* Checklist modal */
+    .checklist-modal { position:fixed; inset:0; z-index:9999; }
+    .hidden { display:none; }
+    .checklist-backdrop { position:absolute; inset:0; background:rgba(0,0,0,0.45); }
+    .checklist-box { position:relative; max-width:820px; margin:6vh auto; background:#fff; border-radius:12px; padding:12px; box-shadow:0 30px 60px rgba(0,0,0,0.28); }
+    .checklist-header { display:flex; justify-content:space-between; align-items:center; gap:8px; border-bottom:1px solid #eef2ff; padding-bottom:8px; }
+    .tabs { display:flex; gap:6px; margin-top:8px; flex-wrap:wrap; }
+    .tab { padding:6px 10px; border-radius:8px; background:#f1f5f9; cursor:pointer; border:1px solid transparent; }
+    .tab.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+    .checklist-content { margin-top:12px; max-height:60vh; overflow:auto; padding-right:8px; }
+    .checklist-item { display:flex; gap:10px; padding:8px 0; border-bottom:1px dashed #eef2ff; align-items:flex-start; }
+    .checklist-item input { margin-top:6px; }
+    .checklist-footer { text-align:right; margin-top:12px; display:flex; gap:8px; justify-content:flex-end; }
+    .btn { padding:8px 12px; border-radius:8px; font-weight:700; cursor:pointer; border:1px solid transparent; }
+    .btn-ghost { background:#fff; color:var(--text); border:1px solid rgba(20,33,61,0.06); }
+    .btn-primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+
+    @media (max-width:720px) {
+      .main-content { padding:16px; }
+      .module-card { min-height:150px; }
+      .checklist-box { margin:4vh 12px; width:calc(100% - 24px); }
+    }
+  </style>
+</head>
+
+<body>
+  {% include 'partials/sidebar.html' %}
+
+  <main class="main-content" role="main" aria-labelledby="schools-heading">
+    <header class="page-header">
+      <h1 id="schools-heading">👩‍🏫 Teachers & Schools</h1>
+      <p class="small-muted">Lessons and operational templates for schools — audits, evacuation, supplies and using schools as safe shelters.</p>
+    </header>
+
+    <!-- Modules -->
+    <section class="modules-grid" aria-label="School modules">
+      <a class="module-card" href="#" title="School safety audit">
+        <div>
+          <div class="module-icon" aria-hidden="true">🏫</div>
+          <h3 class="module-title">School Safety Audit</h3>
+          <p class="module-desc">Step-by-step checklist to inspect roofs, walls, water points and safe assembly areas so the school is ready to shelter people if needed.</p>
+        </div>
+        <div class="module-meta">Infrastructure · Safety checks</div>
+      </a>
+
+      <a class="module-card" href="#" title="Evacuation plan template">
+        <div>
+          <div class="module-icon" aria-hidden="true">🗺️</div>
+          <h3 class="module-title">Evacuation Plan Template</h3>
+          <p class="module-desc">Printable map template and a simple class-wise plan for evacuating pupils safely during floods, cyclones or other hazards.</p>
+        </div>
+        <div class="module-meta">Maps · Class roll calls</div>
+      </a>
+
+      <a class="module-card" href="#" title="Storing supplies">
+        <div>
+          <div class="module-icon" aria-hidden="true">📦</div>
+          <h3 class="module-title">Storing Supplies & First Aid</h3>
+          <p class="module-desc">How to store dry food, medicines and emergency kits at the school so they remain usable during sheltering or after a disaster.</p>
+        </div>
+        <div class="module-meta">WASH · First-aid</div>
+      </a>
+
+      <a class="module-card" href="#" title="Child protection">
+        <div>
+          <div class="module-icon" aria-hidden="true">🧒</div>
+          <h3 class="module-title">Child Protection & Psychosocial Support</h3>
+          <p class="module-desc">Simple steps and activities to comfort children after events and maintain routines in shelter environments.</p>
+        </div>
+        <div class="module-meta">Child safety · Support</div>
+      </a>
+
+      <a class="module-card" href="#" title="Shelter conversion">
+        <div>
+          <div class="module-icon" aria-hidden="true">🏠</div>
+          <h3 class="module-title">Convert School to Shelter</h3>
+          <p class="module-desc">How to quickly adapt classrooms as sleeping areas, safe kitchens and sanitation zones while keeping minimum disruption to school equipment.</p>
+        </div>
+        <div class="module-meta">Shelter setup · Sanitation</div>
+      </a>
+
+      <a class="module-card" href="#" title="Drills">
+        <div>
+          <div class="module-icon" aria-hidden="true">🧯</div>
+          <h3 class="module-title">Drills & Training</h3>
+          <p class="module-desc">Organize regular simple drills for students and teachers and use role-play to teach children how to respond calmly during emergencies.</p>
+        </div>
+        <div class="module-meta">Practice · Roles</div>
+      </a>
+    </section>
+
+    <!-- Quick help -->
+    <section class="help-grid" aria-label="School quick actions">
+      <div class="help-card">
+        <h4>📋 School Checklist</h4>
+        <p>A short checklist for school managers: building checks, assembly points, first-aid and supplies. Save progress on this device.</p>
+        <div style="margin-top:8px;">
+          <button class="btn btn-primary" onclick="openChecklist('schools')">View Checklist</button>
+        </div>
+      </div>
+
+      <div class="help-card">
+        <h4>🧪 Organise a Drill</h4>
+        <p>Use our drill templates to run a simple evacuation drill with teachers and students once every term.</p>
+        <a href="{% url 'drills' %}">Open Drills →</a>
+      </div>
+
+      <div class="help-card">
+        <h4>🗺️ Mark Safe Shelters</h4>
+        <p>Add your school to the safety map so authorities and communities know it can serve as a shelter.</p>
+        <a href="{% url 'map' %}">Open Safety Map →</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Checklist Modal -->
+  <div id="checklistModal" class="checklist-modal hidden" role="dialog" aria-modal="true" aria-labelledby="checklistTitle">
+    <div class="checklist-backdrop" onclick="closeChecklist()"></div>
+    <div class="checklist-box" role="document">
+      <div class="checklist-header">
+        <div>
+          <h2 id="checklistTitle">School Checklist</h2>
+          <div id="checklistRegionNote" class="small-muted" style="font-size:0.95rem;">Region: local</div>
+        </div>
+
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button class="btn btn-ghost" onclick="printChecklist()">Print</button>
+          <button class="btn btn-ghost" onclick="shareChecklist()">Share</button>
+          <button class="close-btn" aria-label="Close" onclick="closeChecklist()">✖</button>
+        </div>
+      </div>
+
+      <div class="tabs" id="checklistTabs" role="tablist">
+        <div class="tab active" data-tab="overview" role="tab" tabindex="0" onclick="switchTab('overview')">Overview</div>
+        <div class="tab" data-tab="before" role="tab" tabindex="0" onclick="switchTab('before')">Before</div>
+        <div class="tab" data-tab="during" role="tab" tabindex="0" onclick="switchTab('during')">During</div>
+        <div class="tab" data-tab="after" role="tab" tabindex="0" onclick="switchTab('after')">After</div>
+        <div class="tab" data-tab="checklist" role="tab" tabindex="0" onclick="switchTab('checklist')">Checklist</div>
+      </div>
+
+      <div class="checklist-content" id="checklistContent" tabindex="0"></div>
+
+      <div class="checklist-footer">
+        <button class="btn btn-ghost" onclick="closeChecklist()">Close</button>
+        <button class="btn btn-primary" onclick="saveChecklistProgress()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // School checklist data
+    const CHECKLISTS = {
+      schools: {
+        title: "Schools — Safety & Shelter Checklist",
+        overview: "Short checklist for school managers: building checks, assembly points, first aid and supplies.",
+        before: [
+          "Inspect roof, walls and boundary walls for loose parts",
+          "Mark and display evacuation routes in each classroom",
+          "Store first-aid, dry food and water in elevated, dry area",
+          "Prepare student roll-call lists and buddy system"
+        ],
+        during: [
+          "Carry out evacuation calmly using practiced routes",
+          "Keep attendance and note missing children immediately",
+          "Ensure drinking water and sanitation in shelters"
+        ],
+        after: [
+          "Check structural damage before reopening classrooms",
+          "Provide psychosocial first-aid and counseling",
+          "Report damages to education department and restore supplies"
+        ],
+        checklist: []
+      }
+    };
+
+    // build combined checklist
+    Object.keys(CHECKLISTS).forEach(k => {
+      CHECKLISTS[k].checklist = [...(CHECKLISTS[k].before||[]), ...(CHECKLISTS[k].during||[]), ...(CHECKLISTS[k].after||[])];
+    });
+
+    const PROG_KEY = 'safesphere_schools_progress_v1';
+    let currentRole = 'schools';
+    let currentTab = 'overview';
+
+    function openChecklist(role) {
+      currentRole = role;
+      const data = CHECKLISTS[role];
+      document.getElementById('checklistTitle').innerText = data.title;
+      document.getElementById('checklistRegionNote').innerText = 'Region: ' + (localStorage.getItem('protect_region_v1') || 'local');
+      switchTab('overview');
+      document.getElementById('checklistModal').classList.remove('hidden');
+    }
+
+    function closeChecklist() { document.getElementById('checklistModal').classList.add('hidden'); }
+
+    function switchTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll('#checklistTabs .tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+      const content = document.getElementById('checklistContent');
+      const data = CHECKLISTS[currentRole];
+
+      if (tab === 'overview') {
+        content.innerHTML = `<p class="small-muted">${data.overview}</p>`;
+      } else if (tab === 'checklist') {
+        content.innerHTML = data.checklist.map((it, idx) => `
+          <div class="checklist-item">
+            <input type="checkbox" id="chk_${idx}">
+            <label for="chk_${idx}">${it}</label>
+          </div>
+        `).join('');
+        restoreCheckedState();
+      } else {
+        const arr = data[tab] || [];
+        content.innerHTML = arr.map(it => `<div style="padding:6px 0">• ${it}</div>`).join('') || '<p class="small-muted">No items.</p>';
+      }
+    }
+
+    function saveChecklistProgress() {
+      const checks = Array.from(document.querySelectorAll('#checklistContent input[type="checkbox"]')).map(c => c.checked);
+      const payload = { schools: checks, ts: Date.now() };
+      localStorage.setItem(PROG_KEY, JSON.stringify(payload));
+      alert('Checklist saved locally on this device.');
+    }
+
+    function restoreCheckedState() {
+      const raw = localStorage.getItem(PROG_KEY);
+      if (!raw) return;
+      try {
+        const obj = JSON.parse(raw);
+        const arr = obj.schools || [];
+        const inputs = document.querySelectorAll('#checklistContent input[type="checkbox"]');
+        inputs.forEach((ch, i) => ch.checked = !!arr[i]);
+        inputs.forEach((ch) => ch.addEventListener('change', () => {
+          const cur = Array.from(document.querySelectorAll('#checklistContent input[type="checkbox"]')).map(c => c.checked);
+          localStorage.setItem(PROG_KEY, JSON.stringify({schools: cur, ts: Date.now()}));
+        }));
+      } catch (e) { console.warn('restore failed', e); }
+    }
+
+    function printChecklist() {
+      const title = document.getElementById('checklistTitle').innerText;
+      const content = document.getElementById('checklistContent').innerHTML;
+      const win = window.open('', '', 'width=700,height=900');
+      win.document.write(`<html><head><title>${title}</title><style>body{font-family:Arial;padding:20px;} .checklist-item{margin-bottom:8px;}</style></head><body><h2>${title}</h2>${content}</body></html>`);
+      win.document.close();
+      win.print();
+    }
+
+    async function shareChecklist() {
+      if (!navigator.share) { alert('Share not supported on this device. Use Print or Save.'); return; }
+      const title = document.getElementById('checklistTitle').innerText;
+      const text = Array.from(document.querySelectorAll('#checklistContent label')).map(l => l.innerText).join('\n');
+      try { await navigator.share({ title, text }); } catch (e) { console.warn('share failed', e); }
+    }
+
+    // initialize default view
+    (function init() { switchTab('overview'); })();
+  </script>
+</body>
+</html>
