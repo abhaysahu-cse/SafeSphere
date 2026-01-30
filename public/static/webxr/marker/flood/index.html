@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>SafeSphere — Flood AR</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- A-Frame + AR.js (stable combo) -->
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.5/aframe/build/aframe-ar.min.js"></script>
+
+  <script src="./app.js?v=7"></script>
+
+  <style>
+    html,body{margin:0;overflow:hidden;background:#000;font-family:Arial}
+    .hint{
+      position:fixed;top:10px;left:10px;z-index:10;
+      background:#fff;padding:8px 10px;border-radius:6px;font-size:13px
+    }
+    #card{
+      position:fixed;left:50%;bottom:20px;transform:translateX(-50%);
+      width:92%;max-width:520px;background:#fff;border-radius:12px;
+      padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.25);
+      display:none;z-index:10
+    }
+    #controls{display:flex;gap:10px;margin-top:10px}
+    button{flex:1;padding:10px;border-radius:8px;border:none;font-size:15px}
+    #start{background:#ef4444;color:#fff}
+    #reset{background:#e5eef8}
+    #barWrap{margin-top:10px;background:#e5eef8;border-radius:8px}
+    #bar{height:8px;width:0%;background:#3b82f6;border-radius:8px}
+  </style>
+</head>
+
+<body>
+  <div class="hint">Allow camera access & point at HIRO marker</div>
+
+  <div id="card">
+    <h3>🌊 Flood Safety Simulation</h3>
+    <p>Press <b>Start Flood</b> to see water rise inside the house.</p>
+    <div id="controls">
+      <button id="start">Start Flood</button>
+      <button id="reset">Reset</button>
+    </div>
+    <div id="barWrap"><div id="bar"></div></div>
+  </div>
+
+  <a-scene
+    embedded
+    vr-mode-ui="enabled:false"
+    renderer="antialias:true"
+    arjs="sourceType: webcam; debugUIEnabled:false;">
+
+    <a-assets>
+      <a-asset-item id="houseGLB" src="models/house.glb"></a-asset-item>
+    </a-assets>
+
+    <!-- Marker -->
+    <a-marker preset="hiro" id="marker">
+
+      <!-- ROOT: we lock this once -->
+      <a-entity id="root" position="0 0 0" rotation="0 0 0" visible="false">
+
+        <!-- House -->
+        <a-entity
+          id="house"
+          gltf-model="#houseGLB"
+          position="0 0 0"
+          rotation="0 180 0"
+          scale="0.45 0.45 0.45">
+        </a-entity>
+
+        <!-- Water box (inside house) -->
+        <a-box
+          id="water"
+          position="0 0.05 0"
+          scale="0.9 0.01 0.9"
+          material="color:#3b82f6;opacity:0.6;transparent:true">
+        </a-box>
+
+      </a-entity>
+    </a-marker>
+
+    <a-entity camera></a-entity>
+  </a-scene>
+</body>
+</html>

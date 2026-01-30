@@ -2686,6 +2686,22 @@ body {
   font-size:0.95rem;
 }
 
+/* Hide Google Translate top frame (banner) */
+.goog-te-banner-frame.skiptranslate { display: none !important; }
+body { top: 0px !important; }
+
+/* Hide small inline “powered by Google” box if desired */
+/* #google_translate_element { display: none !important; } */
+
+/* Optional: style the widget small and unobtrusive */
+#google_translate_element .goog-te-gadget-simple {
+  border: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+  font-size: 13px !important;
+}
+
+
 /* ==========================================
    BACKGROUND VIDEO
    ========================================== */

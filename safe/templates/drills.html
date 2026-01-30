@@ -10,6 +10,21 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <script src="script.js" defer></script>
 </head>
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement(
+    {
+      pageLanguage: 'en',
+      includedLanguages: 'en,hi,ta,te,bn,gu,kn,ml,mr,pa,ur',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+    },
+    'google_translate_element'
+  );
+}
+</script>
+
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 <body>
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
@@ -77,6 +92,7 @@
     <!-- Main Content -->
     <main class="main-content">
         <header class="page-header">
+            <div id="google_translate_element"  class="lang-fixed"></div>
             <div class="header-content">
                 <h1 class="page-title">Emergency Drills 🚨</h1>
                 <p class="page-subtitle">Practice realistic emergency scenarios to build muscle memory</p>
@@ -163,6 +179,35 @@
           Start VR Safety Videos →
          </a>
         </div>
+
+        <div class="drill-card">
+  <span class="drill-icon">📱</span>
+
+  <h3 class="drill-title">
+    Flood Safety AR (Marker-Based)
+  </h3>
+
+  <p class="drill-description">
+    Scan a printed marker using your mobile camera to experience
+    a 3D flood scenario and understand safe response actions.
+  </p>
+
+  <ul class="drill-meta">
+    <li>📌 Requires printed marker</li>
+    <li>📷 Mobile camera required</li>
+    <li>🌐 Works on most Android devices</li>
+  </ul>
+
+  <a
+    href="{% static 'webxr/marker/flood/index.html' %}"
+    class="btn btn-success"
+    target="_blank"
+    rel="noopener"
+  >
+    Start AR Drill →
+  </a>
+</div>
+
 
 
 
@@ -388,4 +433,3 @@
     </script>
 </body>
 </html>
-
