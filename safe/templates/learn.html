@@ -321,8 +321,21 @@
     else if (moduleId === 'first-aid') {
         window.location.href = "{% url 'Firstaid' %}";
     }
-}
+     
+    else if (moduleId === 'communication') {
+       window.location.href = "{% url 'emergency_com' %}";
 
+    }
+    else if (moduleId === 'winter-storms'){
+        window.location.href = "{% url 'WinterStorms_Safety' %}";
+    }
+    else if (moduleId === 'HeatWave-safety'){
+        window.location.href = "{% url 'HeatWave_Safety' %}";
+    }
+    else if (moduleId === 'tornado-safety'){
+        window.location.href = "{% url 'Tornado_Safety' %}";
+    }
+      }
         // Start or continue module
         function startModule(moduleId, currentProgress) {
             const module = modules.find(m => m.id === moduleId);

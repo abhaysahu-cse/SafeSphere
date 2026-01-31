@@ -50,7 +50,7 @@ urlpatterns = [
     path('learn/heatwave/', views.HeatWave_Safety, name='HeatWave_Safety'),
     path('learn/firstaid/', views.FirstAid_Safety, name='FirstAid_Safety'),
     path('learn/winterstorm/', views.WinterStorms_Safety, name='WinterStorms_Safety'),
-
+    path('learn/emergency_com/', views.Emergency_Communication, name='emergency_com'),
     # Drills & simulations
     path('drills/simulation/', views.drills_simulation, name='drills_simulation'),
     path('drills/simulation/', views.drill_simulation, name='drill_simulation'),  # note: duplicate path in original - keeps both names on same path
@@ -58,7 +58,7 @@ urlpatterns = [
     path('drills/wildfire/', views.wildfire_simulation, name='wildfire_simulation'),
     path('drills/cyclone/', views.cyclone_simulation, name='cyclone_simulation'),
     path('drills/landslide/', views.landslide_simulation, name='landslide_simulation'),
-
+    
     # VR & Map
     path('vr/', views.vr_videos, name='vr_videos'),
     path('map/', views.full_map, name='map'),

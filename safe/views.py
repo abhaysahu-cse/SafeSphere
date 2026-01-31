@@ -63,7 +63,17 @@ def  Cyclone_Safety(request):
 def  Firstaid (request):
     return render(request, "learn/Firstaid.html")
 
+def Emergency_Communication(request):
+    return render(request, "learn/emergency_com.html")
 
+def WinterStorms_Safety(request):
+    return render(request, "learn/winterstorm.html")
+
+def HeatWave_Safety(request):
+    return render (request, "learn/heatwave.html")
+
+def Tornado_Safety(request):
+    return render(request, "learn/tornado.html")
 
 def signup_view(request):
     if request.method == "POST":
