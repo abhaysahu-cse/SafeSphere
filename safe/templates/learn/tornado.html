@@ -1,0 +1,244 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Tornado Safety | SafeLearn</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --brand: #444b5a; --accent: #f59e0b; --muted: #64748b; --danger: #b91c1c;
+      --card: #ffffff; --bg: linear-gradient(180deg,#f8fafc 0%,#cbd5e1 100%);
+      --maxw: 1100px; --radius: 12px; --gap: 18px; --text: #1e293b;
+    }
+    *{box-sizing:border-box}
+    body{height:100%;margin:0;background:var(--bg);font-family:system-ui,-apple-system,sans-serif;color:var(--text);}
+    .wrap{width:100%;max-width:var(--maxw);margin:22px auto;padding:26px;background:var(--card);border-radius:var(--radius);box-shadow:0 18px 46px rgba(15, 23, 42, 0.15)}
+    .grid{display:grid;grid-template-columns:1fr 340px;gap:var(--gap);margin-top:18px}
+    @media (max-width:920px){.grid{grid-template-columns:1fr}}
+    .section{background:#fff;padding:16px;border-radius:10px;border:1px solid rgba(0,0,0,0.08);margin-top:14px}
+    .section h2{margin:0 0 8px;color:var(--brand);border-left: 5px solid var(--accent);padding-left:10px}
+    .info{background:#f1f5f9;padding:12px;border-left:4px solid var(--brand);border-radius:8px;margin-top:10px}
+    .tip{background:#fffbeb;padding:12px;border-left:4px solid var(--accent);border-radius:8px;margin-top:10px;color:#92400e}
+    .quiz-box{background:#fefce8;border:1px solid #fde68a;padding:16px;border-radius:8px}
+    .quiz-question{margin-bottom:20px; padding-bottom:10px; border-bottom:1px solid #fde68a}
+    .quiz-options label{display:block;padding:8px;cursor:pointer}
+    .submit-btn{background:var(--brand);color:#fff;border:none;padding:15px;border-radius:9px;font-weight:800;cursor:pointer;width:100%}
+    .correct{color:#15803d; font-weight:bold; margin-top:5px}
+    .incorrect{color:var(--danger); font-weight:bold; margin-top:5px}
+    .section{background:#fff;padding:16px;border-radius:10px;border:1px solid rgba(3,10,18,0.04);margin-top:14px}
+    .section h2{margin:0 0 8px;color:var(--brand)}
+    .video-wrapper{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:10px;overflow:hidden;margin-top:12px}
+    .video-wrapper video,.video-wrapper iframe{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;border:0}
+    /* 1. Layout Adjustment: Move Sidebar to Left */
+
+
+
+.poster {
+    width: 60%;         /* Is percentage ko kam-zyada karke aap size control kar sakte hain */
+    max-width: 180px;   /* Ek fixed maximum limit set kar di taaki zyada bada na dikhe */
+    height: auto;       /* Aspect ratio maintain rahega */
+    display: block;     /* Alignment ke liye zaroori hai */
+    margin: 10px auto;  /* Sidebar ke center mein dikhega */
+    border-radius: 6px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+
+.nav-buttons { margin-top: 30px; display: flex; justify-content: space-between; }
+
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>🌪️ Advanced Tornado Safety & survival</h1>
+    
+    <div class="grid">
+      <div>
+        <section class="section">
+          <h2>1. Understanding Tornado Mechanics</h2>
+          <p>Tornadoes are violently rotating columns of air extending from a thunderstorm to the ground. They can have wind speeds over 200 mph.</p>
+          
+          <p><strong>The EF Scale:</strong> Tornadoes are measured by the Enhanced Fujita Scale, ranging from EF0 (minor damage) to EF5 (incredible damage).</p>
+        </section>
+
+        <section class="section">
+          <h2>2. Advanced Survival Tactics</h2>
+          <ul>
+            <li><strong>Head Protection:</strong> Most tornado fatalities are caused by head trauma from flying debris. If you have time, put on a <strong>bicycle or sports helmet</strong>.</li>
+            <li><strong>The "Triangle of Life" Myth:</strong> Experts recommend the "Duck and Cover" method under a sturdy table. Do not stand next to a void; stay <em>under</em> a protective structure.</li>
+            <li><strong>Post-Storm Communication:</strong> Keep phone lines clear for emergency crews. <strong>Text, don't talk.</strong> Text messages often go through when voice calls fail due to network congestion.</li>
+          </ul>
+          
+        </section>
+
+        <section class="section">
+          <h2>3. Hazard Recognition</h2>
+          <p>Sometimes tornadoes are "rain-wrapped" and invisible. Watch for a <strong>rotating cloud base</strong> or a "debris ball" on radar. If the sky turns a bruise-like green, a severe supercell is likely overhead.</p>
+        </section>
+<div class="video-wrapper">
+    <video
+      controls
+      preload="metadata"
+      playsinline
+      poster="{% static 'image/basicFristaid.jpg' %}"
+    >
+      <source src="{% static 'video/FirstAidProcedures.mp4' %}" type="video/mp4">
+      Your browser does not support HTML5 video.
+    </video>
+  </div>
+  <p class="small" style="margin-top:8px">
+    Tip: Watch carefully and practice these first aid steps during drills.
+  </p>
+
+        
+        <section class="section quiz-box" id="quiz">
+          <h2>📝 Comprehensive Safety Quiz</h2>
+          <form id="tornadoQuiz">
+            <div class="quiz-question">
+              <p><strong>1.</strong> Where is the safest place in a large building (mall/school)?</p>
+              <label><input type="radio" name="q1" value="A"> Near glass windows to see it coming</label>
+              <label><input type="radio" name="q1" value="B"> An interior hallway on the lowest level</label>
+              <label><input type="radio" name="q1" value="C"> Under a wide-span roof like a gym or cafeteria</label>
+            </div>
+            <div class="quiz-question">
+              <p><strong>2.</strong> Why are highway overpasses dangerous during a tornado?</p>
+              <label><input type="radio" name="q2" value="A"> They can collapse and wind speeds increase under them</label>
+              <label><input type="radio" name="q2" value="B"> They attract lightning</label>
+              <label><input type="radio" name="q2" value="C"> They block the view of the storm</label>
+            </div>
+            <div class="quiz-question">
+              <p><strong>3.</strong> What color does the sky often turn during a severe supercell?</p>
+              <label><input type="radio" name="q3" value="A"> Bright Blue</label>
+              <label><input type="radio" name="q3" value="B"> Greenish/Dark Grey</label>
+              <label><input type="radio" name="q3" value="C"> Pink</label>
+            </div>
+            <div class="quiz-question">
+              <p><strong>4.</strong> If you are in a mobile home during a warning, you should:</p>
+              <label><input type="radio" name="q4" value="A"> Hide in the bathtub</label>
+              <label><input type="radio" name="q4" value="B"> Tie yourself to the floor</label>
+              <label><input type="radio" name="q4" value="C"> Leave immediately for a sturdy building</label>
+            </div>
+            <div class="quiz-question">
+              <p><strong>5.</strong> What is a "Debris Ball"?</p>
+              <label><input type="radio" name="q5" value="A"> A type of hail</label>
+              <label><input type="radio" name="q5" value="B"> A radar signature showing objects being lifted by a tornado</label>
+              <label><input type="radio" name="q5" value="C"> A cluster of clouds</label>
+            </div>
+            <div class="quiz-question">
+              <p><strong>6.</strong> Which item is best for protecting your head during a storm?</p>
+              <label><input type="radio" name="q6" value="A"> A pillow</label>
+              <label><input type="radio" name="q6" value="B"> A bicycle helmet</label>
+              <label><input type="radio" name="q6" value="C"> A plastic bag</label>
+            </div>
+            <div class="quiz-question">
+              <p><strong>7.</strong> After a tornado, why should you "Text, don't Talk"?</p>
+              <label><input type="radio" name="q7" value="A"> To save battery only</label>
+              <label><input type="radio" name="q7" value="B"> To keep phone lines open for emergency responders</label>
+              <label><input type="radio" name="q7" value="C"> Because voice calls don't work in the rain</label>
+            </div>
+            <div class="quiz-question">
+              <p><strong>8.</strong> An "EF5" tornado has wind speeds of:</p>
+              <label><input type="radio" name="q8" value="A"> 40-60 mph</label>
+              <label><input type="radio" name="q8" value="B"> 100-110 mph</label>
+              <label><input type="radio" name="q8" value="C"> Over 200 mph</label>
+            </div>
+            <div class="quiz-question">
+              <p><strong>9.</strong> If caught in a ditch, what is the main secondary hazard?</p>
+              <label><input type="radio" name="q9" value="A"> Flash flooding</label>
+              <label><input type="radio" name="q9" value="B"> Snakes</label>
+              <label><input type="radio" name="q9" value="C"> Sunburn</label>
+            </div>
+            <div class="quiz-question">
+              <p><strong>10.</strong> True or False: Opening windows to "equalize pressure" saves your house.</p>
+              <label><input type="radio" name="q10" value="A"> True</label>
+              <label><input type="radio" name="q10" value="B"> False (it allows wind to enter and lift the roof)</label>
+            </div>
+            <div class="quiz-question">
+              <p><strong>11.</strong> What should you do if you see a "Wall Cloud"?</p>
+              <label><input type="radio" name="q11" value="A"> Take photos for social media</label>
+              <label><input type="radio" name="q11" value="B"> Watch it closely and prepare to seek shelter</label>
+              <label><input type="radio" name="q11" value="C"> Ignore it; only funnel clouds matter</label>
+            </div>
+            <div class="quiz-question">
+              <p><strong>12.</strong> What is the safest way to get weather alerts at night?</p>
+              <label><input type="radio" name="q12" value="A"> Leaving the window open</label>
+              <label><input type="radio" name="q12" value="B"> A NOAA Weather Radio with a battery backup</label>
+              <label><input type="radio" name="q12" value="C"> Checking the news every 5 minutes</label>
+            </div>
+            <div class="quiz-question">
+              <p><strong>13.</strong> If a tornado is rain-wrapped, it means:</p>
+              <label><input type="radio" name="q13" value="A"> It is weak</label>
+              <label><input type="radio" name="q13" value="B"> It is hidden by heavy rainfall and hard to see</label>
+              <label><input type="radio" name="q13" value="C"> It only happens over the ocean</label>
+            </div>
+
+            <button type="button" id="submitQuiz" class="submit-btn">Finish Quiz</button>
+            <div id="quizResult" class="result"></div>
+            <div id="quizExplanations" class="explain" style="display:none"></div>
+          </form>
+        </section>
+      </div>
+
+      <aside>
+        <div class="section">
+          <h3>🚨 Immediate Signs</h3>
+          <p class="small">If you hear a <strong>continuous roar</strong> like a freight train, take cover immediately. Don't wait for a siren.</p>
+        </div>
+        <div class="section">
+          <h3>📦 Advanced Kit</h3>
+          <ul class="small">
+            <li>Heavy-duty gloves</li>
+            <li>Sturdy shoes (for walking on glass)</li>
+            <li>Backup power bank</li>
+            <li>Wrench to turn off gas lines</li>
+         
+       
+        </ul>
+
+         <div class="section">
+          <h3>Poster</h3>
+          <img class="poster" src="{% static 'image/tornado-sefty.jpg' %}" alt="First Aid Poster">
+          <p class="small">Print and display this poster in classrooms and corridors.</p>
+        </div>
+        </div>
+      </aside>
+    </div>
+    <div class="nav-buttons">
+        <!-- Use named URL 'learn' for previous; replace if you have a different view name -->
+        <a href="{% url 'learn' %}" class="btn-link"><button class="prev-btn">⬅ {{ "Previous Module" }}</button></a>
+
+        <!-- Next module currently links to 'learn' as a safe fallback.
+             Replace 'learn' with the correct url name for the next module if available. -->
+        <a href="{% url 'learn' %}" class="btn-link"><button class="next-btn">{{ "Next Module" }} ➡</button></a>
+    </div>
+  </main>
+  
+
+
+  <script>
+    const ANSWERS = {
+      q1: 'B', q2: 'A', q3: 'B', q4: 'C', q5: 'B', q6: 'B', q7: 'B',
+      q8: 'C', q9: 'A', q10: 'B', q11: 'B', q12: 'B', q13: 'B'
+    };
+
+    document.getElementById('submitQuiz').addEventListener('click', function() {
+      let score = 0;
+      let total = Object.keys(ANSWERS).length;
+      let explDiv = document.getElementById('quizExplanations');
+      explDiv.innerHTML = '<h3>Results Detail:</h3>';
+      
+      for (let key in ANSWERS) {
+        let selected = document.querySelector(`input[name="${key}"]:checked`);
+        let isCorrect = selected && selected.value === ANSWERS[key];
+        if (isCorrect) score++;
+        
+        explDiv.innerHTML += `<p class="${isCorrect ? 'correct' : 'incorrect'}">Question ${key.slice(1)}: ${isCorrect ? 'Correct' : 'Incorrect'}</p>`;
+      }
+
+      document.getElementById('quizResult').innerHTML = `Your Score: ${score} / ${total}`;
+      explDiv.style.display = 'block';
+    });
+  </script>
+</body>
+</html>
