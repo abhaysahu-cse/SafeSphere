@@ -1,7 +1,218 @@
 {% load static %}
-<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Cyclone - Farmers | SafeSphere</title><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="{% static 'css/styles.css' %}"><style>
-.main-content{padding:22px;min-height:88vh;margin-left:260px;max-width:1000px}
-.page-header h1{margin:0;color:#0b2545;font-size:1.7rem}
-.page-header p{color:#64748b;margin:6px 0 12px}
-.module-body{margin-top:16px;background:#fff;border-radius:12px;padding:16px;box-shadow:0 8px 24px rgba(8,12,40,0.04)}
-</style></head><body><main class="main-content"><header class="page-header"><h1>🌀 Cyclone — Farmers</h1><p>Quick actions to reduce wind/surge damage — tie roofs, secure animals, early harvest.</p></header><div class="module-body"><h3>Before</h3><ul><li>Anchor loose roof sheets</li><li>Move animals to sheltered areas</li><li>Harvest easily damaged crops early</li></ul><h3>During</h3><ul><li>Follow evacuation orders</li><li>Stay away from damaged trees or power lines</li></ul><h3>After</h3><ul><li>Check fields for saltwater intrusion</li><li>Contact extension services</li></ul></div></main></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Cyclone Safety — Farmers | SafeSphere</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Cyclone, hurricane and tornado preparedness module for farmers — practical Before / During / After actions, checklist, drills, posters and resources." />
+
+  <link rel="stylesheet" href="{% static 'css/protect-farmers-cyclone.css' %}">
+
+  <!-- Poster mapping: replace with your images -->
+  <script>
+    window.SECTION_POSTERS = {
+      before: "{% static 'image/protect/farmers/cyclone_before.jpg' %}",
+      during: "{% static 'image/protect/farmers/cyclone_during.jpg' %}",
+      after: "{% static 'image/protect/farmers/cyclone_after.jpg' %}"
+    };
+  </script>
+</head>
+<body>
+  <!-- Alert bar (for wind / storm updates) -->
+  <div id="disaster-alert-bar" class="alert-normal" role="status" aria-live="polite" aria-atomic="true">
+    <div class="alert-inner">
+      <span id="alertIcon">🟢</span>
+      <span id="alertText">Weather is normal. Monitor cyclone alerts from local authorities.</span>
+      <button id="dismissAlert" class="dismiss" title="Dismiss alert">Dismiss</button>
+    </div>
+  </div>
+
+  <main class="wrap" role="main" aria-labelledby="title">
+    <div class="topbar">
+      <div>
+        <h1 id="title">🌀 Cyclone & Severe Wind Safety — Farmers</h1>
+        <p class="lead">Protect roofs, livestock, equipment and community assets. Ordered actions & checklists for fast, effective response.</p>
+        <div class="meta-row">
+          <span class="badge">Module • Cyclone / Tornado</span>
+          <span class="small">Est. time: 12–25 min</span>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <a class="btn btn-ghost" href="{% url 'protect_farmers' %}">⬅ Back</a>
+        <button class="btn btn-primary" id="openChecklistBtn">Open Checklist</button>
+        <a class="btn btn-ghost" href="#quiz">Jump to Quiz</a>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- MAIN -->
+      <div>
+        <!-- HOOK -->
+        <section class="section" id="hook" aria-labelledby="hookTitle">
+          <h2 id="hookTitle">Why cyclones cause large livelihood losses</h2>
+          <div class="hook-grid">
+            <div class="hook-card"><div class="hook-emoji">🏚️</div><h3>Roof & structure damage</h3><p class="small">High winds tear off roofs and destroy storage — simple strapping saves many roofs.</p></div>
+            <div class="hook-card"><div class="hook-emoji">🌾</div><h3>Crops lost to wind & rain</h3><p class="small">Standing crops and nurseries are vulnerable — early harvest or protection reduces loss.</p></div>
+            <div class="hook-card"><div class="hook-emoji">🐄</div><h3>Animals & equipment</h3><p class="small">Livestock exposed to wind or falling trees; pumps/tools washed or blown away.</p></div>
+            <div class="hook-card"><div class="hook-emoji">🧭</div><h3>Community disruption</h3><p class="small">Roads, power and communication fail — local coordination is essential.</p></div>
+          </div>
+        </section>
+
+        <!-- TABS -->
+        <div class="tabs" role="tablist" aria-label="Module sections">
+          <button class="tab active" data-tab="before" onclick="switchTab('before')">Before</button>
+          <button class="tab" data-tab="during" onclick="switchTab('during')">During</button>
+          <button class="tab" data-tab="after" onclick="switchTab('after')">After</button>
+          <button class="tab" data-tab="practice" onclick="switchTab('practice')">Practice (secure items)</button>
+          <button class="tab" data-tab="resources" onclick="switchTab('resources')">Resources</button>
+        </div>
+
+        <div id="moduleContent" class="module-body" tabindex="0" aria-live="polite">
+          <noscript><p>Please enable JavaScript to view the interactive content.</p></noscript>
+        </div>
+
+        <div class="cta-row" style="margin-top:12px;">
+          <button class="btn btn-primary" id="openChecklistBtn2">Open Checklist</button>
+          <button class="btn btn-ghost" onclick="printModule()">Print Module</button>
+        </div>
+
+        <!-- QUIZ -->
+        <section id="quiz" class="section quiz-box" aria-labelledby="quizHeader">
+          <h2 id="quizHeader">📝 Quick Quiz — Cyclone Safety</h2>
+          <div id="quizWrap"></div>
+        </section>
+
+        <!-- STORIES -->
+        <section class="section" aria-labelledby="storiesTitle">
+          <h2 id="storiesTitle">Real stories & local lessons</h2>
+          <p class="small">Short examples to show what worked and what didn't in real storms.</p>
+          <div class="stories">
+            <article class="story">
+              <img src="{% static 'image/protect/farmers/cyclone_story_1.jpg' %}" alt="story 1" onerror="this.style.display='none'">
+              <h4>Coastal village: tied roofs saved homes</h4>
+              <p class="small">Simple rope-tied roofs and early fish pond cover reduced damage to houses and nets.</p>
+              <p><a class="btn btn-ghost" href="#" onclick="openStory(event,1)">Read</a></p>
+            </article>
+            <article class="story">
+              <img src="{% static 'image/protect/farmers/cyclone_story_2.jpg' %}" alt="story 2" onerror="this.style.display='none'">
+              <h4>Community hubs used as shelters</h4>
+              <p class="small">Schools converted quickly and stored community seed on raised racks before the storm.</p>
+              <p><a class="btn btn-ghost" href="#" onclick="openStory(event,2)">Read</a></p>
+            </article>
+          </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="section faq" aria-labelledby="faqTitle">
+          <h2 id="faqTitle">Frequently asked</h2>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">How to secure a tin roof quickly?</div>
+            <div class="faq-a">Tie sheets with ropes to rafters and anchor heavy objects on roofs; remove loose items that could be airborne.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">Should I move my tractor before a cyclone?</div>
+            <div class="faq-a">If possible, move heavy machinery to sheltered sheds and anchor or wedge wheels. Otherwise immobilise and protect with coverings.</div>
+          </div>
+        </section>
+      </div>
+
+      <!-- SIDE -->
+      <aside class="sidecard" aria-labelledby="sideTitle">
+        <div class="section" id="sideTitle">
+          <h3>Quick actions</h3>
+          <ul class="small">
+            <li>Secure loose sheets, tools and fuel drums.</li>
+            <li>Move animals to community shelter or higher ground.</li>
+            <li>Harvest or cover high-value crops if time permits.</li>
+            <li>Trim trees near houses and store important documents in waterproof bags.</li>
+          </ul>
+          <div style="margin-top:8px">
+            <button class="btn btn-primary" onclick="openChecklist()">Open Checklist</button>
+            <a class="btn btn-ghost" href="{% url 'drills' %}">Drills</a>
+          </div>
+        </div>
+
+        <div class="section" id="sectionPoster" aria-hidden="true">
+          <h3 id="posterTitle">Poster</h3>
+          <img id="sectionPosterImg" src="" alt="Section poster" class="poster" onerror="this.style.display='none'">
+          <p class="small" id="posterCaption">Poster swaps with Before / During / After sections — add your images under `static/image/protect/farmers/`.</p>
+        </div>
+
+        <div class="section">
+          <h3>Field demo video</h3>
+          <div class="video-wrapper">
+            <video controls preload="metadata" poster="{% static 'image/protect/farmers/cyclone_field.jpg' %}">
+              <source src="{% static 'video/farm_cyclone_demo.mp4' %}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <p class="small">Use this short demo for community training — show simple roof-tying and anchoring examples.</p>
+        </div>
+
+        <div class="section">
+          <h3>Emergency numbers</h3>
+          <ul class="small">
+            <li>Local Disaster Management / VRC: (add)</li>
+            <li>Village helpline / leader: (add)</li>
+            <li>Ambulance & Police: <strong>112</strong></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      <div class="note">Offline-first: checklist & quiz progress are stored locally (browser localStorage).</div>
+    </footer>
+  </main>
+
+  <!-- CHECKLIST MODAL -->
+  <div id="checklistModal" class="checklist-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="checklistTitle">
+    <div class="checklist-backdrop" onclick="closeChecklist()"></div>
+    <div class="checklist-box" role="document" aria-describedby="checklistNote">
+      <div class="checklist-header">
+        <div>
+          <h2 id="checklistTitle">Cyclone — Farmers Checklist</h2>
+          <div id="checklistNote" class="small">Progress saved locally. Print to distribute to community.</div>
+        </div>
+        <div class="checklist-controls">
+          <button class="btn btn-ghost" onclick="printChecklist()">Print</button>
+          <button class="btn btn-ghost" id="shareBtn" onclick="shareChecklist()">Share</button>
+          <button class="btn btn-ghost" onclick="closeChecklist()">Close</button>
+        </div>
+      </div>
+
+      <div class="tabs-inner" role="tablist">
+        <button class="tab active" data-tab="overview" onclick="switchChecklistTab('overview')">Overview</button>
+        <button class="tab" data-tab="before" onclick="switchChecklistTab('before')">Before</button>
+        <button class="tab" data-tab="during" onclick="switchChecklistTab('during')">During</button>
+        <button class="tab" data-tab="after" onclick="switchChecklistTab('after')">After</button>
+        <button class="tab" data-tab="checklist" onclick="switchChecklistTab('checklist')">Checklist</button>
+      </div>
+
+      <div id="checklistContent" class="checklist-content" tabindex="0"></div>
+
+      <div class="checklist-footer">
+        <button class="btn btn-ghost" onclick="closeChecklist()">Close</button>
+        <button class="btn btn-primary" onclick="saveChecklistProgress()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STORY MODAL -->
+  <div id="storyModal" class="story-modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="story-backdrop" onclick="closeStory()"></div>
+    <div class="story-box">
+      <div class="story-head">
+        <h3 id="storyModalTitle">Story</h3>
+        <button class="btn btn-ghost" onclick="closeStory()">Close</button>
+      </div>
+      <div id="storyModalBody" class="story-body"></div>
+    </div>
+  </div>
+
+  <!-- INTERACTIVE BEHAVIOR -->
+  <script src="{% static 'js/protect-farmers-cyclone.js' %}"></script>
+</body>
+</html>

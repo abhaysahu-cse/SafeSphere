@@ -1,7 +1,153 @@
 {% load static %}
-<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Cyclone - Farmers | SafeSphere</title><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="{% static 'css/styles.css' %}"><style>
-.main-content{padding:22px;min-height:88vh;margin-left:260px;max-width:1000px}
-.page-header h1{margin:0;color:#0b2545;font-size:1.7rem}
-.page-header p{color:#64748b;margin:6px 0 12px}
-.module-body{margin-top:16px;background:#fff;border-radius:12px;padding:16px;box-shadow:0 8px 24px rgba(8,12,40,0.04)}
-</style></head><body><main class="main-content"><header class="page-header"><h1>🌀 Cyclone — Farmers</h1><p>Quick actions to reduce wind/surge damage — tie roofs, secure animals, early harvest.</p></header><div class="module-body"><h3>Before</h3><ul><li>Anchor loose roof sheets</li><li>Move animals to sheltered areas</li><li>Harvest easily damaged crops early</li></ul><h3>During</h3><ul><li>Follow evacuation orders</li><li>Stay away from damaged trees or power lines</li></ul><h3>After</h3><ul><li>Check fields for saltwater intrusion</li><li>Contact extension services</li></ul></div></main></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Drought Safety — Farmers | SafeSphere</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Drought preparedness module for farmers — water, soil, crops, livestock and income protection." />
+
+  <link rel="stylesheet" href="{% static 'css/protect-farmers-drought.css' %}">
+
+  <!-- Section posters (replace images later) -->
+  <script>
+    window.SECTION_POSTERS = {
+      before: "{% static 'image/protect/farmers/drought_before.jpg' %}",
+      during: "{% static 'image/protect/farmers/drought_during.jpg' %}",
+      after: "{% static 'image/protect/farmers/drought_after.jpg' %}"
+    };
+  </script>
+</head>
+
+<body>
+  <!-- ALERT BAR -->
+  <div id="disaster-alert-bar" class="alert-normal" role="status" aria-live="polite">
+    <div class="alert-inner">
+      <span id="alertIcon">🟢</span>
+      <span id="alertText">Weather normal. Monitor rainfall & water storage.</span>
+      <button id="dismissAlert" class="dismiss">Dismiss</button>
+    </div>
+  </div>
+
+  <main class="wrap" role="main" aria-labelledby="title">
+    <div class="topbar">
+      <div>
+        <h1 id="title">🌵 Drought — Protect Water, Crops & Income</h1>
+        <p class="lead">
+          Slow disasters destroy income silently. Learn early planning, survival actions,
+          and recovery skills for drought years.
+        </p>
+        <div class="meta-row">
+          <span class="badge">Module • Drought (Farmers)</span>
+          <span class="small">Est. time: 15–25 min</span>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <a class="btn btn-ghost" href="{% url 'protect_farmers' %}">⬅ Back</a>
+        <button class="btn btn-primary" id="openChecklistBtn">Open Checklist</button>
+        <a class="btn btn-ghost" href="#quiz">Quiz</a>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- MAIN -->
+      <div>
+        <!-- WHY -->
+        <section class="section">
+          <h2>Why drought destroys farmers</h2>
+          <div class="hook-grid">
+            <div class="hook-card"><div class="hook-emoji">💧</div><h3>No water</h3><p class="small">Wells dry, pumps fail, crops wilt.</p></div>
+            <div class="hook-card"><div class="hook-emoji">🌾</div><h3>Crop failure</h3><p class="small">Wrong crop choice increases losses.</p></div>
+            <div class="hook-card"><div class="hook-emoji">🐄</div><h3>Livestock stress</h3><p class="small">Fodder & drinking water shortage.</p></div>
+            <div class="hook-card"><div class="hook-emoji">₹</div><h3>Income loss</h3><p class="small">Loans continue, harvest stops.</p></div>
+          </div>
+        </section>
+
+        <!-- TABS -->
+        <div class="tabs">
+          <button class="tab active" data-tab="before" onclick="switchTab('before')">Before</button>
+          <button class="tab" data-tab="during" onclick="switchTab('during')">During</button>
+          <button class="tab" data-tab="after" onclick="switchTab('after')">After</button>
+          <button class="tab" data-tab="practice" onclick="switchTab('practice')">Practice</button>
+          <button class="tab" data-tab="resources" onclick="switchTab('resources')">Resources</button>
+        </div>
+
+        <div id="moduleContent" class="module-body"></div>
+
+        <div class="cta-row" style="margin-top:12px">
+          <button class="btn btn-primary" id="openChecklistBtn2">Open Checklist</button>
+          <button class="btn btn-ghost" onclick="printModule()">Print</button>
+        </div>
+
+        <!-- QUIZ -->
+        <section id="quiz" class="section quiz-box">
+          <h2>📝 Drought Quiz</h2>
+          <div id="quizWrap"></div>
+        </section>
+
+        <!-- STORIES -->
+        <section class="section">
+          <h2>Real Indian examples</h2>
+          <div class="stories">
+            <article class="story">
+              <h4>Marathwada: crop shift saved income</h4>
+              <p class="small">Farmers switched to millets and pulses and survived drought years.</p>
+            </article>
+            <article class="story">
+              <h4>Rajasthan: farm ponds revived wells</h4>
+              <p class="small">Rainwater harvesting recharged groundwater.</p>
+            </article>
+          </div>
+        </section>
+      </div>
+
+      <!-- SIDE -->
+      <aside class="sidecard">
+        <div class="section">
+          <h3>Immediate actions</h3>
+          <ul class="small">
+            <li>Protect drinking water first</li>
+            <li>Reduce water wastage</li>
+            <li>Secure fodder & animals</li>
+            <li>Plan crop change early</li>
+          </ul>
+          <button class="btn btn-primary" onclick="openChecklist()">Checklist</button>
+        </div>
+
+        <div class="section" id="sectionPoster" aria-hidden="true">
+          <h3>Poster</h3>
+          <img id="sectionPosterImg" class="poster" src="">
+          <p class="small">Poster changes with section.</p>
+        </div>
+
+        <div class="section">
+          <h3>Emergency help</h3>
+          <ul class="small">
+            <li>KVK / Extension office</li>
+            <li>Water tanker contact</li>
+            <li>Emergency: <strong>112</strong></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      <div class="note">Drought is slow — early action saves livelihoods.</div>
+    </footer>
+  </main>
+
+  <!-- CHECKLIST MODAL -->
+  <div id="checklistModal" class="checklist-modal">
+    <div class="checklist-backdrop" onclick="closeChecklist()"></div>
+    <div class="checklist-box">
+      <h2>Drought Checklist</h2>
+      <div id="checklistContent"></div>
+      <button class="btn btn-primary" onclick="saveChecklistProgress()">Save</button>
+      <button class="btn btn-ghost" onclick="closeChecklist()">Close</button>
+    </div>
+  </div>
+
+  <script src="{% static 'js/protect-farmers-drought.js' %}"></script>
+</body>
+</html>

@@ -1,7 +1,236 @@
 {% load static %}
-<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Cyclone - Farmers | SafeSphere</title><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="{% static 'css/styles.css' %}"><style>
-.main-content{padding:22px;min-height:88vh;margin-left:260px;max-width:1000px}
-.page-header h1{margin:0;color:#0b2545;font-size:1.7rem}
-.page-header p{color:#64748b;margin:6px 0 12px}
-.module-body{margin-top:16px;background:#fff;border-radius:12px;padding:16px;box-shadow:0 8px 24px rgba(8,12,40,0.04)}
-</style></head><body><main class="main-content"><header class="page-header"><h1>🌀 Cyclone — Farmers</h1><p>Quick actions to reduce wind/surge damage — tie roofs, secure animals, early harvest.</p></header><div class="module-body"><h3>Before</h3><ul><li>Anchor loose roof sheets</li><li>Move animals to sheltered areas</li><li>Harvest easily damaged crops early</li></ul><h3>During</h3><ul><li>Follow evacuation orders</li><li>Stay away from damaged trees or power lines</li></ul><h3>After</h3><ul><li>Check fields for saltwater intrusion</li><li>Contact extension services</li></ul></div></main></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Heatwave Safety — Farmers | SafeSphere</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Heatwave module for farmers — Before/During/After actions, checklist, practice, quiz, posters and resources." />
+
+  <link rel="stylesheet" href="{% static 'css/protect-farmers-heatwave.css' %}">
+
+  <!-- SECTION_POSTERS mapping: swap these images with your generated assets -->
+  <script>
+    window.SECTION_POSTERS = {
+      before: "{% static 'image/protect/farmers/heatwave_before.jpg' %}",
+      during: "{% static 'image/protect/farmers/heatwave_during.jpg' %}",
+      after: "{% static 'image/protect/farmers/heatwave_after.jpg' %}"
+    };
+  </script>
+</head>
+<body>
+  <!-- ALERT BAR (weather integration hook) -->
+  <div id="disaster-alert-bar" class="alert-normal" role="status" aria-live="polite" aria-atomic="true">
+    <div class="alert-inner">
+      <span id="alertIcon">🟢</span>
+      <span id="alertText">Weather is normal. Stay prepared for heat.</span>
+      <button id="dismissAlert" class="dismiss" title="Dismiss alert">Dismiss</button>
+    </div>
+  </div>
+
+  <main class="wrap" role="main" aria-labelledby="title">
+    <div class="topbar">
+      <div>
+        <h1 id="title">☀️ Heatwave Safety — Farmers & Livelihoods</h1>
+        <p class="lead">Practical, ordered actions to protect people, animals, crops and income during extreme heat. Follow <strong>Before → During → After</strong>.</p>
+
+        <div class="meta-row">
+          <span class="badge">Module • Heatwave (Farmers)</span>
+          <span class="small">Est. time: 10–18 min</span>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <a class="btn btn-ghost" href="{% url 'protect_farmers' %}">⬅ Back</a>
+        <button class="btn btn-primary" id="openChecklistBtn">Open Checklist</button>
+        <a class="btn btn-ghost" href="#quiz">Jump to Quiz</a>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- MAIN COLUMN -->
+      <div>
+        <!-- Hook -->
+        <section class="section" id="hook" aria-labelledby="hookTitle">
+          <h2 id="hookTitle">Why heatwaves threaten livelihoods</h2>
+          <div class="hook-grid">
+            <div class="hook-card">
+              <div class="hook-emoji">🔥</div>
+              <h3>Crop heat stress</h3>
+              <p class="small">High temperatures reduce yield, cause flower drop and sunscald. Timely irrigation and shading help.</p>
+            </div>
+            <div class="hook-card">
+              <div class="hook-emoji">🐄</div>
+              <h3>Livestock overheating</h3>
+              <p class="small">Animals suffer heat stress, reduce milk and growth; shade, water & cooling reduce losses.</p>
+            </div>
+            <div class="hook-card">
+              <div class="hook-emoji">💧</div>
+              <h3>Water scarcity</h3>
+              <p class="small">Heat increases evaporation and competes for irrigation — plan water use carefully.</p>
+            </div>
+            <div class="hook-card">
+              <div class="hook-emoji">🪙</div>
+              <h3>Income risk</h3>
+              <p class="small">Saving a small proportion of crop or a calf can preserve next season's income.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- TABS -->
+        <div class="tabs" role="tablist" aria-label="Module sections">
+          <button class="tab active" data-tab="before" onclick="switchTab('before')">Before</button>
+          <button class="tab" data-tab="during" onclick="switchTab('during')">During</button>
+          <button class="tab" data-tab="after" onclick="switchTab('after')">After</button>
+          <button class="tab" data-tab="practice" onclick="switchTab('practice')">Practice (prioritise)</button>
+          <button class="tab" data-tab="resources" onclick="switchTab('resources')">Resources</button>
+        </div>
+
+        <div id="moduleContent" class="module-body" tabindex="0" aria-live="polite">
+          <noscript><p>Please enable JavaScript to view the interactive content.</p></noscript>
+        </div>
+
+        <div class="cta-row" style="margin-top:12px;">
+          <button class="btn btn-primary" id="openChecklistBtn2">Open Checklist</button>
+          <button class="btn btn-ghost" onclick="printModule()">Print Module</button>
+        </div>
+
+        <!-- Quiz -->
+        <section id="quiz" class="section quiz-box" aria-labelledby="quizHeader">
+          <h2 id="quizHeader">📝 Quick Quiz — Heatwaves</h2>
+          <div id="quizWrap"></div>
+        </section>
+
+        <!-- Stories -->
+        <section class="section" aria-labelledby="storiesTitle">
+          <h2 id="storiesTitle">Real stories & local learning</h2>
+          <p class="small">Replace placeholders with short local case studies and scanned clippings — stories motivate action.</p>
+          <div class="stories">
+            <article class="story">
+              <img src="{% static 'image/protect/farmers/heat_story_1.jpg' %}" alt="story 1" onerror="this.style.display='none'">
+              <h4>Village: early shading saved chilli crop</h4>
+              <p class="small">Farmers who provided shade nets during a 7-day heatwave avoided flower drop and saved 40% yield.</p>
+              <p><a class="btn btn-ghost" href="#" onclick="openStory(event,1)">Read</a></p>
+            </article>
+
+            <article class="story">
+              <img src="{% static 'image/protect/farmers/heat_story_2.jpg' %}" alt="story 2" onerror="this.style.display='none'">
+              <h4>Smallholders: staggered irrigation and mulching</h4>
+              <p class="small">Mulch reduced irrigation needs and kept seedlings alive during peak heat.</p>
+              <p><a class="btn btn-ghost" href="#" onclick="openStory(event,2)">Read</a></p>
+            </article>
+          </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="section faq" aria-labelledby="faqTitle">
+          <h2 id="faqTitle">Frequently asked</h2>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">How to protect livestock during a heatwave?</div>
+            <div class="faq-a">Provide shade, cool water frequently, use sprinklers/misting if possible, feed during cooler hours, check for signs of heat stress early.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">Can I delay harvest when it’s very hot?</div>
+            <div class="faq-a">If crops are mature and heat risk threatens yield, consider early harvest and drying; consult local extension for market timing.</div>
+          </div>
+        </section>
+      </div>
+
+      <!-- SIDE COLUMN (Poster swaps as tabs change) -->
+      <aside class="sidecard" aria-labelledby="sideTitle">
+        <div class="section" id="sideTitle">
+          <h3>Quick actions</h3>
+          <ul class="small">
+            <li>Store extra drinking water for people and animals</li>
+            <li>Provide shade (nets / tree shade) and cooling points for livestock</li>
+            <li>Work early or late — avoid midday field work</li>
+            <li>Mulch fields to preserve soil moisture</li>
+          </ul>
+          <div style="margin-top:8px">
+            <button class="btn btn-primary" onclick="openChecklist('heatwave')">Open Checklist</button>
+            <a class="btn btn-ghost" href="{% url 'drills' %}">Drills</a>
+          </div>
+        </div>
+
+        <div class="section" id="sectionPoster" aria-hidden="true">
+          <h3 id="posterTitle">Poster</h3>
+          <img id="sectionPosterImg" src="" alt="Section poster" class="poster" onerror="this.style.display='none'">
+          <p class="small" id="posterCaption">Poster changes for Before / During / After — add your images to `static/image/protect/farmers/`.</p>
+        </div>
+
+        <div class="section">
+          <h3>Field demo video</h3>
+          <div class="video-wrapper">
+            <video controls preload="metadata" poster="{% static 'image/protect/farmers/heat_field.jpg' %}">
+              <source src="{% static 'video/farm_heat_demo.mp4' %}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <p class="small">Replace the demo with a local recording showing shade & water setups for animals.</p>
+        </div>
+
+        <div class="section">
+          <h3>Emergency numbers</h3>
+          <ul class="small">
+            <li>Local KVK / Extension: (add)</li>
+            <li>Local vet / village leader: (add)</li>
+            <li>Ambulance & Police: <strong>112</strong></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      <div class="note">Offline-first: checklist & quiz progress saved locally in browser storage.</div>
+    </footer>
+  </main>
+
+  <!-- CHECKLIST MODAL -->
+  <div id="checklistModal" class="checklist-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="checklistTitle">
+    <div class="checklist-backdrop" onclick="closeChecklist()"></div>
+    <div class="checklist-box" role="document" aria-describedby="checklistNote">
+      <div class="checklist-header">
+        <div>
+          <h2 id="checklistTitle">Heatwave — Farmers Checklist</h2>
+          <div id="checklistNote" class="small">Saved on this device only — Print to share with the community.</div>
+        </div>
+        <div class="checklist-controls">
+          <button class="btn btn-ghost" onclick="printChecklist()">Print</button>
+          <button class="btn btn-ghost" id="shareBtn" onclick="shareChecklist()">Share</button>
+          <button class="btn btn-ghost" onclick="closeChecklist()">Close</button>
+        </div>
+      </div>
+
+      <div class="tabs-inner" role="tablist">
+        <button class="tab active" data-tab="overview" onclick="switchChecklistTab('overview')">Overview</button>
+        <button class="tab" data-tab="before" onclick="switchChecklistTab('before')">Before</button>
+        <button class="tab" data-tab="during" onclick="switchChecklistTab('during')">During</button>
+        <button class="tab" data-tab="after" onclick="switchChecklistTab('after')">After</button>
+        <button class="tab" data-tab="checklist" onclick="switchChecklistTab('checklist')">Checklist</button>
+      </div>
+
+      <div id="checklistContent" class="checklist-content" tabindex="0"></div>
+
+      <div class="checklist-footer">
+        <button class="btn btn-ghost" onclick="closeChecklist()">Close</button>
+        <button class="btn btn-primary" onclick="saveChecklistProgress()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STORY MODAL -->
+  <div id="storyModal" class="story-modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="story-backdrop" onclick="closeStory()"></div>
+    <div class="story-box">
+      <div class="story-head">
+        <h3 id="storyModalTitle">Story</h3>
+        <button class="btn btn-ghost" onclick="closeStory()">Close</button>
+      </div>
+      <div id="storyModalBody" class="story-body"></div>
+    </div>
+  </div>
+
+  <!-- Page behavior -->
+  <script src="{% static 'js/protect-farmers-heatwave.js' %}"></script>
+</body>
+</html>
