@@ -1,0 +1,225 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Earthquake — Prepare, Protect Infrastructure & Save Lives | SafeSphere</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Comprehensive household earthquake module: preparation, low-cost retrofit, safe behaviour, community measures and recovery." />
+
+  <link rel="stylesheet" href="{% static 'css/earthquake.css' %}">
+  <!-- Inline posters using Django static so static paths are resolved -->
+  <script>
+    window.SECTION_POSTERS = {
+      prevention: "{% static 'image/protect/households/earthquake_prevention.jpg' %}",
+      retrofit: "{% static 'image/protect/households/earthquake_retrofit.jpg' %}",
+      during: "{% static 'image/protect/households/earthquake_during.jpg' %}",
+      after: "{% static 'image/protect/households/earthquake_after.jpg' %}",
+      community: "{% static 'image/protect/households/earthquake_community.jpg' %}",
+      practice: "{% static 'image/protect/households/earthquake_practice.jpg' %}"
+    };
+  </script>
+</head>
+<body>
+  <!-- ALERT BAR (shared hook for weather / hazards) -->
+  <div id="disaster-alert-bar" class="alert-normal" role="status" aria-live="polite" aria-atomic="true">
+    <div class="alert-inner">
+      <span id="alertIcon">🟢</span>
+      <span id="alertText">No seismic alerts. Review your plan.</span>
+      <button id="dismissAlert" class="dismiss" title="Dismiss">Dismiss</button>
+    </div>
+  </div>
+
+  <main class="wrap" role="main" aria-labelledby="pageTitle">
+    <div class="topbar">
+      <div>
+        <h1 id="pageTitle">🌍 Earthquake — Prepare, Protect Infrastructure & Save Lives</h1>
+        <p class="lead">A household guide to reduce injury, damage and financial loss: practical retrofit, siting, drills, and recovery actions tailored for houses and small buildings.</p>
+
+        <div class="meta-row">
+          <span class="badge">Module • Earthquake (Household)</span>
+          <span class="small">Est. time: 25–45 min</span>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <a class="btn btn-ghost" href="{% url 'protect_households' %}">⬅ Back</a>
+        <button class="btn btn-primary" id="openChecklistBtn">Open Checklist</button>
+        <a class="btn btn-ghost" href="#practice">Jump to Practice</a>
+      </div>
+    </div>
+
+    <div class="grid" role="region" aria-label="Earthquake module content">
+      <!-- MAIN -->
+      <div>
+        <section class="section" id="hook" aria-labelledby="hookTitle">
+          <h2 id="hookTitle">Why this matters: damage & life-loss reduction</h2>
+          <p>Earthquakes can occur without warning. Most household casualties come from collapse, falling objects, and fire after shaking. Thoughtful preparation — safe building, anchored furniture, a practiced escape — reduces injuries and months of recovery.</p>
+
+          <div class="info-callout">
+            <strong>Key principle:</strong> protect people first (safe spots, family plan), then critical assets (documents, water, electricity) and then property (retrofit & drains).
+          </div>
+        </section>
+
+        <!-- Tabs -->
+        <div class="tabs" role="tablist" aria-label="Sections">
+          <button class="tab active" data-tab="prevention" onclick="earthquake.switchTab('prevention')">Preparation & Planning</button>
+          <button class="tab" data-tab="retrofit" onclick="earthquake.switchTab('retrofit')">Low-cost Retrofit & Infrastructure</button>
+          <button class="tab" data-tab="during" onclick="earthquake.switchTab('during')">During — Safe Actions</button>
+          <button class="tab" data-tab="after" onclick="earthquake.switchTab('after')">After — Recovery & Health</button>
+          <button class="tab" data-tab="community" onclick="earthquake.switchTab('community')">Community & Evacuation</button>
+          <button class="tab" data-tab="practice" onclick="earthquake.switchTab('practice')">Practice & Drills</button>
+          <button class="tab" data-tab="resources" onclick="earthquake.switchTab('resources')">Resources</button>
+        </div>
+
+        <!-- poster swaps with tab -->
+        <div id="sectionPoster" class="poster-container" aria-hidden="true">
+          <img id="sectionPosterImg" src="" alt="Section poster" />
+        </div>
+
+        <!-- module content injected by JS -->
+        <div id="moduleContent" class="module-body" tabindex="0" aria-live="polite">
+          <noscript><p>Please enable JavaScript for interactive content (drills, checklist, quiz).</p></noscript>
+        </div>
+
+        <!-- CTA -->
+        <div class="cta-row" style="margin-top:12px;">
+          <button class="btn btn-primary" id="openChecklistBtn2">Open Checklist</button>
+          <button class="btn btn-ghost" onclick="earthquake.printModule()">Print Module</button>
+        </div>
+
+        <!-- QUIZ -->
+        <section id="quiz" class="section quiz-box" aria-labelledby="quizHeader">
+          <h2 id="quizHeader">📝 Quick Quiz — Earthquake</h2>
+          <div id="quizWrap"></div>
+        </section>
+
+        <!-- STORIES -->
+        <section class="section" aria-labelledby="storiesTitle">
+          <h2 id="storiesTitle">Real cases & learning</h2>
+          <p class="small">Short local stories are effective — replace placeholders with local case studies and photos.</p>
+          <div class="stories-grid">
+            <article class="story">
+              <img src="{% static 'image/protect/households/quake_case_1.jpg' %}" alt="quake case 1" onerror="this.style.display='none'">
+              <h4>House survived due to anchored shelves</h4>
+              <p class="small">Anchored shelving and secured gas valves limited fire and allowed quick return home.</p>
+            </article>
+            <article class="story">
+              <img src="{% static 'image/protect/households/quake_case_2.jpg' %}" alt="quake case 2" onerror="this.style.display='none'">
+              <h4>Drainage & site slope prevented flooding after quake</h4>
+              <p class="small">Good site drains kept water flows away from foundations during post-quake rains.</p>
+            </article>
+          </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="section faq" aria-labelledby="faqTitle">
+          <h2 id="faqTitle">Frequently asked</h2>
+          <div class="faq-item">
+            <div class="faq-q" onclick="earthquake.toggleFaq(this)">Can I retrofit cheaply?</div>
+            <div class="faq-a">Yes. Low-cost steps (strapping water heaters, anchoring furniture, adding bracing to pantry walls, tying down heavy appliances) significantly reduce risk. For structural retrofit, consult local engineer or government scheme.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="earthquake.toggleFaq(this)">Is 'doorway protection' recommended?</div>
+            <div class="faq-a">No — modern advice is Drop, Cover, Hold (under table). Doorways are not safer in many modern homes. Use a sturdy table to protect yourself from falling objects.</div>
+          </div>
+        </section>
+      </div>
+
+      <!-- SIDE -->
+      <aside class="sidecard" aria-labelledby="sideTitle">
+        <div class="section" id="sideTitle">
+          <h3>Quick actions</h3>
+          <ul class="small">
+            <li>Identify safe spots: under sturdy tables, against interior walls away from windows.</li>
+            <li>Secure heavy furniture, water heaters and gas cylinders.</li>
+            <li>Have an emergency kit with medicines, cash, copies of IDs and bottled water.</li>
+          </ul>
+          <div style="margin-top:10px">
+            <button class="btn btn-primary" onclick="earthquake.openChecklist()">Open Checklist</button>
+            <a class="btn btn-ghost" href="{% url 'drills' %}">Open Drills</a>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>Poster</h3>
+          <img src="{% static 'image/protect/households/earthquake_poster.jpg' %}" alt="Earthquake safety poster" class="poster" onerror="this.style.display='none'">
+          <p class="small">Print and display near the main door or the common notice board.</p>
+        </div>
+
+        <div class="section">
+          <h3>Training video</h3>
+          <div class="video-wrapper">
+            <video controls preload="metadata" poster="{% static 'image/protect/households/earthquake_demo.jpg' %}">
+              <source src="{% static 'video/earthquake_demo.mp4' %}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <p class="small">Use in group sessions to practise DROP-COVER-HOLD and search & rescue basics.</p>
+        </div>
+
+        <div class="section">
+          <h3>Contacts</h3>
+          <ul class="small">
+            <li>Local disaster management office</li>
+            <li>Nearest hospital & ambulance</li>
+            <li>Community response team leader</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      <div class="note">Practice at least once every 3 months. Secure one vulnerable item each week — small steps add up.</div>
+    </footer>
+  </main>
+
+  <!-- CHECKLIST MODAL -->
+  <div id="checklistModal" class="checklist-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="checklistTitle" style="display:none">
+    <div class="checklist-backdrop" onclick="earthquake.closeChecklist()"></div>
+
+    <div class="checklist-box" role="document" aria-describedby="checklistNote">
+      <div class="checklist-header">
+        <div>
+          <h2 id="checklistTitle">Household — Earthquake Checklist</h2>
+          <div id="checklistNote" class="small">Saved locally on this device. Use Print to make a paper copy.</div>
+        </div>
+        <div class="controls">
+          <button class="btn btn-ghost" onclick="earthquake.printChecklist()">Print</button>
+          <button class="btn btn-ghost" id="shareBtn" onclick="earthquake.shareChecklist()">Share</button>
+          <button class="btn btn-ghost" onclick="earthquake.closeChecklist()">Close</button>
+        </div>
+      </div>
+
+      <div class="tabs-inner" role="tablist">
+        <button class="tab active" data-tab="overview" onclick="earthquake.switchChecklistTab('overview')">Overview</button>
+        <button class="tab" data-tab="before" onclick="earthquake.switchChecklistTab('before')">Before</button>
+        <button class="tab" data-tab="during" onclick="earthquake.switchChecklistTab('during')">During</button>
+        <button class="tab" data-tab="after" onclick="earthquake.switchChecklistTab('after')">After</button>
+        <button class="tab" data-tab="checklist" onclick="earthquake.switchChecklistTab('checklist')">Checklist</button>
+      </div>
+
+      <div id="checklistContent" class="checklist-content" tabindex="0"></div>
+
+      <div class="checklist-footer">
+        <button class="btn btn-ghost" onclick="earthquake.closeChecklist()">Close</button>
+        <button class="btn btn-primary" onclick="earthquake.saveChecklistProgress()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STORY MODAL -->
+  <div id="storyModal" class="story-modal" aria-hidden="true" role="dialog" aria-modal="true" style="display:none">
+    <div class="story-backdrop" onclick="earthquake.closeStory()"></div>
+    <div class="story-box">
+      <div class="story-head">
+        <h3 id="storyModalTitle">Story</h3>
+        <button class="btn btn-ghost" onclick="earthquake.closeStory()">Close</button>
+      </div>
+      <div id="storyModalBody" class="story-body"></div>
+    </div>
+  </div>
+
+  <script src="{% static 'js/earthquake.js' %}"></script>
+</body>
+</html>

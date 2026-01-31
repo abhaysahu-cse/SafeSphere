@@ -116,7 +116,7 @@
     <!-- Module cards -->
     <section class="modules-grid" aria-label="Household modules">
 
-      <a class="module-card" href="#" aria-labelledby="m-flood-title">
+      <a class="module-card" href="{% url 'households_flood' %}">
         <div>
           <div class="module-icon" aria-hidden="true">🌊</div>
           <h3 id="m-flood-title" class="module-title">Floods — Elevate valuables & documents</h3>
@@ -125,7 +125,8 @@
         <div class="module-meta">Before · During · After</div>
       </a>
 
-      <a class="module-card" href="#" aria-labelledby="m-cyclone-title">
+      <a class="module-card" href="{% url 'households_cyclone' %}">
+
         <div>
           <div class="module-icon" aria-hidden="true">🌀</div>
           <h3 id="m-cyclone-title" class="module-title">Cyclones — Roof & window protection</h3>
@@ -134,7 +135,8 @@
         <div class="module-meta">Wind · Secure property</div>
       </a>
 
-      <a class="module-card" href="#" aria-labelledby="m-heat-title">
+      <a class="module-card" href="{% url 'households_heatwave' %}">
+
         <div>
           <div class="module-icon" aria-hidden="true">🔥</div>
           <h3 id="m-heat-title" class="module-title">Heatwaves — Cooling & hydration</h3>
@@ -143,7 +145,8 @@
         <div class="module-meta">Hydration · Cooling</div>
       </a>
 
-      <a class="module-card" href="#" aria-labelledby="m-fire-title">
+      <a class="module-card" href="{% url 'households_fire' %}">
+
         <div>
           <div class="module-icon" aria-hidden="true">🧯</div>
           <h3 id="m-fire-title" class="module-title">House Fire — Prevention & escape</h3>
@@ -152,7 +155,8 @@
         <div class="module-meta">Prevention · Escape plan</div>
       </a>
 
-      <a class="module-card" href="#" aria-labelledby="m-earth-title">
+      <a class="module-card" href="{% url 'households_earthquake' %}">
+
         <div>
           <div class="module-icon" aria-hidden="true">🌍</div>
           <h3 id="m-earth-title" class="module-title">Earthquake — Drop, Cover & Hold</h3>

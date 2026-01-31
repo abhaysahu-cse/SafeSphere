@@ -1,0 +1,319 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Household Flood Safety | SafeSphere</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Detailed household flood preparedness: step-by-step planning, property protection, drainage advice, checklists, practice & recovery." />
+
+  <link rel="stylesheet" href="{% static 'css/protect-households-flood.css' %}">
+</head>
+<body>
+
+  <!-- Disaster alert bar (shared hook for weather updates) -->
+  <div id="disaster-alert-bar" class="alert-normal" role="status" aria-live="polite">
+    <div class="alert-inner">
+      <span id="alertIcon">🟢</span>
+      <strong id="alertText">Weather is normal. Stay prepared.</strong>
+      <button id="dismissAlert" class="dismiss" title="Dismiss alert">Dismiss</button>
+    </div>
+  </div>
+
+  <main class="wrap" role="main" aria-labelledby="pageTitle">
+    <header class="top">
+      <div>
+        <h1 id="pageTitle">🏠 Household Flood Preparedness — Protect Home & Property</h1>
+        <p class="lead">A practical, ordered plan to prepare, protect, move and recover. Focus: people first, then documents, assets, sanitation and livelihood continuity.</p>
+
+        <div class="meta-row">
+          <span class="badge">Module • Household • Flood</span>
+          <span class="small">Est. time: 20–40 min</span>
+        </div>
+      </div>
+
+      <div class="actions">
+        <a class="btn btn-ghost" href="{% url 'protect_households' %}">⬅ Back to Household Modules</a>
+        <button class="btn btn-primary" id="openChecklistBtn">Open Checklist</button>
+        <a class="btn btn-ghost" href="#practice">Jump to Practice</a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <!-- left/content column -->
+      <section class="content" aria-label="Main content">
+
+        <!-- Hook / Why -->
+        <section class="card hook">
+          <h2>Why this matters — quick orientation</h2>
+          <p class="muted">Floods damage people, documents and livelihoods. A small set of prioritized actions (move people, protect seed/food, secure electricity) saves months of recovery and reduces cost.</p>
+
+          <div class="hook-grid">
+            <div class="hook-item"><div class="emoji">🌾</div><strong>Crops & food</strong><div class="muted">Raised storage saves seed & food.</div></div>
+            <div class="hook-item"><div class="emoji">🔖</div><strong>Documents</strong><div class="muted">Scans + waterproof box speeds relief/insurance.</div></div>
+            <div class="hook-item"><div class="emoji">⚡</div><strong>Electric safety</strong><div class="muted">Switching safely prevents shock & fires.</div></div>
+            <div class="hook-item"><div class="emoji">🏥</div><strong>Health</strong><div class="muted">Sanitation & clean drinking water reduce disease.</div></div>
+          </div>
+        </section>
+
+        <!-- Tabs -->
+        <nav class="tabs" role="tablist" aria-label="Module sections">
+          <button class="tab active" data-tab="preparation">Preparation</button>
+          <button class="tab" data-tab="property">Property / Drains</button>
+          <button class="tab" data-tab="before">Before</button>
+          <button class="tab" data-tab="during">During</button>
+          <button class="tab" data-tab="after">After</button>
+          <button class="tab" data-tab="livestock">Livestock</button>
+          <button class="tab" data-tab="sanitation">Sanitation</button>
+          <button class="tab" data-tab="community">Community</button>
+          <button class="tab" data-tab="practice">Practice & Drills</button>
+          <button class="tab" data-tab="resources">Resources</button>
+        </nav>
+
+        <!-- Poster (changes with tab) -->
+        <div id="sectionPoster" class="poster-wrap" aria-hidden="false">
+          <img id="sectionPosterImg"
+               alt="Section poster"
+               data-preparation="{% static 'image/protect/households/flood_before_poster.jpg' %}"
+               data-property="{% static 'image/protect/households/flood_property_poster.jpg' %}"
+               data-before="{% static 'image/protect/households/flood_before_poster.jpg' %}"
+               data-during="{% static 'image/protect/households/flood_during_poster.jpg' %}"
+               data-after="{% static 'image/protect/households/flood_after_poster.jpg' %}"
+               src="{% static 'image/protect/households/flood_before_poster.jpg' %}">
+        </div>
+
+        <!-- Detailed content tabs (kept in DOM for SEO & print; JS toggles visibility) -->
+        <article id="tab-preparation" class="card tab-content" data-tab="preparation" role="region" aria-labelledby="prepTitle">
+          <h2 id="prepTitle">Preparation & Planning (weeks to months)</h2>
+          <ol class="detailed-list">
+            <li><strong>Map your house & plot:</strong> mark the highest safe points (roof/upper room) and likely entry routes for water. Photograph layout and keep copy.</li>
+            <li><strong>Household emergency plan:</strong> assign roles: who moves documents, who moves animals, who calls authorities; decide a meeting point outside flood zone.</li>
+            <li><strong>Assemble Emergency Bags:</strong> for each person: torch, powerbank, medicines, bottled water (2–3 days), photocopies of IDs, small cash, whistle, mask. Keep them in a single easy-to-grab location.</li>
+            <li><strong>Practice drills:</strong> monthly 10-minute drill to move the emergency bag and two important boxes to a high point. Keep drill records and improve each time.</li>
+            <li><strong>Materials & simple tools:</strong> collect pallets/bricks for a temporary raised platform, tarpaulin, rope, nails, hammer. Store in an accessible dry place.</li>
+            <li><strong>Communicate:</strong> exchange contact numbers and identify neighbors with boats/tractors; create a paper contact list saved in two places.</li>
+          </ol>
+        </article>
+
+        <article id="tab-property" class="card tab-content" data-tab="property" role="region" aria-labelledby="propTitle">
+          <h2 id="propTitle">Property & Site Measures (practical, low-cost)</h2>
+          <ul class="detailed-list">
+            <li><strong>Raised storage plinth:</strong> Make a plinth 20–40 cm high for sacks; use concrete, bricks or pallets. For low-budget option: stack sealed pallets + tarpaulin.</li>
+            <li><strong>Electrical safety:</strong> raise sockets and distribution boards if you renovate (60–90 cm over likely flood level); install RCCB/MCB and label circuits.</li>
+            <li><strong>Floor finishes:</strong> use tiles or cement on ground floors to allow easy cleaning after floods — avoid gypsum boards.</li>
+            <li><strong>Gutters & downpipes:</strong> clear before monsoon to prevent roof overflow near foundations.</li>
+            <li><strong>Temporary doors:</strong> keep plywood panels and tarpaulin to block or seal doors temporarily from inside.</li>
+          </ul>
+
+          <h3>Drainage & water control (simple how-to)</h3>
+          <ol>
+            <li><strong>Keep drains clear:</strong> remove debris from household drains, gutters and field drains each month.</li>
+            <li><strong>Make a diversion trench:</strong> 50–100cm wide and 20–40cm deep along the property boundary to guide runoff away from structures.</li>
+            <li><strong>Percolation pits:</strong> 1m × 1m × 1m filled with stone/rubble to absorb runoff near soakaway points (good for small plots).</li>
+            <li><strong>Community ponds / check dams:</strong> coordinate with neighbors and local extension (KVK) for upstream retention works to reduce flood peaks.</li>
+          </ol>
+        </article>
+
+        <article id="tab-before" class="card tab-content" data-tab="before" role="region" aria-labelledby="beforeTitle">
+          <h2 id="beforeTitle">Before Flood — Ordered, prioritized actions</h2>
+          <ol class="detailed-list">
+            <li><strong>Act on first warning:</strong> begin moving people and high-priority items when an official alert arrives — do not wait until water is at the gate.</li>
+            <li><strong>People first:</strong> move elderly & children to upper floors or planned high ground; check medicines and mobility aids.</li>
+            <li><strong>Seed & food:</strong> move sacks to raised platform or upper floor; place on sealed pallets and cover with tarpaulin.</li>
+            <li><strong>Documents:</strong> move passports, insurance, land papers into sealed plastic box and keep at highest safe point; keep digital photos in cloud/phones.</li>
+            <li><strong>Electricals:</strong> unplug sensitive devices and move inverters/powerbanks higher; only switch off main if safe and dry to do so.</li>
+            <li><strong>Animals:</strong> move small livestock to a pre-identified high place; tag animals and note owners/contacts.</li>
+            <li><strong>Secure loose objects:</strong> bring pots, furniture and tools inside or tie down to prevent them becoming hazards.</li>
+          </ol>
+        </article>
+
+        <article id="tab-during" class="card tab-content" data-tab="during" role="region" aria-labelledby="duringTitle">
+          <h2 id="duringTitle">During Flood — Safety & Damage control</h2>
+          <ul class="detailed-list">
+            <li><strong>Human safety:</strong> move people to the highest safe indoor area or to a community shelter; wear life-jackets where available.</li>
+            <li><strong>Avoid moving water:</strong> do not walk/drive through moving water; even shallow fast water can carry people/vehicles away.</li>
+            <li><strong>Switch off power safely:</strong> only operate the main switch if it can be reached without standing in water — otherwise wait for certified personnel.</li>
+            <li><strong>Keep drinking water safe:</strong> use bottled/boiled water; treat water with chlorine tablets if necessary.</li>
+            <li><strong>Temporary protection:</strong> cover mattresses, electronics and documents with tarpaulin and move as high as possible.</li>
+            <li><strong>Record damage:</strong> photograph and time-stamp water levels and any damage for relief and insurance claims (use waterproof pouch for phone).</li>
+          </ul>
+        </article>
+
+        <article id="tab-after" class="card tab-content" data-tab="after" role="region" aria-labelledby="afterTitle">
+          <h2 id="afterTitle">After Flood — Recovery & Repair</h2>
+          <ol class="detailed-list">
+            <li><strong>Return safely:</strong> only when authorities say it is safe. Watch for structural damage, slippery floors, animals, or fallen power lines.</li>
+            <li><strong>Document all damage:</strong> photos, short videos, and a written list with approximate values for relief/insurance.</li>
+            <li><strong>Drying grain & seeds:</strong> spread thin on clean tarpaulin in direct sun, turn frequently; discard moulded seed and coordinate with KVK for seed replacement if needed.</li>
+            <li><strong>Sanitize & disinfect:</strong> clean floors, walls, and utensils, disinfect water sources if contaminated (consult local health authority).</li>
+            <li><strong>Check electrical systems:</strong> do not switch on the mains until an electrician inspects wiring and appliances.</li>
+            <li><strong>Soil & garden:</strong> remove silt in a controlled way, test for salinity and restore soil with gypsum/organic matter as recommended by local extension.</li>
+          </ol>
+        </article>
+
+        <article id="tab-livestock" class="card tab-content" data-tab="livestock" role="region" aria-labelledby="livestockTitle">
+          <h2 id="livestockTitle">Livestock — protect animals & feed</h2>
+          <ul class="detailed-list">
+            <li>Plan transport for animals beforehand: small boat, tractor trailer or neighbour arrangement.</li>
+            <li>Keep veterinary kit and contact details for local vet and record serial numbers of tags.</li>
+            <li>Mark animals with owner name/phone (temporary paint / tag) if evacuated to shelter.</li>
+            <li>Store at least 3 days of feed in waterproof sacks and avoid using contaminated feed after floods.</li>
+          </ul>
+        </article>
+
+        <article id="tab-sanitation" class="card tab-content" data-tab="sanitation" role="region" aria-labelledby="sanTitle">
+          <h2 id="sanTitle">Sanitation & Health (critical)</h2>
+          <ul class="detailed-list">
+            <li>Use boiled or treated water until the mains is declared safe. Keep chlorine tablets or water filters accessible.</li>
+            <li>Disinfect flooded latrines and avoid open defecation; set temporary latrine plan for sheltering families.</li>
+            <li>Seek medical attention for wounds; tetanus prophylaxis may be needed — consult clinic.</li>
+          </ul>
+        </article>
+
+        <article id="tab-community" class="card tab-content" data-tab="community" role="region" aria-labelledby="communityTitle">
+          <h2 id="communityTitle">Community Actions</h2>
+          <ul class="detailed-list">
+            <li>Prepare community high-points (school/temple) with basic supplies & sleeping space.</li>
+            <li>Maintain a boat/tractor roster and train volunteers in basic rescue and first aid.</li>
+            <li>Set up a community seed/food bank on a raised platform with an owner registry to help rapid recovery.</li>
+          </ul>
+        </article>
+
+        <article id="tab-practice" class="card tab-content" data-tab="practice" role="region" aria-labelledby="practiceTitle">
+          <h2 id="practiceTitle">Practice & Drills — interactive</h2>
+          <p class="muted">Drag important items to the 'Save first' area. Practising priorities helps you act quickly under pressure.</p>
+
+          <div class="dnd-area">
+            <div class="dnd-palette">
+              <strong>Items</strong>
+              <div id="paletteItems">
+                <!-- JS will add items if needed; fallback items kept here -->
+                <div class="dnd-item" draggable="true" data-id="seedbags">Seed bags</div>
+                <div class="dnd-item" draggable="true" data-id="livestock">Livestock</div>
+                <div class="dnd-item" draggable="true" data-id="pump">Pump & motor</div>
+                <div class="dnd-item" draggable="true" data-id="documents">Documents</div>
+                <div class="dnd-item" draggable="true" data-id="tools">Small tools</div>
+              </div>
+            </div>
+
+            <div id="saveZone" class="dnd-board" aria-label="Save first zone" tabindex="0">
+              <em class="muted">Drop here: items to save first</em>
+            </div>
+          </div>
+          <div style="margin-top:10px;">
+            <button class="btn btn-primary" id="dndCheckBtn">Check choices</button>
+            <button class="btn btn-ghost" id="dndResetBtn">Reset</button>
+            <div id="dndResult" class="muted" style="margin-top:8px;font-weight:700"></div>
+          </div>
+        </article>
+
+        <article id="tab-resources" class="card tab-content" data-tab="resources" role="region" aria-labelledby="resTitle">
+          <h2 id="resTitle">Resources & Templates</h2>
+          <ul>
+            <li><a href="#" onclick="event.preventDefault()">Household emergency plan (printable PDF)</a></li>
+            <li><a href="#" onclick="event.preventDefault()">Community checklist & seed bank sign-up</a></li>
+            <li><a href="#" onclick="event.preventDefault()">KVK / Extension contacts (upload CSV)</a></li>
+            <li><a href="#" onclick="event.preventDefault()">Short films & field demo video links (add yours)</a></li>
+          </ul>
+        </article>
+
+        <!-- Quiz -->
+        <section id="quiz" class="card quiz">
+          <h3>Quick Quiz — Household Flood Safety</h3>
+          <div id="quizWrap"></div>
+        </section>
+
+      </section>
+
+      <!-- right / aside -->
+      <aside class="aside" aria-label="Tools and quick actions">
+        <div class="card">
+          <h3>Quick actions</h3>
+          <ul class="muted">
+            <li>Move seeds & grains to raised platform or top shelf</li>
+            <li>Move animals early to high ground</li>
+            <li>Secure pumps & small tools</li>
+            <li>Prepare emergency bag (meds, water, torch)</li>
+          </ul>
+          <div style="margin-top:10px">
+            <button class="btn btn-primary" onclick="openChecklist()">Open Checklist</button>
+            <a class="btn btn-ghost" href="{% url 'drills' %}">Open Drills</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Poster</h3>
+          <p class="muted">Poster shown above updates with each tab. Click to open large.</p>
+          <button class="btn btn-ghost" id="viewPosterBtn">View Poster</button>
+        </div>
+
+        <div class="card">
+          <h3>Field demo video</h3>
+          <div class="video-wrapper">
+            <video controls preload="metadata" poster="{% static 'image/protect/households/flood_field.jpg' %}">
+              <source src="{% static 'video/household_flood_demo.mp4' %}" type="video/mp4">
+              Your browser does not support the video element.
+            </video>
+          </div>
+          <p class="muted">Replace this with your recorded demo for trainings.</p>
+        </div>
+
+        <div class="card">
+          <h3>Emergency numbers</h3>
+          <ul class="muted">
+            <li>Local KVK / Extension: (add)</li>
+            <li>Village leader / Rescue: (add)</li>
+            <li>Ambulance & Police: <strong>112</strong></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+    <footer class="foot">
+      <div class="muted">Tip: This page stores your checklist and quiz progress locally so it works offline.</div>
+      <div></div>
+    </footer>
+  </main>
+
+  <!-- Checklist modal -->
+  <div id="checklistModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="backdrop" onclick="closeChecklist()"></div>
+    <div class="modal-box" role="document">
+      <div class="modal-head">
+        <h2 id="checklistTitle">Household Checklist (Flood)</h2>
+        <div class="controls">
+          <button class="btn btn-ghost" onclick="printChecklist()">Print</button>
+          <button class="btn btn-ghost" id="shareBtn">Share</button>
+          <button class="btn btn-ghost" onclick="closeChecklist()">Close</button>
+        </div>
+      </div>
+
+      <div class="tabs-inner" role="tablist">
+        <button class="tab inner active" data-tab="overview" onclick="switchChecklistTab('overview')">Overview</button>
+        <button class="tab inner" data-tab="before" onclick="switchChecklistTab('before')">Before</button>
+        <button class="tab inner" data-tab="during" onclick="switchChecklistTab('during')">During</button>
+        <button class="tab inner" data-tab="after" onclick="switchChecklistTab('after')">After</button>
+        <button class="tab inner" data-tab="list" onclick="switchChecklistTab('list')">Checklist</button>
+      </div>
+
+      <div id="checklistContent" class="modal-content" tabindex="0"></div>
+
+      <div class="modal-foot">
+        <button class="btn btn-ghost" onclick="closeChecklist()">Close</button>
+        <button class="btn btn-primary" onclick="saveChecklistProgress()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Poster viewer -->
+  <div id="posterLightbox" class="lightbox" style="display:none" role="dialog" aria-modal="true">
+    <div class="backdrop" onclick="closePoster()"></div>
+    <div class="lightbox-box">
+      <button class="btn btn-ghost" onclick="closePoster()">Close</button>
+      <img id="posterLarge" alt="Large poster" src="">
+    </div>
+  </div>
+
+  <script src="{% static 'js/protect-households-flood.js' %}"></script>
+</body>
+</html>

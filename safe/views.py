@@ -235,7 +235,23 @@ def farmers_drought(request):
     return render(request, "protect/farmers/drought.html")
 
 
+# Modules
 
+
+def households_flood(request):
+    return render(request, 'protect/households/flood.html')
+
+def households_cyclone(request):
+    return render(request, 'protect/households/cyclone.html')
+
+def households_heatwave(request):
+    return render(request, 'protect/households/heatwave.html')
+
+def households_fire(request):
+    return render(request, 'protect/households/fire.html')
+
+def households_earthquake(request):
+    return render(request, 'protect/households/earthquake.html')
 
 def zones_api(request):
     data = [

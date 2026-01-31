@@ -1,0 +1,217 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>House Fire — Prevention, Escape & Recovery | SafeSphere</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="House fire module — prevention, escape steps, drills, checklist and recovery guidance for households." />
+
+  <link rel="stylesheet" href="{% static 'css/households-fire.css' %}">
+</head>
+<body>
+  <!-- ALERT BAR (shared hook for weather updates) -->
+  <div id="disaster-alert-bar" class="alert-normal" role="status" aria-live="polite" aria-atomic="true">
+    <div class="alert-inner">
+      <span id="alertIcon">🟢</span>
+      <span id="alertText">Weather is normal. Stay prepared.</span>
+      <button id="dismissAlert" class="dismiss" title="Dismiss alert">Dismiss</button>
+    </div>
+  </div>
+
+  <main class="wrap" role="main" aria-labelledby="pageTitle">
+    <div class="topbar">
+      <div>
+        <h1 id="pageTitle">🧯 House Fire — Prevention, Escape & Recovery</h1>
+        <p class="lead">Practical, adult-focused steps: prevent fires, detect early, escape safely and recover. Suitable for apartments, houses and rural homes.</p>
+
+        <div class="meta-row">
+          <span class="badge">Module • Fire (Household)</span>
+          <span class="small">Est. time: 15–30 min</span>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <a class="btn btn-ghost" href="{% url 'protect_households' %}">⬅ Back</a>
+        <button class="btn btn-primary" id="openChecklistBtn">Open Checklist</button>
+        <a class="btn btn-ghost" href="#quiz">Jump to Quiz</a>
+      </div>
+    </div>
+
+    <div class="grid" role="region" aria-label="Fire module content">
+      <!-- MAIN -->
+      <div>
+
+        <!-- Hook -->
+        <section class="section" id="hook" aria-labelledby="hookTitle">
+          <h2 id="hookTitle">Why this module matters</h2>
+          <p>Most fire casualties are due to smoke inhalation and poor escape decisions. This module gives clear prevention steps, detection guidance and step-by-step escape actions for different rooms.</p>
+          <div class="info-callout">
+            <strong>Key idea:</strong> prevention + a practiced escape plan saves lives and reduces property loss.
+          </div>
+        </section>
+
+        <!-- Tabs -->
+        <div class="tabs" role="tablist" aria-label="Module sections">
+          <button class="tab active" data-tab="prevention" onclick="fire.switchTab('prevention')">Prevention</button>
+          <button class="tab" data-tab="detection" onclick="fire.switchTab('detection')">Detection & Alarms</button>
+          <button class="tab" data-tab="escape" onclick="fire.switchTab('escape')">Escape Steps</button>
+          <button class="tab" data-tab="extinguish" onclick="fire.switchTab('extinguish')">Extinguish & Safe Use</button>
+          <button class="tab" data-tab="recover" onclick="fire.switchTab('recover')">After & Recovery</button>
+          <button class="tab" data-tab="practice" onclick="fire.switchTab('practice')">Practice & Drill</button>
+          <button class="tab" data-tab="resources" onclick="fire.switchTab('resources')">Resources</button>
+        </div>
+
+        <!-- Poster placeholder that changes per section -->
+        <div id="sectionPoster" class="poster-container" aria-hidden="true">
+          <img id="sectionPosterImg" src="" alt="Section poster" />
+        </div>
+
+        <!-- Module content injected by JS -->
+        <div id="moduleContent" class="module-body" tabindex="0" aria-live="polite">
+          <noscript>
+            <p>Please enable JavaScript to view the interactive content, practice drills and quizzes.</p>
+          </noscript>
+        </div>
+
+        <!-- CTA bar -->
+        <div class="cta-row" style="margin-top:12px;">
+          <button class="btn btn-primary" id="openChecklistBtn2">Open Checklist</button>
+          <button class="btn btn-ghost" onclick="fire.printModule()">Print Module</button>
+        </div>
+
+        <!-- Quiz -->
+        <section id="quiz" class="section quiz-box" aria-labelledby="quizHeader">
+          <h2 id="quizHeader">📝 Quick Quiz — Fire</h2>
+          <div id="quizWrap"></div>
+        </section>
+
+        <!-- Stories / case studies -->
+        <section class="section" aria-labelledby="storiesTitle">
+          <h2 id="storiesTitle">Real cases & lessons</h2>
+          <p class="small">Use local newspaper clippings or case summaries here to show consequences and successful escape stories.</p>
+          <div class="stories-grid">
+            <article class="story">
+              <img src="{% static 'image/protect/households/fire_case_1.jpg' %}" alt="fire case 1" onerror="this.style.display='none'">
+              <h4>Kitchen fire — early cover saved life</h4>
+              <p class="small">A family used a metal lid to smother an oil fire and called the fire service. Minor damage, no injuries.</p>
+            </article>
+            <article class="story">
+              <img src="{% static 'image/protect/households/fire_case_2.jpg' %}" alt="fire case 2" onerror="this.style.display='none'">
+              <h4>Inverter fire — ventilate & isolate battery</h4>
+              <p class="small">A rooftop inverter overheating was isolated early keeping the roof safe but requiring battery disposal.</p>
+            </article>
+          </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="section faq" aria-labelledby="faqTitle">
+          <h2 id="faqTitle">Frequently asked</h2>
+          <div class="faq-item">
+            <div class="faq-q" onclick="fire.toggleFaq(this)">What type of extinguisher is best for household?</div>
+            <div class="faq-a">A multi-purpose ABC dry powder extinguisher covers most household fires; CO₂ can be used for small electrical fires. If unsure, evacuate and call the fire service.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="fire.toggleFaq(this)">Do I need a fire blanket?</div>
+            <div class="faq-a">Yes — a simple fire blanket is excellent for smothering pan / small fires and for wrapping a person whose clothes are on fire.</div>
+          </div>
+        </section>
+      </div>
+
+      <!-- SIDE -->
+      <aside class="sidecard" aria-labelledby="sideTitle">
+        <div class="section" id="sideTitle">
+          <h3>Quick actions</h3>
+          <ul class="small">
+            <li>Install a smoke alarm on each floor</li>
+            <li>Keep a charged torch and phone near bed</li>
+            <li>Know at least two escape routes from sleeping rooms</li>
+            <li>Keep fire extinguisher or blanket in kitchen</li>
+          </ul>
+          <div style="margin-top:10px">
+            <button class="btn btn-primary" onclick="fire.openChecklist()">Open Checklist</button>
+            <a class="btn btn-ghost" href="{% url 'drills' %}">Open Drills</a>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>Poster / printable</h3>
+          <img src="{% static 'image/protect/households/fire_poster.jpg' %}" alt="Fire safety poster" class="poster" onerror="this.style.display='none'">
+          <p class="small">Print this and pin near the kitchen or corridor.</p>
+        </div>
+
+        <div class="section">
+          <h3>Field demo video</h3>
+          <div class="video-wrapper">
+            <video controls preload="metadata" poster="{% static 'image/protect/households/fire_demo.jpg' %}">
+              <source src="{% static 'video/fire_demo.mp4' %}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <p class="small">Use during community training to practise PASS and stop-drop-roll.</p>
+        </div>
+
+        <div class="section">
+          <h3>Emergency numbers</h3>
+          <ul class="small">
+            <li>Fire Service: <strong>101</strong> (or local number)</li>
+            <li>Emergency: <strong>112</strong></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      <div class="note">Tip: practice your escape plan monthly. Children and the elderly need repeated drills.</div>
+    </footer>
+  </main>
+
+  <!-- CHECKLIST MODAL -->
+  <div id="checklistModal" class="checklist-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="checklistTitle">
+    <div class="checklist-backdrop" onclick="fire.closeChecklist()"></div>
+
+    <div class="checklist-box" role="document" aria-describedby="checklistNote">
+      <div class="checklist-header">
+        <div>
+          <h2 id="checklistTitle">Household — Fire Checklist</h2>
+          <div id="checklistNote" class="small">Saved locally on this device. Use Print to make a paper copy.</div>
+        </div>
+        <div class="controls">
+          <button class="btn btn-ghost" onclick="fire.printChecklist()">Print</button>
+          <button class="btn btn-ghost" id="shareBtn" onclick="fire.shareChecklist()">Share</button>
+          <button class="btn btn-ghost" onclick="fire.closeChecklist()">Close</button>
+        </div>
+      </div>
+
+      <div class="tabs-inner" role="tablist" aria-label="Checklist tabs">
+        <button class="tab active" data-tab="overview" onclick="fire.switchChecklistTab('overview')">Overview</button>
+        <button class="tab" data-tab="before" onclick="fire.switchChecklistTab('before')">Before</button>
+        <button class="tab" data-tab="during" onclick="fire.switchChecklistTab('during')">During</button>
+        <button class="tab" data-tab="after" onclick="fire.switchChecklistTab('after')">After</button>
+        <button class="tab" data-tab="checklist" onclick="fire.switchChecklistTab('checklist')">Checklist</button>
+      </div>
+
+      <div id="checklistContent" class="checklist-content" tabindex="0"></div>
+
+      <div class="checklist-footer">
+        <button class="btn btn-ghost" onclick="fire.closeChecklist()">Close</button>
+        <button class="btn btn-primary" onclick="fire.saveChecklistProgress()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STORY MODAL -->
+  <div id="storyModal" class="story-modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="story-backdrop" onclick="fire.closeStory()"></div>
+    <div class="story-box">
+      <div class="story-head">
+        <h3 id="storyModalTitle">Story</h3>
+        <button class="btn btn-ghost" onclick="fire.closeStory()">Close</button>
+      </div>
+      <div id="storyModalBody" class="story-body"></div>
+    </div>
+  </div>
+
+  <script src="{% static 'js/households-fire.js' %}"></script>
+</body>
+</html>

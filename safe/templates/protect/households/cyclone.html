@@ -1,0 +1,189 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Cyclone Safety — Households & Property | SafeSphere</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Detailed cyclone protection for households: planning, retrofitting, securing roof/windows, drainage, evacuation, recovery and property-loss reduction." />
+
+  <link rel="stylesheet" href="{% static 'css/cyclone.css' %}">
+
+  <script>
+    // replace with your images (placeholders here)
+    window.SECTION_POSTERS = {
+      planning: "{% static 'image/protect/households/cyclone_planning.jpg' %}",
+      structure: "{% static 'image/protect/households/cyclone_structure.jpg' %}",
+      before: "{% static 'image/protect/households/cyclone_before.jpg' %}",
+      during: "{% static 'image/protect/households/cyclone_during.jpg' %}",
+      after: "{% static 'image/protect/households/cyclone_after.jpg' %}",
+      practice: "{% static 'image/protect/households/cyclone_practice.jpg' %}"
+    };
+  </script>
+</head>
+<body>
+  <!-- ALERT BAR -->
+  <div id="disaster-alert-bar" class="alert-normal" role="status" aria-live="polite">
+    <div class="alert-inner">
+      <span id="alertIcon">🟢</span>
+      <span id="alertText">No cyclone warning. Stay prepared.</span>
+      <button id="dismissAlert" class="dismiss" aria-label="Dismiss alert">Dismiss</button>
+    </div>
+  </div>
+
+  <main class="wrap" role="main" aria-labelledby="pageTitle">
+    <header class="topbar">
+      <div>
+        <h1 id="pageTitle">🌀 Cyclone — Protect Home & Property</h1>
+        <p class="lead">A practical, property-first guide: planning, retrofit, immediate actions and recovery to reduce life and monetary loss.</p>
+        <div class="meta-row">
+          <span class="badge">Household • Cyclone</span>
+          <span class="small">40–60 min (read + practice)</span>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <a class="btn btn-ghost" href="{% url 'protect_households' %}">⬅ Back</a>
+        <button class="btn btn-primary" id="openChecklistBtn">Open Checklist</button>
+        <button class="btn btn-ghost" id="printModuleBtn">Print</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- MAIN COLUMN -->
+      <div>
+        <section class="section" aria-labelledby="whyTitle">
+          <h2 id="whyTitle">Why cyclones cause property loss — the real causes</h2>
+          <ul>
+            <li><strong>Roof uplift:</strong> wind lifts loose roof sheets if not anchored—entire roof can be lost.</li>
+            <li><strong>Windows & openings:</strong> broken windows create internal pressure that pushes walls out.</li>
+            <li><strong>Flying debris:</strong> can puncture roofs, break glass and damage water tanks/solar panels.</li>
+            <li><strong>Poor drainage & ponding:</strong> traps water at foundations and causes structural weakening.</li>
+            <li><strong>Improper storage of fuels/tools:</strong> leads to secondary fires or chemical contamination after floodwater.</li>
+          </ul>
+          <div class="info-box"><strong>Focus:</strong> strengthen roof anchorage, protect openings, secure loose items, and keep water away from the foundation.</div>
+        </section>
+
+        <!-- TAB NAV -->
+        <nav class="tabs" role="tablist" aria-label="Cyclone sections">
+          <button class="tab active" data-tab="planning">Land & Planning</button>
+          <button class="tab" data-tab="structure">House Structure & Retrofit</button>
+          <button class="tab" data-tab="before">Before (72–24 hrs)</button>
+          <button class="tab" data-tab="during">During (what to do)</button>
+          <button class="tab" data-tab="after">After (recovery & claims)</button>
+          <button class="tab" data-tab="practice">Practice & Drills</button>
+          <button class="tab" data-tab="resources">Resources & Contacts</button>
+        </nav>
+
+        <!-- Poster that swaps with tab -->
+        <div id="sectionPoster" class="poster-container" aria-hidden="true">
+          <img id="sectionPosterImg" alt="Section poster (cyclone)" />
+        </div>
+
+        <!-- Dynamic content area -->
+        <article id="moduleContent" class="module-body" tabindex="0" aria-live="polite">
+          <!-- content injected by JS -->
+        </article>
+
+        <div class="cta-row" style="margin-top:12px;">
+          <button class="btn btn-primary" id="openChecklistBtn2">Open Checklist</button>
+          <button class="btn btn-ghost" id="openQuizBtn">Open Quiz</button>
+        </div>
+
+        <!-- QUIZ -->
+        <section id="quizSection" class="section quiz-box" aria-labelledby="quizHeading" hidden>
+          <h2 id="quizHeading">Quick Quiz — Cyclone property safety</h2>
+          <div id="quizWrap"></div>
+        </section>
+
+        <!-- STORIES -->
+        <section class="section" aria-labelledby="storiesHeading">
+          <h2 id="storiesHeading">Real examples — how property loss was reduced</h2>
+          <article class="story">
+            <h4>Anchored roof saved home — coastal village</h4>
+            <p class="small">A community used metal straps and tie-downs before the cyclone; homes with straps had minor damage, while others lost roofs.</p>
+            <p><a href="#" class="btn btn-ghost" onclick="cyclone.openStory(event,1)">Read summary</a></p>
+          </article>
+        </section>
+
+        <!-- FAQ -->
+        <section class="section faq" aria-labelledby="faqHeading">
+          <h2 id="faqHeading">FAQ</h2>
+          <div class="faq-item">
+            <div class="faq-q" role="button" tabindex="0">How much does retrofitting cost?</div>
+            <div class="faq-a">Minor retrofits (straps, bolts, shutters) are low-cost — often a few thousand rupees — far less than replacing a roof. Larger structural retrofits cost more but increase safety and insurance eligibility.</div>
+          </div>
+        </section>
+      </div>
+
+      <!-- SIDE COLUMN -->
+      <aside class="sidecard" aria-labelledby="sideTitle">
+        <div class="section" id="sideTitle">
+          <h3>High-priority checklist (summary)</h3>
+          <ul class="small">
+            <li>Anchor roofs with straps / bolts</li>
+            <li>Board or shutter windows</li>
+            <li>Elevate important items above flood level</li>
+            <li>Secure water tanks & solar panels</li>
+            <li>Know nearest cyclone shelter</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h3>Emergency kit</h3>
+          <ul class="small">
+            <li>3 days water & food</li>
+            <li>First-aid & medicines</li>
+            <li>Documents in waterproof folder</li>
+            <li>Battery radio / torch / powerbank</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h3>Important: documentation</h3>
+          <p class="small">Photograph structure, roof, and valuables now — these photos accelerate relief and insurance claims.</p>
+          <p><button class="btn btn-ghost" id="saveEvidenceBtn">Save sample evidence note</button></p>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      <p class="note">Local adaptation: Use local KVK/SDMA guidance for materials and elevation values. This module is offline-friendly (checklist & quiz stored on device).</p>
+    </footer>
+  </main>
+
+  <!-- Checklist modal -->
+  <div id="checklistModal" class="checklist-modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="checklist-backdrop" onclick="cyclone.closeChecklist()"></div>
+    <div class="checklist-box" role="document" aria-labelledby="checklistTitle">
+      <h2 id="checklistTitle">Cyclone — Property Protection Checklist</h2>
+      <div id="checklistTabs" class="tabs-inner" role="tablist" aria-label="Checklist tabs">
+        <button class="tab active" data-tab="overview">Overview</button>
+        <button class="tab" data-tab="before">Before</button>
+        <button class="tab" data-tab="during">During</button>
+        <button class="tab" data-tab="after">After</button>
+        <button class="tab" data-tab="checklist">Checklist</button>
+      </div>
+      <div id="checklistContent" class="checklist-content" tabindex="0"></div>
+      <div class="checklist-footer">
+        <button class="btn btn-ghost" onclick="cyclone.closeChecklist()">Close</button>
+        <button class="btn btn-primary" onclick="cyclone.saveChecklist()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Story modal -->
+  <div id="storyModal" class="story-modal" aria-hidden="true">
+    <div class="story-backdrop" onclick="cyclone.closeStory()"></div>
+    <div class="story-box" role="document">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h3 id="storyModalTitle">Story</h3>
+        <button class="btn btn-ghost" onclick="cyclone.closeStory()">Close</button>
+      </div>
+      <div id="storyModalBody" style="margin-top:12px"></div>
+    </div>
+  </div>
+
+  <script src="{% static 'js/cyclone.js' %}"></script>
+</body>
+</html>
