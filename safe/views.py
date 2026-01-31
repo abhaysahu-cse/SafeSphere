@@ -217,6 +217,24 @@ def protect_community(request):
 def protect_schools(request):
     return render(request, "protect/schools.html")
 
+# safe/views.py  -- add these functions near protect_* views
+def farmers_index(request):
+    # keeps a friendly index (if you already have protect_farmers pointing to same template skip this)
+    return render(request, "protect/farmers.html")
+
+def farmers_flood(request):
+    return render(request, "protect/farmers/flood.html")
+
+def farmers_cyclone(request):
+    return render(request, "protect/farmers/cyclone.html")
+
+def farmers_heatwave(request):
+    return render(request, "protect/farmers/heatwave.html")
+
+def farmers_drought(request):
+    return render(request, "protect/farmers/drought.html")
+
+
 
 
 def zones_api(request):

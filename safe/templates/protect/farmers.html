@@ -2,229 +2,93 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8">
   <title>Farmers & Livelihoods | SafeSphere</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="Disaster preparedness modules for farmers to protect crops, livestock and income." />
-
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-
-  <!-- Page-scoped UI fixes (safe, non-breaking) -->
   <style>
-    .main-content {
-      padding: 24px;
-      min-height: 90vh;
-    }
-
-    .page-header h1 {
-      font-size: 2rem;
-      color: #14213d;
-      margin-bottom: 6px;
-    }
-
-    .page-header p {
-      color: #64748b;
-      margin-bottom: 18px;
-    }
-
-    /* Module grid */
-    .modules-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 16px;
-      margin-top: 10px;
-    }
-
-    .module-card {
-      background: linear-gradient(180deg, #ffffff, #f4f7ff);
-      border-radius: 14px;
-      padding: 18px;
-      box-shadow: 0 8px 22px rgba(20,33,61,0.06);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      min-height: 200px;
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .module-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 18px 40px rgba(20,33,61,0.12);
-    }
-
-    .module-icon {
-      font-size: 34px;
-      margin-bottom: 8px;
-    }
-
-    .module-card h3 {
-      margin: 6px 0 8px;
-      font-size: 1.1rem;
-      color: #1e293b;
-    }
-
-    .module-card p {
-      color: #475569;
-      font-size: 0.95rem;
-      line-height: 1.4;
-      flex-grow: 1;
-    }
-
-    .module-meta {
-      margin-top: 12px;
-      font-size: 0.85rem;
-      color: #64748b;
-    }
-
-    /* Quick actions panel */
-    .farmer-help {
-      margin-top: 26px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 14px;
-    }
-
-    .help-card {
-      background: #ffffff;
-      padding: 14px;
-      border-radius: 12px;
-      box-shadow: 0 6px 18px rgba(20,33,61,0.04);
-    }
-
-    .help-card h4 {
-      margin: 0 0 6px;
-      font-size: 1rem;
-      color: #14213d;
-    }
-
-    .help-card p {
-      margin: 0;
-      font-size: 0.9rem;
-      color: #475569;
-    }
-
-    .help-card a {
-      display: inline-block;
-      margin-top: 8px;
-      font-weight: 600;
-      color: #5b21b6;
-      text-decoration: none;
-    }
+    .main-content { padding:22px; min-height:88vh; margin-left:260px; max-width:1200px; }
+    .page-header h1 { font-size:1.9rem; margin:0; color:#0b2545; }
+    .page-header p { color:#64748b; margin:6px 0 14px; }
+    .modules-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; margin-top:12px; }
+    .module-card { background:linear-gradient(180deg,#fff,#f6f9ff); padding:16px; border-radius:12px; box-shadow:0 8px 22px rgba(8,12,40,0.04); display:flex; flex-direction:column; justify-content:space-between; min-height:160px; text-decoration:none; color:inherit; }
+    .module-card:hover { transform:translateY(-6px); box-shadow:0 20px 40px rgba(8,12,40,0.08); }
+    .module-icon { font-size:34px; margin-bottom:8px; }
+    .module-title { margin:6px 0 8px; font-size:1.05rem; color:#10243b; }
+    .module-desc { color:#475569; margin:0; line-height:1.35; }
+    .module-meta { margin-top:12px; color:#64748b; font-size:0.9rem; }
+    .btn { padding:8px 12px; border-radius:8px; border:1px solid transparent; text-decoration:none; font-weight:700; cursor:pointer; }
+    .btn-ghost { background:#fff; border:1px solid rgba(20,33,61,0.06); color:#0b2545; }
+    .btn-primary { background:#16a34a; color:#fff; border-color:#16a34a; }
+    .help-grid { margin-top:18px; display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; }
+    .help-card { background:#fff; padding:12px; border-radius:10px; box-shadow:0 6px 18px rgba(8,12,40,0.04); }
   </style>
 </head>
-
 <body>
   {% include 'partials/sidebar.html' %}
 
-  <main class="main-content" role="main">
-
-    <!-- Header -->
+  <main class="main-content">
     <header class="page-header">
       <h1>👨‍🌾 Farmers & Livelihoods</h1>
-      <p>
-        Step-by-step disaster safety modules to protect crops, animals,
-        tools and farming income.
-        <strong>Follow: Before → During → After</strong>
-      </p>
+      <p>Modules: Floods · Cyclones · Heatwaves · Droughts — practical actions for farmers to reduce crop & income loss.</p>
     </header>
 
-    <!-- Farmer Modules -->
-    <section class="modules-grid" aria-label="Farmer disaster modules">
-
-      <!-- Flood -->
-      <a class="module-card" href="#">
+    <section class="modules-grid" aria-label="Farmer modules">
+      <a class="module-card" href="{% url 'farmers_flood' %}">
         <div>
           <div class="module-icon">🌊</div>
-          <h3>Flood Safety for Farmers</h3>
-          <p>
-            Protect standing crops, stored grains, livestock and farm equipment
-            from flood damage and contamination.
-          </p>
+          <div class="module-title">Flood Safety for Farmers</div>
+          <p class="module-desc">Protect standing crops, stored grains and livestock — clear steps to follow before, during and after floods.</p>
         </div>
-        <div class="module-meta">
-          Covers: Before · During · After
-        </div>
+        <div class="module-meta">Before · During · After · Checklist · Quiz</div>
       </a>
 
-      <!-- Cyclone -->
-      <a class="module-card" href="#">
+      <a class="module-card" href="{% url 'farmers_cyclone' %}">
         <div>
           <div class="module-icon">🌀</div>
-          <h3>Cyclone & Storm Protection</h3>
-          <p>
-            Reduce wind damage, saltwater impact, and animal losses
-            during cyclones and severe storms.
-          </p>
+          <div class="module-title">Cyclone Protection</div>
+          <p class="module-desc">Reduce wind and storm surge damage — tie-downs, early harvesting and livestock safety.</p>
         </div>
-        <div class="module-meta">
-          Wind · Heavy rain · Storm surge
-        </div>
+        <div class="module-meta">Wind · Storm surge · Salt</div>
       </a>
 
-      <!-- Heatwave -->
-      <a class="module-card" href="#">
+      <a class="module-card" href="{% url 'farmers_heatwave' %}">
         <div>
           <div class="module-icon">🔥</div>
-          <h3>Heatwave Safety</h3>
-          <p>
-            Manage water usage, protect livestock, and adjust work timing
-            during extreme heat conditions.
-          </p>
+          <div class="module-title">Heatwave Management</div>
+          <p class="module-desc">Water management, shade, work timing and protecting livestock & labourers during extreme heat.</p>
         </div>
-        <div class="module-meta">
-          Heat stress · Water safety
-        </div>
+        <div class="module-meta">Water · Labour safety</div>
       </a>
 
-      <!-- Drought -->
-      <a class="module-card" href="#">
+      <a class="module-card" href="{% url 'farmers_drought' %}">
         <div>
           <div class="module-icon">🌵</div>
-          <h3>Drought Preparedness</h3>
-          <p>
-            Crop planning, rainwater harvesting, soil moisture conservation
-            and livelihood protection during droughts.
-          </p>
+          <div class="module-title">Drought Preparedness</div>
+          <p class="module-desc">Rainwater harvesting, crop choices and short-season crops to protect income.</p>
         </div>
-        <div class="module-meta">
-          Water storage · Crop choice
-        </div>
+        <div class="module-meta">Rainwater · Crops · Storage</div>
       </a>
-
     </section>
 
-    <!-- Quick help & actions -->
-    <section class="farmer-help" aria-label="Farmer help tools">
-
+    <section class="help-grid">
       <div class="help-card">
-        <h4>📋 Farmer Checklist</h4>
-        <p>
-          Open the flood & disaster checklist to make sure
-          nothing important is missed.
-        </p>
-        <a href="{% url 'protect' %}">Open checklist →</a>
+        <h4>📋 Practical checklist</h4>
+        <p>Open any module and tap <strong>Checklist</strong> to run an in-page checklist and save progress on this device.</p>
       </div>
 
       <div class="help-card">
-        <h4>🧪 Practice with Drills</h4>
-        <p>
-          Use simulation drills to practice decision-making
-          before real disasters.
-        </p>
-        <a href="{% url 'drills' %}">Go to drills →</a>
+        <h4>🧪 Practice drills</h4>
+        <p>Use drills to practise moving livestock and securing tools before the season.</p>
+        <p style="margin-top:8px"><a class="btn btn-ghost" href="{% url 'drills' %}">Open Drills</a></p>
       </div>
 
       <div class="help-card">
-        <h4>🤖 Ask AI Assistant</h4>
-        <p>
-          Ask questions like “What should I do if floods hit my village tomorrow?”
-        </p>
-        <a href="{% url 'chat' %}">Ask AI →</a>
+        <h4>🤖 Ask AI</h4>
+        <p>Get a quick checklist tailored to your crop and farm size from the AI Assistant.</p>
+        <p style="margin-top:8px"><a class="btn btn-ghost" href="{% url 'chat' %}">Ask AI Assistant</a></p>
       </div>
-
     </section>
-
   </main>
 </body>
 </html>

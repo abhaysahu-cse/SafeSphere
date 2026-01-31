@@ -87,6 +87,16 @@ urlpatterns = [
     path('protect/households/', views.protect_households, name='protect_households'),
     path('protect/community/', views.protect_community, name='protect_community'),
     path('protect/schools/', views.protect_schools, name='protect_schools'),
+
+        # Protect Home, Farm & Livelihood
+    path('protect/', views.protect_index, name='protect'),
+    path('protect/farmers/', views.protect_farmers, name='protect_farmers'),
+    path('protect/farmers/flood/', views.farmers_flood, name='farmers_flood'),
+    path('protect/farmers/cyclone/', views.farmers_cyclone, name='farmers_cyclone'),
+    path('protect/farmers/heatwave/', views.farmers_heatwave, name='farmers_heatwave'),
+    path('protect/farmers/drought/', views.farmers_drought, name='farmers_drought'),
+    path('protect/households/', views.protect_households, name='protect_households'),
+    
     
 ]
 

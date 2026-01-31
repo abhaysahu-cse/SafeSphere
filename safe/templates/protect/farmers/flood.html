@@ -1,0 +1,653 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Flood Safety for Farmers | SafeSphere</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Flood safety module for farmers — practical Before / During / After actions, checklist, quiz, posters and resources." />
+
+  <!-- Page-scoped styles (safe, will not touch global CSS) -->
+  <style>
+    :root{
+      --accent:#0f5132;   /* green */
+      --muted:#556074;
+      --card:#ffffff;
+      --bg:#f3f7fb;
+      --callout:#eefcf3;
+      --danger:#c62828;
+      --maxw:1100px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
+      background: linear-gradient(180deg,#f7fbfe 0%, #eef4fb 100%);
+      color:#112;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.5;
+      padding:20px;
+      display:flex;
+      justify-content:center;
+      padding-top:68px; /* room for alert bar */
+    }
+
+    /* ALERT BAR */
+    #disaster-alert-bar{
+      position:fixed;
+      top:0; left:0; right:0;
+      height:48px;
+      z-index:9999;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      gap:12px;
+      padding:6px 12px;
+      box-shadow:0 6px 18px rgba(8,24,40,0.06);
+      transition:transform .25s, opacity .25s;
+    }
+    .alert-normal{ background: linear-gradient(90deg,#1e7e34,#28a745); color:#fff }
+    .alert-warning{ background: linear-gradient(90deg,#ff9800,#ffc107); color:#222 }
+    .alert-danger{ background: linear-gradient(90deg,#c62828,#e53935); color:#fff }
+    #disaster-alert-bar .dismiss{ margin-left:auto; background:rgba(255,255,255,0.12); border-radius:8px; padding:6px 8px; font-size:13px; color:inherit; border:none; cursor:pointer }
+
+    /* main wrap */
+    .wrap{
+      max-width:var(--maxw);
+      width:100%;
+      background:var(--card);
+      border-radius:12px;
+      box-shadow:0 16px 40px rgba(8,24,40,.06);
+      padding:22px;
+      margin-bottom:40px;
+      position:relative;
+    }
+
+    .topbar{ display:flex; justify-content:space-between; gap:12px; align-items:flex-start; flex-wrap:wrap }
+    .topbar h1{ margin:0; color:var(--accent); font-size:1.7rem }
+    .topbar .lead{ margin:6px 0 0; color:var(--muted); font-size:0.98rem }
+
+    .grid{ display:grid; grid-template-columns: 1fr 320px; gap:18px; align-items:start; margin-top:14px }
+    @media (max-width:980px){ .grid{ grid-template-columns: 1fr } .sidecard{ order:-1 } }
+
+    .section{ background:#fff; padding:14px; border-radius:10px; margin-top:12px; border:1px solid rgba(10,20,30,0.03) }
+    .section h2{ margin:0 0 8px; color:var(--accent) }
+    p.small{ color:var(--muted); margin:6px 0 0; }
+
+    /* tabs */
+    .tabs{ display:flex; gap:8px; flex-wrap:wrap; margin-top:12px }
+    .tab{ padding:8px 12px; border-radius:10px; background:#f1f5f9; cursor:pointer; font-weight:700; border:1px solid transparent }
+    .tab.active{ background:var(--accent); color:#fff; border-color:var(--accent) }
+
+    /* content body */
+    .module-body{ margin-top:12px; background:linear-gradient(180deg,#ffffff,#fbfeff); border-radius:10px; padding:16px; box-shadow:0 8px 18px rgba(8,24,40,0.03) }
+    .module-body h3{ color:var(--accent); margin:6px 0 8px; }
+
+    .poster{ width:100%; border-radius:8px; display:block; margin-top:8px; border:1px solid rgba(0,0,0,0.04) }
+    .video-wrapper{ position:relative; width:100%; aspect-ratio:16/9; background:#000; border-radius:10px; overflow:hidden; margin-top:12px }
+    .video-wrapper video{ width:100%; height:100%; object-fit:contain; display:block }
+
+    .info-box{ background:var(--callout); padding:10px; border-radius:8px; border-left:4px solid #2f9a6a; color:#114 }
+    .kit-list{ display:flex; gap:8px; flex-wrap:wrap; margin-top:8px }
+    .kit-item{ background:#f7fffb; padding:8px 10px; border-radius:8px; border:1px solid rgba(0,0,0,0.03); color:#054 }
+
+    .cta-row{ margin-top:12px; display:flex; gap:10px; flex-wrap:wrap }
+    .btn{ display:inline-block; padding:10px 14px; border-radius:10px; font-weight:800; cursor:pointer; text-decoration:none; color:#fff; border:none }
+    .btn-primary{ background:var(--accent) }
+    .btn-ghost{ background:transparent; color:var(--accent); border:1px solid rgba(8,20,30,0.06); padding:8px 12px; border-radius:10px }
+
+    /* checklist modal */
+    .checklist-modal{ position:fixed; inset:0; z-index:10000; display:flex; align-items:flex-start; justify-content:center; padding-top:6vh }
+    .checklist-backdrop{ position:absolute; inset:0; background:rgba(0,0,0,0.45) }
+    .checklist-box{ position:relative; width:90%; max-width:880px; background:#fff; border-radius:12px; padding:14px; box-shadow:0 30px 60px rgba(0,0,0,0.28); z-index:10001 }
+    .checklist-header{ display:flex; justify-content:space-between; align-items:center; gap:8px; border-bottom:1px solid #eef2ff; padding-bottom:8px }
+    .tabs-inner{ display:flex; gap:8px; margin-top:10px; flex-wrap:wrap }
+    .checklist-content{ margin-top:12px; max-height:60vh; overflow:auto; padding-right:8px }
+    .checklist-item{ display:flex; gap:10px; padding:8px 0; border-bottom:1px dashed #eef2ff; align-items:flex-start }
+    .checklist-item input{ margin-top:6px }
+
+    /* quiz */
+    .quiz-box{ background:#fffaf0; border-left:5px solid #ffb74d; padding:14px; border-radius:8px; margin-top:12px }
+    .quiz-options label{ display:block; padding:8px; border-radius:8px; cursor:pointer }
+
+    /* news / stories */
+    .stories{ display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin-top:12px }
+    .story{ background:#fff; border-radius:8px; padding:8px; border:1px solid rgba(0,0,0,0.03) }
+    .story img{ width:100%; border-radius:6px; display:block }
+
+    /* sidecard */
+    .sidecard{ position:sticky; top:20px }
+    .sidecard .section{ margin-top:0 }
+
+    .faq .faq-item{ margin-bottom:8px; border:1px solid #e6eefb; padding:10px; border-radius:8px }
+    .faq .faq-q{ font-weight:700; cursor:pointer }
+    .faq .faq-a{ display:none; margin-top:8px; color:var(--muted) }
+
+    footer{ margin-top:18px; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:center }
+    .note{ color:var(--muted); font-size:0.95rem }
+  </style>
+</head>
+
+<body>
+  <!-- Disaster alert bar (shared behavior with weather; page remains standalone) -->
+  <div id="disaster-alert-bar" class="alert-normal" role="status" aria-live="polite" aria-atomic="true">
+    <div style="max-width:1100px; width:100%; display:flex; gap:12px; align-items:center; padding:0 12px;">
+      <span id="alertIcon">🟢</span>
+      <span id="alertText">Weather is normal. Stay prepared.</span>
+      <button class="dismiss" id="dismissAlert" title="Dismiss">Dismiss</button>
+    </div>
+  </div>
+
+  <main class="wrap" role="main" aria-labelledby="title">
+    <div class="topbar">
+      <div>
+        <h1 id="title">🌊 Flood Safety — Farmers & Livelihoods</h1>
+        <div class="lead">Protect standing crops, store grains safely, secure livestock and farm assets — step-by-step Before → During → After guidance tailored for farmers.</div>
+
+        <div class="meta-row" style="margin-top:8px; display:flex; gap:12px; flex-wrap:wrap; align-items:center">
+          <span class="badge" style="background:#f0fff4; color:#116530; padding:6px 10px; border-radius:999px; font-weight:800">Module • Flood (Farmers)</span>
+          <span class="small">Est. time: 12–22 min</span>
+          <span class="small">Checklist • Quiz • Print</span>
+        </div>
+      </div>
+
+      <div class="cta-row" aria-hidden="false">
+        <a class="btn btn-ghost" href="{% url 'protect_farmers' %}">⬅ Back to Farmers</a>
+        <button class="btn btn-primary" onclick="openChecklist('farmers')">Open Checklist</button>
+        <a class="btn btn-ghost" href="#quiz">Jump to Quiz</a>
+      </div>
+    </div>
+
+    <div class="grid" role="region" aria-label="Module content">
+
+      <!-- MAIN COLUMN -->
+      <div>
+        <!-- Hook -->
+        <section class="section" aria-labelledby="hookTitle">
+          <h2 id="hookTitle">Hook — Imagine the monsoon surge</h2>
+          <p>Heavy rain overnight causes the local stream to rise 60 cm in a few hours. Your low-lying paddy field is at risk — what immediate steps can protect the harvest and livestock?</p>
+          <div class="info-box" style="margin-top:10px">
+            <strong>Key idea:</strong> Act early. Moving key items and animals to higher ground and covering stored seeds/grains saves income and reduces recovery time.
+          </div>
+        </section>
+
+        <!-- Tabs -->
+        <div class="tabs" role="tablist" aria-label="Sections">
+          <div class="tab active" data-tab="before" onclick="switchTab('before')">Before</div>
+          <div class="tab" data-tab="during" onclick="switchTab('during')">During</div>
+          <div class="tab" data-tab="after" onclick="switchTab('after')">After</div>
+          <div class="tab" data-tab="practice" onclick="switchTab('practice')">Practice & Drills</div>
+          <div class="tab" data-tab="resources" onclick="switchTab('resources')">Resources</div>
+        </div>
+
+        <div class="module-body" id="moduleContent" tabindex="0" aria-live="polite">
+          <!-- injected by JS -->
+        </div>
+
+        <!-- Checklist quick link (redundant) -->
+        <div style="margin-top:12px; display:flex; gap:8px;">
+          <button class="btn btn-primary" onclick="openChecklist('farmers')">Open Checklist</button>
+          <button class="btn btn-ghost" onclick="printModule()">Print Module</button>
+        </div>
+
+        <!-- Quiz -->
+        <section class="section quiz-box" id="quiz" aria-labelledby="quizHeader">
+          <h2 id="quizHeader">📝 Quick Quiz — Floods</h2>
+          <div id="quizWrap" aria-live="polite">
+            <!-- injected by JS -->
+          </div>
+        </section>
+
+        <!-- Real-world stories -->
+        <section class="section" aria-labelledby="storiesTitle">
+          <h2 id="storiesTitle">Real-world stories & reports</h2>
+          <p class="small">Examples from local news and case studies (images are placeholders — replace with scanned clippings or summaries).</p>
+          <div class="stories">
+            <article class="story" role="article" aria-label="News story 1">
+              <img src="{% static 'image/protect/farmers/news_1.jpg' %}" alt="Newspaper clipping: flood destroys crops" />
+              <h4 style="margin:8px 0 6px">Flooding damages paddy harvest — July 2025</h4>
+              <p class="small">Short summary: Heavy rains swept fields; farmers used raised storage and saved seed stock after early warnings.</p>
+              <p style="margin-top:8px"><a class="btn btn-ghost" href="#" onclick="openStory(event,1)">Read summary</a></p>
+            </article>
+
+            <article class="story" role="article" aria-label="News story 2">
+              <img src="{% static 'image/protect/farmers/news_2.jpg' %}" alt="Photo: community rescue boats" />
+              <h4 style="margin:8px 0 6px">Community boats rescue livestock — Aug 2025</h4>
+              <p class="small">Local volunteers saved animals and stored grain on village raised platforms; recovery was faster.</p>
+              <p style="margin-top:8px"><a class="btn btn-ghost" href="#" onclick="openStory(event,2)">Read summary</a></p>
+            </article>
+          </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="section faq" aria-labelledby="faqTitle">
+          <h2 id="faqTitle">Frequently asked questions</h2>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">How do I dry wet grains safely?</div>
+            <div class="faq-a">Spread grains thinly on raised tarpaulins in direct sun, turn frequently and use local extension advice for disinfection.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">When should I harvest early?</div>
+            <div class="faq-a">If a red flood alert is issued and your crop is mature enough to be harvested economically, harvest early and store on raised platforms.</div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- SIDE COLUMN -->
+      <aside class="sidecard" aria-labelledby="sideTitle">
+        <div class="section" id="sideTitle">
+          <h3>Quick actions</h3>
+          <p class="small">Use these when flood risk rises:</p>
+          <ul class="small">
+            <li>Move seed bags and valuables to top shelf or house roof (safe & dry).</li>
+            <li>Take animals to community high ground or boats if available.</li>
+            <li>Turn off irrigation pumps and electrical equipment.</li>
+          </ul>
+          <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap">
+            <button class="btn btn-primary" onclick="openChecklist('farmers')">Open Checklist</button>
+            <a class="btn btn-ghost" href="{% url 'drills' %}">Open Drills</a>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>Poster</h3>
+          <img src="{% static 'image/protect/farmers/flood_poster.jpg' %}" alt="Flood safety poster for farmers" class="poster">
+          <p class="small">Print and pin this at the village office.</p>
+        </div>
+
+        <div class="section">
+          <h3>Field demo video</h3>
+          <div class="video-wrapper" aria-hidden="false">
+            <video controls preload="metadata" poster="{% static 'image/protect/farmers/flood_field.jpg' %}">
+              <source src="{% static 'video/farm_flood_demo.mp4' %}" type="video/mp4">
+              <!-- Fallback: link -->
+            </video>
+          </div>
+          <p class="small">Use in training sessions. Replace `video/farm_flood_demo.mp4` with your recorded demo.</p>
+        </div>
+
+        <div class="section">
+          <h3>Emergency numbers</h3>
+          <p class="small">Save these on every phone in the village.</p>
+          <ul class="small">
+            <li>Local Rescue / Village Leader</li>
+            <li>District Disaster Management Office</li>
+            <li>Ambulance & Police: <strong>112</strong></li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      <div class="note">Tip: This module is offline-first — checklists and quiz progress are stored locally on the device (browser localStorage).</div>
+      <div></div>
+    </footer>
+  </main>
+
+  <!-- CHECKLIST MODAL -->
+  <div id="checklistModal" class="checklist-modal" style="display:none" role="dialog" aria-modal="true" aria-labelledby="checklistTitle">
+    <div class="checklist-backdrop" onclick="closeChecklist()"></div>
+    <div class="checklist-box" role="document">
+      <div class="checklist-header">
+        <div>
+          <h2 id="checklistTitle">Farmers — Flood Checklist</h2>
+          <div id="checklistNote" class="small" style="margin-top:4px; color:var(--muted)"></div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:center">
+          <button class="btn btn-ghost" onclick="printChecklist()">Print</button>
+          <button class="btn btn-ghost" id="shareBtn" onclick="shareChecklist()">Share</button>
+          <button class="btn btn-ghost" aria-label="Close" onclick="closeChecklist()">Close</button>
+        </div>
+      </div>
+
+      <div class="tabs-inner" role="tablist" aria-label="Checklist tabs">
+        <div class="tab active" data-tab="overview" onclick="switchChecklistTab('overview')">Overview</div>
+        <div class="tab" data-tab="before" onclick="switchChecklistTab('before')">Before</div>
+        <div class="tab" data-tab="during" onclick="switchChecklistTab('during')">During</div>
+        <div class="tab" data-tab="after" onclick="switchChecklistTab('after')">After</div>
+        <div class="tab" data-tab="checklist" onclick="switchChecklistTab('checklist')">Checklist</div>
+      </div>
+
+      <div class="checklist-content" id="checklistContent" tabindex="0">
+        <!-- injected -->
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:12px">
+        <button class="btn btn-ghost" onclick="closeChecklist()">Close</button>
+        <button class="btn btn-primary" onclick="saveChecklistProgress()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STORY MODAL (for read summaries) -->
+  <div id="storyModal" style="display:none; position:fixed; inset:0; z-index:11000; align-items:center; justify-content:center; padding:6vh;">
+    <div style="position:absolute; inset:0; background:rgba(0,0,0,0.45)" onclick="closeStory()"></div>
+    <div style="background:#fff; border-radius:12px; max-width:880px; width:94%; padding:16px; box-shadow:0 30px 60px rgba(0,0,0,0.28)">
+      <div style="display:flex; justify-content:space-between; align-items:center">
+        <h3 id="storyModalTitle">Story</h3>
+        <button class="btn btn-ghost" onclick="closeStory()">Close</button>
+      </div>
+      <div id="storyModalBody" style="margin-top:12px; color:var(--muted)"></div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS: module content, checklist, quiz, storage, share, print -->
+  <script>
+    (function(){
+      // ---------- Module data ----------
+      const MODULE = {
+        before: [
+          "Monitor local weather and official alerts (IMD/State bulletins).",
+          "Move harvested produce, seeds and fertilizers to raised platforms or upper floors.",
+          "Keep animal feed, medicines and essential fodder stored on higher ground.",
+          "Tie tools, tractors and machinery or move to shelter to prevent washing away.",
+          "Prepare sandbags or earthen bunds around low store rooms where possible.",
+          "Charge power banks and keep important phone numbers written on paper and in phone."
+        ],
+        during: [
+          "Move livestock to higher ground or community shelters before water rises.",
+          "Switch off main electricity and disconnect pumps if safe to do so.",
+          "Avoid walking or driving through moving flood water — it can wash away people and vehicles.",
+          "If using boats for rescue, secure animals and tag them if possible.",
+          "Keep drinking water and basic medicines in waterproof bags."
+        ],
+        after: [
+          "Document damage with photos (for relief/insurance) and note time of events.",
+          "Dry stored grains fully before returning to storage; discard moulded grain and seek seed replacement.",
+          "Desilt fields as advised by local extension; test for salinity if surge occurred.",
+          "Check animals for injuries and seek veterinary help; isolate sick animals.",
+          "Coordinate with local KVK/extension and authorities for input support and relief."
+        ],
+        checklist: [
+          "Raised storage ready for seeds & grains",
+          "Animal shelter identified on higher ground",
+          "Tools & machinery secured or moved",
+          "Emergency bag ready (medicines, documents, torch, powerbank)",
+          "Contact list written and shared with neighbours",
+          "Community contact for boats and tractors noted"
+        ],
+        quiz:[
+          { q:"Where should you store seed bags before a flood?", a:["Low shed", "Raised platform / upper floor", "Open yard"], correct:1 },
+          { q:"What should you do with pumps when flood water approaches?", a:["Keep them running", "Switch off and disconnect if safe", "Leave them on auto"], correct:1 },
+          { q:"After flood, how should you treat wet grains?", a:["Store immediately", "Dry & disinfect before storage", "Discard all grain"], correct:1 }
+        ]
+      };
+
+      // ---------- Render main module tab content ----------
+      let currentTab = 'before';
+      function switchTab(tab){
+        currentTab = tab;
+        document.querySelectorAll('.tabs .tab').forEach(t=> t.classList.toggle('active', t.dataset.tab === tab));
+        renderTab(tab);
+      }
+
+      function renderTab(tab){
+        const c = document.getElementById('moduleContent');
+        if(tab === 'before' || tab === 'during' || tab === 'after'){
+          const arr = MODULE[tab];
+          c.innerHTML = `<h3>${tab.charAt(0).toUpperCase()+tab.slice(1)}</h3>` + arr.map(i=>`<div style="padding:6px 0">• ${i}</div>`).join('');
+        } else if(tab === 'practice'){
+          c.innerHTML = `<h3>Practice & Drills</h3>
+            <p class="small">Use these exercises with neighbours or in school sessions to rehearse moving livestock and storing seed safely.</p>
+            <ol>
+              <li>Village drill: simulate 2-hour advance warning — move 3 families' seed & tools to raised platform.</li>
+              <li>Pump shutdown drill: one farmer demonstrates safe shutdown and reconnection of irrigation pump.</li>
+              <li>Boat exercise: load/unload small animals to a mock raised area.</li>
+            </ol>`;
+        } else if(tab === 'resources'){
+          c.innerHTML = `<h3>Resources</h3>
+            <ul>
+              <li><a href="#" onclick="event.preventDefault()">NDMA: Flood preparedness guide (replace with PDF)</a></li>
+              <li><a href="#" onclick="event.preventDefault()">KVK local extension phone numbers (upload CSV)</a></li>
+              <li><a href="#" onclick="event.preventDefault()">Farm pond & raised plinth guidance</a></li>
+            </ul>`;
+        }
+      }
+
+      // initialize
+      (function init(){
+        renderTab('before');
+        renderQuiz();
+      })();
+
+      // ---------- Checklist modal logic ----------
+      const CHECK_KEY = 'safesphere_farmers_flood_check_v2';
+      function openChecklist(role){
+        // set title and region note
+        document.getElementById('checklistTitle').innerText = "Farmers — Flood Checklist";
+        document.getElementById('checklistNote').innerText = "Saved on this device only — use Print to make a paper copy for the community.";
+        document.getElementById('checklistModal').style.display = 'flex';
+        switchChecklistTab('overview');
+        bumpStat('checklists');
+        loadChecklistProgress();
+      }
+
+      function closeChecklist(){ document.getElementById('checklistModal').style.display = 'none'; }
+
+      function switchChecklistTab(tab){
+        document.querySelectorAll('.tabs-inner .tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+        const content = document.getElementById('checklistContent');
+        if(tab === 'overview'){
+          content.innerHTML = `<p class="small">Checklist helps you confirm simple steps before/during/after a flood. Mark items as done and Save — progress stays on this device.</p>
+            <p class="small">You can Print or Share the checklist.</p>`;
+        } else if(tab === 'before' || tab === 'during' || tab === 'after'){
+          const arr = MODULE[tab];
+          content.innerHTML = `<h3>${tab.charAt(0).toUpperCase()+tab.slice(1)}</h3>` + arr.map(i=>`<div style="padding:6px 0">• ${i}</div>`).join('');
+        } else if(tab === 'checklist'){
+          content.innerHTML = MODULE.checklist.map((it, idx) => `
+            <div class="checklist-item">
+              <input id="chk_${idx}" type="checkbox">
+              <label for="chk_${idx}">${it}</label>
+            </div>
+          `).join('');
+          restoreCheckedState();
+        }
+      }
+
+      function saveChecklistProgress(){
+        const inputs = Array.from(document.querySelectorAll(`#checklistContent input[type="checkbox"]`));
+        const state = inputs.map(i => i.checked);
+        localStorage.setItem(CHECK_KEY, JSON.stringify(state));
+        alert('Checklist progress saved locally on this device.');
+      }
+
+      function loadChecklistProgress(){
+        setTimeout(()=>{
+          try {
+            const raw = localStorage.getItem(CHECK_KEY);
+            if(!raw) return;
+            const arr = JSON.parse(raw);
+            const inputs = document.querySelectorAll(`#checklistContent input[type="checkbox"]`);
+            inputs.forEach((ch, idx) => {
+              ch.checked = !!arr[idx];
+              ch.addEventListener('change', () => {
+                const all = Array.from(document.querySelectorAll(`#checklistContent input[type="checkbox"]`)).map(c => c.checked);
+                localStorage.setItem(CHECK_KEY, JSON.stringify(all));
+              });
+            });
+          } catch(e){ console.warn('loadChecklist:', e) }
+        }, 60);
+      }
+
+      function restoreCheckedState(){
+        try {
+          const raw = localStorage.getItem(CHECK_KEY);
+          if(!raw) return;
+          const arr = JSON.parse(raw);
+          document.querySelectorAll(`#checklistContent input[type="checkbox"]`).forEach((ch, idx)=> ch.checked = !!arr[idx]);
+        } catch(e){ console.warn('restore:', e) }
+      }
+
+      function printChecklist(){
+        const title = document.getElementById('checklistTitle').innerText;
+        const contentHtml = document.getElementById('checklistContent').innerHTML;
+        const win = window.open('', '', 'width=700,height=900');
+        win.document.write(`<html><head><title>${title}</title><style>body{font-family:Arial;padding:20px;} .checklist-item{margin-bottom:8px;}</style></head><body><h2>${title}</h2>${contentHtml}</body></html>`);
+        win.document.close();
+        win.print();
+      }
+
+      async function shareChecklist(){
+        if(!navigator.share){ alert('Share not supported. Use Print or Save locally.'); return; }
+        const title = document.getElementById('checklistTitle').innerText;
+        const text = Array.from(document.querySelectorAll('#checklistContent label')).map(l => l.innerText).join('\n');
+        try{ await navigator.share({ title, text }); } catch(e){ console.warn('share failed', e) }
+      }
+
+      // ---------- Quiz logic ----------
+      const QUIZ_KEY = 'safesphere_farmers_flood_quiz_v1';
+      function renderQuiz(){
+        const wrap = document.getElementById('quizWrap');
+        wrap.innerHTML = MODULE.quiz.map((Q, i) => `
+          <div class="quiz-question" data-idx="${i}">
+            <p style="font-weight:700">Q${i+1}. ${Q.q}</p>
+            <div class="quiz-options">
+              ${Q.a.map((opt, j) => `<label><input type="radio" name="q${i}" value="${j}"> ${opt}</label>`).join('')}
+            </div>
+          </div>
+        `).join('') + `<div style="margin-top:10px"><button class="submit-btn" onclick="submitQuiz()">Submit</button>
+        <button class="btn btn-ghost" onclick="clearQuiz()">Clear</button></div>
+        <div id="quizResult" style="margin-top:10px; font-weight:700"></div>`;
+        // restore saved if any
+        const saved = localStorage.getItem(QUIZ_KEY);
+        if(saved){
+          try {
+            const data = JSON.parse(saved);
+            if(data && data.ans) {
+              Object.keys(data.ans).forEach(k => {
+                const el = document.querySelector(`input[name="${k}"][value="${data.ans[k]}"]`);
+                if(el) el.checked = true;
+              });
+              document.getElementById('quizResult').innerText = data.msg || '';
+            }
+          } catch(e){}
+        }
+      }
+
+      function submitQuiz(){
+        const results = MODULE.quiz.map((Q,i)=>{
+          const sel = document.querySelector(`input[name="q${i}"]:checked`);
+          const val = sel ? parseInt(sel.value) : null;
+          return { correct: Q.correct === val, selected: val };
+        });
+        const correct = results.filter(r=>r.correct).length;
+        const total = MODULE.quiz.length;
+        const pct = Math.round(correct/total*100);
+        let msg = `Score: ${correct} / ${total} (${pct}%) — `;
+        if(pct===100) msg += 'Excellent — you understand flood safety steps.';
+        else if(pct>=70) msg += 'Good — review missed items.';
+        else msg += 'Review the module and practice drills again.';
+        document.getElementById('quizResult').innerText = msg;
+        // save answers
+        const ans = {};
+        MODULE.quiz.forEach((_,i) => {
+          const sel = document.querySelector(`input[name="q${i}"]:checked`);
+          ans['q'+i] = sel ? sel.value : null;
+        });
+        localStorage.setItem(QUIZ_KEY, JSON.stringify({ ans, correct, total, pct, msg }));
+      }
+
+      function clearQuiz(){ MODULE.quiz.forEach((_,i)=> {
+        const sel = document.querySelectorAll(`input[name="q${i}"]`);
+        sel.forEach(s=>s.checked=false);
+      }); document.getElementById('quizResult').innerText = ''; localStorage.removeItem(QUIZ_KEY); }
+
+      // ---------- Statistics (local only) ----------
+      const STATS_KEY = 'safesphere_stats_v1';
+      function bumpStat(name){
+        try {
+          const raw = localStorage.getItem(STATS_KEY) || '{}';
+          const s = JSON.parse(raw);
+          s[name] = (s[name]||0) + 1;
+          localStorage.setItem(STATS_KEY, JSON.stringify(s));
+        } catch(e){}
+      }
+
+      // ---------- Stories modal ----------
+      function openStory(e, id){
+        e.preventDefault();
+        const title = (id===1) ? 'Floods damage paddy harvest — summary' : 'Community boats rescue livestock — summary';
+        const body = (id===1) ? 'Community farmers used raised storage and saved seed stock following timely alerts. Recovery was faster where grain banks were present.' : 'Volunteers used village boats to move livestock to mounds and saved feed stores. Local KVK provided replacement seed.' ;
+        document.getElementById('storyModalTitle').innerText = title;
+        document.getElementById('storyModalBody').innerText = body;
+        document.getElementById('storyModal').style.display = 'flex';
+      }
+      function closeStory(){ document.getElementById('storyModal').style.display = 'none'; }
+
+      // ---------- print module ----------
+      function printModule(){
+        const title = document.getElementById('title').innerText;
+        const content = document.querySelector('.wrap').innerHTML;
+        const win = window.open('', '', 'width=900,height=1000');
+        win.document.write(`<html><head><title>${title}</title><style>body{font-family:Arial;padding:20px} h1{color:#114}</style></head><body><h1>${title}</h1>${content}</body></html>`);
+        win.document.close();
+        win.print();
+      }
+
+      // ---------- FAQ toggle ----------
+      function toggleFaq(el){
+        const a = el.nextElementSibling;
+        if(a.style.display === 'block') a.style.display = 'none'; else a.style.display = 'block';
+      }
+
+      // ---------- Disaster Alert integration (safe, non-blocking) ----------
+      const alertBar = document.getElementById('disaster-alert-bar');
+      const alertText = document.getElementById('alertText');
+      const alertIcon = document.getElementById('alertIcon');
+      const dismissBtn = document.getElementById('dismissAlert');
+
+      dismissBtn.addEventListener('click', () => { alertBar.style.transform = 'translateY(-110%)'; setTimeout(()=>alertBar.style.opacity='0',260); });
+
+      function updateDisasterAlertFromWeather(data){
+        if(!data || typeof data !== 'object') return;
+        let temp = data.temp ?? data.temperature ?? null;
+        let wind = data.wind ?? data.wind_speed ?? 0;
+        let desc = data.description ?? data.weather ?? '';
+        temp = (typeof temp === 'string') ? parseFloat(temp) : temp;
+        wind = (typeof wind === 'string') ? parseFloat(wind) : wind;
+
+        alertBar.className = 'alert-normal';
+        alertIcon.innerText = '🟢';
+        alertText.innerText = 'Weather is normal. Stay prepared.';
+
+        // Flood heuristics (very simple):
+        if(desc && /rain|flood|storm/i.test(desc) || (wind >= 12 && temp <= 22)) {
+          alertBar.className = 'alert-warning';
+          alertIcon.innerText = '🌧️';
+          alertText.innerText = 'Heavy rain / flood risk. Move valuables and livestock to higher ground.';
+        }
+        if(data.water_level && data.water_level >= 1.0) {
+          alertBar.className = 'alert-danger';
+          alertIcon.innerText = '🚨';
+          alertText.innerText = 'Severe flood alert! Evacuate to safe shelter now.';
+        }
+        alertBar.style.transform = '';
+        alertBar.style.opacity = '1';
+      }
+
+      // listen for custom event from your global weather script:
+      window.addEventListener('safe:weather:update', function(e){ if(e && e.detail) updateDisasterAlertFromWeather(e.detail); });
+
+      // try to pick up window.safeWeather if set elsewhere
+      try {
+        if(window.safeWeather && typeof window.safeWeather === 'object') updateDisasterAlertFromWeather(window.safeWeather);
+      } catch(e){ console.warn('alert init fail', e) }
+
+      // expose certain functions globally (optional)
+      window.openChecklist = openChecklist;
+      window.closeChecklist = closeChecklist;
+      window.printModule = printModule;
+      window.updateDisasterAlertFromWeather = updateDisasterAlertFromWeather;
+      window.bumpStat = bumpStat;
+      window.switchTab = switchTab;
+      window.switchChecklistTab = switchChecklistTab;
+      window.openStory = openStory;
+      window.closeStory = closeStory;
+
+    })();
+  </script>
+</body>
+</html>

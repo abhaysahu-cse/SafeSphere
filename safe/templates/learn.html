@@ -11,6 +11,28 @@
     <script src="script.js" defer></script>
 </head>
 <body>
+    <!-- GLOBAL BACKGROUND (place immediately after <body>) -->
+<div class="site-bg" aria-hidden="true" role="presentation">
+  <!-- preload hint (optional) -->
+  <link rel="preload" href="{% static 'bg/site-bg.mp4' %}" as="video" type="video/mp4">
+
+  <video class="site-bg-video"
+         autoplay
+         muted
+         loop
+         playsinline
+         preload="metadata"
+         poster="{% static 'bg/site-bg.png' %}"
+         aria-hidden="true"
+         tabindex="-1">
+    <source src="{% static 'bg/site-bg.mp4' %}" type="video/mp4">
+    <!-- fallback image for very old browsers -->
+  </video>
+
+  <div class="site-bg-overlay" aria-hidden="true" role="presentation"></div>
+</div>
+
+
     <!-- Sidebar -->
 <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">

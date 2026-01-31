@@ -197,13 +197,13 @@ body {
 .page-title {
   font-size: 42px;
   font-weight: 800;
-  color: var(--color-gray-900);
+  color: var(--color-green-900);
   margin-bottom: 8px;
 }
 
 .page-subtitle {
   font-size: 18px;
-  color: var(--color-gray-600);
+  color: var(--color-green-600);
 }
 
 /* ==========================================
@@ -2702,37 +2702,64 @@ body { top: 0px !important; }
 }
 
 
-/* ==========================================
-   BACKGROUND VIDEO
-   ========================================== */
-   
-/* .site-bg {
+/* ===========================
+   GLOBAL VIDEO BACKGROUND
+   =========================== */
+
+.site-bg {
   position: fixed !important;
-  inset: 0;                
-  z-index: -9999;           
+  inset: 0;                /* top:0; right:0; bottom:0; left:0 */
+  z-index: -9999;          /* behind all UI */
   overflow: hidden;
-  pointer-events: none;
+  pointer-events: none;    /* allow clicks through the bg */
+  will-change: transform;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
-.site-bg-video { 
+
+/* The video element sized and centered so object-fit:cover works reliably */
+.site-bg-video {
   position: absolute !important;
   top: 50%;
   left: 50%;
+  width: auto;
+  height: auto;
   min-width: 100%;
   min-height: 100%;
   transform: translate(-50%,-50%);
   object-fit: cover;
   pointer-events: none;
+  opacity: 0.95;            /* tune brightness/contrast */
+  filter: saturate(0.98) contrast(1);
 }
-.site-bg-overlay { position:absolute; inset:0; background: linear-gradient( rgba(15,23,42,0.25), rgba(15,23,42,0.5) ); pointer-events:none; }
 
+/* subtle overlay to keep text readable */
+.site-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(15,23,42,0.25), rgba(15,23,42,0.50));
+  pointer-events: none;
+  mix-blend-mode: normal;
+}
+
+/* make sure UI is above background */
 .sidebar { z-index: 200; position: fixed; }
 .main-content { position: relative; z-index: 201; }
 
-@media (max-width: 900px), (prefers-reduced-motion:reduce) {
-  .site-bg-video { display:none !important; }
-  .site-bg { background: url("{% static 'bg/site-bg.png' %}") center / cover no-repeat fixed; }
+/* Accessibility and mobile fallback:
+   hide the video on smaller screens and on reduced-motion preference */
+@media (max-width: 900px), (prefers-reduced-motion: reduce) {
+  .site-bg-video { display: none !important; }
+  .site-bg { 
+    background: url("{% static 'bg/site-bg.png' %}") center / cover no-repeat fixed;
+    background-size: cover;
+  }
 }
- */
+
+/* if you need the body background transparent for video to show: */
+body { background: transparent !important; }
+
+
 
 
  /* Fix Google Translate layout break */
