@@ -1,0 +1,287 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>School Safety Audit — SafeSphere</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="School safety audit — structural, utilities, WASH, assembly areas, and emergency preparedness checklist." />
+  <link rel="stylesheet" href="{% static 'css/schools-audit.css' %}">
+</head>
+<body>
+  <main class="wrap" role="main" aria-labelledby="pageTitle">
+    <header class="top">
+      <div>
+        <h1 id="pageTitle">🏫 School Safety Audit — Ready to shelter safely</h1>
+        <p class="lead">A step-by-step practical audit to inspect roofs, walls, water points, sanitation, evacuation routes and assembly areas. Save progress locally and print/export the audit report.</p>
+      </div>
+
+      <div class="actions">
+        <a class="btn btn-ghost" href="{% url 'protect_schools' %}">⬅ Back to School Modules</a>
+        <button class="btn btn-primary" id="saveBtn">Save locally</button>
+        <button class="btn btn-primary" id="exportBtn">Export JSON</button>
+        <button class="btn btn-ghost" id="printBtn">Print report</button>
+      </div>
+    </header>
+
+    <section class="summary" aria-labelledby="summaryTitle">
+      <h2 id="summaryTitle">Quick summary & scoring</h2>
+      <p class="small">Use the detailed sections below. The audit will calculate a basic "safety score" (higher = fewer fixes needed).</p>
+
+      <div class="score-row" aria-live="polite">
+        <div class="score-card">
+          <div class="score-value" id="scoreValue">—</div>
+          <div class="score-label">Safety score</div>
+        </div>
+
+        <div class="meta">
+          <label>Auditor name
+            <input type="text" id="auditorName" placeholder="Your name">
+          </label>
+          <label>School / Site
+            <input type="text" id="siteName" placeholder="School name or code">
+          </label>
+          <label>Date
+            <input type="date" id="auditDate">
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- Controls to jump -->
+    <nav class="jump-nav" aria-label="Quick links">
+      <button class="jump" data-target="structural">Preparation & Structural</button>
+      <button class="jump" data-target="roof">Roof & Openings</button>
+      <button class="jump" data-target="electrical">Electrical & Gas</button>
+      <button class="jump" data-target="wash">Water & Sanitation (WASH)</button>
+      <button class="jump" data-target="assembly">Assembly & Evacuation</button>
+      <button class="jump" data-target="supplies">Supplies & First-aid</button>
+      <button class="jump" data-target="report">Export / Print</button>
+    </nav>
+
+    <!-- AUDIT FORM -->
+    <form id="auditForm" class="audit-form" novalidate>
+
+      <!-- Preparation & planning -->
+      <section class="section" id="structural" aria-labelledby="structuralTitle">
+        <h2 id="structuralTitle">Preparation & Structural checks</h2>
+        <p class="small">Look for signs of structural distress, cracks, water penetration and safe exit routes. Document with photos if possible.</p>
+
+        <ol class="check-list">
+          <li class="check-item" data-key="foundation_cracks">
+            <label><input type="checkbox" class="chk"> Major foundation/vertical cracks visible (needs engineer)</label>
+            <div class="notes"><textarea placeholder="Notes & actions (e.g., mark for evaluation)"></textarea></div>
+            <div class="img-uploader"><input type="file" accept="image/*" class="photo"></div>
+            <div class="tag"><button type="button" class="mark-fix">Mark for repair</button></div>
+          </li>
+
+          <li class="check-item" data-key="wall_spalling">
+            <label><input type="checkbox" class="chk"> Wall spalling / loose plaster / exposed reinforcement</label>
+            <div class="notes"><textarea placeholder="Notes & temporary measures (e.g., cover raw ends)"></textarea></div>
+            <div class="img-uploader"><input type="file" accept="image/*" class="photo"></div>
+          </li>
+
+          <li class="check-item" data-key="unsafe_additions">
+            <label><input type="checkbox" class="chk"> Unsafe rooftop additions (heavy tanks, add-ons without support)</label>
+            <div class="notes"><textarea placeholder="If yes, recommend removal or structural evaluation"></textarea></div>
+          </li>
+
+          <li class="check-item" data-key="drainage_problems">
+            <label><input type="checkbox" class="chk"> Site drainage blocked or inadequate (water pools near foundations)</label>
+            <div class="notes"><textarea placeholder="Suggest clearing drains, creating percolation or bunds"></textarea></div>
+          </li>
+
+          <li class="check-item" data-key="accessibility">
+            <label><input type="checkbox" class="chk"> Pathways & exits accessible (ramps, steps, handrails for mobility needs)</label>
+            <div class="notes"><textarea placeholder="Note gaps and improvement actions"></textarea></div>
+          </li>
+        </ol>
+      </section>
+
+      <!-- Roof & openings -->
+      <section class="section" id="roof" aria-labelledby="roofTitle">
+        <h2 id="roofTitle">Roof, windows & doors</h2>
+        <p class="small">Check roofing sheets, fasteners, window latches and protective shutters. Loose roofing is high-risk in storms and during evacuation.</p>
+
+        <ol class="check-list">
+          <li class="check-item" data-key="roof_sheets">
+            <label><input type="checkbox" class="chk"> Roof sheets firmly fixed; no loose or missing sheets</label>
+            <div class="notes"><textarea placeholder="Count replaced sheets or fasteners needed"></textarea></div>
+            <div class="img-uploader"><input type="file" accept="image/*" class="photo"></div>
+          </li>
+
+          <li class="check-item" data-key="skylight_glass">
+            <label><input type="checkbox" class="chk"> Skylights and large glazing secured or protected</label>
+            <div class="notes"><textarea placeholder="Tape, shutters or protective mesh recommended"></textarea></div>
+          </li>
+
+          <li class="check-item" data-key="window_latches">
+            <label><input type="checkbox" class="chk"> Windows & doors latch and close properly (no broken frames)</label>
+            <div class="notes"><textarea placeholder="List broken frames or missing hardware"></textarea></div>
+          </li>
+
+          <li class="check-item" data-key="chimneys_tiles">
+            <label><input type="checkbox" class="chk"> Parapets/loose decorative elements secure (no fall risk)</label>
+            <div class="notes"><textarea placeholder="Identify elements to remove or tie down"></textarea></div>
+          </li>
+        </ol>
+      </section>
+
+      <!-- Electrical & gas -->
+      <section class="section" id="electrical" aria-labelledby="electricalTitle">
+        <h2 id="electricalTitle">Electrical, LPG & fuel safety</h2>
+        <p class="small">Faulty wiring and fuel sources cause fires and electrocutions — check switches, earthing, and shut-off points.</p>
+
+        <ol class="check-list">
+          <li class="check-item" data-key="switchboards">
+            <label><input type="checkbox" class="chk"> Main switchboard is labelled and accessible (with visible switches)</label>
+            <div class="notes"><textarea placeholder="Note missing labelling or blocked access"></textarea></div>
+          </li>
+
+          <li class="check-item" data-key="earthing">
+            <label><input type="checkbox" class="chk"> Proper earthing present for main panels & kitchen equipment</label>
+            <div class="notes"><textarea placeholder="If unsure, recommend electrician check"></textarea></div>
+          </li>
+
+          <li class="check-item" data-key="lpg_storage">
+            <label><input type="checkbox" class="chk"> LPG cylinders and fuel stored outdoors or in ventilated shelter and secured</label>
+            <div class="notes"><textarea placeholder="Relocate cylinders away from sleeping areas"></textarea></div>
+          </li>
+
+          <li class="check-item" data-key="cables_overhead">
+            <label><input type="checkbox" class="chk"> Overhead cables and extension cords are secured and away from walking routes</label>
+            <div class="notes"><textarea placeholder="Clip and secure loose cables"></textarea></div>
+          </li>
+
+          <li class="check-item" data-key="fire_extinguishers">
+            <label><input type="checkbox" class="chk"> Fire extinguishers present, inspected, and staff know locations</label>
+            <div class="notes"><textarea placeholder="Type (water/CO2/DCP) and expiry info"></textarea></div>
+          </li>
+        </ol>
+      </section>
+
+      <!-- Water and sanitation -->
+      <section class="section" id="wash" aria-labelledby="washTitle">
+        <h2 id="washTitle">Water, sanitation & hygiene (WASH)</h2>
+        <p class="small">Ensure safe drinking water, functioning toilets, and emergency handwashing for sheltering people.</p>
+
+        <ol class="check-list">
+          <li class="check-item" data-key="water_sources">
+            <label><input type="checkbox" class="chk"> Clean drinking water source available (tank, borewell, treated supply)</label>
+            <div class="notes"><textarea placeholder="Capacity (litres) and fill frequency"></textarea></div>
+          </li>
+
+          <li class="check-item" data-key="toilets">
+            <label><input type="checkbox" class="chk"> Toilet blocks functional and separate for women/men; accessible for disabled</label>
+            <div class="notes"><textarea placeholder="Permanent or temporary solutions proposed"></textarea></div>
+          </li>
+
+          <li class="check-item" data-key="waste_management">
+            <label><input type="checkbox" class="chk"> Waste disposal plan in place (bins, collection point)</label>
+            <div class="notes"><textarea placeholder="Arrange daily removal during sheltering"></textarea></div>
+          </li>
+
+          <li class="check-item" data-key="handwashing">
+            <label><input type="checkbox" class="chk"> Handwashing stations and soap available near kitchen and latrines</label>
+            <div class="notes"><textarea placeholder="Number of stations vs people capacity"></textarea></div>
+          </li>
+        </ol>
+      </section>
+
+      <!-- Assembly and evacuation -->
+      <section class="section" id="assembly" aria-labelledby="assemblyTitle">
+        <h2 id="assemblyTitle">Assembly areas & evacuation routes</h2>
+        <p class="small">Identify safe open areas, calculate capacity, mark routes, and check signage and lighting for night evacuation.</p>
+
+        <ol class="check-list">
+          <li class="check-item" data-key="assembly_space">
+            <label><input type="checkbox" class="chk"> Open assembly area (playground/open ground) identified & measured</label>
+            <div class="notes"><textarea placeholder="Area (m²) and estimated persons capacity (m² per person)"></textarea></div>
+          </li>
+
+          <li class="check-item" data-key="routes_marked">
+            <label><input type="checkbox" class="chk"> Evacuation routes are clear, signed and unobstructed (multiple exits)</label>
+            <div class="notes"><textarea placeholder="Route 1/2/3 and obstacles to remove"></textarea></div>
+          </li>
+
+          <li class="check-item" data-key="assembly_lighting">
+            <label><input type="checkbox" class="chk"> Emergency lighting or torches available for night movement</label>
+            <div class="notes"><textarea placeholder="Number of torches / emergency lights"></textarea></div>
+          </li>
+
+          <li class="check-item" data-key="roll_call">
+            <label><input type="checkbox" class="chk"> Class-wise roll-call sheets prepared and stored (electronic & paper)</label>
+            <div class="notes"><textarea placeholder="Location of master roll and teacher assignments"></textarea></div>
+          </li>
+
+          <li class="check-item" data-key="special_needs">
+            <label><input type="checkbox" class="chk"> Plan for pupils with mobility/sensory needs (assistants, wheelchairs, priority routes)</label>
+            <div class="notes"><textarea placeholder="List pupils requiring assistance and assigned helpers"></textarea></div>
+          </li>
+        </ol>
+      </section>
+
+      <!-- Supplies & first aid -->
+      <section class="section" id="supplies" aria-labelledby="suppliesTitle">
+        <h2 id="suppliesTitle">Supplies, records & communications</h2>
+        <p class="small">First-aid, medicines, tents/sleeping mats, food stocks, phone power banks and printed contact lists are essential.</p>
+
+        <ol class="check-list">
+          <li class="check-item" data-key="first_aid">
+            <label><input type="checkbox" class="chk"> First-aid kit stocked and staff trained</label>
+            <div class="notes"><textarea placeholder="Kit contents and expiry dates"></textarea></div>
+          </li>
+
+          <li class="check-item" data-key="emergency_food">
+            <label><input type="checkbox" class="chk"> Dry food & safe cooking plan available for at least 48–72 hours</label>
+            <div class="notes"><textarea placeholder="Meals per day & special dietary needs"></textarea></div>
+          </li>
+
+          <li class="check-item" data-key="contact_list">
+            <label><input type="checkbox" class="chk"> Printed emergency contacts and local authorities list available</label>
+            <div class="notes"><textarea placeholder="Village head, KVK, ambulance, police numbers"></textarea></div>
+          </li>
+
+          <li class="check-item" data-key="records_backup">
+            <label><input type="checkbox" class="chk"> Important records backed up (scanned IDs, registers) and stored off-site or in waterproof containers</label>
+            <div class="notes"><textarea placeholder="Backup location & method"></textarea></div>
+          </li>
+
+          <li class="check-item" data-key="community_contacts">
+            <label><input type="checkbox" class="chk"> Community volunteer list and roles for shelter management (teams for water, sanitation, security)</label>
+            <div class="notes"><textarea placeholder="Volunteer names & responsibilities"></textarea></div>
+          </li>
+        </ol>
+      </section>
+
+      <!-- Final comments -->
+      <section class="section" id="report" aria-labelledby="reportTitle">
+        <h2 id="reportTitle">Final report & recommended actions</h2>
+        <p class="small">Write summary recommendations and a prioritized "fix list" with responsible persons and rough costs.</p>
+
+        <label class="full">
+          Summary recommendation
+          <textarea id="finalSummary" placeholder="Short summary of key urgent actions (top 5)"></textarea>
+        </label>
+
+        <label class="full">
+          Prioritized fixes (1 = high priority)
+          <textarea id="fixList" placeholder="1) Replace loose roof sheets — assigned to: ..."></textarea>
+        </label>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-primary" id="calcScoreBtn">Calculate score</button>
+          <button type="button" class="btn btn-ghost" id="resetBtn">Reset form</button>
+        </div>
+      </section>
+    </form>
+
+    <footer class="footer-note">
+      <p class="small">Tip: Use photos to document urgent items. Share exported JSON with local engineers or authorities for faster assistance.</p>
+    </footer>
+  </main>
+
+  <script src="{% static 'js/schools-audit.js' %}"></script>
+</body>
+</html>
+

@@ -1,0 +1,217 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Child Protection & Psychosocial Support — Schools | SafeSphere</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Child protection and psychosocial support guidance for teachers & schools. Psychological first aid, safe spaces, activities and safeguarding." />
+  <link rel="stylesheet" href="{% static 'css/schools-child.css' %}">
+</head>
+<body>
+  <main class="wrap" role="main" aria-labelledby="title">
+    <header class="topbar">
+      <div>
+        <h1 id="title">👩‍🏫 Child Protection & Psychosocial Support</h1>
+        <p class="lead">Simple, practical steps teachers and schools can use to keep children safe, calm, and supported during and after disasters. Includes PFA guidance, activities, referrals, and checklists.</p>
+        <div class="meta-row">
+          <span class="badge">Module • Schools</span>
+          <span class="small">Est. time: 30–60 min (read + practice)</span>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <a class="btn btn-ghost" href="{% url 'protect_schools' %}">⬅ Back</a>
+        <button class="btn btn-primary" id="openChecklist">Open Checklist</button>
+        <button class="btn btn-ghost" id="printPoster">Print Poster</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- main column -->
+      <div class="main-col">
+        <!-- Hook & priorities -->
+        <section class="section" aria-labelledby="whyTitle">
+          <h2 id="whyTitle">Why child protection & psychosocial support matters</h2>
+          <p>Children react differently to emergencies: some withdraw, others act out. Rapid, compassionate adult support reduces long-term harm. This module gives teachers step-by-step actions (PFA), classroom activities to calm and reconnect children, and safeguards for disclosures and referrals.</p>
+          <ul class="priorities">
+            <li><strong>Safety first:</strong> keep children physically safe and account for all pupils.</li>
+            <li><strong>Stability & routine:</strong> restore simple daily routine as soon as possible.</li>
+            <li><strong>Listen & support:</strong> create safe spaces for children to share.</li>
+            <li><strong>Protect & refer:</strong> act on any child protection concerns immediately and follow protocols.</li>
+          </ul>
+        </section>
+
+        <!-- PFA core steps -->
+        <section class="section" aria-labelledby="pfaTitle">
+          <h2 id="pfaTitle">Psychological First Aid (PFA) — simple steps for teachers</h2>
+          <ol class="pfa-steps">
+            <li><strong>Look (for safety):</strong> remove child from immediate danger, ensure basic needs (water, warmth).</li>
+            <li><strong>Listen:</strong> be calm, quiet, offer a seat, use short sentences. Let the child lead; do not force details.</li>
+            <li><strong>Protect (stabilize):</strong> reassure: "You are safe now. I'm here with you." Attend to visible injuries or need for medical attention.</li>
+            <li><strong>Link (connect):</strong> connect to caregiver or known adult; if alone, stay with the child and explain what will happen next.</li>
+            <li><strong>Refer & record:</strong> if serious harm / abuse is disclosed, follow safeguarding protocol immediately and record facts (who, what, when, where).</li>
+          </ol>
+
+          <div class="note-box">
+            <strong>Important:</strong> do not promise secrecy if a child discloses abuse — explain you will share with the person who can help keep them safe.
+          </div>
+        </section>
+
+        <!-- Activities -->
+        <section class="section" aria-labelledby="activitiesTitle">
+          <h2 id="activitiesTitle">Age-appropriate calming & psychosocial activities (practical)</h2>
+
+          <h3>1. Calming breath (3–5 minutes) — all ages</h3>
+          <ol>
+            <li>Ask children to sit comfortably, close eyes (if comfortable).</li>
+            <li>Breathe in slowly for 3, hold 1, breathe out for 4 — repeat 5 times.</li>
+            <li>Finish with a gentle stretch and a smile — helps reduce immediate anxiety.</li>
+          </ol>
+
+          <h3>2. Story circle (10–20 minutes) — ages 5–12</h3>
+          <ol>
+            <li>Use a simple familiar story or picture book. Read slowly and ask open questions ("How would you feel?").</li>
+            <li>Encourage children to draw one thing that makes them feel safe today.</li>
+          </ol>
+
+          <h3>3. Feelings wheel (10 minutes) — ages 8+</h3>
+          <ol>
+            <li>Show a wheel of simple feelings (happy, sad, scared, angry, calm).</li>
+            <li>Ask children to point to how they feel and one small thing that helps them feel better.</li>
+          </ol>
+
+          <h3>4. Role-play safety steps (15 minutes) — adolescents</h3>
+          <ol>
+            <li>Practice "What to do if..." scenarios (flood water near home, someone hurt, school fire alarm).</li>
+            <li>Encourage peer-support language: "Are you okay?" "Let's find the teacher" — reinforces routines.</li>
+          </ol>
+
+          <div class="activity-tools">
+            <button class="btn btn-primary" id="startTimer">Start Activity Timer (5 min)</button>
+            <button class="btn btn-ghost" id="stopTimer">Stop</button>
+            <div id="activityTimer" class="timer" aria-live="polite"></div>
+          </div>
+
+          <p class="small muted">Teacher tip: run these activities daily for the first week after an incident — consistency matters more than length.</p>
+        </section>
+
+        <!-- Safe space setup -->
+        <section class="section" aria-labelledby="safeTitle">
+          <h2 id="safeTitle">Setting up a child-friendly safe space in schools</h2>
+          <ul>
+            <li>Choose a quiet, well-ventilated room with good light and soft seating (mats, cushions).</li>
+            <li>Provide separate corners: a calming corner (soft toys, drawing), a caregiver corner, and private referral room (for confidential conversations).</li>
+            <li>Signage: child-friendly signs showing safe space rules (no cameras, respect privacy).</li>
+            <li>Hygiene: handwashing station, water bottles, sanitary materials; a small locker for medicines (locked, authorized access only).</li>
+          </ul>
+        </section>
+
+        <!-- Safeguarding & referral -->
+        <section class="section" aria-labelledby="safeguardTitle">
+          <h2 id="safeguardTitle">Safeguarding: disclosure, recording & referral (teacher checklist)</h2>
+          <ol>
+            <li>If a child discloses harm: stay calm, listen (do not press for details), ensure immediate safety.</li>
+            <li>Do not question deeply — record the child's words as close as possible to verbatim (who, what, when, where).</li>
+            <li>Notify the designated safeguarding officer at the school immediately (name & contact below).</li>
+            <li>If health emergency, call emergency services and keep child safe; if suspected abuse, follow local reporting law.</li>
+            <li>Record actions taken, dates, times, witnesses. Keep records secure (locked cabinet or encrypted file).</li>
+          </ol>
+
+          <div class="safeguard-roles">
+            <h4>Suggested role matrix (example)</h4>
+            <table>
+              <thead><tr><th>Role</th><th>Responsibilities</th></tr></thead>
+              <tbody>
+                <tr><td>Head Teacher</td><td>Overall coordination, official reporting, liaison with authorities</td></tr>
+                <tr><td>Safeguarding Officer</td><td>Receive disclosures, maintain records, refer to services</td></tr>
+                <tr><td>First-aid staff</td><td>Immediate medical needs and safe transport</td></tr>
+                <tr><td>Class Teachers</td><td>Daily routine, activities, monitoring children</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="contact-card">
+            <h4>Local referral contacts (edit these)</h4>
+            <p id="referralsText">KVK / Child Welfare Committee: (add) — Health: 112 — Local police: (add)</p>
+            <button class="btn btn-ghost" id="editReferralsBtn">Edit contacts</button>
+          </div>
+        </section>
+
+        <!-- Resources & training -->
+        <section class="section" aria-labelledby="resTitle">
+          <h2 id="resTitle">Resources & training</h2>
+          <ul>
+            <li>Short training: 1-hour staff orientation on PFA + safeguarding roles.</li>
+            <li>Printable: "How to listen to a child" poster for staff rooms.</li>
+            <li>Referral pack: list of local health, social services and NGO contacts — keep both digital and printed copies.</li>
+          </ul>
+        </section>
+      </div>
+
+      <!-- side column -->
+      <aside class="side-col">
+        <div class="card section">
+          <h3>Quick actions (first hour)</h3>
+          <ol>
+            <li>Account for all pupils and caregivers.</li>
+            <li>Set up the safe space and assign staff rota.</li>
+            <li>Offer water, basic first-aid and rest.</li>
+            <li>Prioritize children with disabilities or separated from family.</li>
+          </ol>
+        </div>
+
+        <div class="card section">
+          <h3>Printable poster (placeholder)</h3>
+          <div class="poster-small" id="posterSmall">Poster placeholder — replace with your graphic</div>
+          <p class="small muted">Poster should show PFA steps and safe-space rules in child-friendly icons.</p>
+        </div>
+
+        <div class="card section">
+          <h3>Staff roster (local storage)</h3>
+          <div class="roster-form">
+            <input type="text" id="staffName" placeholder="Name (e.g., Ms. Patel)">
+            <input type="text" id="staffRole" placeholder="Role (Safeguarding / First-aid)">
+            <button class="btn btn-primary" id="addStaffBtn">Add</button>
+          </div>
+          <div id="rosterList" class="roster-list"></div>
+          <div style="margin-top:8px">
+            <button class="btn btn-ghost" id="exportRoster">Export Roster</button>
+          </div>
+        </div>
+
+        <div class="card section">
+          <h3>Quick checklist</h3>
+          <ul>
+            <li>Safe space ready</li>
+            <li>Designated safeguarding officer assigned</li>
+            <li>Basic first-aid kit available</li>
+            <li>Printed referral contacts</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+    <footer class="footer-note">
+      <div class="small muted">This module is a practical guide. For severe mental health concerns consult qualified mental health professionals. Replace placeholders with your local referral contacts and graphics.</div>
+    </footer>
+  </main>
+
+  <!-- Edit referrals modal -->
+  <div id="referralsModal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="referralsTitle">
+    <div class="modal-backdrop" onclick="closeReferrals()"></div>
+    <div class="modal-box">
+      <header class="modal-head"><h3 id="referralsTitle">Edit referral contacts</h3><button class="close-btn" onclick="closeReferrals()">✖</button></header>
+      <div class="modal-body">
+        <textarea id="referralsInput" rows="6" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ddd"></textarea>
+        <div style="margin-top:10px;display:flex;gap:8px">
+          <button class="btn btn-primary" id="saveReferrals">Save</button>
+          <button class="btn btn-ghost" onclick="closeReferrals()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'js/schools-child.js' %}"></script>
+</body>
+</html>

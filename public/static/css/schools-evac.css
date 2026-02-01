@@ -1,0 +1,74 @@
+:root{
+  --bg:#f4fbff;
+  --card:#fff;
+  --accent:#05668d;
+  --muted:#5b6b75;
+  --maxw:1200px;
+  --radius:10px;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+*{box-sizing:border-box}
+body{ margin:0; background:linear-gradient(180deg,#f9fdff 0%, #f4fbff 100%); -webkit-font-smoothing:antialiased; color:#102; padding:20px; display:flex; justify-content:center; }
+.wrap{ width:100%; max-width:var(--maxw); background:var(--card); border-radius:12px; padding:18px; box-shadow:0 18px 44px rgba(8,24,40,0.06); margin-bottom:40px; }
+.top{ display:flex; justify-content:space-between; gap:12px; align-items:flex-start; flex-wrap:wrap; }
+.top h1{ margin:0; color:var(--accent); font-size:1.5rem; }
+.lead{ margin-top:6px; color:var(--muted); max-width:760px; }
+
+.actions{ display:flex; gap:8px; align-items:center; }
+.btn{ padding:8px 12px; border-radius:10px; font-weight:700; cursor:pointer; border:0; }
+.btn-primary{ background:var(--accent); color:#fff; }
+.btn-ghost{ background:transparent; color:var(--accent); border:1px solid rgba(5,102,141,0.08); padding:8px 10px; border-radius:10px; }
+
+.grid{ display:flex; gap:16px; margin-top:14px; align-items:flex-start; }
+.col{ background:transparent; }
+.map-col{ flex:1 1 60%; min-width:320px; }
+.plan-col{ width:360px; flex:0 0 360px; }
+
+.map-controls{ padding:10px 12px; border-radius:10px; background:linear-gradient(180deg,#fff,#fbfeff); border:1px solid rgba(8,24,40,0.03); margin-bottom:10px; }
+.map-controls input[type="file"]{ display:block; margin-top:8px; }
+.map-controls .row{ display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; align-items:center; }
+.map-wrapper{ position:relative; border-radius:10px; overflow:hidden; border:1px solid rgba(8,24,40,0.04); background:#111; min-height:320px; display:flex; align-items:center; justify-content:center; }
+#mapCanvas{ display:block; max-width:100%; height:auto; background:#eee; }
+.marker-layer{ position:absolute; inset:0; pointer-events:none; } /* marker elements will be positioned inside; pointer-events enabled individually */
+
+.marker {
+  position:absolute;
+  transform: translate(-50%, -100%); /* position marker bottom-center on coordinate */
+  pointer-events:auto;
+  cursor:grab;
+  user-select:none;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.marker .dot { width:20px; height:20px; border-radius:50%; display:inline-block; border:2px solid #fff; box-shadow: 0 4px 10px rgba(8,24,40,0.12); }
+.marker .label { background:rgba(255,255,255,0.96); padding:4px 8px; border-radius:6px; font-weight:700; font-size:12px; border:1px solid rgba(8,24,40,0.04); }
+.marker[data-type="assembly"] .dot{ background:#2f9a6a; }
+.marker[data-type="exit"] .dot{ background:#f97316; }
+.marker[data-type="vehicle"] .dot{ background:#2563eb; }
+.marker[data-type="firstaid"] .dot{ background:#ef4444; }
+.marker[data-type="accessible"] .dot{ background:#0ea5a3; }
+.marker[data-type="hazard"] .dot{ background:#8b5cf6; }
+
+/* list and controls on right */
+.section{ margin-top:12px; background:linear-gradient(180deg,#fff,#fbfeff); padding:10px; border-radius:10px; border:1px solid rgba(8,24,40,0.03); }
+.form-row{ display:flex; gap:8px; align-items:center; margin-top:8px; }
+.form-row input, .form-row select, textarea{ padding:8px; border-radius:8px; border:1px solid rgba(0,0,0,0.06); }
+.form-row input[type="text"]{ flex:1; }
+.list{ margin-top:10px; max-height:220px; overflow:auto; border-radius:8px; padding:6px; background:#fff; border:1px dashed rgba(8,24,40,0.03); }
+.list .item{ display:flex; justify-content:space-between; gap:8px; padding:8px; border-bottom:1px solid #f1f5f9; align-items:center; }
+.list .item:last-child{ border-bottom:0; }
+.list .item .meta{ font-size:13px; color:var(--muted); }
+
+.small{ font-size:0.9rem; color:var(--muted); }
+.muted{ color:var(--muted); font-size:0.88rem; }
+
+.map-actions{ margin-top:10px; display:flex; gap:8px; }
+.legend{ margin-top:12px; }
+
+.footer-note{ margin-top:16px; color:var(--muted); font-size:0.95rem; }
+
+@media (max-width:980px){
+  .grid{ flex-direction:column; }
+  .plan-col{ width:100%; flex:1 1 auto; }
+}

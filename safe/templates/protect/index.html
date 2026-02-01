@@ -9,165 +9,144 @@
 
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
+  <!-- Page-scoped improved styles (kept inline so you can paste directly) -->
   <style>
-    /* --- Page layout --- */
-    :root {
-      --card-bg: linear-gradient(180deg,#fff,#f6f9ff);
+    :root{
       --accent: #5b21b6;
+      --accent-2: #6e4ae8;
       --muted: #64748b;
       --text: #0b2545;
-    }
-    body { font-family: Inter, system-ui, Arial, sans-serif; }
-
-    .main-content {
-      padding:22px;
-      min-height:88vh;
-      max-width:1200px;
-      margin-left: 260px; /* leave space for sidebar if fixed */
+      --card-bg: linear-gradient(180deg,#ffffff,#f6f9ff);
+      --glass: rgba(255,255,255,0.75);
+      --shadow: 0 12px 30px rgba(8,12,40,0.06);
+      --maxw: 1250px;
+      --gutter: 20px;
     }
 
-    /* HERO */
-    .hero { display:flex; gap:18px; align-items:center; margin-bottom:18px; flex-wrap:wrap; }
-    .hero-left { flex:1 1 520px; min-width:260px; }
-    .hero-right { width:240px; flex:0 0 240px; text-align:center; }
-    .hero h1 { margin:0; font-size:1.9rem; color:var(--text); }
-    .hero p { margin:8px 0 0; color:var(--muted); }
+    html,body{height:100%; margin:0; font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; color:var(--text); background:#f3f7fb;}
 
-    /* Controls & stats */
-    .controls { display:flex; gap:12px; align-items:center; margin-top:12px; flex-wrap:wrap; }
-    .select { padding:8px 10px; border-radius:8px; border:1px solid #d1d5db; background:#fff; }
-    .stats { display:flex; gap:12px; margin-left:8px; align-items:center; flex-wrap:wrap; }
-    .stat { background:#fff; padding:8px 12px; border-radius:10px; box-shadow:0 6px 18px rgba(20,33,61,0.04); min-width:120px; text-align:center; }
+    /* keep sidebar as in your app; main-content needs to align with it */
+    .main-content{
+      max-width:var(--maxw);
+      margin-left: 260px; /* keep same offset as your sidebar */
+      padding:28px var(--gutter);
+      box-sizing:border-box;
+      margin-right: 28px;
+    }
 
-    .stat strong { display:block; font-size:1.05rem; color:var(--text); }
-    .small-muted { color:var(--muted); font-size:0.95rem; }
+    /* subtle hero with content on left and illustration on right */
+    .hero{
+      display:flex;
+      gap:20px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      margin-bottom:18px;
+    }
+    .hero-left{flex:1 1 520px; min-width:260px;}
+    .hero-right{width:280px; flex:0 0 280px; display:flex; align-items:center; justify-content:center;}
+    .hero h1{margin:0; font-size:1.9rem; letter-spacing:-0.02em;}
+    .hero p{margin:8px 0 0; color:var(--muted);}
 
-    /* --- Role cards --- */
-    .role-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; margin-top:18px; align-items:start; }
+    /* controls row */
+    .controls{display:flex; gap:12px; align-items:center; margin-top:12px; flex-wrap:wrap;}
+    .select{padding:8px 12px; border-radius:10px; border:1px solid #e6e9ee; background:#fff; font-weight:600;}
+    .stats{display:flex; gap:12px; margin-left:8px; align-items:center; flex-wrap:wrap;}
+    .stat{background:var(--glass); padding:10px 14px; border-radius:12px; box-shadow:var(--shadow); min-width:120px; text-align:center;}
+    .stat strong{display:block; font-size:1.05rem;}
 
-    .card {
-      background: var(--card-bg);
+    /* role cards grid: consistent heights & spacing */
+    .role-cards{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: repeat(auto-fit,minmax(240px,1fr));
+      gap:16px;
+      align-items:start;
+    }
+    .card{
+      background:var(--card-bg);
       padding:18px;
       border-radius:12px;
-      box-shadow:0 10px 22px rgba(8,12,40,0.04);
+      box-shadow:var(--shadow);
       display:flex;
       flex-direction:column;
-      justify-content:space-between;   /* keeps actions at bottom */
-      min-height:190px;                /* ensures space for actions */
+      justify-content:space-between;
+      min-height:200px;
+      transition:transform .14s ease, box-shadow .14s ease;
       overflow:hidden;
-      position:relative;
     }
+    .card:hover{ transform:translateY(-6px); box-shadow: 0 20px 46px rgba(8,12,40,0.08); }
 
-    .card .top {
-      /* content area */
+    .card .top{}
+    .card-icon{ font-size:34px; margin-bottom:8px; }
+    .card h2{ margin:6px 0 8px; font-size:1.05rem; color:var(--text); }
+    .card p{ margin:0; color:#475569; line-height:1.38; }
+
+    .card-actions{ display:flex; gap:10px; align-items:center; margin-top:14px; flex-wrap:wrap; }
+    .btn-ghost, .btn-primary{
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      text-decoration:none; border-radius:10px; padding:10px 14px; font-weight:700; cursor:pointer; border:1px solid transparent;
+      min-height:42px; font-size:0.95rem;
     }
-    .card-icon { font-size:34px; display:inline-block; margin-bottom:8px; }
-    .card h2 { margin:6px 0 8px; color:var(--text); font-size:1.1rem; }
-    .card p { margin:0; color:#475569; line-height:1.35; word-break:break-word; }
+    .btn-ghost{ background:#fff; color:var(--text); border:1px solid rgba(20,33,61,0.06); }
+    .btn-primary{ background: linear-gradient(180deg,var(--accent),var(--accent-2)); color:white; border:1px solid rgba(0,0,0,0.04); min-width:132px; box-shadow: 0 8px 20px rgba(110,74,232,0.14); }
 
-    /* ensure actions are always visible and consistent */
-    .card-actions {
-      display:flex;
-      gap:10px;
-      align-items:center;
-      margin-top:14px;
-      flex-wrap:wrap;
+    /* info grid below */
+    .grid-3{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin-top:18px; }
+    .card.small{ padding:14px; min-height:84px; }
+    .card.small h3{ margin:0 0 8px 0; font-size:1rem; }
+    .card.small p, .card.small ul{ margin:0; color:#475569; font-size:0.95rem; }
+
+    /* faq */
+    .faq{ margin-top:18px; }
+    .faq-item{ border:1px solid #e6eefb; background:#fff; padding:12px; border-radius:10px; margin-bottom:10px; }
+    .faq-q{ font-weight:700; cursor:pointer; color:var(--text); }
+    .faq-a{ display:none; margin-top:8px; color:#475569; }
+
+    /* checklist modal improved */
+    .checklist-modal{ position:fixed; inset:0; z-index:12000; display:flex; align-items:flex-start; justify-content:center; padding-top:6vh; }
+    .checklist-backdrop{ position:absolute; inset:0; background:rgba(6,10,18,0.48); }
+    .checklist-box{ position:relative; width:94%; max-width:820px; background:#fff; border-radius:12px; padding:16px; box-shadow:0 30px 60px rgba(4,8,20,0.36); z-index:12001; }
+    .checklist-header{ display:flex; justify-content:space-between; gap:12px; align-items:center; border-bottom:1px solid #eef2ff; padding-bottom:8px; }
+    .tabs{ display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
+    .tab{ padding:8px 12px; border-radius:10px; background:#f3f6fb; cursor:pointer; font-weight:700; border:1px solid transparent; }
+    .tab.active{ background:var(--accent); color:#fff; border-color:var(--accent); box-shadow:0 6px 18px rgba(110,74,232,0.12); }
+    .checklist-content{ margin-top:12px; max-height:58vh; overflow:auto; padding-right:8px; }
+    .checklist-item{ display:flex; gap:10px; padding:10px 0; border-bottom:1px dashed #eef2ff; align-items:flex-start; }
+    .checklist-item input{ margin-top:6px; width:18px; height:18px; }
+
+    /* responsive tweaks */
+    @media (max-width:1000px){
+      .main-content{ margin-left:0; padding:18px; }
+      .hero-right{ display:none; }
+      .card{ min-height:170px; }
     }
-
-    .btn-ghost, .btn-primary {
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-      text-decoration:none;
-      border-radius:8px;
-      padding:8px 12px;
-      font-weight:600;
-      cursor:pointer;
-      border:1px solid transparent;
-      min-height:40px;
-    }
-
-    .btn-ghost {
-      background:#fff;
-      color:var(--text);
-      border:1px solid rgba(20,33,61,0.06);
-    }
-
-    .btn-primary {
-      background:var(--accent);
-      color:#fff;
-      border:1px solid var(--accent);
-      min-width:120px;
-    }
-
-    /* small icons or anchors inside card content should not break layout */
-    .card a, .card button { font-size:0.95rem; }
-
-    /* --- tips / FAQ / grid --- */
-    .grid-3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin-top:18px; }
-    .card.small { padding:12px; min-height:80px; }
-
-    .faq { margin-top:18px; }
-    .faq-item { border:1px solid #e6eefb; background:#fff; padding:10px; border-radius:8px; margin-bottom:8px; }
-    .faq-q { font-weight:700; cursor:pointer; }
-    .faq-a { display:none; margin-top:8px; color:#475569; }
-
-    /* Checklist modal */
-    .checklist-modal { position:fixed; inset:0; z-index:9999; }
-    .hidden { display:none; }
-    .checklist-backdrop { position:absolute; inset:0; background:rgba(0,0,0,0.45); }
-    .checklist-box { position:relative; max-width:820px; margin:6vh auto; background:#fff; border-radius:12px; padding:12px; box-shadow:0 30px 60px rgba(0,0,0,0.28); }
-    .checklist-header { display:flex; justify-content:space-between; align-items:center; gap:8px; border-bottom:1px solid #eef2ff; padding-bottom:8px; }
-    .tabs { display:flex; gap:6px; margin-top:10px; flex-wrap:wrap; }
-    .tab { padding:6px 10px; border-radius:8px; background:#f1f5f9; cursor:pointer; border:1px solid transparent; }
-    .tab.active { background:var(--accent); color:#fff; border-color:var(--accent); }
-    .checklist-content { margin-top:12px; max-height:60vh; overflow:auto; padding-right:8px; }
-    .checklist-item { display:flex; gap:10px; padding:8px 0; border-bottom:1px dashed #eef2ff; align-items:flex-start; }
-    .checklist-item input { margin-top:6px; }
-
-    /* small screens adjustments */
-    @media (max-width:900px) {
-      .main-content { margin-left: 0; padding:18px; }
-      .hero-right { display:none; }
-      .card { min-height:170px; }
+    @media (max-width:520px){
+      .btn-primary{ min-width:unset; padding:10px; }
+      .card{ padding:14px; }
     }
   </style>
 </head>
 
 <body>
-  <!-- GLOBAL BACKGROUND (place immediately after <body>) -->
-<div class="site-bg" aria-hidden="true" role="presentation">
-  <!-- preload hint (optional) -->
-  <link rel="preload" href="{% static 'bg/site-bg.mp4' %}" as="video" type="video/mp4">
-
-  <video class="site-bg-video"
-         autoplay
-         muted
-         loop
-         playsinline
-         preload="metadata"
-         poster="{% static 'bg/site-bg.png' %}"
-         aria-hidden="true"
-         tabindex="-1">
-    <source src="{% static 'bg/site-bg.mp4' %}" type="video/mp4">
-    <!-- fallback image for very old browsers -->
-  </video>
-
-  <div class="site-bg-overlay" aria-hidden="true" role="presentation"></div>
-</div>
-
+  <!-- Optional site background video - keep but non-blocking -->
+  <div class="site-bg" aria-hidden="true" style="position:fixed; inset:0; z-index:-1; overflow:hidden;">
+    <video autoplay muted loop playsinline preload="metadata" poster="{% static 'bg/site-bg.png' %}" style="width:100%; height:100%; object-fit:cover; opacity:0.18; filter:blur(0.6px);">
+      <source src="{% static 'bg/site-bg.mp4' %}" type="video/mp4">
+    </video>
+  </div>
 
   {% include 'partials/sidebar.html' %}
 
   <main class="main-content" role="main" aria-labelledby="protect-heading">
-    <div class="hero" role="region" aria-label="Intro">
+    <!-- HERO -->
+    <section class="hero" aria-label="Protect overview">
       <div class="hero-left">
         <h1 id="protect-heading">Protect Home, Farm & Livelihood</h1>
         <p class="small-muted">Practical, regional lessons to reduce disaster loss. Choose a role and follow <strong>Before → During → After</strong>.</p>
 
         <div class="controls" aria-hidden="false">
-          <label for="regionSelect" class="small-muted" style="margin-right:6px;">Your region:</label>
+          <label for="regionSelect" class="small-muted" style="font-weight:700; margin-right:4px;">Region:</label>
           <select id="regionSelect" class="select" onchange="onRegionChange()">
             <option value="andhra">Andhra Pradesh (Coastal)</option>
             <option value="assam">Assam (Flood-prone)</option>
@@ -185,18 +164,17 @@
       </div>
 
       <div class="hero-right" aria-hidden="true">
-        <img src="{% static 'protect/hero.png' %}" alt="" style="max-width:100%; border-radius:8px; box-shadow:0 10px 30px rgba(10,20,60,0.06)" onerror="this.style.display='none'">
+        <img src="{% static 'protect/hero.png' %}" alt="Protect illustration" style="max-width:100%; border-radius:10px; box-shadow:0 10px 30px rgba(10,20,60,0.06)" onerror="this.style.display='none'">
       </div>
-    </div>
+    </section>
 
-    <!-- Role cards -->
+    <!-- Role cards (links must remain unchanged) -->
     <section class="role-cards" aria-label="Roles">
-      <!-- FARMERS -->
       <article class="card" aria-labelledby="farmers-title">
         <div class="top">
           <div class="card-icon" aria-hidden="true">👨‍🌾</div>
           <h2 id="farmers-title">Farmers & Livelihoods</h2>
-          <p>Practical farming actions: seed storage, early harvest decisions, livestock safety and soil recovery. Clear, low-cost steps you can do before monsoon.</p>
+          <p>Practical farming actions: seed storage, early harvest, livestock safety and soil recovery. Clear, low-cost steps before monsoon to preserve income.</p>
         </div>
 
         <div class="card-actions">
@@ -205,12 +183,11 @@
         </div>
       </article>
 
-      <!-- HOUSEHOLDS -->
       <article class="card" aria-labelledby="households-title">
         <div class="top">
           <div class="card-icon" aria-hidden="true">🏠</div>
           <h2 id="households-title">Households & Property</h2>
-          <p>Save valuables and documents; protect electricals and entry points. Steps are simple and affordable for every household.</p>
+          <p>Save valuables and documents; protect electricals and entry points. Affordable steps every household should know.</p>
         </div>
 
         <div class="card-actions">
@@ -219,12 +196,11 @@
         </div>
       </article>
 
-      <!-- COMMUNITY -->
       <article class="card" aria-labelledby="community-title">
         <div class="top">
           <div class="card-icon" aria-hidden="true">🧑‍🤝‍🧑</div>
           <h2 id="community-title">Community & Local Leaders</h2>
-          <p>Organize shelters, grain banks, rescue tools and drills. Templates and steps make community action faster and safer.</p>
+          <p>Organize shelters, grain banks and rescue tools. Templates and steps to make community action faster, safer and more inclusive.</p>
         </div>
 
         <div class="card-actions">
@@ -233,12 +209,11 @@
         </div>
       </article>
 
-      <!-- SCHOOLS -->
       <article class="card" aria-labelledby="schools-title">
         <div class="top">
           <div class="card-icon" aria-hidden="true">👩‍🏫</div>
           <h2 id="schools-title">Teachers & Schools</h2>
-          <p>School safety audit, shelter conversion steps and child-focused evacuation training templates for teachers and staff.</p>
+          <p>School safety audits, shelter conversion steps and child-focused evacuation templates for teachers and staff.</p>
         </div>
 
         <div class="card-actions">
@@ -248,238 +223,306 @@
       </article>
     </section>
 
-    <!-- Quick tips and FAQ -->
+    <!-- Quick tips, when to act, training -->
     <section class="grid-3" aria-label="Quick tips">
       <div class="card small">
         <h3 style="margin:0 0 8px 0">Quick Tips</h3>
         <ul style="margin:0; padding-left:18px; color:#475569">
-          <li>Store medicines & documents in sealed, elevated box.</li>
-          <li>Keep a phone power bank and torch ready.</li>
-          <li>Teach two evacuation routes to every family member.</li>
+          <li>Store medicines & documents in sealed, elevated containers.</li>
+          <li>Keep a charged powerbank & torch nearby.</li>
+          <li>Teach two evacuation routes to every household member.</li>
         </ul>
       </div>
 
       <div class="card small">
         <h3 style="margin:0 0 8px 0">When to act</h3>
-        <p class="small-muted" style="margin:0">If a red alert is issued, start early — move people & valuables before roads block.</p>
+        <p class="small-muted" style="margin:0">If a red alert is issued, act early — move people & valuables before roads block.</p>
       </div>
 
       <div class="card small">
         <h3 style="margin:0 0 8px 0">Training</h3>
-        <p class="small-muted" style="margin:0 0 8px 0">Use AI Assistant for a drill template.</p>
+        <p class="small-muted" style="margin:0 0 8px 0">Use the AI Assistant to create a drill template tailored to your community.</p>
         <p style="margin:8px 0 0 0"><a class="btn-ghost" href="{% url 'chat' %}">Ask AI Assistant</a></p>
       </div>
     </section>
 
+    <!-- FAQ -->
     <section class="faq" aria-label="FAQ">
       <div class="faq-item">
         <div class="faq-q" onclick="toggleFaq(this)">How do I save checklist progress?</div>
-        <div class="faq-a">Check items in the checklist modal — progress is saved locally in your browser.</div>
+        <div class="faq-a">Use the checklist modal — progress is stored locally in your browser using localStorage and can be printed for the community.</div>
       </div>
       <div class="faq-item">
         <div class="faq-q" onclick="toggleFaq(this)">Can I print the checklist?</div>
-        <div class="faq-a">Yes — open the checklist and use Print (Print button) which prints only the checklist content.</div>
+        <div class="faq-a">Yes — open Checklist → Print. The print view contains only the checklist content for easy distribution.</div>
       </div>
     </section>
-
   </main>
 
-  <!-- Checklist Modal -->
-  <div id="checklistModal" class="checklist-modal hidden" role="dialog" aria-modal="true" aria-labelledby="checklistTitle">
+  <!-- Checklist modal (keeps same IDs & functions so your other code / links keep working) -->
+  <div id="checklistModal" class="checklist-modal" style="display:none" role="dialog" aria-modal="true" aria-labelledby="checklistTitle">
     <div class="checklist-backdrop" onclick="closeChecklist()"></div>
     <div class="checklist-box" role="document">
       <div class="checklist-header">
         <div>
           <h2 id="checklistTitle">Checklist</h2>
-          <div id="checklistRegionNote" class="small-muted" style="font-size:0.9em;"></div>
+          <div id="checklistRegionNote" class="small-muted" style="font-size:0.95rem; margin-top:4px;"></div>
         </div>
         <div style="display:flex; gap:8px; align-items:center;">
           <button class="btn-ghost" onclick="printChecklist()">Print</button>
           <button class="btn-ghost" id="shareBtn" onclick="shareChecklist()">Share</button>
-          <button class="close-btn" aria-label="Close" onclick="closeChecklist()">✖</button>
+          <button class="btn-ghost" onclick="closeChecklist()">Close</button>
         </div>
       </div>
 
-      <div class="tabs" id="checklistTabs" role="tablist">
-        <div class="tab active" data-tab="overview" role="tab" tabindex="0" onclick="switchTab('overview')">Overview</div>
-        <div class="tab" data-tab="before" role="tab" tabindex="0" onclick="switchTab('before')">Before</div>
-        <div class="tab" data-tab="during" role="tab" tabindex="0" onclick="switchTab('during')">During</div>
-        <div class="tab" data-tab="after" role="tab" tabindex="0" onclick="switchTab('after')">After</div>
-        <div class="tab" data-tab="checklist" role="tab" tabindex="0" onclick="switchTab('checklist')">Checklist</div>
+      <div class="tabs" id="checklistTabs" role="tablist" aria-label="Checklist tabs">
+        <div class="tab active" data-tab="overview" onclick="switchTab('overview')">Overview</div>
+        <div class="tab" data-tab="before" onclick="switchTab('before')">Before</div>
+        <div class="tab" data-tab="during" onclick="switchTab('during')">During</div>
+        <div class="tab" data-tab="after" onclick="switchTab('after')">After</div>
+        <div class="tab" data-tab="checklist" onclick="switchTab('checklist')">Checklist</div>
       </div>
 
-      <div class="checklist-content" id="checklistContent" tabindex="0">
-        <!-- injected -->
+      <div id="checklistContent" class="checklist-content" tabindex="0" aria-live="polite">
+        <!-- injected by JS -->
       </div>
 
-      <div class="checklist-actions">
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:12px;">
         <button class="btn-ghost" onclick="closeChecklist()">Close</button>
         <button class="btn-primary" onclick="saveChecklistProgress()">Save</button>
       </div>
     </div>
   </div>
 
+  <!-- Inline JS (keeps same function names / localStorage keys the app expects) -->
   <script>
-    // same JS logic as before but with small helpers for UI fixes
+    // Keys & datasets (kept simple and compatible)
     const STAT_KEY = 'protect_stats_v1';
     const REGION_KEY = 'protect_region_v1';
-    function loadStats() {
-      const s = JSON.parse(localStorage.getItem(STAT_KEY) || '{}');
-      document.getElementById('statViewed').innerText = s.viewed || 0;
-      document.getElementById('statChecklist').innerText = s.checklists || 0;
-    }
-    function bumpStat(name) {
-      const s = JSON.parse(localStorage.getItem(STAT_KEY) || '{}');
-      s[name] = (s[name] || 0) + 1;
-      localStorage.setItem(STAT_KEY, JSON.stringify(s));
-      loadStats();
-    }
+    const PROG_KEY = 'protect_check_progress_v1';
 
-    function onRegionChange() {
-      const region = document.getElementById('regionSelect').value;
-      localStorage.setItem(REGION_KEY, region);
-      const txt = (region === 'custom') ? '' : `Tips adapted for ${document.getElementById('regionSelect').selectedOptions[0].text}`;
-      document.getElementById('checklistRegionNote').innerText = txt;
-    }
-    (function initRegion() {
-      const saved = localStorage.getItem(REGION_KEY) || 'andhra';
-      document.getElementById('regionSelect').value = saved;
-      onRegionChange();
-    })();
-
-    function toggleFaq(el) {
-      const a = el.nextElementSibling;
-      if (a.style.display === 'block') { a.style.display = 'none'; } else { a.style.display = 'block'; }
-    }
-
-    // Checklist content (unchanged, reused)
     const CHECKLISTS = {
-      farmers: { title: "Farmers — Protect crops & livestock",
-        overview: "Brief actions to reduce farm income loss.",
-        before: ["Store seeds & grains on raised platforms","Build temporary raised storage","Prepare farm pond & bunds","Harvest mature crops early if alert issued"],
-        during: ["Move animals to higher ground","Turn off pump motors, secure tools","Avoid entering fast-moving water"],
-        after: ["Dry grains & seeds before storage","Desilt and repair bunds","Contact local KVK for assistance"],
-        checklist: []
+      farmers: {
+        title: "Farmers — Protect crops & livestock",
+        overview: "Prioritised actions to preserve next season's income: move seed & grain, secure livestock and tools, and plan harvest decisions.",
+        before: [
+          "Map highest safe points on the farm and mark raised storage locations.",
+          "Store seeds & grains on raised platforms or upper floors.",
+          "Prepare feed & medicines separated and waterproofed.",
+          "Collect bricks/pallets to make temporary raised storage.",
+          "Practice a monthly toolbox drill (move 2 items to high point)."
+        ],
+        during: [
+          "Move livestock to community high ground early.",
+          "Turn off and disconnect pumps if water is rising.",
+          "Avoid direct contact with fast-moving water; use boats safely.",
+          "Tag animals (simple tags) and keep records for reunification."
+        ],
+        after: [
+          "Photograph damage for relief/insurance and note times.",
+          "Dry grains fully in sun, discard moulded stock and disinfect seed.",
+          "Desilt topsoil and test salt contamination before replanting.",
+          "Coordinate with KVK/local extension for seed replacement."
+        ]
       },
-      households: { title: "Household — Property Safety",
-        overview: "Steps to protect documents and reduce repair costs.",
-        before: ["Move documents to waterproof containers","Prepare an emergency bag","Tie down loose roof sheets"],
-        during: ["Switch off main electricity if safe","Move to higher floor or shelter","Avoid flood water"],
-        after: ["Document damages for insurance","Dry wet items quickly","Ensure water safety"], checklist: []
+      households: {
+        title: "Household — Property Safety",
+        overview: "People first. Protect documents and reduce repair costs by early action: raised storage, safe electrics and sanitary plans.",
+        before: [
+          "Photograph & scan important documents; keep copies in waterproof container and cloud.",
+          "Prepare an emergency bag (medicines, torch, powerbank, copies of IDs, cash).",
+          "Identify safe rooms & an evacuation meeting point outside the flood zone.",
+          "Secure loose rooftop items and tie down light furniture outside."
+        ],
+        during: [
+          "Move to higher floor or safe shelter; avoid walking through flood water.",
+          "If you smell gas, switch off supply and ventilate before leaving (only if safe).",
+          "Keep children and elderly in one place; maintain lists of people moved."
+        ],
+        after: [
+          "Check structural safety before returning; if in doubt, seek local authority clearance.",
+          "Dry and disinfect water containers; boil water until official confirm safety.",
+          "Document damage for insurance; clean and ventilate before reoccupation."
+        ]
       },
-      community: { title: "Community — Readiness",
-        overview: "Community level readiness & response.",
-        before: ["Identify shelters","Stockpile dry food & medicines","Train rescue teams"],
-        during: ["Coordinate evacuation","Use radio/phone to share info","Assist vulnerable households first"],
-        after: ["Organize clearing & sanitation","Record losses, support farmers"], checklist: []
+      community: {
+        title: "Community — Readiness & Leaders",
+        overview: "Community-level preparedness: shelters, seed banks, rescue kits and drills that reduce collective losses.",
+        before: [
+          "Identify safe shelter buildings and mark capacity & single-access points.",
+          "Stock basic WASH items, dry food, medicines and fuel for cooking in shelters.",
+          "Train a small rescue team with ropes, boats and life-jackets and safe operation rules."
+        ],
+        during: [
+          "Coordinate community alerting and prioritise evacuating vulnerable households.",
+          "Stage boats/vehicles at pre-planned locations and manage traffic flow.",
+          "Maintain simple registration at shelter entry for family tracing."
+        ],
+        after: [
+          "Organise sanitation & safe drinking water provision in shelters.",
+          "Plan seed distribution prioritising smallholder recovery.",
+          "Collect damage records for district relief coordination."
+        ]
       },
-      schools: { title: "Schools — Safety Checklist",
-        overview: "School focused safety & drills.",
-        before: ["Create evacuation map","Store first aid","Secure roofs & walls"],
-        during: ["Execute evacuation plan","Keep children cool/shaded","First aid by trained staff"],
-        after: ["Check structure before reopening","Provide child psychological support"], checklist: []
+      schools: {
+        title: "Schools — Safety & Shelters",
+        overview: "School-focused templates: audit, evacuation maps, first-aid & converting classrooms to temporary shelters.",
+        before: [
+          "Run a building audit: roofs, walls, stairs, water points and toilets.",
+          "Create classroom-wise evacuation maps and register lists.",
+          "Store emergency kits & first-aid in labelled, accessible places."
+        ],
+        during: [
+          "Execute class-wise evacuation, count roll-call at assembly points.",
+          "Designate staff for first-aid, child safety & family liaison.",
+          "Keep children hydrated, shaded and calm until cleared."
+        ],
+        after: [
+          "Inspect structure before reuse, repair water & sanitation quickly.",
+          "Provide child psychosocial support and reunification services.",
+          "Record losses and open school as distribution point if safe."
+        ]
       }
     };
 
+    // derived checklist arrays
     Object.keys(CHECKLISTS).forEach(k => {
       const c = CHECKLISTS[k];
       c.checklist = [...(c.before||[]), ...(c.during||[]), ...(c.after||[])];
     });
 
+    // load stats
+    function loadStats(){
+      const s = JSON.parse(localStorage.getItem(STAT_KEY) || '{}');
+      document.getElementById('statViewed').innerText = s.viewed || 0;
+      document.getElementById('statChecklist').innerText = s.checklists || 0;
+    }
+    function bumpStat(name){
+      const s = JSON.parse(localStorage.getItem(STAT_KEY) || '{}');
+      s[name] = (s[name]||0) + 1;
+      localStorage.setItem(STAT_KEY, JSON.stringify(s));
+      loadStats();
+    }
+
+    // region handling
+    function onRegionChange(){
+      const region = document.getElementById('regionSelect').value;
+      localStorage.setItem(REGION_KEY, region);
+      const txt = (region === 'custom') ? '' : `Tips adapted for ${document.getElementById('regionSelect').selectedOptions[0].text}`;
+      const n = document.getElementById('checklistRegionNote');
+      if(n) n.innerText = txt;
+    }
+    (function initRegion(){
+      const saved = localStorage.getItem(REGION_KEY) || 'andhra';
+      document.getElementById('regionSelect').value = saved;
+      onRegionChange();
+    })();
+
+    // UI helpers (FAQ)
+    function toggleFaq(el){
+      const a = el.nextElementSibling;
+      if(!a) return;
+      a.style.display = (a.style.display === 'block') ? 'none' : 'block';
+    }
+
+    // Checklist modal handlers (match earlier names so other pages can call these)
     let currentRole = 'farmers';
     let currentTab = 'overview';
-    const PROG_KEY = 'protect_check_progress_v1';
 
-    function openChecklist(role) {
+    function openChecklist(role){
+      if(!CHECKLISTS[role]) role = 'farmers';
       currentRole = role;
       document.getElementById('checklistTitle').innerText = CHECKLISTS[role].title;
-      document.getElementById('checklistRegionNote').innerText = `Region: ${document.getElementById('regionSelect').selectedOptions[0].text}`;
+      const region = document.getElementById('regionSelect').selectedOptions[0].text || '';
+      document.getElementById('checklistRegionNote').innerText = `Region: ${region}`;
       switchTab('overview');
-      document.getElementById('checklistModal').classList.remove('hidden');
+      document.getElementById('checklistModal').style.display = 'flex';
       bumpStat('checklists');
       loadChecklistProgress(role);
     }
 
-    function closeChecklist() { document.getElementById('checklistModal').classList.add('hidden'); }
+    function closeChecklist(){
+      document.getElementById('checklistModal').style.display = 'none';
+    }
 
-    function switchTab(tab) {
+    function switchTab(tab){
       currentTab = tab;
       document.querySelectorAll('#checklistTabs .tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
       const content = document.getElementById('checklistContent');
-      if (tab === 'overview') {
-        content.innerHTML = `<p class="small-muted">${CHECKLISTS[currentRole].overview || 'Overview not available.'}</p>`;
-      } else if (tab === 'checklist') {
-        content.innerHTML = CHECKLISTS[currentRole].checklist.map((it, idx) => `
+      const data = CHECKLISTS[currentRole] || {};
+      if(tab === 'overview'){
+        content.innerHTML = `<p class="small-muted">${data.overview || ''}</p>`;
+      } else if(tab === 'checklist'){
+        content.innerHTML = data.checklist.map((it, idx) => `
           <div class="checklist-item">
-            <input type="checkbox" id="chk_${currentRole}_${idx}">
+            <input id="chk_${currentRole}_${idx}" type="checkbox">
             <label for="chk_${currentRole}_${idx}">${it}</label>
           </div>
         `).join('');
         restoreCheckedState(currentRole);
       } else {
-        const arr = CHECKLISTS[currentRole][tab] || [];
+        const arr = data[tab] || [];
         content.innerHTML = arr.map(it => `<div style="padding:6px 0">• ${it}</div>`).join('') || '<p class="small-muted">No items.</p>';
       }
     }
 
-    function saveChecklistProgress() {
-      const inputs = document.querySelectorAll(`#checklistContent input[type="checkbox"]`);
-      const state = Array.from(inputs).map(ch => ch.checked);
+    function saveChecklistProgress(){
+      const inputs = document.querySelectorAll('#checklistContent input[type="checkbox"]');
+      const state = Array.from(inputs).map(ch => !!ch.checked);
       const all = JSON.parse(localStorage.getItem(PROG_KEY) || '{}');
       all[currentRole] = state;
       localStorage.setItem(PROG_KEY, JSON.stringify(all));
-      alert('Checklist progress saved locally.');
+      alert('Checklist progress saved locally on this device.');
       bumpStat('viewed');
     }
 
-    function loadChecklistProgress(role) {
-      // after rendering, restore state and attach change listeners
+    function loadChecklistProgress(role){
+      // After rendering the checklist tab, restore state
       setTimeout(() => {
         const all = JSON.parse(localStorage.getItem(PROG_KEY) || '{}');
         const arr = all[role] || [];
-        const inputs = document.querySelectorAll(`#checklistContent input[type="checkbox"]`);
+        const inputs = document.querySelectorAll('#checklistContent input[type="checkbox"]');
         inputs.forEach((ch, idx) => {
-          ch.checked = arr[idx] || false;
+          ch.checked = !!arr[idx];
           ch.addEventListener('change', () => {
             const all2 = JSON.parse(localStorage.getItem(PROG_KEY) || '{}');
-            all2[role] = Array.from(document.querySelectorAll(`#checklistContent input[type="checkbox"]`)).map(c => c.checked);
+            all2[role] = Array.from(document.querySelectorAll('#checklistContent input[type="checkbox"]')).map(c => c.checked);
             localStorage.setItem(PROG_KEY, JSON.stringify(all2));
           });
         });
-      }, 40);
+      }, 50);
     }
 
-    function restoreCheckedState(role) {
+    function restoreCheckedState(role){
       const all = JSON.parse(localStorage.getItem(PROG_KEY) || '{}');
       const arr = all[role] || [];
-      const inputs = document.querySelectorAll(`#checklistContent input[type="checkbox"]`);
-      inputs.forEach((ch, idx) => ch.checked = arr[idx] || false);
+      const inputs = document.querySelectorAll('#checklistContent input[type="checkbox"]');
+      inputs.forEach((ch, idx) => ch.checked = !!arr[idx]);
     }
 
-    function printChecklist() {
-      const win = window.open('', '', 'width=700,height=900');
+    // Print & share
+    function printChecklist(){
       const title = document.getElementById('checklistTitle').innerText;
-      const content = document.getElementById('checklistContent').innerHTML;
-      win.document.write(`<html><head><title>${title}</title><style>body{font-family:Arial;padding:20px;} .checklist-item{margin-bottom:8px;}</style></head><body><h2>${title}</h2>${content}</body></html>`);
+      const contentHtml = document.getElementById('checklistContent').innerHTML;
+      const win = window.open('', '', 'width=700,height=900');
+      win.document.write(`<html><head><title>${title}</title><style>body{font-family:Arial;padding:18px;} .checklist-item{margin-bottom:8px;} h2{color:${getComputedStyle(document.documentElement).getPropertyValue('--text') || '#0b2545'}}</style></head><body><h2>${title}</h2>${contentHtml}</body></html>`);
       win.document.close();
       win.print();
     }
 
-    async function shareChecklist() {
-      if (!navigator.share) {
-        alert('Share not supported on this device. Use Print or save locally.');
-        return;
-      }
+    async function shareChecklist(){
+      if(!navigator.share){ alert('Share not supported on this device. Use Print or Save.'); return; }
       const title = document.getElementById('checklistTitle').innerText;
       const text = Array.from(document.querySelectorAll('#checklistContent div')).map(d => d.innerText).join('\n');
-      try { await navigator.share({ title, text }); } catch(e){ console.warn(e); }
+      try{ await navigator.share({ title, text }); } catch(e){ console.warn(e); }
     }
 
+    // init
     (function init(){
       loadStats();
-      // default role
-      currentRole = 'farmers';
-      // ensure tabs and region default
+      const saved = localStorage.getItem(REGION_KEY) || 'andhra';
+      document.getElementById('regionSelect').value = saved;
+      onRegionChange();
       switchTab('overview');
     })();
   </script>

@@ -1,0 +1,211 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>School Drills & Training — SafeSphere</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Practical drills & training for teachers, staff and students — checklist, drill planner, role-play scripts and printable templates." />
+
+  <link rel="stylesheet" href="{% static 'css/schools-drills.css' %}">
+</head>
+<body>
+  <main class="wrap" role="main" aria-labelledby="pageTitle">
+    <header class="topbar">
+      <div>
+        <h1 id="pageTitle">🏫 School Drills & Training — Prepare, Practice, Protect</h1>
+        <p class="lead">Step-by-step training for headteachers, teachers and students. Includes drill planner, printable evacuation template, role-play scripts and psychosocial activities.</p>
+        <div class="meta-row">
+          <span class="badge">Module • Drills & Training</span>
+          <span class="small">Estimated time: 30–60 min (training session)</span>
+        </div>
+      </div>
+
+      <div class="actions">
+        <a class="btn btn-ghost" href="{% url 'protect_schools' %}">⬅ Back to Schools</a>
+        <button class="btn btn-primary" id="openChecklistBtn">Open School Drill Checklist</button>
+        <button class="btn btn-ghost" id="plannerBtn">Plan a Drill</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- main column -->
+      <div>
+        <section class="section" id="why" aria-labelledby="whyTitle">
+          <h2 id="whyTitle">Why drills matter</h2>
+          <p>A short, calm, practised response saves lives and reduces panic. Drills give children the memory of what to do, teachers the confidence to lead, and communities the coordination to act quickly.</p>
+          <div class="info-box">
+            <strong>Core goal:</strong> make safe behaviour automatic — every teacher and student should know two evacuation routes and the assembly point.
+          </div>
+        </section>
+
+        <section class="section" id="roles" aria-labelledby="rolesTitle">
+          <h2 id="rolesTitle">Who does what — quick roles</h2>
+          <ul>
+            <li><strong>Headteacher / Principal</strong>: lead planning, liaison with local authorities, approve drill calendar.</li>
+            <li><strong>Teachers</strong>: lead classes during the drill, perform roll-call and supervise students at assembly point.</li>
+            <li><strong>School Safety Team</strong>: check exits, first-aid kit, radios/phones, and support quick evacuation of students with disabilities.</li>
+            <li><strong>Students</strong>: practice Drop-Cover-Hold (earthquake) or calm evacuation (fire / flood), follow teacher instructions.</li>
+            <li><strong>Volunteers / Parents</strong>: support assembly point management and safe reunification when needed.</li>
+          </ul>
+        </section>
+
+        <section class="section" id="what-to-practice" aria-labelledby="practiceTitle">
+          <h2 id="practiceTitle">What to practise (session checklist)</h2>
+          <ol>
+            <li>Alarm activation & clear announcement (who sounds alarm, how, and by which alternative channel).</li>
+            <li>Classroom immediate actions (e.g., STOP, sit/cover/stand — depending on hazard) and teacher instructions.</li>
+            <li>Orderly exit via primary route; teacher holds the class list and leads quietly.</li>
+            <li>Assembly point arrival → roll call → swift evacuation of absentee list to administration.</li>
+            <li>Special needs assistance (student list, buddy system) and safe re-entry decision by headteacher only.</li>
+            <li>Check emergency kit, first-aid response drill and basic fire extinguisher demo (teacher-led).</li>
+            <li>Short group debrief & psychosocial check-in at assembly point (5–10 minutes).</li>
+          </ol>
+        </section>
+
+        <section class="section" id="role-play" aria-labelledby="roleplayTitle">
+          <h2 id="roleplayTitle">Role-play scripts (ready to use)</h2>
+
+          <p class="small">Run 10–15 minute role-plays tailored to age group. Below are short scripts teachers can use.</p>
+
+          <div class="roleplay-card">
+            <h3>Fire drill — primary school (script)</h3>
+            <ol>
+              <li>Teacher: "Fire drill — everyone stand up and line by the door quietly".</li>
+              <li>Teacher leads class out, checks corridor, closes the door, counts students at assembly point.</li>
+              <li>School Safety Team: simulates smoke sign at location X, confirms evacuation time and notes bottlenecks.</li>
+              <li>Debrief: what worked, any blocked door, student who needed help, time taken.</li>
+            </ol>
+          </div>
+
+          <div class="roleplay-card">
+            <h3>Earthquake drill — secondary (script)</h3>
+            <ol>
+              <li>Teacher: shout "Drop! Cover! Hold!" and everyone drops under desk (30s).</li>
+              <li>When shaking stops (simulate), teacher orders quiet exit and uses nearest safe route to assembly point.</li>
+              <li>Safety Team checks for injuries and flags building damage for inspection.</li>
+            </ol>
+          </div>
+
+          <p class="small-muted">You can create simple props (cardboard blocks = blocked exit) to rehearse alternate routes.</p>
+        </section>
+
+        <section class="section" id="psychosocial" aria-labelledby="psychTitle">
+          <h2 id="psychTitle">Child-friendly debrief & psychosocial check</h2>
+          <p class="small">After every drill and especially after real incidents, run brief child-appropriate activities to reduce fear:</p>
+          <ul>
+            <li>Simple breathing exercise (count 1–5 inhale, 1–5 exhale) — 2 minutes.</li>
+            <li>Circle time: each student names one thing they did well during the drill.</li>
+            <li>Art activity: draw a safe place or safe adult (helps ES, expressive processing).</li>
+            <li>Referral: teachers note children who are unusually anxious and inform the school counsellor or parent.</li>
+          </ul>
+          <p class="small-muted">For structured MHPSS activities see INEE / Save the Children materials (use graded age-appropriate scripts). :contentReference[oaicite:4]{index=4}</p>
+        </section>
+
+        <section class="section" id="monitoring" aria-labelledby="monitorTitle">
+          <h2 id="monitorTitle">Monitoring & improvement</h2>
+          <p>Maintain a simple Drill Log (date, hazard, duration, issues, actions): this helps track readiness and reduce repeat problems.</p>
+          <ul>
+            <li>Record evacuation time and bottlenecks.</li>
+            <li>List repairs or changes needed (blocked exit, signage, mobility access).</li>
+            <li>Plan follow-up drills to practice the problem areas.</li>
+          </ul>
+        </section>
+
+      </div>
+
+      <!-- side column -->
+      <aside class="sidecard">
+        <div class="section">
+          <h3>Quick tools</h3>
+          <p class="small">Use these during planning sessions and staff meetings.</p>
+          <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+            <button class="btn btn-primary" id="planDrillBtn">Create drill now</button>
+            <button class="btn btn-ghost" id="printTemplateBtn">Print evacuation template</button>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>Printable evacuation template</h3>
+          <p class="small">A simple map the school can print and pin in every classroom.</p>
+          <img src="{% static 'image/schools/evac_template_placeholder.jpg' %}" alt="Evacuation template placeholder" class="poster" onerror="this.style.display='none'">
+          <p class="small-muted">Replace placeholder with your site map, mark primary/secondary routes and assembly points.</p>
+        </div>
+
+        <div class="section">
+          <h3>Training videos (placeholders)</h3>
+          <div class="video-thumb">
+            <video controls preload="metadata" poster="{% static 'image/schools/drill_demo_poster.jpg' %}">
+              <source src="{% static 'video/schools/drill_demo.mp4' %}" type="video/mp4">
+            </video>
+          </div>
+          <p class="small">Add recorded drills for teacher training. Keep files small for low-bandwidth.</p>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      <div class="note small-muted">Module uses internationally recommended approaches (school safety frameworks, community drills and psychosocial check-ins). Consult local NDMA / Education Department for policy alignment. :contentReference[oaicite:5]{index=5}</div>
+    </footer>
+  </main>
+
+  <!-- Checklist modal -->
+  <div id="checklistModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="checklistTitle">
+    <div class="modal-backdrop" onclick="closeChecklist()"></div>
+    <div class="modal-box" role="document">
+      <div class="modal-head">
+        <h2 id="checklistTitle">School Drill Checklist</h2>
+        <div class="modal-actions">
+          <button class="btn btn-ghost" onclick="printChecklist()">Print</button>
+          <button class="btn btn-ghost" onclick="closeChecklist()">Close</button>
+        </div>
+      </div>
+
+      <div class="tabs-inner" role="tablist">
+        <button class="tab active" data-tab="pre" onclick="switchChecklistTab('pre')">Before drill</button>
+        <button class="tab" data-tab="during" onclick="switchChecklistTab('during')">During drill</button>
+        <button class="tab" data-tab="after" onclick="switchChecklistTab('after')">After drill</button>
+        <button class="tab" data-tab="log" onclick="switchChecklistTab('log')">Drill log</button>
+      </div>
+
+      <div id="checklistContent" class="modal-body" tabindex="0"></div>
+
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeChecklist()">Close</button>
+        <button class="btn btn-primary" onclick="saveChecklist()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Drill Planner modal -->
+  <div id="plannerModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-backdrop" onclick="closePlanner()"></div>
+    <div class="modal-box">
+      <div class="modal-head">
+        <h2>Plan a Drill</h2>
+        <div class="modal-actions"><button class="btn btn-ghost" onclick="closePlanner()">Close</button></div>
+      </div>
+      <div class="modal-body">
+        <form id="plannerForm">
+          <label>Drill name<br><input id="drillName" type="text" required></label>
+          <label>Date & time<br><input id="drillDate" type="datetime-local" required></label>
+          <label>Hazard type<br>
+            <select id="drillHazard">
+              <option value="fire">Fire</option>
+              <option value="earthquake">Earthquake</option>
+              <option value="flood">Flood</option>
+              <option value="cyclone">Cyclone</option>
+            </select>
+          </label>
+          <label>Scope (classes / whole school)<br><input id="drillScope" type="text" value="Whole school"></label>
+          <label>Lead teacher / contact<br><input id="drillLead" type="text"></label>
+          <p><button class="btn btn-primary" type="submit">Save Drill</button></p>
+        </form>
+        <div id="plannerResult"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'js/schools-drills.js' %}"></script>
+</body>
+</html>

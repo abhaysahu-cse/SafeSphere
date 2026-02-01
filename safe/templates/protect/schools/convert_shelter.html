@@ -1,0 +1,143 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>School → Shelter: Setup Guide | SafeSphere</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="How to convert school classrooms into safe temporary shelters: sleeping areas, sanitation/WASH, layouts, infection control and checklists." />
+  <link rel="stylesheet" href="{% static 'css/schools-shelter.css' %}">
+</head>
+<body>
+  <main class="wrap" role="main" aria-labelledby="title">
+    <header class="topbar">
+      <div>
+        <h1 id="title">🏫 Convert School to Shelter — Rapid Setup & WASH</h1>
+        <p class="lead">Step-by-step, low-cost, safe ways to prepare classrooms and school grounds to host people during emergencies. Includes sleeping layout, sanitation, infection control, supplies, rosters and printable checklists.</p>
+        <div class="meta-row">
+          <span class="badge">Module • Schools / Community Shelter</span>
+          <span class="small">Est. time: 20–45 min (read + plan)</span>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <a class="btn btn-ghost" href="{% url 'protect_schools' %}">⬅ Back</a>
+        <button class="btn btn-primary" id="openChecklistBtn">Open Shelter Checklist</button>
+        <button class="btn btn-ghost" id="printPlanBtn">Print Plan</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- MAIN COLUMN -->
+      <div class="main-col">
+        <section class="section" id="overview" aria-labelledby="overviewTitle">
+          <h2 id="overviewTitle">Overview — Convert safely, quickly</h2>
+          <p>When a school is used as an emergency shelter, the priority order is: <strong>Safety → Dignity → Health → Water & Sanitation → Livelihood continuity.</strong> This module guides you through planning, physical layout and daily management with minimal disruption to school property where possible.</p>
+          <div class="info note">
+            <strong>Remember:</strong> always check with local authorities and ensure layered consent and security (school management + local disaster committee).
+          </div>
+        </section>
+
+        <!-- TABS -->
+        <nav class="tabs" role="tablist" aria-label="Shelter sections">
+          <button class="tab active" data-tab="convert" onclick="switchTab('convert')">Convert & Plan</button>
+          <button class="tab" data-tab="sleep" onclick="switchTab('sleep')">Sleeping Areas</button>
+          <button class="tab" data-tab="wash" onclick="switchTab('wash')">Sanitation & WASH</button>
+          <button class="tab" data-tab="infection" onclick="switchTab('infection')">Infection Control</button>
+          <button class="tab" data-tab="supplies" onclick="switchTab('supplies')">Supplies & Inventory</button>
+          <button class="tab" data-tab="management" onclick="switchTab('management')">Rosters & Management</button>
+        </nav>
+
+        <article id="moduleContent" class="module-body" tabindex="0" aria-live="polite">
+          <!-- Injected by JS -->
+          <noscript><p class="small">Enable JavaScript for interactive planning, roster and printable layout.</p></noscript>
+        </article>
+
+        <!-- Quick actions -->
+        <div class="cta-row" style="margin-top:12px;">
+          <button class="btn btn-primary" id="savePlanBtn">Save Plan</button>
+          <button class="btn btn-ghost" id="exportPlanBtn">Export Plan (JSON)</button>
+        </div>
+
+        <!-- STORIES / CASE STUDIES -->
+        <section class="section" aria-labelledby="caseTitle">
+          <h2 id="caseTitle">Case studies & tips</h2>
+          <ul>
+            <li><strong>Temporary latrine arrangement:</strong> raised pit latrines with nearby handwashing reduced diarrhoeal cases in a village shelter.</li>
+            <li><strong>Sleeping layout:</strong> simple 1m spacing between mats and gender-separated rows with visible signage preserved privacy and dignity.</li>
+            <li><strong>Infection control:</strong> isolation corner for symptomatic persons prevented spread of respiratory illness in a shelter hosting 120 people.</li>
+          </ul>
+        </section>
+      </div>
+
+      <!-- SIDE COLUMN -->
+      <aside class="side-col">
+        <div class="card section">
+          <h3>Essential Quick Checklist</h3>
+          <ul class="small">
+            <li>Count capacity: available classrooms & floor area</li>
+            <li>Set safe sleeping capacity at 1 person per 3.5–4 m² (adjust for bedding)</li>
+            <li>Identify water source & handwashing points</li>
+            <li>Designate isolation room & first-aid point</li>
+            <li>Assign shelter manager & roster</li>
+          </ul>
+        </div>
+
+        <div class="card section">
+          <h3>Video / Poster</h3>
+          <div class="poster-placeholder" id="posterPlace">Poster / GIF placeholder — add image here</div>
+          <p class="small muted">Add a short demo video here (setup, handwashing, sleeping layout).</p>
+        </div>
+
+        <div class="card section">
+          <h3>Shelter Capacity Calculator</h3>
+          <label class="small">Room area (m²)</label>
+          <input type="number" id="roomArea" placeholder="e.g., 80" min="5">
+          <label class="small">Allowance per person (m²)</label>
+          <input type="number" id="allowance" value="4" min="1">
+          <button class="btn btn-primary" id="calcCap">Calculate</button>
+          <div id="capacityResult" class="small" style="margin-top:8px"></div>
+        </div>
+
+        <div class="card section">
+          <h3>Emergency Contacts</h3>
+          <div id="contactsText" class="small muted">Edit contacts in Management tab.</div>
+          <div style="margin-top:8px">
+            <button class="btn btn-ghost" id="openManagementBtn">Open Management</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <footer class="footer-note">
+      <div class="small muted">This page is offline-first: saved plans and rosters are stored locally. Share printed copies with authorities and community leaders.</div>
+    </footer>
+  </main>
+
+  <!-- CHECKLIST MODAL -->
+  <div id="checklistModal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="checklistTitle">
+    <div class="modal-backdrop" onclick="closeChecklist()"></div>
+    <div class="modal-box" role="document">
+      <header class="modal-head"><h3 id="checklistTitle">Shelter Checklist — Quick View</h3><button class="close-btn" onclick="closeChecklist()">✖</button></header>
+      <div class="modal-body" id="checklistContent">
+        <!-- injected -->
+      </div>
+      <div style="margin-top:12px; display:flex; gap:8px; justify-content:flex-end">
+        <button class="btn btn-ghost" onclick="closeChecklist()">Close</button>
+        <button class="btn btn-primary" onclick="printChecklist()">Print Checklist</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLAN EXPORT MODAL -->
+  <div id="planModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" onclick="closePlanModal()"></div>
+    <div class="modal-box">
+      <header class="modal-head"><h3 id="planModalTitle">Saved shelter plan</h3><button class="close-btn" onclick="closePlanModal()">✖</button></header>
+      <div class="modal-body" id="planModalBody"></div>
+    </div>
+  </div>
+
+  <script src="{% static 'js/schools-shelter.js' %}"></script>
+</body>
+</html>

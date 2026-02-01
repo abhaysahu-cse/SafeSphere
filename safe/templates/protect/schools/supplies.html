@@ -1,0 +1,190 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Storing Supplies & First Aid — School | SafeSphere</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="How to store dry food, medicines and emergency kits at schools so they remain usable during sheltering or after disasters." />
+  <link rel="stylesheet" href="{% static 'css/schools-supplies.css' %}">
+</head>
+<body>
+  <main class="wrap" role="main" aria-labelledby="pageTitle">
+    <header class="topbar">
+      <div>
+        <h1 id="pageTitle">📦 Storing Supplies & First Aid — Schools</h1>
+        <p class="lead">Practical, low-cost methods to store dry food, medicines and emergency kits so they remain usable during sheltering and in recovery. Includes inventory tools, printable poster and step-by-step checklist.</p>
+      </div>
+
+      <div class="actions">
+        <a class="btn btn-ghost" href="{% url 'protect_schools' %}">⬅ Back to School Modules</a>
+        <button class="btn btn-primary" id="openChecklistBtn">Open Checklist</button>
+        <button class="btn btn-primary" id="exportAllBtn">Export Inventory (CSV)</button>
+      </div>
+    </header>
+
+    <section class="grid">
+      <!-- Left: Guidance + poster -->
+      <div class="col guidance">
+        <article class="section">
+          <h2>Why good storage matters</h2>
+          <p>Proper storage reduces spoilage, prevents medication loss, ensures safe water and reduces disease risk in shelters. A small, well-managed stock of dry food and kits keeps schools running as safe shelters for the community.</p>
+
+          <h3>High-priority items to keep on hand</h3>
+          <ul>
+            <li><strong>Dry food</strong> — rice, wheat, millets, ready-to-eat rations (MREs), baby food. Keep sealed and on raised shelves.</li>
+            <li><strong>Drinking water</strong> — stored in clean, covered containers or water bladders (rotate every 6 months).</li>
+            <li><strong>Medicines & first-aid</strong> — basic emergency kit, ORS, antibiotic ointment, wound dressings; store in a dry, cool locked cabinet with labelled expiry dates.</li>
+            <li><strong>Sanitation supplies</strong> — soap, bleach, water purification tablets, menstrual hygiene kits, portable toilets or arrangements.</li>
+            <li><strong>Tools & supplies</strong> — torches, spare batteries, power banks, blankets, tarpaulins, ropes, repair kit.</li>
+          </ul>
+
+          <h3>Storage best-practices (short)</h3>
+          <ol>
+            <li>Use a clean, dry room with a lockable cabinet for medicines and a separate raised shelf for food (at least 30 cm above floor).</li>
+            <li>Label everything: content, opening date, expiry date, and "Use-by" with big tags.</li>
+            <li>First In → First Out (FIFO): always use older items first. Mark new stock on arrival.</li>
+            <li>Keep medicines locked, accessible to designated trained person only. Record dispensing in a simple logbook.</li>
+            <li>Protect from pests: sealed plastic containers, pallet stacking, insect traps; check monthly.</li>
+            <li>Keep an inventory with quantities and expiries. Replace soon-to-expire stock by local procurement or requests to KVK/authorities.</li>
+            <li>Hygiene: wash hands before handling food/medicine and keep storage room clean. Segregate food & non-food items.</li>
+          </ol>
+        </article>
+
+        <article class="section poster" id="posterArea">
+          <h2>Printable Poster — Storage basics</h2>
+          <div class="poster-placeholder" id="posterPlaceholder">Poster image / diagram placeholder (replace with your generated image)</div>
+          <p class="small muted">Tip: use a poster that shows shelf heights, locked cabinet for medicines, and labelled boxes. Replace the image below with your generated poster file.</p>
+          <div class="poster-ctas">
+            <button class="btn btn-primary" id="downloadPosterBtn">Download Poster (placeholder)</button>
+            <button class="btn btn-ghost" id="printPosterBtn">Print Poster</button>
+          </div>
+        </article>
+
+        <article class="section details">
+          <h2>Detailed guidance — by topic</h2>
+          <h4>Dry Food</h4>
+          <p>Store in sealed, food-grade containers. Keep original packaging if possible and place containers on pallets. Label batch and date received. Rotate every 6–12 months depending on food type.</p>
+
+          <h4>Medicines & First-aid</h4>
+          <p>Store in a cool, dry, locked cabinet. Keep a paper logbook of access and dispensing. Check expiry dates monthly and use soon-to-expire items first. Teach one or two staff on basic first-aid and medicine handling.</p>
+
+          <h4>Water & WASH</h4>
+          <p>Store water in clean, covered containers; use water purification tablets or filtration for replenishment. Separate drinking / cleaning water. Prepare a sanitation area and waste-disposal plan for shelters to avoid disease spread.</p>
+
+          <h4>Pest & Moisture Control</h4>
+          <p>Elevate stocks on pallets, inspect for leaks, use desiccant packs in sealed containers where appropriate, maintain cleanliness, and rotate stock to minimize infestation.</p>
+
+          <h4>Security & Access</h4>
+          <p>Lock medicine cabinets and restrict access to trained staff. Keep a printed contact list for suppliers and district authorities near the storage area.</p>
+        </article>
+      </div>
+
+      <!-- Right: Inventory manager -->
+      <aside class="col inventory">
+        <div class="section">
+          <h3>Inventory manager</h3>
+          <p class="small muted">Add supplies, monitor expiry & low stock. This is stored locally in your browser (use Export to share).</p>
+
+          <div class="form">
+            <div class="row">
+              <select id="itemCategory">
+                <option value="dryfood">Dry food</option>
+                <option value="water">Water</option>
+                <option value="medicine">Medicine</option>
+                <option value="sanitation">Sanitation</option>
+                <option value="tools">Tools & other</option>
+              </select>
+              <input type="text" id="itemName" placeholder="Item name (e.g., Rice 25kg)" />
+            </div>
+
+            <div class="row">
+              <input type="number" id="itemQty" placeholder="Qty" min="0" />
+              <input type="date" id="itemExpiry" placeholder="Expiry (optional)" />
+            </div>
+
+            <div class="row">
+              <input type="text" id="itemNotes" placeholder="Notes (location, batch, supplier)" />
+            </div>
+
+            <div class="row actions">
+              <button class="btn btn-primary" id="addItemBtn">Add / Update Item</button>
+              <button class="btn btn-ghost" id="clearExpiredBtn">Remove expired</button>
+            </div>
+          </div>
+
+          <div class="filter-row">
+            <input type="search" id="searchInput" placeholder="Search inventory..." />
+            <select id="filterCategory">
+              <option value="">All categories</option>
+              <option value="dryfood">Dry food</option>
+              <option value="water">Water</option>
+              <option value="medicine">Medicine</option>
+              <option value="sanitation">Sanitation</option>
+              <option value="tools">Tools & other</option>
+            </select>
+            <button class="btn btn-ghost" id="exportCsvBtn">Export CSV</button>
+            <button class="btn btn-ghost" id="exportJsonBtn">Export JSON</button>
+          </div>
+
+          <div id="inventoryList" class="list" aria-live="polite">
+            <!-- inventory rows -->
+          </div>
+
+          <div class="list-ctas" style="margin-top:8px">
+            <button class="btn btn-primary" id="printListBtn">Print Inventory</button>
+            <button class="btn btn-ghost" id="resetAllBtn">Reset Inventory</button>
+          </div>
+        </div>
+
+        <div class="section quick-checks">
+          <h3>Quick checks & training</h3>
+          <ul>
+            <li>Monthly check: quantity, integrity of packaging, and expiry. Record in logbook.</li>
+            <li>Drill: Practice distributing a sample kit in <strong>10 minutes</strong> to a small class group.</li>
+            <li>Assign two staff for inventory & first-aid; keep a backup copy of records offsite or in cloud if possible.</li>
+            <li>Label shelf zones (A,B,C) and keep a printed shelf map near the storage room.</li>
+          </ul>
+        </div>
+      </aside>
+    </section>
+
+    <footer class="note">
+      <div class="small muted">This module is offline-first. Use Export to share inventory with authorities or other schools. Replace poster placeholder with local graphics.</div>
+    </footer>
+  </main>
+
+  <!-- CHECKLIST MODAL -->
+  <div id="checklistModal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="checklistTitle">
+    <div class="modal-backdrop" onclick="closeChecklist()"></div>
+    <div class="modal-box" role="document">
+      <header class="modal-head">
+        <h2 id="checklistTitle">Shelter Storage Checklist — quick</h2>
+        <button class="close-btn" aria-label="Close" onclick="closeChecklist()">✖</button>
+      </header>
+
+      <div class="modal-body">
+        <p class="small muted">Use this checklist while preparing your storage area for a shelter.</p>
+        <ol>
+          <li>Designate storage room and lockable medicine cabinet.</li>
+          <li>Elevate all food & water containers at least 30 cm off the floor.</li>
+          <li>Label shelves and boxes with content, date received and expiry.</li>
+          <li>Check tents/tarpaulins and emergency blankets for dryness and pack them separately.</li>
+          <li>Place a signboard with contact numbers and the stock master near the storage door.</li>
+          <li>Ensure a clean separate area for cooking and waste to avoid contamination.</li>
+          <li>Assign staff responsible for monthly checks and stock rotation.</li>
+        </ol>
+
+        <h4>Print & distribute</h4>
+        <p class="small muted">You can print this checklist and pin it inside the storage room.</p>
+        <div style="display:flex; gap:8px; margin-top:8px">
+          <button class="btn btn-primary" onclick="printChecklist()">Print checklist</button>
+          <button class="btn btn-ghost" onclick="saveChecklist()">Save checklist locally</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'js/schools-supplies.js' %}"></script>
+</body>
+</html>

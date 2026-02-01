@@ -291,6 +291,25 @@ def community_wash(request):
 def community_drills(request):
     return render(request, 'protect/community/drills.html')
 
+# Individual module pages Schools
+def schools_audit(request):
+    return render(request, 'protect/schools/audit.html')
+
+def schools_evacuation(request):
+    return render(request, 'protect/schools/evacuation.html')
+
+def schools_supplies(request):
+    return render(request, 'protect/schools/supplies.html')
+
+def schools_child_protection(request):
+    return render(request, 'protect/schools/child_protection.html')
+
+def schools_convert_shelter(request):
+    return render(request, 'protect/schools/convert_shelter.html')
+
+def schools_drills(request):
+    return render(request, 'protect/schools/drills.html')
+
 def zones_api(request):
     data = [
         {"lat": 23.27, "lng": 77.43, "level": "high", "msg": "Flood-prone area"},

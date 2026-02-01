@@ -116,6 +116,14 @@ urlpatterns = [
     path('protect/community/rescue/', views.community_rescue, name='community_rescue'),
     path('protect/community/wash/', views.community_wash, name='community_wash'),
     path('protect/community/drills/', views.community_drills, name='community_drills'),
+
+    # schools
+    path('protect/schools/audit/', views.schools_audit, name='schools_audit'),
+    path('protect/schools/evacuation/', views.schools_evacuation, name='schools_evacuation'),
+    path('protect/schools/supplies/', views.schools_supplies, name='schools_supplies'),
+    path('protect/schools/child-protection/', views.schools_child_protection, name='schools_child_protection'),
+    path('protect/schools/convert-to-shelter/', views.schools_convert_shelter, name='schools_convert_shelter'),
+    path('protect/schools/drills/', views.schools_drills, name='schools_drills'),
     
 ]
 
