@@ -1,0 +1,212 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Shelters & Relief Management | SafeSphere</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="How to set up safe shelters, maintain supplies, organise rosters and manage entry points for quick community response." />
+
+  <link rel="stylesheet" href="{% static 'css/protect-community-shelters.css' %}">
+</head>
+<body>
+  <!-- ALERT BAR (shared hook; JS may update via updateDisasterAlertFromWeather) -->
+  <div id="disaster-alert-bar" class="alert-normal" role="status" aria-live="polite">
+    <div class="alert-inner">
+      <span id="alertIcon">🟢</span>
+      <span id="alertText">Weather is normal. Prepare your community shelter plan.</span>
+      <button id="dismissAlert" class="dismiss" title="Dismiss">Dismiss</button>
+    </div>
+  </div>
+
+  <main class="wrap" role="main" aria-labelledby="pageTitle">
+    <header class="topbar">
+      <div>
+        <h1 id="pageTitle">🏚️ Shelters & Relief Management — Community</h1>
+        <p class="lead">How to set up safe shelters, maintain basic supplies, organise shelter rosters and manage entry points so your community can respond quickly and safely.</p>
+        <div class="meta-row">
+          <span class="badge">Module • Community</span>
+          <span class="small">Est.time: 25–45 min (practice & drills)</span>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <a class="btn btn-ghost" href="{% url 'protect_community' %}">⬅ Back to Community</a>
+        <button class="btn btn-primary" id="openChecklistBtn">Open Checklist</button>
+        <a class="btn btn-ghost" href="#drills">Jump to Drills</a>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- MAIN -->
+      <div>
+        <!-- Overview -->
+        <section class="section" id="why" aria-labelledby="whyTitle">
+          <h2 id="whyTitle">Why community shelters matter</h2>
+          <p class="small">A well-prepared shelter saves lives, reduces injuries, prevents disease spread and protects essential documents, seeds and community equipment. Planning ahead reduces confusion during a disaster and accelerates recovery.</p>
+          <div class="info-box">
+            <strong>Quick summary:</strong> Choose a safe building, keep basic supplies stocked, make an access plan for people with limited mobility, and maintain a volunteer roster with clear roles.
+          </div>
+        </section>
+
+        <!-- Tabs -->
+        <div class="tabs" role="tablist" aria-label="Shelter sections">
+          <button class="tab active" data-tab="setup" onclick="switchTab('setup')">Setup</button>
+          <button class="tab" data-tab="supplies" onclick="switchTab('supplies')">Supplies</button>
+          <button class="tab" data-tab="roster" onclick="switchTab('roster')">Rosters & Roles</button>
+          <button class="tab" data-tab="entry" onclick="switchTab('entry')">Entry & Crowd Flow</button>
+          <button class="tab" data-tab="drills" onclick="switchTab('drills')">Practice & Drills</button>
+          <button class="tab" data-tab="resources" onclick="switchTab('resources')">Resources</button>
+        </div>
+
+        <div id="moduleContent" class="module-body" tabindex="0" aria-live="polite">
+          <!-- injected by JS -->
+        </div>
+
+        <!-- Interactive shelter layout -->
+        <section class="section" aria-labelledby="layoutTitle">
+          <h2 id="layoutTitle">Practice: Shelter layout (drag & drop)</h2>
+          <p class="small">Drag critical items into the shelter: water, medicines, toilets, wheelchair ramp, seed storage, sleeping mats. Aim for a layout that keeps entry clear and accessible.</p>
+
+          <div class="dnd-area">
+            <div class="dnd-palette" aria-label="Palette">
+              <strong>Items to place</strong>
+              <div id="paletteItems"></div>
+            </div>
+
+            <div class="dnd-board" id="shelterBoard" aria-label="Shelter layout (drop zone)" tabindex="0">
+              <div class="shelter-room">
+                <div class="shelter-label">Main hall — plan entrances & zones</div>
+              </div>
+            </div>
+          </div>
+
+          <p style="margin-top:8px">
+            <button class="btn btn-primary" id="btnCheckLayout">Check layout</button>
+            <button class="btn btn-ghost" id="btnResetLayout">Reset layout</button>
+            <button class="btn btn-ghost" id="btnSaveLayout">Save layout</button>
+          </p>
+          <div id="layoutResult" style="margin-top:10px;font-weight:700"></div>
+        </section>
+
+        <!-- Drills & Training -->
+        <section class="section" id="drills" aria-labelledby="drillsTitle">
+          <h2 id="drillsTitle">Practice & Drills</h2>
+          <p class="small">Regular drills make response automatic. Focus on these exercises:</p>
+          <ol>
+            <li><strong>Arrival drill</strong>: simulate 2-hour warning — set up shelter and receive first 10 families.</li>
+            <li><strong>Evacuation of vulnerable</strong>: practise moving elderly/disabled with wheelchairs/stretcher to safe zone.</li>
+            <li><strong>Supplies rotation</strong>: monthly check of supplies, expiry and condition.</li>
+            <li><strong>Sanitation drill</strong>: deploy emergency toilets and handwashing stations.</li>
+          </ol>
+
+          <div class="info-box" style="margin-top:8px">
+            <strong>Template drill schedule:</strong> monthly small-scale drill; quarterly full-shelter simulation; annually invite district authority.
+          </div>
+        </section>
+
+        <!-- Quiz & Checklist link -->
+        <section class="section quiz-box" aria-labelledby="quizTitle">
+          <h2 id="quizTitle">Quick checklist quiz</h2>
+          <p class="small">Use this short quiz to check understanding of shelter essentials.</p>
+          <div id="quizWrap"></div>
+        </section>
+
+      </div>
+
+      <!-- SIDE -->
+      <aside class="sidecard" aria-labelledby="sideTitle">
+        <div class="section" id="sideTitle">
+          <h3>Quick actions</h3>
+          <ul class="small">
+            <li>Identify 2 potential shelter buildings (school, community hall).</li>
+            <li>Designate a shelter manager and 3 volunteers.</li>
+            <li>Keep a printed copy of contacts and a whiteboard at the shelter.</li>
+          </ul>
+          <div style="margin-top:8px">
+            <button class="btn btn-primary" id="openChecklistBtnSide">Open Checklist</button>
+            <a class="btn btn-ghost" href="#drills">Open Drills</a>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>Poster</h3>
+          <img src="{% static 'image/protect/community/shelter_poster.jpg' %}" alt="Shelter poster" class="poster" onerror="this.style.display='none'">
+          <p class="small">Download and print this poster for the village noticeboard.</p>
+        </div>
+
+        <div class="section">
+          <h3>How-to video</h3>
+          <div class="video-wrapper">
+            <video controls preload="metadata" poster="{% static 'image/protect/community/shelter_video_poster.jpg' %}">
+              <source src="{% static 'video/community_shelter_demo.mp4' %}" type="video/mp4">
+              Your browser does not support video.
+            </video>
+          </div>
+          <p class="small">Use in training sessions — replace with your recorded demo.</p>
+        </div>
+
+        <div class="section">
+          <h3>Volunteer roster</h3>
+          <div id="rosterBox" style="margin-top:8px"></div>
+          <p style="margin-top:8px"><button class="btn btn-ghost" id="btnAddVolunteer">Add volunteer</button></p>
+          <p class="small">Volunteers & roles are saved locally on this device.</p>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      <div class="note">Make printed checklists and a simple whiteboard at the shelter for live updates. Keep phone powerbanks charged and gas for cooking if possible.</div>
+    </footer>
+  </main>
+
+  <!-- CHECKLIST MODAL -->
+  <div id="checklistModal" class="checklist-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="checklistTitle">
+    <div class="checklist-backdrop" onclick="closeChecklist()"></div>
+    <div class="checklist-box" role="document">
+      <div class="checklist-header">
+        <div>
+          <h2 id="checklistTitle">Shelter setup checklist</h2>
+          <div id="checklistNote" class="small-muted">Saved locally — Print or Share as needed.</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn btn-ghost" onclick="printChecklist()">Print</button>
+          <button class="btn btn-ghost" id="shareBtn" onclick="shareChecklist()">Share</button>
+          <button class="btn btn-ghost" onclick="closeChecklist()">Close</button>
+        </div>
+      </div>
+
+      <div class="tabs-inner" role="tablist">
+        <button class="tab active" data-tab="overview" onclick="switchChecklistTab('overview')">Overview</button>
+        <button class="tab" data-tab="setup" onclick="switchChecklistTab('setup')">Setup</button>
+        <button class="tab" data-tab="supplies" onclick="switchChecklistTab('supplies')">Supplies</button>
+        <button class="tab" data-tab="sanitation" onclick="switchChecklistTab('sanitation')">Sanitation</button>
+        <button class="tab" data-tab="roster" onclick="switchChecklistTab('roster')">Roster</button>
+        <button class="tab" data-tab="checklist" onclick="switchChecklistTab('checklist')">Checklist</button>
+      </div>
+
+      <div class="checklist-content" id="checklistContent" tabindex="0"></div>
+
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px">
+        <button class="btn btn-ghost" onclick="closeChecklist()">Close</button>
+        <button class="btn btn-primary" onclick="saveChecklistProgress()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STORY / INFO MODAL -->
+  <div id="infoModal" class="story-modal" aria-hidden="true" role="dialog">
+    <div class="story-backdrop" onclick="closeInfo()"></div>
+    <div class="story-box">
+      <div class="story-head">
+        <h3 id="infoModalTitle">Info</h3>
+        <button class="btn btn-ghost" onclick="closeInfo()">Close</button>
+      </div>
+      <div id="infoModalBody" class="story-body"></div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="{% static 'js/protect-community-shelters.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Rescue Tools, Boats & Safety Kits — Community | SafeSphere</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Guidance for community rescue teams: boats, ropes, lifejackets, first-aid, training and drills." />
+  <link rel="stylesheet" href="{% static 'css/protect-community-rescue.css' %}">
+</head>
+<body>
+  <main class="wrap" role="main" aria-labelledby="pageTitle">
+    <header class="topbar">
+      <div>
+        <h1 id="pageTitle">🛶 Rescue Tools, Boats & Safety Kits — Community</h1>
+        <p class="lead">Equip and train a small rescue team for safe water operations and general disaster rescue. Focus: safety-first, simple durable equipment, record keeping and regular drills.</p>
+        <div class="meta">Target: community volunteers, local leaders, first responders • Tools: inventory manager, training roster, drill scheduler, printable checklists</div>
+      </div>
+
+      <div class="actions">
+        <a class="btn btn-ghost" href="{% url 'protect_community' %}">⬅ Back to Community</a>
+        <button class="btn primary" id="openChecklistBtn">Open Checklist</button>
+        <button class="btn ghost" id="exportBtn">Export (JSON)</button>
+      </div>
+    </header>
+
+    <section class="section" id="why">
+      <h2>Why community rescue matters</h2>
+      <p class="small">When formal services are delayed, a trained local rescue team with basic boats, rope systems, lifejackets and first aid can save lives. But improper operation increases risk — this module emphasises safe procedures and simple gear suitable for low-resource settings.</p>
+
+      <div class="grid-3">
+        <div class="card">
+          <h3>Safety first</h3>
+          <p class="small">No untrained person near fast water. Always use PPE, have a shore-based safety line, and never exceed the team's capability.</p>
+        </div>
+        <div class="card">
+          <h3>Equipment focus</h3>
+          <p class="small">Quality lifejackets, sturdy ropes (not frayed), marked boats, rescue poles and a basic medical kit are high-impact buys — maintain them.</p>
+        </div>
+        <div class="card">
+          <h3>Training beats gear</h3>
+          <p class="small">A small amount of repeated practical training (boat launch, victim handling, rope rescue) reduces accidents and builds confidence.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TABS -->
+    <div class="tabs" role="tablist" aria-label="Sections">
+      <button class="tab active" data-tab="equipment" onclick="switchTab('equipment')">Equipment & Kits</button>
+      <button class="tab" data-tab="boats" onclick="switchTab('boats')">Boats & Boat Ops</button>
+      <button class="tab" data-tab="ropes" onclick="switchTab('ropes')">Ropes & Knots</button>
+      <button class="tab" data-tab="medical" onclick="switchTab('medical')">Medical Kits & Triage</button>
+      <button class="tab" data-tab="training" onclick="switchTab('training')">Training & Roster</button>
+      <button class="tab" data-tab="drills" onclick="switchTab('drills')">Drill Planner</button>
+      <button class="tab" data-tab="resources" onclick="switchTab('resources')">Printable Checklists</button>
+    </div>
+
+    <section id="tabContent" class="tab-content" aria-live="polite">
+      <!-- injected by JS -->
+    </section>
+
+    <!-- Interactive tools -->
+    <section class="section" id="interactive">
+      <h2>Interactive toolkit</h2>
+      <div class="tool-grid">
+        <div class="tool-col">
+          <h3>➤ Equipment Inventory (add / edit / remove)</h3>
+          <form id="equipForm" onsubmit="event.preventDefault(); addEquipment();">
+            <label>Item name <input id="equip_name" required placeholder="e.g., 4-person inflatable boat"></label>
+            <label>Category <select id="equip_cat">
+              <option value="boat">Boat</option>
+              <option value="pfd">Lifejacket / PFD</option>
+              <option value="rope">Rope / Line</option>
+              <option value="medical">Medical kit</option>
+              <option value="tool">Tool (oar, pole, pump)</option>
+              <option value="electronics">Radio / torch</option>
+            </select></label>
+            <label>Qty <input id="equip_qty" type="number" min="1" value="1"></label>
+            <label>Condition <select id="equip_condition">
+              <option>Good</option><option>Service due</option><option>Repair/replace</option>
+            </select></label>
+            <label>Storage location <input id="equip_loc" placeholder="village shelter / shed"></label>
+            <label>Notes <input id="equip_notes" placeholder="manufacturer, last service date"></label>
+            <div style="margin-top:8px">
+              <button class="btn primary" type="submit">Add item</button>
+              <button class="btn ghost" type="button" onclick="clearEquipForm()">Clear</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="tool-col">
+          <h3>➤ Inventory</h3>
+          <div id="inventoryList" class="list">Loading…</div>
+          <div style="margin-top:8px">
+            <button class="btn ghost" onclick="importSampleEquipment()">Load sample data</button>
+            <button class="btn ghost" onclick="exportData()">Export all</button>
+          </div>
+        </div>
+      </div>
+
+      <hr style="margin:14px 0">
+
+      <div>
+        <h3>➤ Training roster & roles</h3>
+        <form id="personForm" onsubmit="event.preventDefault(); addPerson();">
+          <input id="p_name" required placeholder="Volunteer name / ID">
+          <select id="p_role">
+            <option value="boat_operator">Boat operator</option>
+            <option value="shore_safety">Shore safety</option>
+            <option value="medic">Medic / First-aid</option>
+            <option value="logistics">Logistics / comms</option>
+          </select>
+          <input id="p_contact" placeholder="Phone">
+          <button class="btn primary" type="submit">Add volunteer</button>
+          <button class="btn ghost" type="button" onclick="clearPersons()">Clear</button>
+        </form>
+        <div id="personsList" class="list" style="margin-top:8px">No volunteers</div>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <div class="small muted">Tip: maintain printed checklists near storage, test radios monthly and run at least two practical drills per year (monsoon pre-season + dry-season review).</div>
+      <div></div>
+    </footer>
+  </main>
+
+  <!-- CHECKLIST MODAL (boat ops, equipment, med kit) -->
+  <div id="checklistModal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="checklistTitle">
+    <div class="modal-backdrop" onclick="closeChecklist()"></div>
+    <div class="modal-box" role="document">
+      <h3 id="checklistTitle">Rescue Team Checklist</h3>
+
+      <div class="checklist-grid">
+        <label><input id="ch_pfds" type="checkbox"> Lifejackets for all rescue members (fitted & sized)</label>
+        <label><input id="ch_ropes" type="checkbox"> Rescue ropes + throwbags (min 15 m) present</label>
+        <label><input id="ch_boat" type="checkbox"> Boat(s) inspected – hull, valves, oars, fuel</label>
+        <label><input id="ch_med" type="checkbox"> First-aid kit stocked (see contents)</label>
+        <label><input id="ch_comms" type="checkbox"> Radios/phones charged and spare batteries</label>
+        <label><input id="ch_ppe" type="checkbox"> PPE: gloves, helmets, waterproof boots</label>
+        <label><input id="ch_training" type="checkbox"> Recent drill within last 6 months</label>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn ghost" onclick="closeChecklist()">Close</button>
+        <button class="btn primary" onclick="saveChecklistModal()">Save checklist</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STORY / GUIDE MODAL (for rope knots, boat diagram placeholders) -->
+  <div id="guideModal" class="modal" aria-hidden="true" role="dialog">
+    <div class="modal-backdrop" onclick="closeGuide()"></div>
+    <div class="modal-box" role="document">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h3 id="guideTitle">Guide</h3>
+        <button class="btn ghost" onclick="closeGuide()">Close</button>
+      </div>
+      <div id="guideBody" style="margin-top:12px"></div>
+    </div>
+  </div>
+
+  <script src="{% static 'js/protect-community-rescue.js' %}"></script>
+</body>
+</html>

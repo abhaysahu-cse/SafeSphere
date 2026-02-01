@@ -1,0 +1,138 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Community Drills & Training | SafeSphere</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Community drills: how to organize mock drills, volunteer teams, day/night exercises and special-needs inclusion." />
+  <link rel="stylesheet" href="{% static 'css/protect-community-drills.css' %}">
+</head>
+<body>
+  <main class="wrap" role="main" aria-labelledby="pageTitle">
+    <header class="topbar">
+      <div>
+        <h1 id="pageTitle">👥 Community Drills & Training</h1>
+        <p class="lead">How to organise realistic, repeatable community drills (day & night), train volunteers, include elders/children/pets and run after-action reviews.</p>
+        <div class="meta">Module • Community • Drills · Offline-first · Printable templates</div>
+      </div>
+
+      <div class="actions">
+        <a class="btn btn-ghost" href="{% url 'protect_community' %}">⬅ Back to Community</a>
+        <button class="btn primary" id="openChecklistBtn">Open Drill Checklist</button>
+      </div>
+    </header>
+
+    <!-- Intro / Why -->
+    <section class="section" aria-labelledby="whyTitle">
+      <h2 id="whyTitle">Why community drills matter</h2>
+      <p class="small">Mock drills reduce panic, clarify roles, improve evacuation time and reveal logistical gaps — especially for elders, disabled people and animals.</p>
+      <ul class="benefits">
+        <li>Familiarises everyone with routes and assembly points</li>
+        <li>Trains volunteers to manage crowds, first aid and boats</li>
+        <li>Exposes problems (blocked routes, missing supplies)</li>
+      </ul>
+    </section>
+
+    <!-- Tabs -->
+    <div class="tabs" role="tablist" aria-label="Drill sections">
+      <button class="tab active" data-tab="plan" onclick="switchTab('plan')">Plan a Drill</button>
+      <button class="tab" data-tab="roles" onclick="switchTab('roles')">Volunteer Roles</button>
+      <button class="tab" data-tab="daynight" onclick="switchTab('daynight')">Day & Night Drills</button>
+      <button class="tab" data-tab="elder" onclick="switchTab('elder')">Elders & Special Needs</button>
+      <button class="tab" data-tab="pets" onclick="switchTab('pets')">Animals & Pets</button>
+      <button class="tab" data-tab="afteraction" onclick="switchTab('afteraction')">After-action Review</button>
+      <button class="tab" data-tab="templates" onclick="switchTab('templates')">Templates & Print</button>
+    </div>
+
+    <!-- Module content injected here -->
+    <section id="tabContent" class="tab-content" tabindex="0" aria-live="polite"></section>
+
+    <!-- Quick controls -->
+    <div class="cta-row">
+      <button class="btn primary" id="startDrillBtn">Simulate Drill (demo)</button>
+      <button class="btn ghost" onclick="printModule()">Print Module</button>
+      <button class="btn ghost" id="openRosterBtn">Open Roster</button>
+    </div>
+
+    <!-- Roster / Sign-up (modal) -->
+    <div id="rosterModal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="rosterTitle">
+      <div class="modal-backdrop" onclick="closeRoster()"></div>
+      <div class="modal-box" role="document">
+        <div class="modal-head">
+          <h3 id="rosterTitle">Volunteer Roster & Signup</h3>
+          <button class="btn ghost" onclick="closeRoster()">Close</button>
+        </div>
+
+        <form id="rosterForm" class="roster-form" onsubmit="event.preventDefault(); addVolunteer();">
+          <label>Name <input type="text" id="volName" required></label>
+          <label>Phone <input type="tel" id="volPhone" required></label>
+          <label>Role
+            <select id="volRole">
+              <option value="evac">Evacuation</option>
+              <option value="firstaid">First Aid</option>
+              <option value="logistics">Logistics</option>
+              <option value="boats">Boats / Rescue</option>
+              <option value="childcare">Childcare</option>
+            </select>
+          </label>
+          <label>Availability (comma days) <input type="text" id="volAvail" placeholder="Mon,Tue,Weekend"></label>
+          <div style="display:flex;gap:8px;margin-top:8px;">
+            <button class="btn primary" type="submit">Add Volunteer</button>
+            <button class="btn ghost" type="button" onclick="exportRoster()">Export CSV</button>
+          </div>
+        </form>
+
+        <div class="roster-list" id="rosterList" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <!-- Checklist modal -->
+    <div id="checklistModal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="checklistTitle">
+      <div class="modal-backdrop" onclick="closeChecklist()"></div>
+      <div class="modal-box" role="document">
+        <h3 id="checklistTitle">Drill Checklist</h3>
+        <div class="checklist-grid">
+          <label><input type="checkbox" id="c-notify"> Notify community 48 hours before (or as required)</label>
+          <label><input type="checkbox" id="c-assembly"> Mark assembly points & routes</label>
+          <label><input type="checkbox" id="c-firstaid"> First aid & medicines stocked</label>
+          <label><input type="checkbox" id="c-boats"> Boats / rescue tools checked</label>
+          <label><input type="checkbox" id="c-access"> Accessible routes for elders and wheelchair users</label>
+          <label><input type="checkbox" id="c-child"> Child-safe zone & childcare volunteers assigned</label>
+          <label><input type="checkbox" id="c-pets"> Animal holding & tagging plan ready</label>
+          <label><input type="checkbox" id="c-comm"> Communication plan (who calls who)</label>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn ghost" onclick="closeChecklist()">Close</button>
+          <button class="btn primary" onclick="saveDrillChecklist()">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Print / Templates area (hidden) -->
+    <div id="templatesHidden" style="display:none">
+      <div id="templateEvac" class="print-template">
+        <h2>Evacuation Route Map (Template)</h2>
+        <p>Instructions: Draw roads, mark low-lying areas, mark assembly points in green, mark blocked alternatives in red.</p>
+      </div>
+      <div id="templateAAR" class="print-template">
+        <h2>After-Action Review (AAR) Template</h2>
+        <ol>
+          <li>Drill time & date</li>
+          <li>Objectives</li>
+          <li>What went well</li>
+          <li>Issues found</li>
+          <li>Actions & owners</li>
+        </ol>
+      </div>
+    </div>
+
+    <footer class="foot">
+      <p class="small">Tip: run smaller drills monthly and full drills twice a year; include at least one night exercise annually.</p>
+    </footer>
+  </main>
+
+  <script src="{% static 'js/protect-community-drills.js' %}"></script>
+</body>
+</html>

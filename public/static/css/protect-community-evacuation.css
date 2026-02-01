@@ -1,0 +1,72 @@
+/* Protect - Community Evacuation module */
+:root{
+  --bg:#f5f9ff;
+  --card:#fff;
+  --accent:#1e40af;
+  --muted:#475569;
+  --ok:#0b7a3c;
+}
+
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,Arial,sans-serif;background:var(--bg);color:#102a43}
+.wrap{max-width:1100px;margin:18px auto;padding:20px;background:var(--card);border-radius:10px;box-shadow:0 14px 40px rgba(2,6,23,0.06)}
+
+.top{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}
+.top h1{margin:0;color:var(--accent);font-size:1.6rem}
+.lead{color:var(--muted);margin-top:6px}
+.meta{font-size:0.9rem;color:var(--muted);margin-top:6px}
+.actions{display:flex;gap:10px;align-items:center}
+
+.btn{border-radius:8px;padding:8px 12px;font-weight:700;border:1px solid transparent;cursor:pointer}
+.btn.primary{background:var(--accent);color:#fff}
+.btn.ghost{background:#fff;border:1px solid rgba(30,64,175,0.12);color:var(--accent)}
+
+.section{margin-top:18px}
+.criteria-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:12px}
+.crit{background:#fbfdff;padding:12px;border-radius:8px;border:1px solid rgba(2,6,23,0.03)}
+.crit h4{margin:0 0 6px 0;color:var(--accent)}
+
+.tabs{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.tab{background:#e6eefc;padding:8px 12px;border-radius:8px;border:none;font-weight:700;cursor:pointer}
+.tab.active{background:var(--accent);color:#fff}
+
+.tab-content{margin-top:12px;background:#fbfdff;padding:14px;border-radius:8px;border:1px solid rgba(2,6,23,0.03)}
+.tab-content h3{margin-top:0;color:var(--accent)}
+
+.dnd-area{display:flex;gap:12px;align-items:flex-start;margin-top:12px;flex-wrap:wrap}
+.palette{width:220px;background:#f1f5ff;padding:10px;border-radius:8px;border:1px solid rgba(2,6,23,0.03)}
+.palette h4{margin:0 0 8px 0}
+.palette-item{background:#fff;padding:8px;margin-top:8px;border-radius:6px;cursor:grab;border:1px solid rgba(2,6,23,0.04)}
+.board{flex:1;min-height:220px;border-radius:8px;padding:12px;border:2px dashed #cbd5e1;background:#fcfeff}
+.hint{color:var(--muted)}
+
+.plan-actions{margin-top:10px;display:flex;gap:10px}
+.result{margin-top:8px;font-weight:700;color:var(--muted)}
+
+.form-inline{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.form-inline input,.form-inline select{padding:8px;border-radius:6px;border:1px solid #d1d5db}
+.form-inline button{padding:8px 12px}
+
+.list{margin-top:12px;border-radius:6px;padding:8px;background:#fff;border:1px solid rgba(2,6,23,0.03)}
+.list .person{padding:8px;border-bottom:1px dashed #eef2ff}
+.list .person:last-child{border-bottom:none}
+.small{font-size:0.9rem;color:var(--muted)}
+
+.foot{display:flex;justify-content:space-between;align-items:center;margin-top:20px;gap:10px}
+.foot .muted{color:var(--muted);font-size:0.9rem}
+
+/* modal */
+.modal{position:fixed;inset:0;display:none;z-index:10000}
+.modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,0.45)}
+.modal-box{position:relative;background:#fff;max-width:620px;margin:6vh auto;border-radius:10px;padding:18px;box-shadow:0 20px 50px rgba(2,6,23,0.2)}
+.checklist-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px}
+.checklist-grid label{display:block;padding:6px;border-radius:6px;background:#fbfdff;border:1px solid rgba(2,6,23,0.03)}
+
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}
+
+/* small responsive */
+@media (max-width:800px){
+  .top{flex-direction:column;align-items:flex-start}
+  .palette{width:100%}
+  .dnd-area{flex-direction:column}
+}

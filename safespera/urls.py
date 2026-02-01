@@ -88,7 +88,7 @@ urlpatterns = [
     path('protect/community/', views.protect_community, name='protect_community'),
     path('protect/schools/', views.protect_schools, name='protect_schools'),
 
-        # Protect Home, Farm & Livelihood
+     # Protect Home, Farm & Livelihood
     path('protect/', views.protect_index, name='protect'),
     path('protect/farmers/', views.protect_farmers, name='protect_farmers'),
     path('protect/farmers/flood/', views.farmers_flood, name='farmers_flood'),
@@ -105,6 +105,17 @@ urlpatterns = [
     path('households/heatwave/', views.households_heatwave, name='households_heatwave'),
     path('households/fire/', views.households_fire, name='households_fire'),
     path('households/earthquake/', views.households_earthquake, name='households_earthquake'),
+
+      # =========================
+    # COMMUNITY
+    # =========================
+    
+    path('protect/community/shelters/', views.community_shelters, name='community_shelters'),
+    path('protect/community/evacuation/', views.community_evacuation, name='community_evacuation'),
+    path('protect/community/grain-banks/', views.community_grain_banks, name='community_grain_banks'),
+    path('protect/community/rescue/', views.community_rescue, name='community_rescue'),
+    path('protect/community/wash/', views.community_wash, name='community_wash'),
+    path('protect/community/drills/', views.community_drills, name='community_drills'),
     
 ]
 

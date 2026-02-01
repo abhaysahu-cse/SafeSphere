@@ -263,6 +263,34 @@ def households_fire(request):
 def households_earthquake(request):
     return render(request, 'protect/households/earthquake.html')
 
+# ============================
+# COMMUNITY MODULES
+# ============================
+
+
+def community_shelters(request):
+    return render(request, 'protect/community/shelters.html')
+
+
+def community_evacuation(request):
+    return render(request, 'protect/community/evacuation.html')
+
+
+def community_grain_banks(request):
+    return render(request, 'protect/community/grain_banks.html')
+
+
+def community_rescue(request):
+    return render(request, 'protect/community/rescue.html')
+
+
+def community_wash(request):
+    return render(request, 'protect/community/wash.html')
+
+
+def community_drills(request):
+    return render(request, 'protect/community/drills.html')
+
 def zones_api(request):
     data = [
         {"lat": 23.27, "lng": 77.43, "level": "high", "msg": "Flood-prone area"},

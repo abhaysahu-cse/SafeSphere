@@ -1,0 +1,166 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Evacuation Planning & Safe Routes | SafeSphere</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Community evacuation planning: route mapping, assembly points, mobility support, vehicle & boat staging, drills and printable checklists.">
+
+  <link rel="stylesheet" href="{% static 'css/protect-community-evacuation.css' %}">
+</head>
+<body>
+  <main class="wrap" role="main" aria-labelledby="pageTitle">
+    <header class="top">
+      <div>
+        <h1 id="pageTitle">🗺️ Evacuation Planning & Safe Routes — Community</h1>
+        <p class="lead">A practical, community-focused plan for identifying safe routes and assembly points, supporting people with mobility needs, and organising vehicle/boat staging — with drill templates and printable checklists.</p>
+        <div class="meta">Target: community leaders • Est time: 30–60 min (planning); drills: 30–90 min</div>
+      </div>
+
+      <div class="actions">
+        <a class="btn btn-ghost" href="{% url 'protect_community' %}">⬅ Back to Community</a>
+        <button class="btn primary" id="openChecklistBtn">Open Checklist</button>
+        <button class="btn ghost" id="exportBtn">Export Plan (JSON)</button>
+      </div>
+    </header>
+
+    <!-- WHY & KEY CRITERIA -->
+    <section class="section" id="why">
+      <h2>Why evacuation planning matters (quick)</h2>
+      <p>Most avoidable harm during floods/cyclones happens because people are delayed, routes are blocked, or mobility needs are ignored. This plan prioritises: <strong>life first → mobility & dignity → assets → vehicles</strong>.</p>
+
+      <div class="criteria-grid">
+        <div class="crit">
+          <h4>Route criteria</h4>
+          <ul>
+            <li>Prefer high ground & gentle slope</li>
+            <li>Minimise water-crossings (bridges) & avoid electric poles</li>
+            <li>Wide routes (2-3 people abreast) where possible</li>
+            <li>Clear obstacles and mark safe entry/exits</li>
+          </ul>
+        </div>
+        <div class="crit">
+          <h4>Assembly point criteria</h4>
+          <ul>
+            <li>Raised, open area, away from trees/power lines</li>
+            <li>Space for tents, water distribution & medical desk</li>
+            <li>Accessible by foot and vehicles (separate lanes)</li>
+            <li>Signage & night reflectors</li>
+          </ul>
+        </div>
+        <div class="crit">
+          <h4>Mobility & dignity</h4>
+          <ul>
+            <li>Maintain a list of people who need help (with contact)</li>
+            <li>Wheelchair/ stretcher routes & volunteers assigned</li>
+            <li>Privacy (separate areas for women/families in shelters)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- TABS -->
+    <div class="tabs" role="tablist" aria-label="Sections">
+      <button class="tab active" data-tab="mapping" onclick="switchTab('mapping')">Route mapping</button>
+      <button class="tab" data-tab="assembly" onclick="switchTab('assembly')">Assembly points</button>
+      <button class="tab" data-tab="mobility" onclick="switchTab('mobility')">Mobility plan</button>
+      <button class="tab" data-tab="vehicles" onclick="switchTab('vehicles')">Vehicles & boats</button>
+      <button class="tab" data-tab="command" onclick="switchTab('command')">Command & comms</button>
+      <button class="tab" data-tab="drills" onclick="switchTab('drills')">Drills & schedule</button>
+    </div>
+
+    <section id="tabContent" class="tab-content" aria-live="polite">
+      <!-- populated by JS -->
+    </section>
+
+    <!-- PRACTICE: interactive board -->
+    <section class="section" id="practice">
+      <h2>Interactive: Build an evacuation plan (practice)</h2>
+      <p class="small">Drag elements from the left palette into the plan board. Then use the 'Check' button to validate key components.</p>
+
+      <div class="dnd-area">
+        <div class="palette" aria-label="Palette">
+          <h4>Palette</h4>
+          <div class="palette-item" draggable="true" data-type="foot">Pedestrian route</div>
+          <div class="palette-item" draggable="true" data-type="wheel">Wheelchair route</div>
+          <div class="palette-item" draggable="true" data-type="assembly">Assembly point</div>
+          <div class="palette-item" draggable="true" data-type="medical">Medical desk</div>
+          <div class="palette-item" draggable="true" data-type="vehicle">Vehicle staging</div>
+          <div class="palette-item" draggable="true" data-type="boat">Boat pickup</div>
+          <div class="palette-item" draggable="true" data-type="sign">Directional sign</div>
+        </div>
+
+        <div id="planBoard" class="board" aria-label="Evacuation plan board" tabindex="0">
+          <p class="hint">Drop items here to plan routes & points</p>
+        </div>
+      </div>
+
+      <div class="plan-actions">
+        <button class="btn primary" id="checkPlanBtn">Check plan</button>
+        <button class="btn ghost" id="resetPlanBtn">Reset plan</button>
+        <button class="btn ghost" id="savePlanBtn">Save plan (local)</button>
+      </div>
+
+      <div id="planResult" class="result" aria-live="polite"></div>
+    </section>
+
+    <!-- Mobility registry -->
+    <section class="section">
+      <h2>Register people who need assistance (mobility register)</h2>
+      <p class="small">Collect minimal info — name, household, phone, mobility type, preferred volunteer(s).</p>
+
+      <form id="mobilityForm" class="form-inline" onsubmit="event.preventDefault(); addMobilityPerson();">
+        <input type="text" id="m_name" placeholder="Name" required>
+        <input type="text" id="m_house" placeholder="House / Address" required>
+        <input type="tel" id="m_phone" placeholder="Phone" required>
+        <select id="m_type">
+          <option value="wheelchair">Wheelchair</option>
+          <option value="walker">Walker / Reduced mobility</option>
+          <option value="bedridden">Bedridden</option>
+          <option value="pregnant">Pregnant</option>
+          <option value="other">Other</option>
+        </select>
+        <input type="text" id="m_volunteer" placeholder="Assigned volunteer(s)">
+        <button class="btn primary" type="submit">Add</button>
+      </form>
+
+      <div id="mobilityList" class="list"></div>
+      <div class="small">Data saved locally in browser; export with 'Export plan' button above.</div>
+    </section>
+
+    <footer class="foot">
+      <div>
+        <strong>Printable templates:</strong>
+        <a href="#" onclick="event.preventDefault(); alert('Download placeholder');">Route sign (A4)</a> |
+        <a href="#" onclick="event.preventDefault(); alert('Download placeholder');">Assembly point poster</a> |
+        <a href="#" onclick="event.preventDefault(); alert('Download placeholder');">Volunteer assignment sheet</a>
+      </div>
+      <div class="small muted">Tip: print route maps in A3 and attach to public places; place reflectors for night visibility.</div>
+    </footer>
+  </main>
+
+  <!-- CHECKLIST MODAL -->
+  <div id="checklistModal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="checklistTitle">
+    <div class="modal-backdrop" onclick="closeChecklist()"></div>
+    <div class="modal-box" role="document">
+      <h3 id="checklistTitle">Evacuation Quick Checklist</h3>
+      <div class="checklist-grid">
+        <label><input type="checkbox" id="c_map"> Two safe routes for each zone mapped</label>
+        <label><input type="checkbox" id="c_assembly"> Assembly point(s) identified & signposted</label>
+        <label><input type="checkbox" id="c_mobility"> Mobility list created & volunteers assigned</label>
+        <label><input type="checkbox" id="c_vehicle"> Vehicle & boat staging areas planned</label>
+        <label><input type="checkbox" id="c_comms"> Communication & leader assigned</label>
+        <label><input type="checkbox" id="c_drill"> Drill planned (date set)</label>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn ghost" onclick="closeChecklist()">Close</button>
+        <button class="btn primary" onclick="saveChecklistModal()">Save checklist</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'js/protect-community-evacuation.js' %}"></script>
+</body>
+</html>

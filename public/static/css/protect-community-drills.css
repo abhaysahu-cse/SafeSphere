@@ -1,0 +1,68 @@
+:root{
+  --accent:#0b5;
+  --muted:#556074;
+  --card:#fff;
+  --bg:#f7fbfa;
+  --maxw:1100px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  font-family:Inter,system-ui,Arial,sans-serif;
+  color:#14213d;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{
+  max-width:var(--maxw);
+  margin:20px auto;
+  background:var(--card);
+  padding:18px;
+  border-radius:12px;
+  box-shadow:0 20px 40px rgba(8,12,30,0.06);
+}
+.topbar{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+h1{margin:0;color:#067a61}
+.lead{margin:6px 0;color:var(--muted)}
+.meta{font-size:0.9rem;color:var(--muted)}
+
+.actions{display:flex;gap:8px}
+.btn{padding:8px 12px;border-radius:8px;font-weight:700;cursor:pointer}
+.btn.primary{background:#067a61;color:#fff;border:none}
+.btn.ghost{background:#fff;border:1px solid #e6eef0;color:#067a61}
+
+.section{margin-top:16px}
+.small{color:var(--muted)}
+.benefits{margin:8px 0 0 18px;color:var(--muted)}
+
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.tab{padding:8px 12px;border-radius:8px;background:#eef8f5;border:none;cursor:pointer;font-weight:700}
+.tab.active{background:#067a61;color:#fff}
+
+.tab-content{margin-top:14px;padding:14px;background:#fbfffd;border-radius:8px;min-height:160px}
+
+.cta-row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+
+.modal{display:none;position:fixed;inset:0;z-index:12000}
+.modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,0.45)}
+.modal-box{position:relative;background:#fff;max-width:760px;margin:8vh auto;padding:14px;border-radius:10px;box-shadow:0 30px 60px rgba(0,0,0,0.28)}
+.modal-head{display:flex;justify-content:space-between;align-items:center}
+.roster-form label{display:block;margin-top:8px}
+.roster-form input,.roster-form select{width:100%;padding:8px;margin-top:4px;border-radius:6px;border:1px solid #e6eef0}
+
+.roster-list{margin-top:12px;max-height:220px;overflow:auto;border-top:1px dashed #eef2f1;padding-top:8px}
+.roster-entry{display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:6px;background:#f7fffb;margin-bottom:6px}
+
+.checklist-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin-top:8px}
+.checklist-grid label{display:flex;gap:8px;align-items:center;background:#f4fffb;padding:10px;border-radius:6px}
+
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}
+
+/* print templates */
+.print-template{padding:12px;background:#fff;border:1px solid #eef4ef;margin-top:10px}
+
+/* small screens */
+@media (max-width:760px){
+  .topbar{flex-direction:column;gap:12px}
+  .modal-box{margin:4vh 12px;width:calc(100%-24px)}
+}

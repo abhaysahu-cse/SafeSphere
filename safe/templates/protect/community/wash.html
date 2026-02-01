@@ -1,0 +1,97 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Water, Sanitation & Hygiene (WASH) — Community | SafeSphere</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Community WASH module to protect drinking water, sanitation, and prevent water-borne diseases after disasters." />
+  <link rel="stylesheet" href="{% static 'css/protect-community-wash.css' %}">
+</head>
+<body>
+
+<main class="wrap" role="main">
+  <header class="topbar">
+    <div>
+      <h1>🚰 Water, Sanitation & Hygiene (WASH)</h1>
+      <p class="lead">
+        How communities can protect drinking water, manage sanitation in shelters,
+        and prevent deadly water-borne diseases after floods and disasters.
+      </p>
+      <div class="meta">
+        Focus: Floods · Cyclones · Shelters · Disease prevention
+      </div>
+    </div>
+    <div class="actions">
+      <a class="btn btn-ghost" href="{% url 'protect_community' %}">⬅ Back to Community</a>
+      <button class="btn primary" onclick="openChecklist()">Open WASH Checklist</button>
+    </div>
+  </header>
+  
+
+  <!-- WHY -->
+  <section class="section">
+    <h2>Why WASH is life-saving</h2>
+    <div class="grid-3">
+      <div class="card">
+        <h3>Contaminated water kills silently</h3>
+        <p>Flood water mixes with sewage, animal waste and chemicals causing cholera, diarrhea, typhoid and hepatitis.</p>
+      </div>
+      <div class="card">
+        <h3>Poor sanitation spreads disease</h3>
+        <p>Open defecation and dirty toilets in shelters spread infections rapidly, especially among children.</p>
+      </div>
+      <div class="card">
+        <h3>Simple actions save many lives</h3>
+        <p>Clean water storage, handwashing stations and waste management reduce disease by more than 60%.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('water')">Safe Drinking Water</button>
+    <button class="tab" onclick="switchTab('sanitation')">Sanitation in Shelters</button>
+    <button class="tab" onclick="switchTab('hygiene')">Hygiene Practices</button>
+    <button class="tab" onclick="switchTab('disease')">Disease Prevention</button>
+    <button class="tab" onclick="switchTab('operations')">Community Operations</button>
+  </div>
+
+  <!-- CONTENT -->
+  <section id="tabContent" class="tab-content"></section>
+
+  <!-- FOOTER -->
+  <footer class="foot">
+    <p class="small">
+      Recommendation: Assign one WASH coordinator per shelter and update water safety checks daily.
+    </p>
+  </footer>
+</main>
+
+<!-- CHECKLIST MODAL -->
+<div id="checklistModal" class="modal">
+  <div class="modal-backdrop" onclick="closeChecklist()"></div>
+  <div class="modal-box">
+    <h3>Community WASH Checklist</h3>
+
+    <div class="checklist-grid">
+      <label><input type="checkbox"> Drinking water source protected & marked safe</label>
+      <label><input type="checkbox"> Chlorine tablets / bleaching powder available</label>
+      <label><input type="checkbox"> Separate toilets for men & women</label>
+      <label><input type="checkbox"> Handwashing stations with soap</label>
+      <label><input type="checkbox"> Solid waste collected daily</label>
+      <label><input type="checkbox"> Standing water drained (mosquito control)</label>
+      <label><input type="checkbox"> ORS & zinc stocked</label>
+      <label><input type="checkbox"> Health worker contact displayed</label>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeChecklist()">Close</button>
+      <button class="btn primary" onclick="saveChecklist()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script src="{% static 'js/protect-community-wash.js' %}"></script>
+</body>
+</html>
