@@ -10,6 +10,26 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <script src="script.js" defer></script>
 </head>
+
+
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement(
+    {
+      pageLanguage: 'en',
+      includedLanguages: 'en,hi,ta,te,bn,gu,kn,ml,mr,pa,ur',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+    },
+    'google_translate_element'
+  );
+}
+</script>
+
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+
+
 <body>
     <!-- GLOBAL BACKGROUND (place immediately after <body>) -->
 <div class="site-bg" aria-hidden="true" role="presentation">
@@ -95,6 +115,7 @@
 
     <!-- Main Content -->
     <main class="main-content">
+        <div id="google_translate_element" class="lang-selector"></div> 
         <header class="page-header">
             <div class="header-content">
                 <h1 class="page-title">Learning Modules 📚</h1>
@@ -128,7 +149,7 @@
                 id: 'Earthquake_Safety',
                 title: 'Earthquake Safety Basics',
                 description: 'Learn essential earthquake preparedness and response techniques',
-                icon: '🌍',
+                icon: '<img src="{% static "image/Earthquake_gif.gif" %}" class="card-icon" >',
                 difficulty: 'beginner',
                 duration: 15,
                 progress: 65,
@@ -138,7 +159,7 @@
                 id: 'fire_sefty',
                 title: 'Fire Safety',
                 description: 'Prevention and response strategies for fire emergencies',
-                icon: '🔥',
+                icon: '<img src="{% static "image/fire-gif.gif" %}" class="card-icon" alt="Fire Animation">',
                 difficulty: 'beginner',
                 duration: 15,
                 progress: 100,
@@ -148,7 +169,7 @@
                 id: 'flood-response',
                 title: 'Flood Response',
                 description: 'Stay safe during flooding events and water emergencies',
-                icon: '🌊',
+                icon: '<img src="{% static "image/flood-gif.gif" %}" class="card-icon" >',
                 difficulty: 'intermediate',
                 duration: 20,
                 progress: 40,
@@ -158,7 +179,7 @@
                 id: 'hurricane-prep',
                 title: 'Hurricane Preparation',
                 description: 'Before, during, and after hurricane safety protocols',
-                icon: '💨',
+                icon: '<img src="{% static "image/cyclone2-gif.gif" %}" class="card-icon" >',
                 difficulty: 'beginner',
                 duration: 18,
                 progress: 0,
@@ -168,7 +189,7 @@
                 id: 'first-aid',
                 title: 'Emergency First Aid',
                 description: 'Critical first aid techniques for disaster scenarios',
-                icon: '🏥',
+                icon: '<img src="{% static "image/doctor-gif.gif" %}" class="card-icon" >',
                 difficulty: 'intermediate',
                 duration: 25,
                 progress: 20,
@@ -178,7 +199,7 @@
                 id: 'tornado-safety',
                 title: 'Tornado Safety',
                 description: 'Recognize warnings and take shelter effectively',
-                icon: '🌪️',
+                icon: '<img src="{% static "image/cyclone-gif.gif" %}" class="card-icon" >',
                 difficulty: 'beginner',
                 duration: 12,
                 progress: 0,
@@ -188,7 +209,7 @@
                 id: 'winter-storms',
                 title: 'Winter Storm Survival',
                 description: 'Navigate extreme cold and snow emergencies',
-                icon: '❄️',
+                icon: '<img src="{% static "image/winterstrom-gif.gif" %}" class="card-icon" >',
                 difficulty: 'intermediate',
                 duration: 22,
                 progress: 0,
@@ -198,7 +219,7 @@
                 id: 'wildfire-escape',
                 title: 'Wildfire Evacuation',
                 description: 'Plan and execute safe evacuation during wildfires',
-                icon: '🔥',
+                icon: '<img src="{% static "image/fire-gif.gif" %}" class="card-icon" alt="Fire Animation">',
                 difficulty: 'advanced',
                 duration: 30,
                 progress: 0,
@@ -208,7 +229,7 @@
                 id: 'emergency-kit',
                 title: 'Emergency Kit Essentials',
                 description: 'Build a comprehensive 72-hour emergency kit',
-                icon: '🎒',
+                icon: '<img src="{% static "image/firstaid-kit-gif.gif" %}" class="card-icon" >',
                 difficulty: 'beginner',
                 duration: 10,
                 progress: 80,
@@ -218,7 +239,7 @@
                 id: 'communication',
                 title: 'Emergency Communication',
                 description: 'Maintain contact during infrastructure failures',
-                icon: '📡',
+                icon: '<img src="{% static "image/emmergency-comm-gif.gif" %}" class="card-icon" >',
                 difficulty: 'intermediate',
                 duration: 18,
                 progress: 0,
@@ -229,12 +250,112 @@
                 id: 'HeatWave-safety',
                 title: 'Heat Wave Safety Planning',
                 description: 'Protect yourself and others during extreme heat events',
-                icon: '🔥🌡️',
+                icon: '<img src="{% static "image/heatwave-gif.gif" %}" class="card-icon" >',
                 difficulty: 'beginner',
                 duration: 12,
                 progress: 0,
                 xp: 85
-            }
+            },
+
+          {
+    id: 'landslide-safety',
+    title: 'Landslide Safety Planning',
+    description: 'Protect yourself and others during landslide events',
+    icon: '<img src="{% static "image/landslide-gif.gif" %}" class="card-icon" >',
+    difficulty: 'advanced',
+    duration: 12,
+    progress: 0,
+    xp: 85
+},
+
+{
+    id: 'tsunami-safety',
+    title: 'Tsunami Safety',
+    description: 'Learn how to prepare for and survive tsunami events',
+    icon: '<img src="{% static "image/tsunami-gif.gif" %}" class="card-icon">',
+    difficulty: 'advanced',
+    duration: 20,
+    progress: 0,
+    xp: 180
+},
+
+
+{
+    id: 'air-pollution',
+    title: 'AQI Emergency',
+    description: 'Understand air pollution risks and safety measures during AQI emergencies',
+    icon: '<img src="{% static "image/air-pollution.gif" %}" class="card-icon">',
+    difficulty: 'advanced',
+    duration: 15,
+    progress: 0,
+    xp: 150
+},
+
+{
+    id: 'war-civil-defence',
+    title: 'War & Civil Defence',
+    description: 'Civilian safety basics during war, armed conflict, and missile strikes',
+    icon: '<img src="{% static "image/civil-defence.gif" %}" class="card-icon">',
+    difficulty: 'advanced',
+    duration: 25,
+    progress: 0,
+    xp: 200
+},
+
+{
+    id: 'gas-leak',
+    title: 'Gas Leak Safety',
+    description: 'Civilian safety basics during gas leaks and related emergencies',
+    icon: '<img src="{% static "image/gas-leak.gif" %}" class="card-icon">',
+    difficulty: 'advanced',
+    duration: 25,
+    progress: 0,
+    xp: 200
+},
+
+
+
+
+{
+    id: 'transport_accident',
+    title: 'Major Transport Accident Safety',
+    description: 'Civilian safety basics during major transport accidents and related emergencies',
+    icon: '<img src="{% static "image/transport-accident.gif" %}" class="card-icon">',
+    difficulty: 'advanced',
+    duration: 25,
+    progress: 0,
+    xp: 200
+},
+
+
+
+
+{
+    id: 'thunderstorm',
+    title: 'Thunderstorm Safety',
+    description: 'Civilian safety basics during thunderstorms and related emergencies',
+    icon: '<img src="{% static "image/thunderstorm.gif" %}" class="card-icon">',
+    difficulty: 'advanced',
+    duration: 25,
+    progress: 0,
+    xp: 200
+},
+
+     
+{
+    id: 'dam_reservoir_failure',
+    title: 'Dam & Reservoir Failure Safety',
+    description: 'Civilian safety basics during dam and reservoir failures and related emergencies',
+    icon: '<img src="{% static "image/dam-reservoir-failure.gif" %}" class="card-icon">',
+    difficulty: 'advanced',
+    duration: 25,
+    progress: 0,
+    xp: 200
+},
+
+
+
+
         ];
 
         // Load module progress from localStorage
@@ -335,6 +456,45 @@
     else if (moduleId === 'tornado-safety'){
         window.location.href = "{% url 'Tornado_Safety' %}";
     }
+
+   else if (moduleId === 'landslide-safety') {
+    window.location.href = "{% url 'landslide' %}";
+}
+
+else if (moduleId === 'tsunami-safety') {
+    window.location.href = "{% url 'tsunami' %}";
+}
+
+
+else if (moduleId === 'air-pollution') {
+    window.location.href = "{% url 'air_pollution' %}";
+}
+
+
+else if (moduleId === 'war-civil-defence') {
+   window.location.href = "{% url 'war_civil_defence' %}";
+
+}
+
+else if (moduleId === 'gas-leak') {
+    window.location.href = "{% url 'gas_leak' %}";
+}
+
+else if (moduleId === 'transport_accident') {
+    window.location.href = "{% url 'major_transport_accident' %}";
+}
+
+
+else if (moduleId === 'thunderstorm') {
+    window.location.href = "{% url 'thunderstorm' %}";
+}
+
+else if (moduleId === 'dam_reservoir_failure') {
+    window.location.href = "{% url 'dam_reservoir_failure' %}";
+}
+
+
+
       }
         // Start or continue module
         function startModule(moduleId, currentProgress) {

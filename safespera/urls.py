@@ -45,12 +45,38 @@ urlpatterns = [
     path("learn/Cyclone_Safety", views.Cyclone_Safety, name="Cyclone_Safety"),
     path("learn/Firstaid", views.Firstaid, name="Firstaid"),
     path('learn/flood/', views.Flood_SafetyL, name='flood'),
-    path('learn/tsunami/', views.Tsunami_Safety, name='Tsunami_Safety'),
+    path('learn/tsunami-safety/', views.tsunami_safety, name='tsunami'),
+
     path('learn/tornado/', views.Tornado_Safety, name='Tornado_Safety'),
     path('learn/heatwave/', views.HeatWave_Safety, name='HeatWave_Safety'),
     path('learn/firstaid/', views.FirstAid_Safety, name='FirstAid_Safety'),
     path('learn/winterstorm/', views.WinterStorms_Safety, name='WinterStorms_Safety'),
     path('learn/emergency_com/', views.Emergency_Communication, name='emergency_com'),
+    path('learn/landslide_safety/', views.landslide_Safety, name='landslide'),
+    path('learn/air-pollution/', views.air_pollution_safety, name='air_pollution'),
+    path('learn/gas_leak/', views.Gas_Leak_Safety, name='gas_leak'),
+    path(
+    'learn/war-civil-defence/',
+    views.war_civil_defence,
+    name='war_civil_defence'
+),
+path(
+        'learn/major-transport-accident/',
+        views.major_transport_accident,
+        name='major_transport_accident'
+    ),
+path(
+        'learn/thunderstorm/',
+        views.thunderstorm,
+        name='thunderstorm'
+    ),
+
+     path(
+        'learn/dam-reservoir-failure/',
+        views.dam_reservoir_failure,
+        name='dam_reservoir_failure'
+    ),
+
     # Drills & simulations
     path('drills/simulation/', views.drills_simulation, name='drills_simulation'),
     path('drills/simulation/', views.drill_simulation, name='drill_simulation'),  # note: duplicate path in original - keeps both names on same path
@@ -96,6 +122,7 @@ urlpatterns = [
     path('protect/farmers/heatwave/', views.farmers_heatwave, name='farmers_heatwave'),
     path('protect/farmers/drought/', views.farmers_drought, name='farmers_drought'),
     path('protect/households/', views.protect_households, name='protect_households'),
+    path('learn/war-civil-defence/', views.war_civil_defence, name='war_civil_defence'),
 
 
     # Household modules

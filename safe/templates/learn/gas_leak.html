@@ -1,0 +1,180 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Gas Leak Emergency Hub | SafeLearn</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root {
+      --brand: #263238; /* Industrial Dark */
+      --accent: #ff6f00; /* Hazard Orange */
+      --safe: #2e7d32;
+      --bg: #fafafa;
+      --text: #263238;
+      --card: #ffffff;
+    }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); margin: 0; line-height: 1.6; }
+    .wrap { max-width: 1200px; margin: 20px auto; padding: 25px; background: var(--card); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+
+    header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 30px; }
+    .badge { background: #eceff1; color: var(--brand); padding: 5px 12px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; }
+
+    .grid { display: grid; grid-template-columns: 300px 1fr; gap: 30px; }
+    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } .sidecard { order: 2; } }
+
+    .section-side { background: #fff; padding: 15px; border: 1px solid #eee; border-radius: 10px; margin-bottom: 20px; }
+    .poster { width: 65%; max-width: 170px; display: block; margin: 10px 0; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+    .contact-table { width: 100%; font-size: 0.85rem; border-collapse: collapse; margin-top: 10px; }
+    .contact-table td { padding: 8px; border-bottom: 1px solid #eee; }
+
+    .info-box { background: #e8f5e9; border-left: 5px solid var(--safe); padding: 15px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+    .warning-box { background: #fff3e0; border-left: 5px solid var(--accent); padding: 15px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+    h2 { border-bottom: 1px solid #eee; padding-bottom: 10px; color: var(--brand); }
+
+    .quiz-container { background: #eceff1; padding: 30px; border-radius: 15px; margin-top: 40px; }
+    .q-item { background: white; padding: 20px; border-radius: 10px; margin-bottom: 15px; }
+    .btn-submit { background: var(--brand); color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 1.1rem; }
+    .result-display { margin-top: 20px; padding: 20px; border-radius: 10px; text-align: center; font-weight: bold; display: none; }
+  </style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <span class="badge">Advanced Safety Module</span>
+    <h1>☠️ Gas Leak Emergency Response</h1>
+    <p>LPG • Industrial Gases • Household & Factory Safety</p>
+  </header>
+
+  <div class="grid">
+    <aside class="sidecard">
+
+      <div class="section-side">
+        <h3>Safety Poster</h3>
+        <img class="poster" src="{% static 'image/gas-leak-safety.jpg' %}" alt="Gas Leak Safety Poster">
+        <button onclick="window.print()">🖨️ Print Sheet</button>
+      </div>
+
+      <div class="section-side" style="border:1px solid var(--accent);">
+        <h3 style="color:var(--accent);">📞 Emergency Help</h3>
+        <table class="contact-table">
+          <tr><td>Emergency</td><td><strong>112</strong></td></tr>
+          <tr><td>Fire Brigade</td><td><strong>101</strong></td></tr>
+          <tr><td>Ambulance</td><td><strong>108</strong></td></tr>
+        </table>
+      </div>
+
+      <div class="section-side">
+        <h3>🏠 Preparedness</h3>
+        <ul>
+          <li>Install gas detectors</li>
+          <li>Check regulators weekly</li>
+          <li>Keep exits clear</li>
+          <li>Know shut-off valve</li>
+        </ul>
+      </div>
+
+    </aside>
+
+    <main>
+      <section>
+        <h2>1. Understanding Gas Leaks</h2>
+        <p>
+          Gas leaks involve uncontrolled release of flammable or toxic gases such as LPG,
+          methane, ammonia, or chlorine. These gases can displace oxygen or ignite explosively.
+        </p>
+        <div class="info-box">
+          <strong>Key Fact:</strong> LPG is heavier than air and settles near the floor, making
+          low areas extremely dangerous.
+        </div>
+      </section>
+
+      <section>
+        <h2>2. Early Warning Signs</h2>
+        <ul>
+          <li>Strong odor (rotten egg / chemical smell)</li>
+          <li>Hissing sound near pipes or cylinders</li>
+          <li>Dizziness, nausea, breathing difficulty</li>
+          <li>Dead plants or animals near leak zone</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>3. Immediate Survival Actions</h2>
+        <div class="warning-box">
+          <strong>Golden Rule:</strong> Do NOT use electrical switches, mobile phones,
+          lighters, or vehicles.
+        </div>
+        <ul>
+          <li>Turn off gas supply if safe</li>
+          <li>Open doors and windows</li>
+          <li>Evacuate immediately to fresh air</li>
+          <li>Move upwind and uphill</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>4. First Aid & Medical Response</h2>
+        <p>
+          <strong>Inhalation:</strong> Move victim to fresh air, loosen clothing, begin CPR if needed.<br>
+          <strong>Burns:</strong> Cool with water, cover with clean cloth, seek hospital care.
+        </p>
+      </section>
+
+      <section class="quiz-container">
+        <h2 style="border:none;text-align:center;">📝 Gas Leak Safety Quiz</h2>
+
+        <form id="quiz">
+          <div class="q-item">1. LPG settles near: <br>
+            <input type="radio" name="q1" value="A"> Ceiling
+            <input type="radio" name="q1" value="B"> Floor
+          </div>
+
+          <div class="q-item">2. First action after leak detection: <br>
+            <input type="radio" name="q2" value="A"> Switch on exhaust
+            <input type="radio" name="q2" value="B"> Evacuate & ventilate
+          </div>
+
+          <div class="q-item">3. Safe phone usage during leak? <br>
+            <input type="radio" name="q3" value="A"> Yes
+            <input type="radio" name="q3" value="B"> No
+          </div>
+
+          <div class="q-item">4. Best direction to move: <br>
+            <input type="radio" name="q4" value="A"> Downwind
+            <input type="radio" name="q4" value="B"> Upwind
+          </div>
+
+          <div class="q-item">5. Gas detectors help by: <br>
+            <input type="radio" name="q5" value="A"> Early warning
+            <input type="radio" name="q5" value="B"> Stopping gas
+          </div>
+
+          <button type="button" class="btn-submit" onclick="check()">Submit</button>
+        </form>
+
+        <div id="res" class="result-display"></div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<script>
+function check(){
+  const ans={q1:'B',q2:'B',q3:'B',q4:'B',q5:'A'};
+  let s=0,t=5;
+  for(let k in ans){
+    let v=document.querySelector(`input[name="${k}"]:checked`);
+    if(v && v.value===ans[k]) s++;
+  }
+  let r=document.getElementById('res');
+  r.style.display='block';
+  r.style.background=s>=4?'#c8e6c9':'#ffcdd2';
+  r.innerHTML=`Score ${s}/${t} – ${s>=4?'Certified in Gas Leak Safety':'Review and retry'}`;
+}
+</script>
+
+</body>
+</html>

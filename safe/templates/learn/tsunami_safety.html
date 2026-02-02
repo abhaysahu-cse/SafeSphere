@@ -1,0 +1,168 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Tsunami Safety Hub | SafeLearn</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root {
+      --brand: #01579b; /* Ocean Blue */
+      --accent: #ff6f00; /* Warning Orange */
+      --safe: #2e7d32;
+      --bg: #f5fbff;
+      --text: #0d1b2a;
+      --card: #ffffff;
+    }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); margin: 0; line-height: 1.6; }
+    .wrap { max-width: 1200px; margin: 20px auto; padding: 25px; background: var(--card); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+
+    header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 30px; }
+    .badge { background: #e3f2fd; color: var(--brand); padding: 5px 12px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; }
+
+    .grid { display: grid; grid-template-columns: 300px 1fr; gap: 30px; }
+    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+
+    .section-side { background: #fff; padding: 15px; border: 1px solid #e0f2f1; border-radius: 10px; margin-bottom: 20px; }
+    .poster { width: 65%; max-width: 170px; margin: 10px 0; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+    .contact-table { width: 100%; font-size: 0.85rem; border-collapse: collapse; }
+    .contact-table td { padding: 8px; border-bottom: 1px solid #eee; }
+
+    .info-box { background: #e3f2fd; border-left: 5px solid var(--brand); padding: 15px; margin: 20px 0; }
+    .warning-box { background: #fff3e0; border-left: 5px solid var(--accent); padding: 15px; margin: 20px 0; }
+
+    h2 { border-bottom: 1px solid #eee; padding-bottom: 10px; color: var(--brand); }
+
+    .quiz-container { background: #e1f5fe; padding: 30px; border-radius: 15px; margin-top: 40px; }
+    .q-item { background: white; padding: 20px; border-radius: 10px; margin-bottom: 15px; }
+    .btn-submit { background: var(--brand); color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; width: 100%; font-size: 1.1rem; }
+    .result-display { margin-top: 20px; padding: 20px; border-radius: 10px; display: none; text-align: center; font-weight: bold; }
+  </style>
+</head>
+
+<body>
+<div class="wrap">
+  <header>
+    <span class="badge">Advanced Safety Module</span>
+    <h1>🌊 Tsunami Preparedness & Survival</h1>
+    <p>Scientific understanding, early warnings, evacuation physics, and post-tsunami safety.</p>
+  </header>
+
+  <div class="grid">
+    <aside>
+      <div class="section-side">
+        <h3>Safety Poster</h3>
+        <img class="poster" src="{% static 'image/tsunami-safety.jpg' %}">
+        <button onclick="window.print()">🖨️ Print Sheet</button>
+      </div>
+
+      <div class="section-side" style="border:1px solid var(--accent);">
+        <h3>📞 Emergency Help</h3>
+        <table class="contact-table">
+          <tr><td>Emergency</td><td><strong>112</strong></td></tr>
+          <tr><td>Disaster Helpline</td><td><strong>1077</strong></td></tr>
+          <tr><td>Coast Guard</td><td><strong>1554</strong></td></tr>
+        </table>
+      </div>
+
+      <div class="section-side">
+        <h3>🏠 Coastal Checklist</h3>
+        <ul>
+          <li>Know evacuation routes</li>
+          <li>Identify high ground</li>
+          <li>Emergency Go-Bag</li>
+          <li>Battery-powered radio</li>
+        </ul>
+      </div>
+    </aside>
+
+    <main>
+      <section>
+        <h2>1. Tsunami Science</h2>
+        <p>Tsunamis are caused by <strong>undersea earthquakes, volcanic eruptions, or landslides</strong>. Unlike normal waves, tsunami waves involve the entire water column.</p>
+        <div class="info-box">
+          <strong>Key Fact:</strong> In deep ocean, tsunami waves are fast but low. Near shore, they slow down and grow dangerously tall.
+        </div>
+      </section>
+
+      <section>
+        <h2>2. Natural Warning Signs</h2>
+        <ul>
+          <li>Strong or long coastal earthquakes</li>
+          <li>Sea suddenly receding</li>
+          <li>Loud ocean roar (like a train)</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>3. Survival Rules</h2>
+        <div class="warning-box">
+          <strong>Golden Rule:</strong> After shaking, RUN to high ground immediately. Do not wait for alerts.
+        </div>
+        <p>Never go to the shore to watch waves. Multiple waves may strike.</p>
+      </section>
+
+      <section>
+        <h2>4. After the Tsunami</h2>
+        <p>Flooding, debris, and contaminated water are deadly hazards.</p>
+        <div class="info-box">
+          Stay away until authorities declare the area safe.
+        </div>
+      </section>
+
+      <!-- QUIZ -->
+      <section class="quiz-container">
+        <h2 style="border:none;">📝 Tsunami Safety Certification Quiz</h2>
+
+        <form id="quiz">
+          <div class="q-item">1. Main cause of tsunamis? <br>
+            <input type="radio" name="q1" value="A"> Wind
+            <input type="radio" name="q1" value="B"> Undersea earthquakes
+          </div>
+
+          <div class="q-item">2. Best action after strong shaking? <br>
+            <input type="radio" name="q2" value="A"> Wait
+            <input type="radio" name="q2" value="B"> Run to high ground
+          </div>
+
+          <div class="q-item">3. Sea suddenly receding means? <br>
+            <input type="radio" name="q3" value="A"> Tsunami warning
+            <input type="radio" name="q3" value="B"> Normal tide
+          </div>
+
+          <div class="q-item">4. Tsunami waves are: <br>
+            <input type="radio" name="q4" value="A"> Single
+            <input type="radio" name="q4" value="B"> Multiple
+          </div>
+
+          <div class="q-item">5. Safe place? <br>
+            <input type="radio" name="q5" value="A"> Beach
+            <input type="radio" name="q5" value="B"> High ground
+          </div>
+
+          <button type="button" class="btn-submit" onclick="checkQuiz()">Submit Assessment</button>
+        </form>
+
+        <div id="result" class="result-display"></div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<script>
+function checkQuiz(){
+  const ans = {q1:'B',q2:'B',q3:'A',q4:'B',q5:'B'};
+  let s=0;
+  for(let k in ans){
+    let v=document.querySelector(`input[name="${k}"]:checked`);
+    if(v && v.value===ans[k]) s++;
+  }
+  const r=document.getElementById('result');
+  r.style.display='block';
+  r.style.background=s>=4?'#c8e6c9':'#ffcdd2';
+  r.innerHTML=`Score: ${s}/5 — `+(s>=4?'Tsunami Safety Certified 🌊':'Please review the module.');
+}
+</script>
+</body>
+</html>

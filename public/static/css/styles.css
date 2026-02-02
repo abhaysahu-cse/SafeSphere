@@ -2810,3 +2810,14 @@ iframe.goog-te-banner-frame {
 }
 
 
+
+
+
+
+/* gif  css */
+.module-icon img,
+.card-icon {
+    width: 300px;
+    height: auto;
+    display: inline-block;
+}

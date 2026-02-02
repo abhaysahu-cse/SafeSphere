@@ -1,0 +1,195 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Landslide Safety Hub | SafeLearn</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root {
+      --brand: #5d4037; /* Earth Brown */
+      --accent: #ef6c00; /* Caution Orange */
+      --safe: #2e7d32;
+      --bg: #fdfbf9;
+      --text: #3e2723;
+      --card: #ffffff;
+    }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); margin: 0; line-height: 1.6; }
+    .wrap { max-width: 1200px; margin: 20px auto; padding: 25px; background: var(--card); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+    
+    /* Header */
+    header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 30px; }
+    .badge { background: #efebe9; color: var(--brand); padding: 5px 12px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; }
+
+    /* Layout */
+    .grid { display: grid; grid-template-columns: 300px 1fr; gap: 30px; }
+    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } .sidecard { order: 2; } }
+
+    /* Sidebar Components */
+    .section-side { background: #fff; padding: 15px; border: 1px solid #efebe9; border-radius: 10px; margin-bottom: 20px; }
+    .poster { width: 65%; max-width: 170px; height: auto; display: block; margin: 10px 0; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    
+    .contact-table { width: 100%; font-size: 0.85rem; border-collapse: collapse; margin-top: 10px; }
+    .contact-table td { padding: 8px; border-bottom: 1px solid #eee; }
+    .contact-table tr:last-child td { border: none; }
+
+    /* Main Content Components */
+    .info-box { background: #f1f8e9; border-left: 5px solid var(--safe); padding: 15px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+    .warning-box { background: #fff3e0; border-left: 5px solid var(--accent); padding: 15px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+    h2 { border-bottom: 1px solid #eee; padding-bottom: 10px; color: var(--brand); }
+
+    /* Quiz Styling */
+    .quiz-container { background: #efebe9; padding: 30px; border-radius: 15px; margin-top: 40px; }
+    .q-item { background: white; padding: 20px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+    .btn-submit { background: var(--brand); color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 1.1rem; transition: 0.3s; }
+    .btn-submit:hover { background: #3e2723; }
+    .result-display { margin-top: 20px; padding: 20px; border-radius: 10px; text-align: center; font-weight: bold; display: none; }
+  </style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <span class="badge">Advanced Safety Module</span>
+    <h1>⛰️ Landslide Mitigation & Survival</h1>
+    <p>A comprehensive guide to slope stability, early warning signs, and emergency response.</p>
+  </header>
+
+  <div class="grid">
+    <aside class="sidecard">
+      <div class="section-side">
+        <h3>Safety Poster</h3>
+        <img class="poster" src="{% static 'image/landslide-safety.jpg' %}" alt="Landslide Safety Poster">
+        <p style="font-size: 0.75rem; color: #777;">Click to expand or print for community halls.</p>
+        <button onclick="window.print()" style="font-size: 0.7rem; cursor: pointer;">🖨️ Print Sheet</button>
+      </div>
+
+      <div class="section-side" style="background: #fffcf5; border: 1px solid var(--accent);">
+        <h3 style="color: var(--accent);">📞 Emergency Help</h3>
+        <table class="contact-table">
+          <tr><td>Police / Ambulance</td><td><strong>112 / 108</strong></td></tr>
+          <tr><td>Disaster Mgmt</td><td><strong>1070 / 1077</strong></td></tr>
+          <tr><td>Fire Dept.</td><td><strong>101</strong></td></tr>
+        </table>
+      </div>
+
+      <div class="section-side">
+        <h3>🏠 Home Checklist</h3>
+        <ul style="font-size: 0.85rem; padding-left: 20px;">
+            <li>Clean all gutters/drains</li>
+            <li>Plant trees on slopes</li>
+            <li>Identify high-ground path</li>
+            <li>Prepare a "Go-Bag"</li>
+        </ul>
+      </div>
+    </aside>
+
+    <main>
+      <section>
+        <h2>1. The Science of Landslides</h2>
+        <p>Landslides occur when the slope's "shear strength" is compromised by water or tremors. Understanding <strong>Pore Water Pressure</strong> is vital: as water fills soil gaps, it pushes soil particles apart, causing the ground to act like a liquid.</p>
+        
+        <div class="info-box">
+          <strong>Pro-Tip:</strong> Watch for "Hummocky" ground. Bumpy, uneven terrain on a hillside often indicates the site of a past landslide, which is highly likely to fail again.
+        </div>
+      </section>
+
+      <section>
+        <h2>2. Visual Warning Signals</h2>
+        <p>Nature provides cues before the mass movement begins. Immediate evacuation is required if you see:</p>
+        <ul>
+            <li><strong>The "Jamming" Effect:</strong> Interior doors and windows sticking or refusing to close.</li>
+            <li><strong>Slope Deformation:</strong> Fences, utility poles, or trees tilting downhill.</li>
+            <li><strong>Hydrological Changes:</strong> Springs or seeps appearing in dry areas, or river water turning suddenly muddy.</li>
+        </ul>
+        
+      </section>
+
+      <section>
+        <h2>3. Survival Physics: Inside & Outside</h2>
+        <div class="warning-box">
+          <strong>Inside a Building:</strong> Move to the highest floor and stay in the "Leeward" room (the room furthest from the sliding hill). Curl into a ball and protect your head.
+        </div>
+        <p><strong>Outdoors:</strong> Run to the nearest high ground. If debris flow is imminent and you cannot escape, find a sturdy clump of trees or a building and wrap yourself around it to avoid being swept away.</p>
+        
+      </section>
+
+      <section>
+        <h2>4. Post-Disaster: The Silent Killers</h2>
+        <p>After the slide, the danger shifts to <strong>River Damming</strong>. If a slide blocks a stream, a temporary lake forms. When this "debris dam" fails, it creates a catastrophic flash flood.</p>
+        
+        <div class="info-box" style="border-color: #1976d2; background: #e3f2fd;">
+          <strong>Post-Slide Rule:</strong> Stay away from the slide area. A secondary slide is extremely common within 24 hours of the first event.
+        </div>
+      </section>
+
+      <section class="quiz-container" id="quiz-section">
+        <h2 style="border:none; text-align:center;">📝 Safety Certification Quiz</h2>
+        <p style="text-align:center;">Test your knowledge to earn your safety badge.</p>
+        
+        <form id="masterQuiz">
+          <div class="q-item"><strong>1.</strong> Which indicates a landslide is starting? <br>
+            <input type="radio" name="q1" value="A"> Rainbows <input type="radio" name="q1" value="B"> New cracks in foundations</div>
+          
+          <div class="q-item"><strong>2.</strong> If outdoors during a slide, move to: <br>
+            <input type="radio" name="q2" value="A"> A valley floor <input type="radio" name="q2" value="B"> The nearest high ground</div>
+
+          <div class="q-item"><strong>3.</strong> Muddy creek water suggests: <br>
+            <input type="radio" name="q3" value="A"> Soil erosion upstream <input type="radio" name="q3" value="B"> Normal rain</div>
+
+          <div class="q-item"><strong>4.</strong> Most dangerous spot in heavy rain? <br>
+            <input type="radio" name="q4" value="A"> Steep bare slopes <input type="radio" name="q4" value="B"> Flat rooftops</div>
+
+          <div class="q-item"><strong>5.</strong> Safest floor inside a building? <br>
+            <input type="radio" name="q5" value="A"> Basement <input type="radio" name="q5" value="B"> Top floor</div>
+
+          <div class="q-item"><strong>6.</strong> Why do trees tilt before a slide? <br>
+            <input type="radio" name="q6" value="A"> Wind <input type="radio" name="q6" value="B"> Ground shifting beneath them</div>
+
+          <div class="q-item"><strong>7.</strong> Primary trigger for landslides? <br>
+            <input type="radio" name="q7" value="A"> Heavy rainfall/Saturation <input type="radio" name="q7" value="B"> Cold weather</div>
+
+          <div class="q-item"><strong>8.</strong> Secondary hazard after a slide? <br>
+            <input type="radio" name="q8" value="A"> Flash floods from blocked rivers <input type="radio" name="q8" value="B"> Thunder</div>
+
+          <div class="q-item"><strong>9.</strong> Debris flows move faster than humans can run. <br>
+            <input type="radio" name="q9" value="A"> True <input type="radio" name="q9" value="B"> False</div>
+
+          <div class="q-item"><strong>10.</strong> If you hear a loud rumbling sound: <br>
+            <input type="radio" name="q10" value="A"> Stay and look <input type="radio" name="q10" value="B"> Evacuate immediately</div>
+
+          <div class="q-item"><strong>11.</strong> Burnt land (wildfires) increases risk because: <br>
+            <input type="radio" name="q11" value="A"> No roots to hold soil <input type="radio" name="q11" value="B"> Soil is too dry</div>
+
+          <div class="q-item"><strong>12.</strong> If trapped, signal by: <br>
+            <input type="radio" name="q12" value="A"> Whistling or tapping pipes <input type="radio" name="q12" value="B"> Shouting constantly</div>
+
+          <div class="q-item"><strong>13.</strong> Danger on hilly roads: <br>
+            <input type="radio" name="q13" value="A"> Collapsed pavement <input type="radio" name="q13" value="B"> Fast birds</div>
+
+          <button type="button" class="btn-submit" onclick="evaluateQuiz()">Submit Assessment</button>
+        </form>
+        <div id="resBox" class="result-display"></div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<script>
+  function evaluateQuiz() {
+    const sol = { q1:'B', q2:'B', q3:'A', q4:'A', q5:'B', q6:'B', q7:'A', q8:'A', q9:'A', q10:'B', q11:'A', q12:'A', q13:'A' };
+    let s = 0; let t = 13;
+    for(let k in sol) {
+      let v = document.querySelector(`input[name="${k}"]:checked`);
+      if(v && v.value === sol[k]) s++;
+    }
+    const r = document.getElementById('resBox');
+    r.style.display = 'block';
+    r.style.background = s > 10 ? '#c8e6c9' : '#ffcdd2';
+    r.innerHTML = `Your Score: ${s} / ${t}. ` + (s > 10 ? "You are certified in Landslide Safety!" : "Please review the technical data above.");
+    r.scrollIntoView({behavior: 'smooth'});
+  }
+</script>
+
+</body>
+</html>

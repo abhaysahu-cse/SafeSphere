@@ -75,6 +75,13 @@ def HeatWave_Safety(request):
 def Tornado_Safety(request):
     return render(request, "learn/tornado.html")
 
+def landslide_Safety(request):
+    return render(request, "learn/landslide_sefty.html")
+
+def tsunami_safety(request):
+    return render(request, "learn/tsunami_safety.html")
+
+
 def signup_view(request):
     if request.method == "POST":
         username = request.POST.get('username')
@@ -198,10 +205,31 @@ def HeatWave_Safety(request):
     return render(request, "learn/heatwave.html")
 
 
+def air_pollution_safety(request):
+    return render(request, "learn/air_pollution.html")
+
 def FirstAid_Safety(request):
     return render(request, "learn/firstaid.html")
 def WinterStorms_Safety(request):
     return render(request, "learn/winterstorm.html")
+
+def war_civil_defence(request):
+    return render(request, "learn/war_civil_defence.html")
+
+def Gas_Leak_Safety(request):
+    return render(request, "learn/gas_leak.html")
+
+def major_transport_accident(request):
+    return render(request, "learn/major_transport_accident.html")
+
+
+def thunderstorm(request):
+    return render(request, "learn/thunderstorm.html")
+
+def dam_reservoir_failure(request):
+    return render(request, "learn/dam_reservoir_failure.html")
+
+
 
 
 # def ar_hub(request):

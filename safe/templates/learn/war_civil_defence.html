@@ -1,0 +1,281 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Civil Defence Hub | SafeLearn</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+  <style>
+    :root {
+      --brand: #263238; /* Steel Grey */
+      --accent: #c62828; /* Alert Red */
+      --safe: #2e7d32;
+      --bg: #fafafa;
+      --text: #212121;
+      --card: #ffffff;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .wrap {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 25px;
+      background: var(--card);
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    }
+
+    header {
+      border-bottom: 3px solid var(--accent);
+      padding-bottom: 20px;
+      margin-bottom: 30px;
+    }
+
+    .badge {
+      background: #ffebee;
+      color: var(--accent);
+      padding: 5px 12px;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 30px;
+    }
+
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+      .sidecard { order: 2; }
+    }
+
+    .section-side {
+      background: #fff;
+      padding: 15px;
+      border: 1px solid #eee;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    .poster {
+      width: 65%;
+      max-width: 170px;
+      border-radius: 6px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    .contact-table {
+      width: 100%;
+      font-size: 0.85rem;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    .contact-table td {
+      padding: 8px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .info-box {
+      background: #e8f5e9;
+      border-left: 5px solid var(--safe);
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .warning-box {
+      background: #ffebee;
+      border-left: 5px solid var(--accent);
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 0 8px 8px 0;
+    }
+
+    h2 {
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+      color: var(--brand);
+    }
+
+    .quiz-container {
+      background: #eceff1;
+      padding: 30px;
+      border-radius: 15px;
+      margin-top: 40px;
+    }
+
+    .q-item {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+
+    .btn-submit {
+      background: var(--brand);
+      color: white;
+      border: none;
+      padding: 15px;
+      border-radius: 8px;
+      width: 100%;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+
+    .result-display {
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: bold;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="wrap">
+  <header>
+    <span class="badge">Civilian Survival Module</span>
+    <h1>🛡️ War, Armed Conflict & Missile Strike</h1>
+    <p>High-level civil defence knowledge for non-combat civilians.</p>
+  </header>
+
+  <div class="grid">
+
+    <!-- SIDEBAR -->
+    <aside class="sidecard">
+      <div class="section-side">
+        <h3>Safety Poster</h3>
+        <img class="poster" src="{% static 'image/civil-defence.jpg' %}">
+        <button onclick="window.print()">🖨️ Print Guide</button>
+      </div>
+
+      <div class="section-side" style="border:1px solid var(--accent);">
+        <h3 style="color:var(--accent)">📞 Emergency Numbers</h3>
+        <table class="contact-table">
+          <tr><td>Emergency</td><td><strong>112</strong></td></tr>
+          <tr><td>Disaster Control</td><td><strong>1070</strong></td></tr>
+          <tr><td>Fire & Rescue</td><td><strong>101</strong></td></tr>
+        </table>
+      </div>
+
+      <div class="section-side">
+        <h3>🎒 Civil Defence Kit</h3>
+        <ul>
+          <li>Identity documents</li>
+          <li>Water & dry food</li>
+          <li>Flashlight + radio</li>
+          <li>First aid kit</li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main>
+      <section>
+        <h2>1. What is Civil Defence?</h2>
+        <p>
+          Civil defence refers to protective actions taken by civilians during
+          war, missile strikes, or armed conflict to reduce injury, panic, and loss of life.
+        </p>
+
+        <div class="info-box">
+          <strong>Core Principle:</strong> Civilians must avoid combat zones and
+          strictly follow official government instructions.
+        </div>
+      </section>
+
+      <section>
+        <h2>2. Shelter Types & Selection</h2>
+        <ul>
+          <li><strong>Underground shelters:</strong> Basements, bunkers</li>
+          <li><strong>Interior rooms:</strong> No windows, reinforced walls</li>
+          <li><strong>Public shelters:</strong> Government-marked safe zones</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>3. Missile Strike / Air Raid Response</h2>
+        <div class="warning-box">
+          <strong>Immediate Action:</strong> Move to shelter, lie flat,
+          protect head and neck, stay away from windows.
+        </div>
+        <p>Remain silent, conserve phone battery, and wait for official clearance.</p>
+      </section>
+
+      <section>
+        <h2>4. Evacuation & Documentation Safety</h2>
+        <ul>
+          <li>Carry ID, passport, certificates</li>
+          <li>Keep documents waterproof</li>
+          <li>Evacuate only via approved routes</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>5. Survival Behaviour (Non-Combat)</h2>
+        <div class="info-box">
+          Avoid filming attacks, spreading rumors, or approaching military areas.
+        </div>
+      </section>
+
+      <!-- QUIZ -->
+      <section class="quiz-container">
+        <h2 style="border:none;text-align:center">📝 Civil Defence Quiz</h2>
+
+        <form id="quiz">
+          <div class="q-item">1. Safest place during missile strike?
+            <br><input type="radio" name="q1" value="A"> Near windows
+            <input type="radio" name="q1" value="B"> Underground shelter
+          </div>
+
+          <div class="q-item">2. Best source of information?
+            <br><input type="radio" name="q2" value="A"> Social media
+            <input type="radio" name="q2" value="B"> Government alerts
+          </div>
+
+          <div class="q-item">3. What should civilians avoid?
+            <br><input type="radio" name="q3" value="A"> Combat zones
+            <input type="radio" name="q3" value="B"> Shelters
+          </div>
+
+          <button type="button" class="btn-submit" onclick="check()">Submit</button>
+        </form>
+
+        <div id="res" class="result-display"></div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<script>
+function check() {
+  const a = {q1:'B', q2:'B', q3:'A'};
+  let s = 0;
+  for(let k in a){
+    let v = document.querySelector(`input[name="${k}"]:checked`);
+    if(v && v.value === a[k]) s++;
+  }
+  let r = document.getElementById('res');
+  r.style.display = 'block';
+  r.style.background = s === 3 ? '#c8e6c9' : '#ffcdd2';
+  r.innerHTML = `Score: ${s}/3`;
+}
+</script>
+
+</body>
+</html>
