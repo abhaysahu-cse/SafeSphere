@@ -128,6 +128,20 @@
   </style>
 </head>
 
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement(
+    {
+      pageLanguage: 'en',
+      includedLanguages: 'en,hi,ta,te,bn,gu,kn,ml,mr,pa,ur',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+    },
+    'google_translate_element'
+  );
+}
+</script>
+
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <body>
   <!-- Optional site background video - keep but non-blocking -->
   <div class="site-bg" aria-hidden="true" style="position:fixed; inset:0; z-index:-1; overflow:hidden;">
@@ -140,6 +154,7 @@
 
   <main class="main-content" role="main" aria-labelledby="protect-heading">
     <!-- HERO -->
+      <div id="google_translate_element" class="lang-selector"></div> 
     <section class="hero" aria-label="Protect overview">
       <div class="hero-left">
         <h1 id="protect-heading">Protect Home, Farm & Livelihood</h1>

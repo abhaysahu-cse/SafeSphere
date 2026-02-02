@@ -20,6 +20,22 @@
     };
   </script>
 </head>
+
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement(
+    {
+      pageLanguage: 'en',
+      includedLanguages: 'en,hi,ta,te,bn,gu,kn,ml,mr,pa,ur',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+    },
+    'google_translate_element'
+  );
+}
+</script>
+
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <body>
   <!-- ALERT BAR (can be updated by external script to show heat warnings) -->
   <div id="disaster-alert-bar" class="alert-normal" role="status" aria-live="polite" aria-atomic="true">
@@ -32,6 +48,7 @@
 
   <main class="wrap" role="main" aria-labelledby="pageTitle">
     <div class="topbar">
+      <div id="google_translate_element" class="lang-selector"></div>
       <div>
         <h1 id="pageTitle">🔥 Heatwave — Protect Households & Reduce Losses</h1>
         <p class="lead">Practical, ordered actions to keep people safe, reduce property and economic loss, and maintain health & water security before, during and after extreme heat.</p>

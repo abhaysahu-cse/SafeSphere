@@ -67,7 +67,7 @@
     border-radius: 6px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
-
+.nav-buttons { margin-top: 30px; display: flex; justify-content: space-between; }
 
 
   </style>
@@ -212,6 +212,15 @@ function googleTranslateElementInit() {
           </ul>
         </div>
       </aside>
+
+      <div class="nav-buttons">
+        <!-- Use named URL 'learn' for previous; replace if you have a different view name -->
+        <a href="{% url 'learn' %}" class="btn-link"><button class="prev-btn">⬅ {{ "Previous Module" }}</button></a>
+
+        <!-- Next module currently links to 'learn' as a safe fallback.
+             Replace 'learn' with the correct url name for the next module if available. -->
+        <a href="{% url 'learn' %}" class="btn-link"><button class="next-btn">{{ "Next Module" }} ➡</button></a>
+    </div>
     </div>
   </main>
 

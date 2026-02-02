@@ -46,6 +46,25 @@
     .result-display { margin-top: 20px; padding: 20px; border-radius: 10px; text-align: center; font-weight: bold; display: none; }
   </style>
 </head>
+
+
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement(
+    {
+      pageLanguage: 'en',
+      includedLanguages: 'en,hi,ta,te,bn,gu,kn,ml,mr,pa,ur',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+    },
+    'google_translate_element'
+  );
+}
+</script>
+
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+
 <body>
 
 <div class="wrap">
@@ -59,7 +78,7 @@
     <aside class="sidecard">
       <div class="section-side">
         <h3>Safety Poster</h3>
-        <img class="poster" src="{% static 'image/landslide-safety.jpg' %}" alt="Landslide Safety Poster">
+        <img class="poster" src="{% static 'image/landslide.png' %}" alt="Landslide Safety Poster">
         <p style="font-size: 0.75rem; color: #777;">Click to expand or print for community halls.</p>
         <button onclick="window.print()" style="font-size: 0.7rem; cursor: pointer;">🖨️ Print Sheet</button>
       </div>
@@ -85,6 +104,9 @@
     </aside>
 
     <main>
+
+
+       <div id="google_translate_element" class="lang-selector"></div> 
       <section>
         <h2>1. The Science of Landslides</h2>
         <p>Landslides occur when the slope's "shear strength" is compromised by water or tremors. Understanding <strong>Pore Water Pressure</strong> is vital: as water fills soil gaps, it pushes soil particles apart, causing the ground to act like a liquid.</p>
@@ -122,6 +144,120 @@
           <strong>Post-Slide Rule:</strong> Stay away from the slide area. A secondary slide is extremely common within 24 hours of the first event.
         </div>
       </section>
+
+<section>
+  <h2>5. Types of Landslides</h2>
+  <p>
+    Landslides differ based on material, speed, and movement pattern.
+    Recognizing the type helps predict damage and survival chances.
+  </p>
+  <ul>
+    <li><strong>Rockfall:</strong> Sudden falling of rocks from steep cliffs</li>
+    <li><strong>Debris Flow:</strong> Fast-moving mix of water, soil, and rocks (most deadly)</li>
+    <li><strong>Earth Slide:</strong> Slow to moderate movement of soil mass</li>
+    <li><strong>Creep:</strong> Very slow downhill soil movement over years</li>
+  </ul>
+
+  <div class="info-box">
+    Debris flows can travel at speeds greater than 40 km/h — faster than vehicles on mountain roads.
+  </div>
+</section>
+
+
+
+<section>
+  <h2>6. Rainfall Thresholds & Early Warning Science</h2>
+  <p>
+    Landslides are often triggered when rainfall exceeds soil absorption capacity.
+    Disaster agencies monitor rainfall intensity-duration (I–D) thresholds.
+  </p>
+  <ul>
+    <li>Short intense rain → shallow landslides</li>
+    <li>Long continuous rain → deep slope failure</li>
+    <li>Saturated soil loses internal friction</li>
+  </ul>
+
+  <div class="warning-box">
+    If rainfall exceeds 100 mm in 24 hours in hilly terrain, evacuation readiness is essential.
+  </div>
+</section>
+
+
+
+<section>
+  <h2>7. Human-Induced Landslide Risk</h2>
+  <p>
+    Many landslides are accelerated or triggered by human interference with natural slopes.
+  </p>
+  <ul>
+    <li>Unplanned hill cutting for roads and buildings</li>
+    <li>Poor drainage systems</li>
+    <li>Deforestation and mining</li>
+    <li>Overloading slopes with construction</li>
+  </ul>
+
+  <div class="info-box">
+    Nearly 60% of landslides in India are linked to anthropogenic (human) activities.
+  </div>
+</section>
+
+
+<section>
+  <h2>8. Evacuation Planning & Safe Route Mapping</h2>
+  <p>
+    Evacuation is most effective when routes are pre-identified before disaster strikes.
+  </p>
+  <ul>
+    <li>Move perpendicular to slope direction</li>
+    <li>Avoid river valleys and drainage lines</li>
+    <li>Mark routes leading to ridge tops</li>
+    <li>Practice evacuation drills annually</li>
+  </ul>
+
+  <div class="warning-box">
+    Never evacuate downhill during active rainfall.
+  </div>
+</section>
+
+
+<section>
+  <h2>9. Landslide Emergency Go-Bag</h2>
+  <p>
+    A specialized go-bag improves survival during rapid evacuation.
+  </p>
+  <ul>
+    <li>Whistle (sound travels better than voice)</li>
+    <li>Dust mask / cloth (for debris inhalation)</li>
+    <li>Power bank & torch</li>
+    <li>Basic medicines & water purification tablets</li>
+    <li>Local map with evacuation points marked</li>
+  </ul>
+
+  <div class="info-box">
+    Keep the go-bag under 6 kg to ensure fast mobility.
+  </div>
+</section>
+
+
+
+<section>
+  <h2>10. Community-Level Landslide Risk Reduction</h2>
+  <p>
+    Landslide safety is strongest when communities work collectively.
+  </p>
+  <ul>
+    <li>Community rainfall monitoring</li>
+    <li>Shared siren / alarm systems</li>
+    <li>Slope vegetation programs</li>
+    <li>School & village evacuation drills</li>
+  </ul>
+
+  <div class="info-box">
+    Community reporting of cracks and seepage saves lives before authorities arrive.
+  </div>
+</section>
+
+
 
       <section class="quiz-container" id="quiz-section">
         <h2 style="border:none; text-align:center;">📝 Safety Certification Quiz</h2>

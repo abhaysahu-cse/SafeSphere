@@ -2,213 +2,317 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>War & Civil Defence | SafeLearn</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <style>
-    :root {
-      --brand: #263238; /* Steel Grey */
-      --accent: #c62828; /* Alert Red */
-      --safe: #2e7d32;
-      --bg: #fafafa;
-      --text: #212121;
-      --card: #ffffff;
-    }
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); margin: 0; line-height: 1.6; }
-    .wrap { max-width: 1200px; margin: 20px auto; padding: 25px; background: var(--card); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+<meta charset="utf-8" />
+<title>War & Civil Defence | SafeLearn</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 
-    header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 30px; }
-    .badge { background: #eceff1; color: var(--brand); padding: 5px 12px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; }
-
-    .grid { display: grid; grid-template-columns: 300px 1fr; gap: 30px; }
-    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
-
-    .section-side { background: #fff; padding: 15px; border: 1px solid #eee; border-radius: 10px; margin-bottom: 20px; }
-    .poster { width: 65%; max-width: 170px; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-
-    .contact-table { width: 100%; font-size: 0.85rem; border-collapse: collapse; margin-top: 10px; }
-    .contact-table td { padding: 8px; border-bottom: 1px solid #eee; }
-
-    .info-box { background: #e8f5e9; border-left: 5px solid var(--safe); padding: 15px; margin: 20px 0; border-radius: 0 8px 8px 0; }
-    .warning-box { background: #ffebee; border-left: 5px solid var(--accent); padding: 15px; margin: 20px 0; border-radius: 0 8px 8px 0; }
-
-    h2 { border-bottom: 1px solid #eee; padding-bottom: 10px; color: var(--brand); }
-
-    .quiz-container { background: #eceff1; padding: 30px; border-radius: 15px; margin-top: 40px; }
-    .q-item { background: white; padding: 20px; border-radius: 10px; margin-bottom: 15px; }
-    .btn-submit { background: var(--brand); color: white; border: none; padding: 15px; border-radius: 8px; width: 100%; font-size: 1.1rem; cursor: pointer; }
-    .result-display { margin-top: 20px; padding: 20px; border-radius: 10px; text-align: center; display: none; }
-  </style>
+<style>
+:root{
+--brand:#263238;
+--accent:#c62828;
+--safe:#2e7d32;
+--bg:#fafafa;
+--text:#212121;
+--card:#ffffff;
+}
+body{
+font-family:'Segoe UI',Tahoma,Verdana,sans-serif;
+background:var(--bg);
+margin:0;
+line-height:1.7;
+color:var(--text);
+}
+.wrap{
+max-width:1200px;
+margin:20px auto;
+padding:25px;
+background:var(--card);
+border-radius:12px;
+box-shadow:0 10px 30px rgba(0,0,0,.1);
+}
+header{
+border-bottom:3px solid var(--accent);
+margin-bottom:30px;
+padding-bottom:20px;
+}
+.badge{
+background:#eceff1;
+padding:5px 12px;
+border-radius:15px;
+font-size:.8rem;
+font-weight:bold;
+}
+.grid{
+display:grid;
+grid-template-columns:300px 1fr;
+gap:30px;
+}
+@media(max-width:900px){
+.grid{grid-template-columns:1fr;}
+}
+.section-side{
+border:1px solid #eee;
+border-radius:10px;
+padding:15px;
+margin-bottom:20px;
+}
+.poster{
+width:70%;
+max-width:180px;
+border-radius:6px;
+display:block;
+margin:auto;
+}
+.contact-table{
+width:100%;
+border-collapse:collapse;
+font-size:.9rem;
+}
+.contact-table td{
+padding:8px;
+border-bottom:1px solid #eee;
+}
+h2{
+border-bottom:1px solid #eee;
+padding-bottom:8px;
+color:var(--brand);
+}
+.info-box{
+background:#e8f5e9;
+border-left:5px solid var(--safe);
+padding:15px;
+margin:20px 0;
+}
+.warning-box{
+background:#ffebee;
+border-left:5px solid var(--accent);
+padding:15px;
+margin:20px 0;
+}
+.quiz-container{
+background:#eceff1;
+padding:30px;
+border-radius:15px;
+margin-top:40px;
+}
+.q-item{
+background:#fff;
+padding:15px;
+border-radius:10px;
+margin-bottom:12px;
+}
+.btn-submit{
+width:100%;
+padding:15px;
+font-size:1.1rem;
+background:var(--brand);
+color:#fff;
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
+.result-display{
+margin-top:20px;
+padding:20px;
+border-radius:10px;
+text-align:center;
+display:none;
+font-weight:bold;
+}
+</style>
 </head>
 
+
+
+
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement(
+    {
+      pageLanguage: 'en',
+      includedLanguages: 'en,hi,ta,te,bn,gu,kn,ml,mr,pa,ur',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+    },
+    'google_translate_element'
+  );
+}
+</script>
+
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <body>
 <div class="wrap">
 
 <header>
-  <span class="badge">National Safety Module</span>
-  <h1>🛡️ War & Civil Defence Preparedness</h1>
-  <p>Protection, preparedness, and survival strategies during armed conflict.</p>
+<span class="badge">National Safety Module</span>
+<h1>🛡️ War & Civil Defence Preparedness</h1>
+<p>Civilian survival, protection & response during armed conflict</p>
 </header>
 
 <div class="grid">
 
+<!-- SIDEBAR -->
 <aside>
-  <div class="section-side">
-    <h3>Safety Poster</h3>
-    <img class="poster" src="{% static 'image/civil-defence.jpg' %}" alt="Civil Defence Poster">
-    <button onclick="window.print()">🖨️ Print</button>
-  </div>
 
-  <div class="section-side" style="border:1px solid var(--accent)">
-    <h3 style="color:var(--accent)">📞 Emergency Contacts</h3>
-    <table class="contact-table">
-      <tr><td>Emergency</td><td><strong>112</strong></td></tr>
-      <tr><td>Fire</td><td><strong>101</strong></td></tr>
-      <tr><td>Disaster Control</td><td><strong>1077</strong></td></tr>
-    </table>
-  </div>
+<div class="section-side">
+<h3>Safety Poster</h3>
+<img src="{% static 'image/accdent.jpeg' %}" class="poster">
+<button onclick="window.print()">🖨 Print</button>
+</div>
 
-  <div class="section-side">
-    <h3>🎒 Emergency Kit</h3>
-    <ul>
-      <li>Water & dry food</li>
-      <li>First aid kit</li>
-      <li>Flashlight & radio</li>
-      <li>ID documents</li>
-    </ul>
-  </div>
+<div class="section-side" style="border:1px solid var(--accent)">
+<h3 style="color:var(--accent)">📞 Emergency Contacts</h3>
+<table class="contact-table">
+<tr><td>Emergency</td><td><strong>112</strong></td></tr>
+<tr><td>Fire</td><td><strong>101</strong></td></tr>
+<tr><td>Disaster Control</td><td><strong>1077</strong></td></tr>
+</table>
+</div>
+
+<div class="section-side">
+<h3>🎒 Emergency Kit</h3>
+<ul>
+<li>Water & dry food (72 hrs)</li>
+<li>First-aid & medicines</li>
+<li>Flashlight, batteries</li>
+<li>Radio, power bank</li>
+<li>ID documents</li>
+</ul>
+</div>
+
 </aside>
 
+<!-- MAIN CONTENT -->
 <main>
-
+ <div id="google_translate_element" class="lang-selector"></div> 
 <section>
 <h2>1. What is Civil Defence?</h2>
-<p>Civil Defence is the organized effort to protect civilians from military attacks, natural disasters, and internal disturbances during war or emergencies.</p>
-
+<p>
+Civil Defence is the organized effort to protect civilians, infrastructure,
+and essential services during war, attacks, or national emergencies.
+</p>
 <div class="info-box">
-<strong>Key Objective:</strong> Minimize loss of life and maintain essential services.
+<strong>Main Goal:</strong> Reduce casualties & maintain public order.
 </div>
 </section>
 
 <section>
-<h2>2. Air Raid Warning Signals</h2>
+<h2>2. BEFORE War / Attack (Preparedness)</h2>
 <ul>
-  <li><strong>Wailing Siren:</strong> Incoming attack warning</li>
-  <li><strong>Short Bursts:</strong> All clear signal</li>
+<li>Identify nearest shelters</li>
+<li>Learn siren signals</li>
+<li>Store emergency supplies</li>
+<li>Participate in mock drills</li>
 </ul>
 </section>
 
 <section>
-<h2>3. During Bombing or Attack</h2>
+<h2>3. Air Raid Warning Signals</h2>
+<ul>
+<li><strong>Long Wailing Siren:</strong> Incoming attack</li>
+<li><strong>Short Intermittent Siren:</strong> All clear</li>
+</ul>
+</section>
+
+<section>
+<h2>4. DURING Attack</h2>
 <div class="warning-box">
-<strong>Indoors:</strong> Move to basement, avoid windows, lie flat and cover head.
+<strong>Indoors:</strong> Basement, windowless rooms, lie flat & cover head.
 </div>
-<p><strong>Outdoors:</strong> Take cover in trenches or behind solid structures.</p>
-</section>
-
-<section>
-<h2>4. Chemical / Nuclear Threat</h2>
 <ul>
-  <li>Cover nose & mouth with wet cloth</li>
-  <li>Seal doors & windows</li>
-  <li>Listen to official instructions</li>
+<li>Switch off lights (blackout)</li>
+<li>Stay away from windows</li>
+<li>Follow official announcements</li>
 </ul>
 </section>
 
+<section>
+<h2>5. Chemical / Nuclear Threat</h2>
+<ul>
+<li>Seal doors & windows</li>
+<li>Cover nose with wet cloth</li>
+<li>Do NOT consume exposed food/water</li>
+</ul>
+</section>
+
+<section>
+<h2>6. AFTER Attack</h2>
+<ul>
+<li>Check for injuries</li>
+<li>Avoid damaged buildings</li>
+<li>Report unexploded objects</li>
+<li>Assist authorities calmly</li>
+</ul>
+</section>
+
+<!-- QUIZ -->
 <section class="quiz-container">
 <h2 style="text-align:center;border:none">📝 Civil Defence Quiz</h2>
 
-<form>
-<div class="q-item">1. Civil Defence aims to protect:  
-<input type="radio" name="q1" value="A"> Soldiers  
-<input type="radio" name="q1" value="B"> Civilians
-</div>
+<form id="quiz">
 
-<div class="q-item">2. Air raid siren means:  
-<input type="radio" name="q2" value="A"> Celebration  
-<input type="radio" name="q2" value="B"> Danger
-</div>
+<!-- 15 QUESTIONS -->
+<div class="q-item">1. Civil Defence protects:
+<br><input type="radio" name="q1" value="A"> Soldiers
+<input type="radio" name="q1" value="B"> Civilians</div>
 
-<div class="q-item">3. Safest indoor place:  
-<input type="radio" name="q3" value="A"> Balcony  
-<input type="radio" name="q3" value="B"> Basement
-</div>
-<div class="q-item"><strong>1.</strong> A Mass Casualty Incident means: <br>
-<input type="radio" name="q1" value="A"> Many ambulances arrive  
-<input type="radio" name="q1" value="B"> Victims exceed available resources
-</div>
+<div class="q-item">2. Air raid siren indicates:
+<br><input type="radio" name="q2" value="A"> Celebration
+<input type="radio" name="q2" value="B"> Danger</div>
 
-<div class="q-item"><strong>2.</strong> First priority at accident site: <br>
-<input type="radio" name="q2" value="A"> Start CPR  
-<input type="radio" name="q2" value="B"> Scene safety
-</div>
+<div class="q-item">3. Safest indoor location:
+<br><input type="radio" name="q3" value="A"> Balcony
+<input type="radio" name="q3" value="B"> Basement</div>
 
-<div class="q-item"><strong>3.</strong> Red triage category indicates: <br>
-<input type="radio" name="q3" value="A"> Minor injury  
-<input type="radio" name="q3" value="B"> Immediate life threat
-</div>
+<div class="q-item">4. Blackout purpose:
+<br><input type="radio" name="q4" value="A"> Decoration
+<input type="radio" name="q4" value="B"> Avoid detection</div>
 
-<div class="q-item"><strong>4.</strong> Who controls overall operations? <br>
-<input type="radio" name="q4" value="A"> Crowd  
-<input type="radio" name="q4" value="B"> Incident Commander
-</div>
+<div class="q-item">5. Wet cloth helps against:
+<br><input type="radio" name="q5" value="A"> Dust only
+<input type="radio" name="q5" value="B"> Toxic gases</div>
 
-<div class="q-item"><strong>5.</strong> Golden Hour refers to: <br>
-<input type="radio" name="q5" value="A"> 24 hours  
-<input type="radio" name="q5" value="B"> First 60 minutes
-</div>
+<div class="q-item">6. Golden Hour means:
+<br><input type="radio" name="q6" value="A"> First 60 minutes
+<input type="radio" name="q6" value="B"> 24 hours</div>
 
-<div class="q-item"><strong>6.</strong> Walking wounded are categorized as: <br>
-<input type="radio" name="q6" value="A"> Green  
-<input type="radio" name="q6" value="B"> Red
-</div>
+<div class="q-item">7. Walking wounded category:
+<br><input type="radio" name="q7" value="A"> Green
+<input type="radio" name="q7" value="B"> Red</div>
 
-<div class="q-item"><strong>7.</strong> Biggest danger in train accidents: <br>
-<input type="radio" name="q7" value="A"> Electric lines  
-<input type="radio" name="q7" value="B"> Noise
-</div>
+<div class="q-item">8. Major preventable death cause:
+<br><input type="radio" name="q8" value="A"> Bleeding
+<input type="radio" name="q8" value="B"> Cold</div>
 
-<div class="q-item"><strong>8.</strong> Crowd control is important because: <br>
-<input type="radio" name="q8" value="A"> Looks organized  
-<input type="radio" name="q8" value="B"> Allows emergency access
-</div>
+<div class="q-item">9. Unexploded bomb should be:
+<br><input type="radio" name="q9" value="A"> Touched
+<input type="radio" name="q9" value="B"> Reported</div>
 
-<div class="q-item"><strong>9.</strong> Black triage category means: <br>
-<input type="radio" name="q9" value="A"> Dead / no signs of life  
-<input type="radio" name="q9" value="B"> Minor injury
-</div>
+<div class="q-item">10. Panic causes:
+<br><input type="radio" name="q10" value="A"> Safety
+<input type="radio" name="q10" value="B"> More casualties</div>
 
-<div class="q-item"><strong>10.</strong> Most preventable cause of death: <br>
-<input type="radio" name="q10" value="A"> Bleeding  
-<input type="radio" name="q10" value="B"> Infection
-</div>
+<div class="q-item">11. Emergency number in India:
+<br><input type="radio" name="q11" value="A"> 112
+<input type="radio" name="q11" value="B"> 911</div>
 
-<div class="q-item"><strong>11.</strong> Shock symptoms include: <br>
-<input type="radio" name="q11" value="A"> Warm skin  
-<input type="radio" name="q11" value="B"> Pale, cold skin
-</div>
+<div class="q-item">12. Best civilian role:
+<br><input type="radio" name="q12" value="A"> Panic
+<input type="radio" name="q12" value="B"> Organized help</div>
 
-<div class="q-item"><strong>12.</strong> Safe action near fuel leak: <br>
-<input type="radio" name="q12" value="A"> Light torch  
-<input type="radio" name="q12" value="B"> Move away
-</div>
+<div class="q-item">13. Shelter should be:
+<br><input type="radio" name="q13" value="A"> Glassy
+<input type="radio" name="q13" value="B"> Reinforced</div>
 
-<div class="q-item"><strong>13.</strong> Psychological First Aid includes: <br>
-<input type="radio" name="q13" value="A"> Scolding  
-<input type="radio" name="q13" value="B"> Calm reassurance
-</div>
+<div class="q-item">14. Radio is important to:
+<br><input type="radio" name="q14" value="A"> Music
+<input type="radio" name="q14" value="B"> Official updates</div>
 
-<div class="q-item"><strong>14.</strong> Secondary accidents occur due to: <br>
-<input type="radio" name="q14" value="A"> Curiosity crowds  
-<input type="radio" name="q14" value="B"> Weather only
-</div>
+<div class="q-item">15. Civil Defence volunteers:
+<br><input type="radio" name="q15" value="A"> Ignore orders
+<input type="radio" name="q15" value="B"> Assist authorities</div>
 
-<div class="q-item"><strong>15.</strong> Best civilian role in MCI: <br>
-<input type="radio" name="q15" value="A"> Panic  
-<input type="radio" name="q15" value="B"> Organized assistance
-</div>
-
-<button type="button" class="btn-submit" onclick="check()">Submit</button>
+<button type="button" class="btn-submit" onclick="check()">Submit Quiz</button>
 </form>
 
 <div id="res" class="result-display"></div>
@@ -220,17 +324,22 @@
 
 <script>
 function check(){
-  let score = 0;
-  if(document.querySelector('input[name="q1"]:checked')?.value === 'B') score++;
-  if(document.querySelector('input[name="q2"]:checked')?.value === 'B') score++;
-  if(document.querySelector('input[name="q3"]:checked')?.value === 'B') score++;
-  const r = document.getElementById('res');
-  r.style.display='block';
-  r.style.background = score>=2 ? '#c8e6c9':'#ffcdd2';
-  r.innerHTML = `Score: ${score}/3`;
+const ans={
+q1:'B',q2:'B',q3:'B',q4:'B',q5:'B',
+q6:'A',q7:'A',q8:'A',q9:'B',q10:'B',
+q11:'A',q12:'B',q13:'B',q14:'B',q15:'B'
+};
+let score=0;
+for(let k in ans){
+const v=document.querySelector(`input[name="${k}"]:checked`);
+if(v && v.value===ans[k]) score++;
+}
+const r=document.getElementById('res');
+r.style.display='block';
+r.style.background=score>=11?'#c8e6c9':'#ffcdd2';
+r.innerHTML=`Score ${score}/15<br>${score>=11?'✅ Certified in Civil Defence':'❌ Revise & Retry'}`;
 }
 </script>
 
 </body>
 </html>
-

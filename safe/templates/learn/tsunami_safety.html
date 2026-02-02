@@ -7,33 +7,28 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
     :root {
-      --brand: #01579b; /* Ocean Blue */
-      --accent: #ff6f00; /* Warning Orange */
+      --brand: #01579b;
+      --accent: #ff6f00;
       --safe: #2e7d32;
       --bg: #f5fbff;
       --text: #0d1b2a;
       --card: #ffffff;
     }
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); margin: 0; line-height: 1.6; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; }
     .wrap { max-width: 1200px; margin: 20px auto; padding: 25px; background: var(--card); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-
     header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 30px; }
     .badge { background: #e3f2fd; color: var(--brand); padding: 5px 12px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; }
-
     .grid { display: grid; grid-template-columns: 300px 1fr; gap: 30px; }
     @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
-
     .section-side { background: #fff; padding: 15px; border: 1px solid #e0f2f1; border-radius: 10px; margin-bottom: 20px; }
-    .poster { width: 65%; max-width: 170px; margin: 10px 0; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-
+    .poster { width: 65%; max-width: 170px; border-radius: 6px; }
     .contact-table { width: 100%; font-size: 0.85rem; border-collapse: collapse; }
     .contact-table td { padding: 8px; border-bottom: 1px solid #eee; }
-
     .info-box { background: #e3f2fd; border-left: 5px solid var(--brand); padding: 15px; margin: 20px 0; }
     .warning-box { background: #fff3e0; border-left: 5px solid var(--accent); padding: 15px; margin: 20px 0; }
-
-    h2 { border-bottom: 1px solid #eee; padding-bottom: 10px; color: var(--brand); }
-
+    h2 { color: var(--brand); border-bottom: 1px solid #eee; padding-bottom: 8px; }
+    table { width:100%; border-collapse: collapse; }
+    table td, table th { border:1px solid #ddd; padding:10px; }
     .quiz-container { background: #e1f5fe; padding: 30px; border-radius: 15px; margin-top: 40px; }
     .q-item { background: white; padding: 20px; border-radius: 10px; margin-bottom: 15px; }
     .btn-submit { background: var(--brand); color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; width: 100%; font-size: 1.1rem; }
@@ -41,128 +36,186 @@
   </style>
 </head>
 
+
+
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement(
+    {
+      pageLanguage: 'en',
+      includedLanguages: 'en,hi,ta,te,bn,gu,kn,ml,mr,pa,ur',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+    },
+    'google_translate_element'
+  );
+}
+</script>
+
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <body>
 <div class="wrap">
-  <header>
-    <span class="badge">Advanced Safety Module</span>
-    <h1>🌊 Tsunami Preparedness & Survival</h1>
-    <p>Scientific understanding, early warnings, evacuation physics, and post-tsunami safety.</p>
-  </header>
 
-  <div class="grid">
-    <aside>
-      <div class="section-side">
-        <h3>Safety Poster</h3>
-        <img class="poster" src="{% static 'image/tsunami-safety.jpg' %}">
-        <button onclick="window.print()">🖨️ Print Sheet</button>
-      </div>
+<header>
+  <span class="badge">Advanced Safety Module</span>
+  <h1>🌊 Tsunami Preparedness & Survival</h1>
+  <p>Scientific concepts, early warning systems, evacuation planning & certification.</p>
+</header>
 
-      <div class="section-side" style="border:1px solid var(--accent);">
-        <h3>📞 Emergency Help</h3>
-        <table class="contact-table">
-          <tr><td>Emergency</td><td><strong>112</strong></td></tr>
-          <tr><td>Disaster Helpline</td><td><strong>1077</strong></td></tr>
-          <tr><td>Coast Guard</td><td><strong>1554</strong></td></tr>
-        </table>
-      </div>
-
-      <div class="section-side">
-        <h3>🏠 Coastal Checklist</h3>
-        <ul>
-          <li>Know evacuation routes</li>
-          <li>Identify high ground</li>
-          <li>Emergency Go-Bag</li>
-          <li>Battery-powered radio</li>
-        </ul>
-      </div>
-    </aside>
-
-    <main>
-      <section>
-        <h2>1. Tsunami Science</h2>
-        <p>Tsunamis are caused by <strong>undersea earthquakes, volcanic eruptions, or landslides</strong>. Unlike normal waves, tsunami waves involve the entire water column.</p>
-        <div class="info-box">
-          <strong>Key Fact:</strong> In deep ocean, tsunami waves are fast but low. Near shore, they slow down and grow dangerously tall.
-        </div>
-      </section>
-
-      <section>
-        <h2>2. Natural Warning Signs</h2>
-        <ul>
-          <li>Strong or long coastal earthquakes</li>
-          <li>Sea suddenly receding</li>
-          <li>Loud ocean roar (like a train)</li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>3. Survival Rules</h2>
-        <div class="warning-box">
-          <strong>Golden Rule:</strong> After shaking, RUN to high ground immediately. Do not wait for alerts.
-        </div>
-        <p>Never go to the shore to watch waves. Multiple waves may strike.</p>
-      </section>
-
-      <section>
-        <h2>4. After the Tsunami</h2>
-        <p>Flooding, debris, and contaminated water are deadly hazards.</p>
-        <div class="info-box">
-          Stay away until authorities declare the area safe.
-        </div>
-      </section>
-
-      <!-- QUIZ -->
-      <section class="quiz-container">
-        <h2 style="border:none;">📝 Tsunami Safety Certification Quiz</h2>
-
-        <form id="quiz">
-          <div class="q-item">1. Main cause of tsunamis? <br>
-            <input type="radio" name="q1" value="A"> Wind
-            <input type="radio" name="q1" value="B"> Undersea earthquakes
-          </div>
-
-          <div class="q-item">2. Best action after strong shaking? <br>
-            <input type="radio" name="q2" value="A"> Wait
-            <input type="radio" name="q2" value="B"> Run to high ground
-          </div>
-
-          <div class="q-item">3. Sea suddenly receding means? <br>
-            <input type="radio" name="q3" value="A"> Tsunami warning
-            <input type="radio" name="q3" value="B"> Normal tide
-          </div>
-
-          <div class="q-item">4. Tsunami waves are: <br>
-            <input type="radio" name="q4" value="A"> Single
-            <input type="radio" name="q4" value="B"> Multiple
-          </div>
-
-          <div class="q-item">5. Safe place? <br>
-            <input type="radio" name="q5" value="A"> Beach
-            <input type="radio" name="q5" value="B"> High ground
-          </div>
-
-          <button type="button" class="btn-submit" onclick="checkQuiz()">Submit Assessment</button>
-        </form>
-
-        <div id="result" class="result-display"></div>
-      </section>
-    </main>
+<div class="grid">
+<aside>
+  <div class="section-side">
+    <h3>Safety Poster</h3>
+    <img class="poster" src="{% static 'image/sunami.jpg' %}">
+    <button onclick="window.print()">🖨️ Print Sheet</button>
   </div>
+
+  <div class="section-side" style="border:1px solid var(--accent);">
+    <h3>📞 Emergency Numbers</h3>
+    <table class="contact-table">
+      <tr><td>Emergency</td><td><strong>112</strong></td></tr>
+      <tr><td>Disaster Helpline</td><td><strong>1077</strong></td></tr>
+      <tr><td>Coast Guard</td><td><strong>1554</strong></td></tr>
+    </table>
+  </div>
+</aside>
+
+<main>
+ <div id="google_translate_element" class="lang-selector"></div> 
+<section>
+  <h2>1. Tsunami Science</h2>
+  <p>Tsunamis are generated mainly by <strong>undersea earthquakes (M > 7.0)</strong>. Energy transfer displaces massive water volumes.</p>
+  <div class="info-box">
+    Tsunami speed can exceed <strong>800 km/h</strong> in deep oceans.
+  </div>
+</section>
+
+<section>
+  <h2>2. Natural Warning Signs</h2>
+  <ul>
+    <li>Strong coastal earthquake</li>
+    <li>Sudden sea withdrawal</li>
+    <li>Unusual roaring sound</li>
+  </ul>
+</section>
+
+<section>
+  <h2>3. Early Warning Systems</h2>
+  <p>India uses <strong>INCOIS Tsunami Warning Centre</strong> with seismic sensors, buoys and satellites.</p>
+  <div class="info-box">
+    Alerts are issued within <strong>10 minutes</strong> of detection.
+  </div>
+</section>
+
+<section>
+  <h2>4. Evacuation Science</h2>
+  <p>Evacuation time window is often less than <strong>30 minutes</strong> after a nearby earthquake.</p>
+  <div class="warning-box">
+    Vertical evacuation buildings may be used where hills are unavailable.
+  </div>
+</section>
+
+<section>
+  <h2>5. Structural Safety</h2>
+  <ul>
+    <li>Reinforced concrete buildings resist flow better</li>
+    <li>Wooden structures float and collapse easily</li>
+    <li>Upper floors are safer than ground floors</li>
+  </ul>
+</section>
+
+<section>
+  <h2>6. Do’s and Don’ts</h2>
+  <table>
+    <tr><th>Do</th><th>Don’t</th></tr>
+    <tr><td>Move to high ground</td><td>Go to the shore</td></tr>
+    <tr><td>Follow evacuation signs</td><td>Use vehicles unnecessarily</td></tr>
+    <tr><td>Listen to authorities</td><td>Return early</td></tr>
+  </table>
+</section>
+
+<!-- QUIZ -->
+<section class="quiz-container">
+<h2 style="border:none;">📝 Tsunami Safety Certification Quiz</h2>
+<p><strong>Passing Score: 7 / 10</strong></p>
+
+<form id="quiz">
+
+<div class="q-item">1. Main cause of tsunamis?<br>
+<input type="radio" name="q1" value="A"> Wind
+<input type="radio" name="q1" value="B"> Undersea earthquakes
+</div>
+
+<div class="q-item">2. Tsunami speed in deep ocean?<br>
+<input type="radio" name="q2" value="A"> 50 km/h
+<input type="radio" name="q2" value="B"> 800 km/h
+</div>
+
+<div class="q-item">3. Sea suddenly receding means?<br>
+<input type="radio" name="q3" value="A"> Tsunami warning
+<input type="radio" name="q3" value="B"> Normal tide
+</div>
+
+<div class="q-item">4. Best evacuation direction?<br>
+<input type="radio" name="q4" value="A"> Toward sea
+<input type="radio" name="q4" value="B"> High ground
+</div>
+
+<div class="q-item">5. Tsunami waves are usually?<br>
+<input type="radio" name="q5" value="A"> One
+<input type="radio" name="q5" value="B"> Multiple
+</div>
+
+<div class="q-item">6. India’s tsunami warning center?<br>
+<input type="radio" name="q6" value="A"> ISRO
+<input type="radio" name="q6" value="B"> INCOIS
+</div>
+
+<div class="q-item">7. Safe building location?<br>
+<input type="radio" name="q7" value="A"> Ground floor
+<input type="radio" name="q7" value="B"> Upper floors
+</div>
+
+<div class="q-item">8. After tsunami you should?<br>
+<input type="radio" name="q8" value="A"> Return immediately
+<input type="radio" name="q8" value="B"> Wait for clearance
+</div>
+
+<div class="q-item">9. Best warning source?<br>
+<input type="radio" name="q9" value="A"> Social media
+<input type="radio" name="q9" value="B"> Official alerts
+</div>
+
+<div class="q-item">10. Tsunami risk highest near?<br>
+<input type="radio" name="q10" value="A"> Coasts
+<input type="radio" name="q10" value="B"> Deserts
+</div>
+
+<button type="button" class="btn-submit" onclick="checkQuiz()">Submit Assessment</button>
+</form>
+
+<div id="result" class="result-display"></div>
+</section>
+
+</main>
+</div>
 </div>
 
 <script>
 function checkQuiz(){
-  const ans = {q1:'B',q2:'B',q3:'A',q4:'B',q5:'B'};
+  const ans={q1:'B',q2:'B',q3:'A',q4:'B',q5:'B',q6:'B',q7:'B',q8:'B',q9:'B',q10:'A'};
   let s=0;
   for(let k in ans){
     let v=document.querySelector(`input[name="${k}"]:checked`);
-    if(v && v.value===ans[k]) s++;
+    if(!v){ alert("Answer all questions"); return; }
+    if(v.value===ans[k]) s++;
   }
   const r=document.getElementById('result');
   r.style.display='block';
-  r.style.background=s>=4?'#c8e6c9':'#ffcdd2';
-  r.innerHTML=`Score: ${s}/5 — `+(s>=4?'Tsunami Safety Certified 🌊':'Please review the module.');
+  r.style.background=s>=7?'#c8e6c9':'#ffcdd2';
+  r.innerHTML=`Score: ${s}/10 — `+(s>=7?'Certified Tsunami Ready 🌊':'Review the module again.');
 }
 </script>
+
 </body>
 </html>
