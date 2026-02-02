@@ -9,6 +9,22 @@
 
   <link rel="stylesheet" href="{% static 'css/households-fire.css' %}">
 </head>
+
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement(
+    {
+      pageLanguage: 'en',
+      includedLanguages: 'en,hi,ta,te,bn,gu,kn,ml,mr,pa,ur',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+    },
+    'google_translate_element'
+  );
+}
+</script>
+
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <body>
   <!-- ALERT BAR (shared hook for weather updates) -->
   <div id="disaster-alert-bar" class="alert-normal" role="status" aria-live="polite" aria-atomic="true">
@@ -22,6 +38,7 @@
   <main class="wrap" role="main" aria-labelledby="pageTitle">
     <div class="topbar">
       <div>
+        <div id="google_translate_element" class="lang-selector"></div> 
         <h1 id="pageTitle">🧯 House Fire — Prevention, Escape & Recovery</h1>
         <p class="lead">Practical, adult-focused steps: prevent fires, detect early, escape safely and recover. Suitable for apartments, houses and rural homes.</p>
 

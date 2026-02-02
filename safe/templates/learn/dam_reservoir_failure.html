@@ -41,6 +41,20 @@
   </style>
 </head>
 
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement(
+    {
+      pageLanguage: 'en',
+      includedLanguages: 'en,hi,ta,te,bn,gu,kn,ml,mr,pa,ur',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+    },
+    'google_translate_element'
+  );
+}
+</script>
+
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <body>
 <div class="wrap">
 <header>
@@ -54,7 +68,7 @@
 <aside class="sidecard">
   <div class="section-side">
     <h3>Safety Poster</h3>
-    <img class="poster" src="{% static 'image/dam-failure-safety.jpg' %}" alt="Dam Failure Safety">
+    <img class="poster" src="{% static 'image/dam.png' %}" alt="Dam Failure Safety">
     <button onclick="window.print()" style="font-size:0.7rem;">🖨️ Print Sheet</button>
   </div>
 
@@ -79,7 +93,7 @@
 </aside>
 
 <main>
-
+ <div id="google_translate_element" class="lang-selector"></div> 
 <section>
 <h2>1. What is Dam / Reservoir Failure?</h2>
 <p>Dam failure occurs when a dam collapses or releases water uncontrollably due to structural damage, overtopping, earthquakes, or sabotage. The resulting flood wave moves extremely fast downstream.</p>

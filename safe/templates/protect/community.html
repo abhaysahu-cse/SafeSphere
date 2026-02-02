@@ -83,10 +83,25 @@
   </style>
 </head>
 
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement(
+    {
+      pageLanguage: 'en',
+      includedLanguages: 'en,hi,ta,te,bn,gu,kn,ml,mr,pa,ur',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+    },
+    'google_translate_element'
+  );
+}
+</script>
+
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <body>
   {% include 'partials/sidebar.html' %}
 
   <main class="main-content" role="main">
+     <div id="google_translate_element" class="lang-selector"></div> 
     <header class="page-header">
       <h1>🧑‍🤝‍🧑 Community & Local Leaders</h1>
       <p>Guidance for organising shelters, grain banks, rescue teams and community drills so vulnerable people stay safe.</p>

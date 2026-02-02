@@ -24,10 +24,27 @@
     .help-card { background:#fff; padding:12px; border-radius:10px; box-shadow:0 6px 18px rgba(8,12,40,0.04); }
   </style>
 </head>
+
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement(
+    {
+      pageLanguage: 'en',
+      includedLanguages: 'en,hi,ta,te,bn,gu,kn,ml,mr,pa,ur',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+    },
+    'google_translate_element'
+  );
+}
+</script>
+
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <body>
   {% include 'partials/sidebar.html' %}
 
   <main class="main-content">
+     <div id="google_translate_element" class="lang-selector"></div> 
     <header class="page-header">
       <h1>👨‍🌾 Farmers & Livelihoods</h1>
       <p>Modules: Floods · Cyclones · Heatwaves · Droughts — practical actions for farmers to reduce crop & income loss.</p>

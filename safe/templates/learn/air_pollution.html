@@ -7,33 +7,28 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
     :root {
-      --brand: #263238;   /* Smog Gray */
-      --accent: #d84315;  /* Alert Red */
+      --brand: #263238;
+      --accent: #d84315;
       --safe: #2e7d32;
       --bg: #f9fafb;
       --text: #212121;
       --card: #ffffff;
     }
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); margin: 0; line-height: 1.6; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; }
     .wrap { max-width: 1200px; margin: 20px auto; padding: 25px; background: var(--card); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-
     header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 30px; }
     .badge { background: #eceff1; color: var(--brand); padding: 5px 12px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; }
-
     .grid { display: grid; grid-template-columns: 300px 1fr; gap: 30px; }
     @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
-
     .section-side { background: #fff; padding: 15px; border: 1px solid #eee; border-radius: 10px; margin-bottom: 20px; }
-    .poster { width: 65%; max-width: 170px; margin: 10px 0; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-
+    .poster { width: 65%; max-width: 170px; border-radius: 6px; }
     .contact-table { width: 100%; font-size: 0.85rem; border-collapse: collapse; }
     .contact-table td { padding: 8px; border-bottom: 1px solid #eee; }
-
     .info-box { background: #e8f5e9; border-left: 5px solid var(--safe); padding: 15px; margin: 20px 0; }
     .warning-box { background: #fbe9e7; border-left: 5px solid var(--accent); padding: 15px; margin: 20px 0; }
-
     h2 { border-bottom: 1px solid #eee; padding-bottom: 10px; color: var(--brand); }
-
+    table { width:100%; border-collapse: collapse; margin-top:10px; }
+    table th, table td { border:1px solid #ddd; padding:10px; }
     .quiz-container { background: #eceff1; padding: 30px; border-radius: 15px; margin-top: 40px; }
     .q-item { background: white; padding: 20px; border-radius: 10px; margin-bottom: 15px; }
     .btn-submit { background: var(--brand); color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; width: 100%; font-size: 1.1rem; }
@@ -41,133 +36,207 @@
   </style>
 </head>
 
+
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement(
+    {
+      pageLanguage: 'en',
+      includedLanguages: 'en,hi,ta,te,bn,gu,kn,ml,mr,pa,ur',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+    },
+    'google_translate_element'
+  );
+}
+</script>
+
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+
 <body>
 <div class="wrap">
-  <header>
-    <span class="badge">Advanced Health Emergency Module</span>
-    <h1>🌫️ AQI Emergency & Air Pollution Safety</h1>
-    <p>Understand air quality risks, emergency response, and long-term protection strategies.</p>
-  </header>
 
-  <div class="grid">
-    <aside>
-      <div class="section-side">
-        <h3>Safety Poster</h3>
-        <img class="poster" src="{% static 'image/aqi-safety.jpg' %}">
-        <button onclick="window.print()">🖨️ Print Sheet</button>
-      </div>
+<header>
+  <span class="badge">Advanced Health Emergency Module</span>
+  <h1>🌫️ AQI Emergency & Air Pollution Safety</h1>
+  <p>Air quality science, health impacts, emergency response & prevention strategies.</p>
+</header>
 
-      <div class="section-side" style="border:1px solid var(--accent);">
-        <h3>📞 Emergency Help</h3>
-        <table class="contact-table">
-          <tr><td>Medical Emergency</td><td><strong>112</strong></td></tr>
-          <tr><td>Ambulance</td><td><strong>108</strong></td></tr>
-          <tr><td>Health Helpline</td><td><strong>104</strong></td></tr>
-        </table>
-      </div>
-
-      <div class="section-side">
-        <h3>🏠 AQI Home Checklist</h3>
-        <ul>
-          <li>Use N95 / KN95 masks</li>
-          <li>Close doors & windows</li>
-          <li>Use air purifiers</li>
-          <li>Keep rescue inhalers ready</li>
-        </ul>
-      </div>
-    </aside>
-
-    <main>
-      <section>
-        <h2>1. Understanding AQI</h2>
-        <p>
-          AQI (Air Quality Index) measures pollution levels including
-          <strong>PM2.5, PM10, NO₂, SO₂, CO, O₃</strong>.
-          Higher values mean greater health risk.
-        </p>
-        <div class="info-box">
-          <strong>Critical Fact:</strong> PM2.5 particles can enter bloodstream and damage lungs, heart, and brain.
-        </div>
-      </section>
-
-      <section>
-        <h2>2. AQI Levels & Risk</h2>
-        <ul>
-          <li><strong>0–50:</strong> Good</li>
-          <li><strong>51–100:</strong> Moderate</li>
-          <li><strong>101–200:</strong> Poor</li>
-          <li><strong>201–300:</strong> Very Poor</li>
-          <li><strong>301+:</strong> Severe / Emergency</li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>3. Emergency Response</h2>
-        <div class="warning-box">
-          <strong>During Severe AQI:</strong> Stay indoors, avoid exercise, wear masks if outdoors.
-        </div>
-        <p>Children, elderly, and asthma patients must take extra precautions.</p>
-      </section>
-
-      <section>
-        <h2>4. After AQI Emergency</h2>
-        <p>
-          Ventilate homes only when AQI improves. Continue hydration and monitor symptoms like breathlessness.
-        </p>
-      </section>
-
-      <!-- QUIZ -->
-      <section class="quiz-container">
-        <h2 style="border:none;">📝 AQI Emergency Certification Quiz</h2>
-
-        <form>
-          <div class="q-item">1. AQI mainly measures? <br>
-            <input type="radio" name="q1" value="A"> Temperature
-            <input type="radio" name="q1" value="B"> Air pollution
-          </div>
-
-          <div class="q-item">2. PM2.5 is dangerous because it: <br>
-            <input type="radio" name="q2" value="A"> Is visible
-            <input type="radio" name="q2" value="B"> Enters bloodstream
-          </div>
-
-          <div class="q-item">3. AQI above 300 is: <br>
-            <input type="radio" name="q3" value="A"> Moderate
-            <input type="radio" name="q3" value="B"> Severe
-          </div>
-
-          <div class="q-item">4. Best mask for high AQI? <br>
-            <input type="radio" name="q4" value="A"> Cloth mask
-            <input type="radio" name="q4" value="B"> N95/KN95
-          </div>
-
-          <div class="q-item">5. During AQI emergency you should: <br>
-            <input type="radio" name="q5" value="A"> Jog outdoors
-            <input type="radio" name="q5" value="B"> Stay indoors
-          </div>
-
-          <button type="button" class="btn-submit" onclick="checkAQIQuiz()">Submit Assessment</button>
-        </form>
-
-        <div id="result" class="result-display"></div>
-      </section>
-    </main>
+<div class="grid">
+<aside>
+  <div class="section-side">
+    <h3>Safety Poster</h3>
+    <img class="poster" src="{% static 'image/aqi.jpg' %}">
+    <button onclick="window.print()">🖨️ Print Sheet</button>
   </div>
+
+  <div class="section-side" style="border:1px solid var(--accent);">
+    <h3>📞 Emergency Help</h3>
+    <table class="contact-table">
+      <tr><td>Emergency</td><td><strong>112</strong></td></tr>
+      <tr><td>Ambulance</td><td><strong>108</strong></td></tr>
+      <tr><td>Health Helpline</td><td><strong>104</strong></td></tr>
+    </table>
+  </div>
+
+  <div class="section-side">
+    <h3>🏠 AQI Home Checklist</h3>
+    <ul>
+      <li>N95 / KN95 masks</li>
+      <li>Doors & windows sealed</li>
+      <li>Air purifiers</li>
+      <li>Emergency medicines</li>
+    </ul>
+  </div>
+</aside>
+
+<main>
+
+
+ <div id="google_translate_element" class="lang-selector"></div> 
+
+<section>
+<h2>1. Understanding AQI</h2>
+<p>AQI measures air pollution based on <strong>PM2.5, PM10, NO₂, SO₂, CO, O₃</strong>.</p>
+<div class="info-box">
+PM2.5 particles are 30x smaller than human hair and enter bloodstream.
+</div>
+</section>
+
+<section>
+<h2>2. AQI Levels & Risk</h2>
+<ul>
+<li>0–50: Good</li>
+<li>51–100: Moderate</li>
+<li>101–200: Poor</li>
+<li>201–300: Very Poor</li>
+<li>301+: Severe / Emergency</li>
+</ul>
+</section>
+
+<section>
+<h2>3. Health Impact</h2>
+<ul>
+<li><strong>Short-term:</strong> Eye irritation, cough, breathlessness</li>
+<li><strong>Long-term:</strong> Asthma, heart disease, lung damage</li>
+</ul>
+</section>
+
+<section>
+<h2>4. Emergency Response Plan</h2>
+<div class="warning-box">
+Stay indoors, avoid exercise, wear masks if outdoor exposure is unavoidable.
+</div>
+</section>
+
+<section>
+<h2>5. Indoor Air Safety</h2>
+<p>Indoor AQI can be improved using HEPA purifiers and wet mopping.</p>
+</section>
+
+<section>
+<h2>6. Special Care Groups</h2>
+<ul>
+<li>Children & elderly</li>
+<li>Pregnant women</li>
+<li>Asthma & heart patients</li>
+<li>Outdoor workers</li>
+</ul>
+</section>
+
+<section>
+<h2>7. Do’s & Don’ts</h2>
+<table>
+<tr><th>Do</th><th>Don’t</th></tr>
+<tr><td>Wear N95 mask</td><td>Exercise outdoors</td></tr>
+<tr><td>Check AQI daily</td><td>Ignore symptoms</td></tr>
+<tr><td>Use purifier</td><td>Burn waste</td></tr>
+</table>
+</section>
+
+<!-- QUIZ -->
+<section class="quiz-container">
+<h2 style="border:none;">📝 AQI Emergency Certification Quiz</h2>
+<p><strong>Passing Score: 7 / 10</strong></p>
+
+<form id="quiz">
+
+<div class="q-item">1. AQI measures?<br>
+<input type="radio" name="q1" value="A"> Temperature
+<input type="radio" name="q1" value="B"> Air pollution
+</div>
+
+<div class="q-item">2. Most dangerous pollutant?<br>
+<input type="radio" name="q2" value="A"> PM2.5
+<input type="radio" name="q2" value="B"> Oxygen
+</div>
+
+<div class="q-item">3. AQI > 300 means?<br>
+<input type="radio" name="q3" value="A"> Moderate
+<input type="radio" name="q3" value="B"> Severe
+</div>
+
+<div class="q-item">4. Best mask?<br>
+<input type="radio" name="q4" value="A"> Cloth
+<input type="radio" name="q4" value="B"> N95
+</div>
+
+<div class="q-item">5. Safe activity during emergency?<br>
+<input type="radio" name="q5" value="A"> Jogging
+<input type="radio" name="q5" value="B"> Staying indoors
+</div>
+
+<div class="q-item">6. PM2.5 affects?<br>
+<input type="radio" name="q6" value="A"> Skin only
+<input type="radio" name="q6" value="B"> Lungs & heart
+</div>
+
+<div class="q-item">7. Best indoor cleaning method?<br>
+<input type="radio" name="q7" value="A"> Dry dusting
+<input type="radio" name="q7" value="B"> Wet mopping
+</div>
+
+<div class="q-item">8. Outdoor workers should?<br>
+<input type="radio" name="q8" value="A"> Ignore AQI
+<input type="radio" name="q8" value="B"> Limit exposure
+</div>
+
+<div class="q-item">9. AQI data source?<br>
+<input type="radio" name="q9" value="A"> Government sensors
+<input type="radio" name="q9" value="B"> Random guess
+</div>
+
+<div class="q-item">10. Long-term exposure causes?<br>
+<input type="radio" name="q10" value="A"> Immunity boost
+<input type="radio" name="q10" value="B"> Chronic disease
+</div>
+
+<button type="button" class="btn-submit" onclick="checkAQIQuiz()">Submit Assessment</button>
+</form>
+
+<div id="result" class="result-display"></div>
+</section>
+
+</main>
+</div>
 </div>
 
 <script>
 function checkAQIQuiz(){
-  const ans={q1:'B',q2:'B',q3:'B',q4:'B',q5:'B'};
+  const ans={q1:'B',q2:'A',q3:'B',q4:'B',q5:'B',q6:'B',q7:'B',q8:'B',q9:'A',q10:'B'};
   let s=0;
   for(let k in ans){
     let v=document.querySelector(`input[name="${k}"]:checked`);
-    if(v && v.value===ans[k]) s++;
+    if(!v){ alert("Please answer all questions"); return; }
+    if(v.value===ans[k]) s++;
   }
   const r=document.getElementById('result');
   r.style.display='block';
-  r.style.background=s>=4?'#c8e6c9':'#ffcdd2';
-  r.innerHTML=`Score: ${s}/5 — `+(s>=4?'AQI Emergency Certified 🌫️':'Please review the module.');
+  r.style.background=s>=7?'#c8e6c9':'#ffcdd2';
+  r.innerHTML=`Score: ${s}/10 — `+(s>=7?'AQI Emergency Certified 🌫️':'Please review the module.');
 }
 </script>
+
 </body>
 </html>
