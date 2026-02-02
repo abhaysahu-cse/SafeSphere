@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>SafeSphere — Fire Safety AR (School)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- A-Frame + AR.js -->
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.5/aframe/build/aframe-ar.min.js"></script>
+
+  <!-- App JS -->
+  <script src="./app.js?v=3"></script>
+
+  <style>
+    html,body{margin:0;height:100%;background:#000;font-family:Arial,Helvetica,sans-serif}
+    .hint{position:fixed;top:10px;left:10px;z-index:999;background:#fff;padding:8px 10px;border-radius:8px;color:#111}
+    #card{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;width:92%;max-width:560px;background:#fff;border-radius:12px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.18);display:none;z-index:999}
+    #card h3{margin:0 0 6px;font-size:18px}
+    #notice{font-size:13px;color:#333;margin-bottom:10px}
+    #controls{display:flex;gap:10px}
+    .btn{flex:1;padding:10px;border-radius:8px;border:0;font-size:15px;cursor:pointer}
+    #extBtn{background:#ef4444;color:#fff}
+    #truckBtn{background:#0b61ff;color:#fff}
+    #status{margin-top:8px;font-size:13px;color:#0b2b45}
+    a-scene{width:100vw;height:100vh;display:block}
+  </style>
+</head>
+<body>
+  <div class="hint">Allow camera & point at the HIRO marker (printed)</div>
+
+  <div id="card" role="region" aria-live="polite">
+    <h3>🔥 Fire Safety Drill (School)</h3>
+    <div id="notice">Scan the marker — fires are visible on the building. Follow instructions to extinguish.</div>
+
+    <div id="controls">
+      <button id="extBtn" class="btn">Use Extinguisher</button>
+      <button id="truckBtn" class="btn" style="background:#6b7280;color:#fff">Call Fire Truck</button>
+    </div>
+
+    <div id="status">Status: Waiting for marker...</div>
+  </div>
+
+  <a-scene embedded vr-mode-ui="enabled:false" arjs="sourceType:webcam;debugUIEnabled:false">
+
+    <a-assets>
+      <a-asset-item id="schoolGLB" src="models/school_building.glb"></a-asset-item>
+      <a-asset-item id="fireGLB" src="models/fire.glb"></a-asset-item>
+      <a-asset-item id="extGLB" src="models/extinguisher.glb"></a-asset-item>
+      <a-asset-item id="truckGLB" src="models/fire_truck.glb"></a-asset-item>
+    </a-assets>
+
+    <!-- marker (HIRO) -->
+    <a-marker preset="hiro" id="marker" emitevents="true" smooth="true" smoothCount="8" smoothTolerance="0.02" smoothThreshold="4">
+
+        <a-entity light="type: ambient; intensity: 1.2; color: #ffffff"></a-entity>
+        <a-entity light="type: directional; intensity: 0.8" position="1 2 1"></a-entity>
+
+
+      <!-- root: we show this when marker is found & school model loaded -->
+      <a-entity id="root" visible="false">
+
+        <!-- school building -->
+        <a-entity
+  id="school"
+  gltf-model="#schoolGLB"
+  position="0 0.08 0"
+  rotation="0 180 0"
+  scale="0.15 0.15 0.15">
+</a-entity>
+
+
+        <!-- three fire entities (we reuse same model) - adjust positions to match your building -->
+        <a-entity id="fire1" gltf-model="#fireGLB" position="-0.45 0.45 0.3" rotation="0 0 0"></a-entity>
+        <a-entity id="fire2" gltf-model="#fireGLB" position="0.45 0.45 0.3" rotation="0 0 0"></a-entity>
+        <a-entity id="fire3" gltf-model="#fireGLB" position="0 0.8 -0.2" rotation="0 30 0"></a-entity>
+
+        <!-- extinguisher (hidden until used) -->
+        <a-entity id="ext" gltf-model="#extGLB" position="0.7 0 0.3" visible="false"></a-entity>
+
+        <!-- fire truck (hidden until called) -->
+        <a-entity id="truck" gltf-model="#truckGLB" position="-0.9 0 0.6" rotation="0 -20 0" visible="false"></a-entity>
+
+      </a-entity>
+    </a-marker>
+
+    <a-entity camera></a-entity>
+  </a-scene>
+</body>
+</html>

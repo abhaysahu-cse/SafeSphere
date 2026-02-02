@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Heatwave — SafeSphere</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.5/aframe/build/aframe-ar.min.js"></script>
+  <script src="./app.js?v=1"></script>
+  <style>
+    html,body{height:100%;margin:0;background:#000}
+    .hint{position:fixed;left:10px;top:10px;background:#fff;padding:8px;border-radius:8px;z-index:10}
+    #card{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;background:#fff;padding:12px;border-radius:10px;display:none;z-index:10}
+  </style>
+</head>
+<body>
+  <div class="hint">Heatwave demo — point at marker</div>
+  <div id="card"><div id="msg">Heatwave demo</div><div style="margin-top:10px"><button id="start">Start Heat</button></div></div>
+
+  <a-scene embedded arjs="sourceType:webcam;debugUIEnabled:false">
+    <a-assets>
+      <a-asset-item id="sun" src="../../models/sun.glb"></a-asset-item>
+      <a-asset-item id="waterTank" src="../../models/water_tank.glb"></a-asset-item>
+    </a-assets>
+
+    <a-marker preset="hiro" id="marker" emitevents="true" smooth="true">
+      <a-entity id="root" visible="false">
+        <a-entity id="sunEnt" gltf-model="#sun" position="0 0.85 -0.2" scale="0.25 0.25 0.25"></a-entity>
+        <a-entity id="tank" gltf-model="#waterTank" position="0 -0.02 0.3" scale="0.25 0.25 0.25" visible="false"></a-entity>
+      </a-entity>
+    </a-marker>
+
+    <a-entity camera></a-entity>
+  </a-scene>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Evacuation Route — SafeSphere</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.5/aframe/build/aframe-ar.min.js"></script>
+  <script src="./app.js?v=1"></script>
+  <style>html,body{height:100%;margin:0;background:#000} #card{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;background:#fff;padding:10px;border-radius:8px;display:none;z-index:10}</style>
+</head>
+<body>
+  <div id="card"><button id="start">Show Route</button></div>
+
+  <a-scene embedded arjs="sourceType:webcam;debugUIEnabled:false">
+    <a-assets>
+      <a-asset-item id="arrow" src="../../models/direction_arrow.glb"></a-asset-item>
+      <a-asset-item id="boy" src="../../models/boy.glb"></a-asset-item>
+    </a-assets>
+
+    <a-marker preset="hiro" id="marker" emitevents="true" smooth="true">
+      <a-entity id="root" visible="false">
+        <a-plane id="map" rotation="-90 0 0" width="1.2" height="1.2" color="#eee" position="0 0 0"></a-plane>
+        <a-entity id="arrowEnt" gltf-model="#arrow" position="0 0.05 -0.2" scale="0.25 0.25 0.25" visible="false"></a-entity>
+        <a-entity id="walker" gltf-model="#boy" position="-0.4 0 0.4" scale="0.18 0.18 0.18" visible="false"></a-entity>
+      </a-entity>
+    </a-marker>
+
+    <a-entity camera></a-entity>
+  </a-scene>
+</body>
+</html>

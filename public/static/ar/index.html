@@ -1,77 +1,242 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>SafeSphere AR</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- A-Frame + AR.js -->
-  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.5/aframe/build/aframe-ar.min.js"></script>
-
+  <meta charset="utf-8" />
+  <title>SafeSphere — AR Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      background: black;
+    /* Simple, self-contained UI kit for the AR Hub */
+    :root{
+      --bg: #f5f8ff;
+      --card: #ffffff;
+      --muted: #586675;
+      --accent: #2563eb;
+      --accent-2: #06b6d4;
+      --success: #16a34a;
+      --shadow: 0 8px 28px rgba(19,38,63,0.08);
+      --radius: 12px;
+      --glass: rgba(255,255,255,0.7);
+      --gap: 16px;
+      --maxw: 1180px;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     }
-    .hint {
-      position: fixed;
-      top: 10px;
-      left: 10px;
-      z-index: 999;
-      background: rgba(255,255,255,0.9);
-      padding: 8px 12px;
-      border-radius: 8px;
-      font-size: 13px;
+    html,body { height:100%; margin:0; background:linear-gradient(180deg,#eef5ff 0%,var(--bg) 100%); color:#0b2436; }
+    .wrap { max-width: var(--maxw); margin:24px auto; padding:22px; }
+    .header {
+      display:flex;
+      gap:16px;
+      align-items:center;
     }
-    
+    .logo {
+      width:64px;height:64px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+      font-size:28px;background:linear-gradient(135deg,var(--accent),#7c3aed);color:#fff;box-shadow:var(--shadow);
+    }
+    h1 { margin:0; font-size:22px; letter-spacing:-0.2px; }
+    .sub { margin-top:6px;color:var(--muted); font-size:14px }
+
+    /* Controls row */
+    .top-actions { display:flex; gap:12px; margin-top:18px; align-items:center; flex-wrap:wrap; }
+    .search {
+      flex:1; min-width:220px; max-width:420px; display:flex; gap:8px; align-items:center;
+      background:var(--card); padding:8px 12px; border-radius:10px; box-shadow:var(--shadow);
+    }
+    .search input { border:0; outline:none; flex:1; font-size:14px; background:transparent; color:inherit; }
+    .help { font-size:13px; color:var(--muted); margin-left:auto; }
+
+    /* grid */
+    .grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap:var(--gap); margin-top:18px; }
+    .card {
+      background:var(--card);
+      border-radius:var(--radius);
+      padding:14px;
+      box-shadow:var(--shadow);
+      display:flex;
+      flex-direction:column;
+      min-height:170px;
+      transition: transform .14s ease, box-shadow .14s ease;
+    }
+    .card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(12,40,80,0.12); }
+    .card .meta { display:flex; gap:8px; align-items:center; font-size:12px; color:var(--muted); margin-bottom:8px; }
+    .card h3 { margin:0 0 8px; font-size:16px; }
+    .card p { margin:0; color:var(--muted); font-size:14px; flex:1; line-height:1.35; }
+    .card .actions { margin-top:12px; display:flex; gap:10px; align-items:center; }
+
+    .btn {
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      padding:10px 12px; border-radius:10px; text-decoration:none; font-weight:600; cursor:pointer;
+      border: 0; font-size:14px;
+    }
+    .btn-cta { background:var(--accent); color:#fff; box-shadow: 0 8px 22px rgba(37,99,235,0.18); }
+    .btn-ghost { background:#f6f9ff; color: #0b2436; border: 1px solid rgba(37,99,235,0.06); }
+    .tag { display:inline-block; padding:6px 8px; border-radius:6px; font-size:12px; color:#063; background:rgba(6,182,212,0.12); font-weight:600; }
+
+    /* marker download strip */
+    .downloads { margin-top:20px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+    .download-card { background:linear-gradient(180deg,#fff,#fbfdff); padding:10px 12px; border-radius:10px; box-shadow:var(--shadow); display:flex; gap:10px; align-items:center; min-width:220px }
+    .download-card img { width:36px; height:36px; border-radius:6px; object-fit:cover; border:1px solid rgba(10,20,30,0.04) }
+    .muted { color:var(--muted); font-size:13px; }
+
+    /* footer / note */
+    .note { margin-top:18px; color:var(--muted); font-size:13px; }
+
+    /* responsive tweak */
+    @media (max-width:520px){
+      .logo { width:56px;height:56px;font-size:26px }
+      .search { max-width:unset }
+    }
   </style>
 </head>
-
 <body>
-  <div class="hint">
-    Allow camera access<br>
-    Show HIRO marker to camera
+  <div class="wrap">
+
+    <div class="header">
+      <div class="logo" aria-hidden>🛡️</div>
+      <div>
+        <h1>SafeSphere — AR Hub</h1>
+        <div class="sub">All marker-based and markerless AR drills in one place. Print markers, open on phone and practise safely.</div>
+      </div>
+    </div>
+
+    <div class="top-actions">
+      <div class="search" role="search" aria-label="Search AR modules">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="opacity:.7"><path d="M21 21l-4.35-4.35" stroke="#2b6cb0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="11" cy="11" r="6" stroke="#2b6cb0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <input id="searchInput" placeholder="Search AR lessons (flood, fire, earthquake...)"/>
+      </div>
+
+      <div class="help">Tip: print markers at 6–10 cm for best detection</div>
+    </div>
+
+    <div class="grid" id="cardsGrid">
+
+      <!-- Flood AR (existing) -->
+      <div class="card" data-keywords="flood flood-simulation marker">
+        <div class="meta"><span class="tag">Marker AR</span> <span style="margin-left:auto" class="muted">Low-end phones</span></div>
+        <h3>🌊 Flood Safety</h3>
+        <p>Scan the HIRO marker to open the flood practice. Designed for low-end Android (AR.js / A-Frame).</p>
+        <div class="actions">
+          <a class="btn btn-cta" href="/static/webxr/marker/flood/index.html" target="_blank" rel="noopener">Start Flood AR →</a>
+          <a class="btn btn-ghost" href="/static/webxr/marker/flood/markers/flood_marker.png" download>Download Marker</a>
+        </div>
+      </div>
+
+      <!-- Fire AR (existing) -->
+      <div class="card" data-keywords="fire extinguisher fire-safety marker">
+        <div class="meta"><span class="tag" style="background:rgba(255,112,67,0.12); color:#ff5a1f">Marker AR</span> <span style="margin-left:auto" class="muted">Practice drill</span></div>
+        <h3>🔥 Fire Safety</h3>
+        <p>Learn to use a fire extinguisher correctly. Point phone at the printed marker and follow the steps.</p>
+        <div class="actions">
+          <a class="btn btn-cta" href="/static/webxr/marker/fire/index.html" target="_blank" rel="noopener">Start Fire AR →</a>
+          <a class="btn btn-ghost" href="/static/webxr/marker/fire/markers/fire_marker.png" download>Download Marker</a>
+        </div>
+      </div>
+
+      <!-- Earthquake AR (existing) -->
+      <div class="card" data-keywords="earthquake drop cover hold marker">
+        <div class="meta"><span class="tag">Marker AR</span> <span style="margin-left:auto" class="muted">Viva practice</span></div>
+        <h3>🏠 Earthquake Safety</h3>
+        <p>Practice Drop, Cover & Hold in AR. Great for classroom drills and quick demos.</p>
+        <div class="actions">
+          <!-- <a class="btn btn-cta" href="/static/webxr/marker/earthquake/index.html" target="_blank" rel="noopener">Start Earthquake AR →</a> -->
+          <!-- <a class="btn btn-ghost" href="/static/webxr/marker/earthquake/markers/quake_marker.png" download>Download Marker</a> -->
+        </div>
+      </div>
+
+      <!-- Tsunami AR (existing) -->
+      <div class="card" data-keywords="tsunami evacuation water marker">
+        <div class="meta"><span class="tag" style="background:rgba(59,130,246,0.08); color:#0b61ff">Marker AR</span> <span style="margin-left:auto" class="muted">Evacuation demo</span></div>
+        <h3>🌊 Tsunami Safety</h3>
+        <p>Visualize safe routes and move to safe ground. Works with printed markers and a phone camera.</p>
+        <div class="actions">
+          <a class="btn btn-cta" href="/static/webxr/marker/tsunami/index.html" target="_blank" rel="noopener">Start Tsunami AR →</a>
+          <a class="btn btn-ghost" href="/static/webxr/marker/tsunami/markers/tsunami_marker.png" download>Download Marker</a>
+        </div>
+      </div>
+
+      <!-- Markerless (existing) -->
+      <div class="card" data-keywords="markerless webxr arcore flood">
+        <div class="meta"><span class="tag" style="background:linear-gradient(90deg,var(--accent),#7c3aed); color:#fff">Markerless</span> <span style="margin-left:auto" class="muted">ARCore devices</span></div>
+        <h3>📱 Markerless Flood AR</h3>
+        <p>ARCore / WebXR based flood demo. Use Chrome on ARCore-capable Android phones (best with HTTPS).</p>
+        <div class="actions">
+          <a class="btn btn-cta" href="/static/webxr/flood/index.html" target="_blank" rel="noopener">Try Markerless →</a>
+          <a class="btn btn-ghost" href="/static/webxr/marker/flood/markers/flood_marker.png" download>Marker (optional)</a>
+        </div>
+      </div>
+
+      <!-- NEW: Farm Flood (uses cow + boy + water tank optionally) -->
+      <div class="card" data-keywords="farm flood cow farmer marker">
+        <div class="meta"><span class="tag">Marker AR</span> <span style="margin-left:auto" class="muted">Community / farmers</span></div>
+        <h3>🌾 Farm Flood — Animals & Crops</h3>
+        <p>Demonstrates water rise on a small farm. Shows when to move animals and where to seek higher ground.</p>
+        <div class="actions">
+          <a class="btn btn-cta" href="/static/webxr/marker/farm-flood/index.html" target="_blank" rel="noopener">Start Farm Flood →</a>
+          <a class="btn btn-ghost" href="/static/webxr/marker/farm-flood/marker.png" download>Download Marker</a>
+        </div>
+      </div>
+
+      <!-- NEW: Heatwave / Water Conservation -->
+      <div class="card" data-keywords="heatwave water conservation sun water-tank marker">
+        <div class="meta"><span class="tag" style="background:linear-gradient(90deg,#f59e0b,#f97316); color:#fff">Marker AR</span> <span style="margin-left:auto" class="muted">Farmers / schools</span></div>
+        <h3>☀️ Heatwave & Water Conservation</h3>
+        <p>Shows rising sun intensity and suggests water conservation (place water tank, shade crops, stay hydrated).</p>
+        <div class="actions">
+          <a class="btn btn-cta" href="/static/webxr/marker/heatwave/index.html" target="_blank" rel="noopener">Start Heatwave →</a>
+          <a class="btn btn-ghost" href="/static/webxr/marker/heatwave/marker.png" download>Download Marker</a>
+        </div>
+      </div>
+
+      <!-- NEW: Evacuation Route -->
+      <div class="card" data-keywords="evacuation route map arrow marker shelter">
+        <div class="meta"><span class="tag" style="background:linear-gradient(90deg,#06b6d4,#0891b2); color:#fff">Marker AR</span> <span style="margin-left:auto" class="muted">Community drills</span></div>
+        <h3>🧭 Evacuation Route</h3>
+        <p>Show safe routes on a small map: arrow and guide walk to shelter. Great for community drills and school demos.</p>
+        <div class="actions">
+          <a class="btn btn-cta" href="/static/webxr/marker/evac-route/index.html" target="_blank" rel="noopener">Start Evacuation →</a>
+          <a class="btn btn-ghost" href="/static/webxr/marker/evac-route/marker.png" download>Download Marker</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="downloads">
+      <div class="download-card">
+        <img src="/static/image/hiromarker_preview.jpeg" alt="HIRO" onerror="this.style.display='none'"/>
+        <a class="btn btn-ghost" href="/static/image/hiromarker_preview.jpeg" download>Download</a>
+        <div>
+          <div style="font-weight:700">Printable markers</div>
+          <div class="muted">Download HIRO and module markers for classroom printing</div>
+        </div>
+      </div>
+
+      <div class="download-card">
+        <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(90deg,#f97316,#f43f5e);display:flex;align-items:center;justify-content:center;color:white;font-weight:700">PDF</div>
+        <div>
+          <div style="font-weight:700">Print pack (zip)</div>
+          <div class="muted">Bundle all markers for easy printing</div>
+        </div>
+        <div style="margin-left:auto">
+          <a class="btn btn-ghost" href="/static/webxr/marker/pack/markers_bundle.zip" download>Download</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="note">
+      <strong>Quick tips:</strong> Print markers at 6–10 cm on plain paper, good lighting, keep phone steady. Markerless AR requires HTTPS (use ngrok for testing).
+    </div>
+
   </div>
 
-  <a-scene
-    embedded
-    arjs="sourceType: webcam; debugUIEnabled: false;"
-    vr-mode-ui="enabled: false">
-
-    <!-- HIRO marker -->
-    <a-marker type="pattern" url="marker/hiro.patt">
-
-      <!-- 3D MODEL (optional) -->
-      <a-entity
-        gltf-model="models/extinguisher.glb"
-        scale="0.5 0.5 0.5"
-        position="0 0 0">
-      </a-entity>
-
-      <!-- Fallback BOX -->
-      <a-box
-        color="#ff3333"
-        position="0 0.3 0"
-        height="0.6"
-        width="0.3"
-        depth="0.3"
-        animation="property: rotation; to: 0 360 0; loop: true; dur: 4000">
-      </a-box>
-
-      <a-text
-        value="Fire Safety\nUse extinguisher\nAim at base"
-        align="center"
-        position="-0.7 1 0"
-        width="2"
-        color="#ffffff">
-      </a-text>
-    </a-marker>
-
-    <a-entity camera></a-entity>
-  </a-scene>
-
+  <script>
+    // Small search filter — client side only
+    const input = document.getElementById('searchInput');
+    const cards = Array.from(document.querySelectorAll('#cardsGrid .card'));
+    input.addEventListener('input', (e) => {
+      const q = (e.target.value || '').trim().toLowerCase();
+      cards.forEach(card => {
+        const keys = (card.dataset.keywords || '') + ' ' + (card.querySelector('h3')?.innerText || '') + ' ' + (card.querySelector('p')?.innerText || '');
+        card.style.display = (keys.toLowerCase().includes(q) ? 'flex' : 'none');
+      });
+    });
+  </script>
 </body>
 </html>
