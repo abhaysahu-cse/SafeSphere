@@ -1,0 +1,175 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Dam & Reservoir Failure Safety Hub | SafeLearn</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root {
+      --brand: #1a237e; /* Deep Blue */
+      --accent: #d32f2f; /* Emergency Red */
+      --safe: #2e7d32;
+      --bg: #f5f8ff;
+      --text: #1a237e;
+      --card: #ffffff;
+    }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); margin: 0; line-height: 1.6; }
+    .wrap { max-width: 1200px; margin: 20px auto; padding: 25px; background: var(--card); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+
+    header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 30px; }
+    .badge { background: #e3f2fd; color: var(--brand); padding: 5px 12px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; }
+
+    .grid { display: grid; grid-template-columns: 300px 1fr; gap: 30px; }
+    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } .sidecard { order: 2; } }
+
+    .section-side { background: #fff; padding: 15px; border: 1px solid #e3f2fd; border-radius: 10px; margin-bottom: 20px; }
+    .poster { width: 65%; max-width: 170px; height: auto; display: block; margin: 10px 0; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+    .contact-table { width: 100%; font-size: 0.85rem; border-collapse: collapse; margin-top: 10px; }
+    .contact-table td { padding: 8px; border-bottom: 1px solid #eee; }
+    .contact-table tr:last-child td { border: none; }
+
+    .info-box { background: #e8f5e9; border-left: 5px solid var(--safe); padding: 15px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+    .warning-box { background: #ffebee; border-left: 5px solid var(--accent); padding: 15px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+    h2 { border-bottom: 1px solid #eee; padding-bottom: 10px; color: var(--brand); }
+
+    .quiz-container { background: #e3f2fd; padding: 30px; border-radius: 15px; margin-top: 40px; }
+    .q-item { background: white; padding: 20px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+    .btn-submit { background: var(--brand); color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 1.1rem; }
+    .result-display { margin-top: 20px; padding: 20px; border-radius: 10px; text-align: center; font-weight: bold; display: none; }
+  </style>
+</head>
+
+<body>
+<div class="wrap">
+<header>
+  <span class="badge">Advanced Flood Safety Module</span>
+  <h1>🌊 Dam & Reservoir Failure Response</h1>
+  <p>Rapid flood evacuation, safe high-ground mapping, and community early-warning systems.</p>
+</header>
+
+<div class="grid">
+
+<aside class="sidecard">
+  <div class="section-side">
+    <h3>Safety Poster</h3>
+    <img class="poster" src="{% static 'image/dam-failure-safety.jpg' %}" alt="Dam Failure Safety">
+    <button onclick="window.print()" style="font-size:0.7rem;">🖨️ Print Sheet</button>
+  </div>
+
+  <div class="section-side" style="border:1px solid var(--accent);">
+    <h3 style="color:var(--accent);">📞 Emergency Help</h3>
+    <table class="contact-table">
+      <tr><td>Emergency</td><td><strong>112</strong></td></tr>
+      <tr><td>Disaster Control</td><td><strong>1070 / 1077</strong></td></tr>
+      <tr><td>Flood Helpline</td><td><strong>1096</strong></td></tr>
+    </table>
+  </div>
+
+  <div class="section-side">
+    <h3>🎒 Evacuation Kit</h3>
+    <ul style="font-size:0.85rem;">
+      <li>Documents in waterproof pouch</li>
+      <li>Emergency torch & power bank</li>
+      <li>Whistle & first-aid kit</li>
+      <li>Dry food & water</li>
+    </ul>
+  </div>
+</aside>
+
+<main>
+
+<section>
+<h2>1. What is Dam / Reservoir Failure?</h2>
+<p>Dam failure occurs when a dam collapses or releases water uncontrollably due to structural damage, overtopping, earthquakes, or sabotage. The resulting flood wave moves extremely fast downstream.</p>
+
+<div class="info-box">
+<strong>Key Fact:</strong> Flood waves from dam failure can travel faster than vehicles within the first 10–30 km.
+</div>
+</section>
+
+<section>
+<h2>2. Early Warning Signs</h2>
+<ul>
+<li>Sudden increase in water discharge</li>
+<li>Sirens or SMS alerts from authorities</li>
+<li>Cracks, seepage, or vibrations near dams</li>
+<li>Unusual water color or debris</li>
+</ul>
+</section>
+
+<section>
+<h2>3. Rapid Downstream Evacuation</h2>
+<div class="warning-box">
+<strong>Immediate Action:</strong> Move perpendicular to the river flow toward high ground. Do NOT attempt to cross bridges.
+</div>
+<p>Evacuate on foot if traffic congestion occurs. Follow pre-marked evacuation routes.</p>
+</section>
+
+<section>
+<h2>4. Mapping Safe High Ground</h2>
+<p>Communities must identify elevated zones above predicted flood levels.</p>
+<ul>
+<li>Schools on hills</li>
+<li>Concrete multi-storey buildings</li>
+<li>Natural ridges and embankments</li>
+</ul>
+</section>
+
+<section>
+<h2>5. Community Early-Warning Roles</h2>
+<ul>
+<li><strong>Spotters:</strong> Monitor dam status</li>
+<li><strong>Messengers:</strong> Spread alerts door-to-door</li>
+<li><strong>Guides:</strong> Lead evacuation routes</li>
+<li><strong>Care Teams:</strong> Help elderly & disabled</li>
+</ul>
+</section>
+
+<section class="quiz-container">
+<h2 style="border:none;text-align:center;">📝 Safety Certification Quiz</h2>
+
+<form id="quiz">
+<div class="q-item"><strong>1.</strong> Main danger of dam failure? <br>
+<input type="radio" name="q1" value="A"> Slow flooding
+<input type="radio" name="q1" value="B"> Sudden flood wave</div>
+
+<div class="q-item"><strong>2.</strong> Safest direction during evacuation? <br>
+<input type="radio" name="q2" value="A"> Along river
+<input type="radio" name="q2" value="B"> Toward high ground</div>
+
+<div class="q-item"><strong>3.</strong> First warning system? <br>
+<input type="radio" name="q3" value="A"> Sirens/SMS
+<input type="radio" name="q3" value="B"> TV news</div>
+
+<div class="q-item"><strong>4.</strong> Who helps vulnerable people? <br>
+<input type="radio" name="q4" value="A"> Care teams
+<input type="radio" name="q4" value="B"> Police only</div>
+
+<button type="button" class="btn-submit" onclick="checkQuiz()">Submit</button>
+</form>
+
+<div id="res" class="result-display"></div>
+</section>
+
+</main>
+</div>
+</div>
+
+<script>
+function checkQuiz(){
+const ans={q1:'B',q2:'B',q3:'A',q4:'A'};
+let s=0,t=4;
+for(let k in ans){
+let v=document.querySelector(`input[name="${k}"]:checked`);
+if(v&&v.value===ans[k])s++;
+}
+let r=document.getElementById('res');
+r.style.display='block';
+r.style.background=s>=3?'#c8e6c9':'#ffcdd2';
+r.innerHTML=`Score: ${s}/${t} `+(s>=3?'Certified in Dam Safety!':'Review the module again.');
+}
+</script>
+</body>
+</html>

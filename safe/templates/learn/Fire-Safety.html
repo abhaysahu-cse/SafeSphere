@@ -91,6 +91,16 @@
     /* small utilities */
     .muted{color:var(--muted);font-size:0.95rem}
     .small{font-size:0.9rem;color:var(--muted)}
+
+    .poster {
+    width: 60%;         /* Is percentage ko kam-zyada karke aap size control kar sakte hain */
+    max-width: 180px;   /* Ek fixed maximum limit set kar di taaki zyada bada na dikhe */
+    height: auto;       /* Aspect ratio maintain rahega */
+    display: block;     /* Alignment ke liye zaroori hai */
+    margin: 10px auto;  /* Sidebar ke center mein dikhega */
+    border-radius: 6px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
   </style>
 </head>
 <script type="text/javascript">
@@ -329,6 +339,11 @@ function googleTranslateElementInit() {
             <li>Practice a family evacuation plan</li>
             <li>Keep car fuel at least half tank during fire season</li>
           </ul>
+        </div>
+<div class="section">
+          <h3>Poster</h3>
+          <img class="poster" src="{% static 'image/wild-fire-sefty.jpg' %}" alt="wild fire poster">
+          <p class="small">Print and display this poster in classrooms and corridors.</p>
         </div>
 
         <div class="section" aria-labelledby="numbers">

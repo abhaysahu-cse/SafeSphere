@@ -1,0 +1,214 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Thunderstorm Safety Hub | SafeLearn</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root {
+      --brand: #283593; /* Storm Blue */
+      --accent: #fbc02d; /* Lightning Yellow */
+      --safe: #2e7d32;
+      --bg: #f5f7fb;
+      --text: #1a237e;
+      --card: #ffffff;
+    }
+    body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin:0; color:var(--text); }
+    .wrap { max-width:1200px; margin:20px auto; padding:25px; background:var(--card); border-radius:14px; box-shadow:0 12px 35px rgba(0,0,0,0.1); }
+    header { border-bottom:3px solid var(--accent); margin-bottom:30px; padding-bottom:20px; }
+    .badge { background:#e8eaf6; padding:6px 14px; border-radius:16px; font-size:.8rem; font-weight:bold; }
+
+    .grid { display:grid; grid-template-columns:300px 1fr; gap:30px; }
+    @media(max-width:900px){ .grid{grid-template-columns:1fr;} }
+
+    .section-side { border:1px solid #e0e0e0; padding:15px; border-radius:10px; margin-bottom:20px; }
+    .poster { width:65%; max-width:170px; border-radius:6px; box-shadow:0 4px 10px rgba(0,0,0,0.15); }
+
+    h2 { border-bottom:1px solid #eee; padding-bottom:10px; color:var(--brand); }
+
+    .info-box { background:#e3f2fd; border-left:5px solid #1565c0; padding:15px; margin:20px 0; border-radius:0 10px 10px 0; }
+    .warning-box { background:#fff8e1; border-left:5px solid var(--accent); padding:15px; margin:20px 0; border-radius:0 10px 10px 0; }
+
+    .quiz-container { background:#e8eaf6; padding:30px; border-radius:16px; margin-top:40px; }
+    .q-item { background:#fff; padding:18px; border-radius:10px; margin-bottom:15px; }
+    .btn-submit { width:100%; padding:15px; background:var(--brand); color:#fff; border:none; border-radius:10px; font-size:1.1rem; cursor:pointer; }
+    .btn-submit:hover { background:#1a237e; }
+    .result-display { display:none; margin-top:20px; padding:20px; border-radius:10px; font-weight:bold; text-align:center; }
+  </style>
+</head>
+
+<body>
+<div class="wrap">
+
+<header>
+  <span class="badge">Weather Disaster Module</span>
+  <h1>🌩️ Thunderstorm Safety & Lightning Survival</h1>
+  <p>Understand thunderstorm formation, lightning risks, and life-saving safety actions.</p>
+</header>
+
+<div class="grid">
+
+<!-- SIDEBAR -->
+<aside>
+  <div class="section-side">
+    <h3>⚡ Safety Poster</h3>
+    <img src="{% static 'image/thunderstorm-safety.jpg' %}" class="poster" alt="Thunderstorm Safety">
+    <p style="font-size:.75rem;">Print for schools & shelters</p>
+    <button onclick="window.print()">🖨 Print</button>
+  </div>
+
+  <div class="section-side" style="border-color:var(--accent); background:#fffde7;">
+    <h3>📞 Emergency Numbers</h3>
+    <ul style="font-size:.85rem;">
+      <li>Emergency: <strong>112</strong></li>
+      <li>Ambulance: <strong>108</strong></li>
+      <li>Disaster Helpline: <strong>1077</strong></li>
+    </ul>
+  </div>
+
+  <div class="section-side">
+    <h3>🏠 Safety Checklist</h3>
+    <ul style="font-size:.85rem;">
+      <li>Unplug appliances</li>
+      <li>Stay indoors</li>
+      <li>Avoid metal objects</li>
+      <li>Secure loose items</li>
+    </ul>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main>
+
+<section>
+  <h2>1. What is a Thunderstorm?</h2>
+  <p>A thunderstorm is a weather system characterized by <strong>lightning, thunder, heavy rain, gusty winds, and sometimes hail or tornadoes</strong>.</p>
+  <div class="info-box">
+    <strong>Fact:</strong> Lightning can strike up to 10 km away from rain.
+  </div>
+</section>
+
+<section>
+  <h2>2. Lightning Science (Why it Kills)</h2>
+  <ul>
+    <li>Direct strike</li>
+    <li>Side flash</li>
+    <li>Ground current</li>
+    <li>Conduction through metal</li>
+  </ul>
+</section>
+
+<section>
+  <h2>3. Outdoor Safety Rules</h2>
+  <div class="warning-box">
+    <strong>DO NOT:</strong> Stand under trees, hold metal, or stay in open fields.
+  </div>
+  <p>If trapped outside: crouch low, feet together, minimize ground contact.</p>
+</section>
+
+<section>
+  <h2>4. Indoor Safety Rules</h2>
+  <ul>
+    <li>Unplug electronics</li>
+    <li>Avoid plumbing & wired phones</li>
+    <li>Stay away from windows</li>
+  </ul>
+</section>
+
+<section>
+  <h2>5. Vehicles & Travel</h2>
+  <p>Cars with metal roofs act as <strong>Faraday cages</strong>. Avoid motorcycles and open vehicles.</p>
+</section>
+
+<section>
+  <h2>6. After the Storm</h2>
+  <ul>
+    <li>Watch for fallen power lines</li>
+    <li>Avoid flooded roads</li>
+    <li>Provide first aid if safe</li>
+  </ul>
+</section>
+
+<!-- QUIZ -->
+<section class="quiz-container">
+  <h2 style="border:none;text-align:center;">📝 Thunderstorm Safety Quiz</h2>
+
+  <form id="quiz">
+    <div class="q-item">1. Thunderstorms produce lightning due to: <br>
+      <input type="radio" name="q1" value="A"> Heat  
+      <input type="radio" name="q1" value="B"> Charge separation
+    </div>
+
+    <div class="q-item">2. Safest place during lightning: <br>
+      <input type="radio" name="q2" value="A"> Under tree  
+      <input type="radio" name="q2" value="B"> Inside building
+    </div>
+
+    <div class="q-item">3. Lightning can strike without rain. <br>
+      <input type="radio" name="q3" value="A"> True  
+      <input type="radio" name="q3" value="B"> False
+    </div>
+
+    <div class="q-item">4. Unsafe indoor activity: <br>
+      <input type="radio" name="q4" value="A"> Showering  
+      <input type="radio" name="q4" value="B"> Sitting quietly
+    </div>
+
+    <div class="q-item">5. Vehicles are safe because of: <br>
+      <input type="radio" name="q5" value="A"> Rubber tires  
+      <input type="radio" name="q5" value="B"> Metal shell
+    </div>
+
+    <div class="q-item">6. First sign of lightning danger: <br>
+      <input type="radio" name="q6" value="A"> Thunder  
+      <input type="radio" name="q6" value="B"> Clear sky
+    </div>
+
+    <div class="q-item">7. If hair stands up: <br>
+      <input type="radio" name="q7" value="A"> Ignore  
+      <input type="radio" name="q7" value="B"> Crouch immediately
+    </div>
+
+    <div class="q-item">8. Avoid during storms: <br>
+      <input type="radio" name="q8" value="A"> Cell phone  
+      <input type="radio" name="q8" value="B"> Wired phone
+    </div>
+
+    <div class="q-item">9. Thunder heard means lightning is: <br>
+      <input type="radio" name="q9" value="A"> Nearby  
+      <input type="radio" name="q9" value="B"> Gone
+    </div>
+
+    <div class="q-item">10. After storm wait time: <br>
+      <input type="radio" name="q10" value="A"> 5 minutes  
+      <input type="radio" name="q10" value="B"> 30 minutes
+    </div>
+
+    <button type="button" class="btn-submit" onclick="checkQuiz()">Submit</button>
+  </form>
+
+  <div id="res" class="result-display"></div>
+</section>
+
+</main>
+</div>
+</div>
+
+<script>
+function checkQuiz(){
+  const ans={q1:'B',q2:'B',q3:'A',q4:'A',q5:'B',q6:'A',q7:'B',q8:'B',q9:'A',q10:'B'};
+  let s=0;
+  for(let k in ans){
+    let v=document.querySelector(`input[name="${k}"]:checked`);
+    if(v && v.value===ans[k]) s++;
+  }
+  let r=document.getElementById('res');
+  r.style.display='block';
+  r.style.background=s>=7?'#c8e6c9':'#ffcdd2';
+  r.innerHTML=`Score: ${s}/10 – `+(s>=7?'Certified in Thunderstorm Safety ⚡':'Please review the module.');
+}
+</script>
+
+</body>
+</html>
