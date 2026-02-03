@@ -133,7 +133,72 @@ function googleTranslateElementInit() {
 
 <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <body>
-  {% include 'partials/sidebar.html' %}
+
+    <!-- optional background video: keep or remove (the page uses gradient if not present) -->
+  <div style="position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:0.06;">
+    <video autoplay muted loop playsinline style="width:100%; height:100%; object-fit:cover;">
+      <source src="{% static 'bg/ar_boy.mp4' %}" type="video/mp4">
+    </video>
+  </div>
+  
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <div class="logo">
+            <span class="logo-icon">🛡️</span>
+            <span class="logo-text">SafeSphere</span>
+        </div>
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+            <span class="toggle-icon">☰</span>
+        </button>
+    </div>
+
+    <nav class="sidebar-nav">
+        <a href="{% url 'index' %}" class="nav-link active">
+            <span class="nav-icon">📊</span>
+            <span class="nav-text">Dashboard</span>
+        </a>
+        <a href="{% url 'learn' %}" class="nav-link">
+            <span class="nav-icon">📚</span>
+            <span class="nav-text">Learn</span>
+        </a>
+        <a href="{% url 'games' %}" class="nav-link">
+            <span class="nav-icon">🎮</span>
+            <span class="nav-text">Games</span>
+        </a>
+        <a href="{% url 'drills' %}" class="nav-link">
+            <span class="nav-icon">🚨</span>
+            <span class="nav-text">Drills</span>
+        </a>
+         <a href="{% url 'protect' %}" class="nav-link">
+            <span class="nav-icon">🏡</span>
+            <span class="nav-text">Protect Home, Farm & Livelihood</span>
+        </a>
+        <a href="{% url 'emergency' %}" class="nav-link emergency-link">
+            <span class="nav-icon">🆘</span>
+            <span class="nav-text">Emergency</span>
+        </a>
+        <a href="{% url 'chat' %}" class="nav-link">
+            <span class="nav-icon">💬</span>
+            <span class="nav-text">AI Assistant</span>
+        </a>
+        
+        <!-- Weather page -->
+        <a href="{% url 'weather' %}" class="nav-link">
+            <span class="nav-icon">🌦</span>
+            <span class="nav-text">Weather</span>
+        </a>
+        <!-- Map page -->
+        <a href="{% url 'map' %}" class="nav-link">
+            <span class="nav-icon">🗺️</span>
+            <span class="nav-text">Safety Map</span>
+        </a>
+        <a href="{% url 'profile' %}" class="nav-link">
+            <span class="nav-icon">👤</span>
+            <span class="nav-text">Profile</span>
+        </a>
+
+    </nav>
+</aside>
 
   <main class="main-content" role="main" aria-labelledby="households-heading">
      <div id="google_translate_element" class="lang-selector"></div> 

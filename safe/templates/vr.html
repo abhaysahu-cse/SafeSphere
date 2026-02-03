@@ -8,36 +8,212 @@
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
   <style>
-    /* Minimal page-specific styles (you can move to styles.css) */
-    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin: 18px; background:#f7f9fb; color:#111; }
-    .page-container { max-width:1100px; margin: 0 auto; padding-bottom:60px; }
-    h1 { margin-bottom:6px; }
-    p.lead { color:#444; margin-top:0; margin-bottom:18px; }
-    .actions-row { display:flex; gap:10px; align-items:center; margin-bottom:12px; flex-wrap:wrap; }
-    .drills-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(300px,1fr)); gap:18px; }
-    .drill-card { background:#fff; border-radius:12px; box-shadow: 0 8px 20px rgba(20,30,40,0.06); padding:12px; display:flex; flex-direction:column; gap:8px; }
-    .drill-card h3 { margin:6px 0 0 0; font-size:1.02rem; }
-    .drill-desc { color:#555; font-size:0.95rem; margin-bottom:6px; }
-    .video-wrap { position:relative; border-radius:10px; overflow:hidden; background:#000; }
-    video { width:100%; height:auto; display:block; background:#000; }
-    .controls { display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; }
-    .btn { background:#fff; border:1px solid #e6e9ee; padding:8px 10px; border-radius:8px; font-weight:600; cursor:pointer; box-shadow: 0 4px 12px rgba(20,30,40,0.04); }
-    .btn.primary { background:#0066ff; color:#fff; border:none; }
-    .meta { font-size:0.85rem; color:#666; margin-top:4px; }
-    .small { font-size:0.85rem; color:#666; }
-    .back-link { display:inline-block; margin-top:16px; color:#333; text-decoration:none; border:1px solid #ddd; padding:8px 12px; border-radius:8px; background:#fff; }
-    /* VR instruction modal */
-    .vr-modal { position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,0.6); z-index:1200; padding:20px; }
-    .vr-modal .card { width:100%; max-width:720px; background:#fff; padding:18px; border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,0.4); }
-    .vr-modal h3 { margin-top:0; }
-    .close-vr { float:right; cursor:pointer; background:#eee; border-radius:6px; padding:6px 8px; border:none; }
-    @media (max-width:420px){ .controls{ gap:6px; } .btn{ padding:7px 8px; } }
+    /* Theme variables */
+    :root{
+      --bg-1: #f3f6fb;
+      --bg-2: #e9edf4;
+      --card-bg: rgba(255,255,255,0.86);
+      --muted: #55606a;
+      --accent: #0b66ff;
+      --accent-2: #06b6d4;
+      --shadow-strong: 0 18px 50px rgba(9,30,66,0.08);
+      --shadow-soft: 0 8px 24px rgba(13,30,50,0.06);
+      --radius: 12px;
+      --glass-blur: 8px;
+      --maxw: 1180px;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color-scheme: light;
+    }
+
+    /* Page base */
+    html, body {
+  height: 100%;
+  margin: 0;
+  background: transparent;   /* 🔥 removes white/gradient */
+  color: #0b1b26;
+}
+
+
+    /* page wrapper */
+    .page-container {
+      max-width: var(--maxw);
+      margin: 22px auto;
+      padding: 28px;
+    }
+
+    /* header */
+    .page-header {
+      display:flex;
+      gap:18px;
+      align-items:center;
+      margin-bottom:10px;
+    }
+    .logo-hero {
+      width:84px;
+      height:84px;
+      border-radius:14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:34px;
+      background: linear-gradient(135deg, var(--accent), #7c3aed);
+      color: white;
+      box-shadow: var(--shadow-strong);
+    }
+    h1 {
+      margin:0;
+      font-size:26px;
+      letter-spacing:-0.3px;
+    }
+    p.lead {
+      margin:6px 0 0 0;
+      color:var(--muted);
+      max-width: 860px;
+      line-height:1.45;
+    }
+
+    /* actions */
+    .actions-row {
+      display:flex;
+      gap:10px;
+      align-items:center;
+      margin:16px 0 18px 0;
+      flex-wrap:wrap;
+    }
+    .btn {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:9px 12px;
+      border-radius:10px;
+      border: 1px solid rgba(10,20,30,0.06);
+      background: white;
+      color: #0b1b26;
+      cursor:pointer;
+      box-shadow: var(--shadow-soft);
+      font-weight:600;
+      text-decoration:none;
+    }
+    .btn.primary {
+      background: linear-gradient(90deg,var(--accent), #2563eb);
+      color: #fff;
+      border: 0;
+      box-shadow: 0 8px 26px rgba(6,99,255,0.15);
+    }
+    .back-link {
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:9px 12px;
+      border-radius:10px;
+      background: #fff;
+      border:1px solid rgba(10,20,30,0.06);
+      text-decoration:none;
+      color: #1f2937;
+      box-shadow: var(--shadow-soft);
+    }
+
+    /* grid of cards */
+    .drills-grid {
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap:18px;
+    }
+
+    .drill-card {
+  background: rgba(255, 255, 255, 0.55); /* 🔥 semi-transparent */
+  border-radius: var(--radius);
+  padding: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 180px;
+  transition: transform .14s ease, box-shadow .14s ease;
+  backdrop-filter: blur(4px);             /* 🔥 less blur */
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255,255,255,0.25);
+}
+
+    .drill-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-strong); }
+
+    .drill-card h3 { margin:0; font-size:1.05rem; }
+    .drill-desc { margin:0; color: var(--muted); line-height:1.45; font-size:0.95rem; }
+
+    /* video container */
+    .video-wrap {
+      position:relative;
+      border-radius:10px;
+      overflow:hidden;
+      background: #000;
+      box-shadow: 0 8px 30px rgba(2,6,23,0.12) inset;
+      min-height:160px;
+    }
+    .video-wrap video {
+      display:block;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      background:#000;
+    }
+
+    /* controls row in card */
+    .controls {
+      display:flex;
+      gap:10px;
+      align-items:center;
+      margin-top:6px;
+      flex-wrap:wrap;
+    }
+    .controls .btn { padding:9px 14px; font-weight:700; font-size:0.95rem; }
+    .controls .btn.ghost { background: transparent; border:1px solid rgba(10,20,30,0.06); box-shadow:none; color:var(--muted); font-weight:600; }
+
+    /* meta and small text */
+    .meta { color:var(--muted); font-size:0.89rem; margin-top:6px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+    .page-container {
+  background: transparent;
+}
+
+
+    /* VR modal */
+    .vr-modal { position:fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(3,6,12,0.55); z-index:1200; padding:20px; }
+    .vr-modal .card { width:100%; max-width:760px; background: #fff; border-radius:12px; padding:18px; box-shadow: 0 30px 80px rgba(2,8,23,0.6); }
+    .close-vr { float:right; cursor:pointer; background:#f3f5f8; border-radius:8px; padding:6px 8px; border:none; }
+
+    /* responsiveness tweaks */
+    @media (max-width:880px){
+      .page-container { padding-left:16px; padding-right:16px; }
+      .page-header { gap:12px; align-items:flex-start; }
+      .logo-hero { width:68px; height:68px; font-size:28px; }
+      h1 { font-size:20px; }
+    }
+    @media (max-width:420px){
+      .drills-grid { grid-template-columns: 1fr; }
+      .controls { gap:6px; }
+      .btn { padding:8px 10px; }
+    }
   </style>
 </head>
 <body>
+
+  <!-- optional background video: keep or remove (the page uses gradient if not present) -->
+  <div style="position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:0.06;">
+    <video autoplay muted loop playsinline style="width:100%; height:100%; object-fit:cover;">
+      <source src="{% static 'bg/ar_boy.mp4' %}" type="video/mp4">
+    </video>
+  </div>
+
+  
+
   <div class="page-container">
-    <h1>🎥 VR & 360° Safety Videos</h1>
-    <p class="lead">Immersive training videos — best experienced with a VR headset (Google Cardboard / mobile VR). Use the controls to go fullscreen, open in new tab, or download the file for offline use.</p>
+    <div class="page-header">
+      <div class="logo-hero" aria-hidden>🎬</div>
+      <div>
+        <h1>🎥 VR & 360° Safety Videos</h1>
+        <p class="lead">Immersive training videos — best experienced with a VR headset (Google Cardboard / mobile VR). Use the controls to go fullscreen, open in new tab, or download the file for offline use.</p>
+      </div>
+    </div>
 
     <div class="actions-row">
       <button class="btn" onclick="openVrInstructions()">VR Instructions</button>
@@ -58,8 +234,8 @@
         </div>
         <div class="controls">
           <button class="btn primary" onclick="goFullscreen('v-flood')">Fullscreen</button>
-          <button class="btn" onclick="openNewTab('{% static 'video/floodSafety.mp4' %}')">Open</button>
-          <button class="btn" onclick="downloadFile('{% static 'video/floodSafety.mp4' %}', 'floodSafety.mp4')">Download</button>
+          <button class="btn ghost" onclick="openNewTab('{% static 'video/floodSafety.mp4' %}')">Open</button>
+          <button class="btn ghost" onclick="downloadFile('{% static 'video/floodSafety.mp4' %}', 'floodSafety.mp4')">Download</button>
         </div>
         <div class="meta"><strong>Length:</strong> check file &nbsp; • &nbsp; <span class="small">Tip: use headset for 360° view</span></div>
       </div>
@@ -70,15 +246,13 @@
         <p class="drill-desc">Simulated earthquake scenario: drop-cover-hold-on, safe exits, and aftershock awareness.</p>
         <div class="video-wrap">
           <video id="v-earth" controls playsinline preload="metadata" poster="{% static 'video/thumbs/earthquake.jpg' %}">
-            <!-- corrected filename: earthquake.mp4 (no stray spaces) -->
             <source src="{% static 'video/earthquake.mp4' %}" type="video/mp4">
-            Your browser does not support the video element.
           </video>
         </div>
         <div class="controls">
           <button class="btn primary" onclick="goFullscreen('v-earth')">Fullscreen</button>
-          <button class="btn" onclick="openNewTab('{% static 'video/earthquake.mp4' %}')">Open</button>
-          <button class="btn" onclick="downloadFile('{% static 'video/earthquake.mp4' %}', 'earthquake.mp4')">Download</button>
+          <button class="btn ghost" onclick="openNewTab('{% static 'video/earthquake.mp4' %}')">Open</button>
+          <button class="btn ghost" onclick="downloadFile('{% static 'video/earthquake.mp4' %}', 'earthquake.mp4')">Download</button>
         </div>
         <div class="meta"><strong>Focus:</strong> safe cover points, evacuation paths.</div>
       </div>
@@ -94,8 +268,8 @@
         </div>
         <div class="controls">
           <button class="btn primary" onclick="goFullscreen('v-road')">Fullscreen</button>
-          <button class="btn" onclick="openNewTab('{% static 'video/RoadSafety.mp4' %}')">Open</button>
-          <button class="btn" onclick="downloadFile('{% static 'video/RoadSafety.mp4' %}', 'roadSafety.mp4')">Download</button>
+          <button class="btn ghost" onclick="openNewTab('{% static 'video/RoadSafety.mp4' %}')">Open</button>
+          <button class="btn ghost" onclick="downloadFile('{% static 'video/RoadSafety.mp4' %}', 'roadSafety.mp4')">Download</button>
         </div>
       </div>
 
@@ -104,15 +278,14 @@
         <h3>🌪 Tornado / High Wind Safety</h3>
         <p class="drill-desc">Recognize tornado signs and best sheltering actions during extreme wind events.</p>
         <div class="video-wrap">
-          <!-- standardized filename: tornadoSafety.mp4 -->
           <video id="v-tornado" controls playsinline preload="metadata" poster="{% static 'video/thumbs/tornado.jpg' %}">
             <source src="{% static 'video/tornadoSafety.mp4' %}" type="video/mp4">
           </video>
         </div>
         <div class="controls">
           <button class="btn primary" onclick="goFullscreen('v-tornado')">Fullscreen</button>
-          <button class="btn" onclick="openNewTab('{% static 'video/tornadoSafety.mp4' %}')">Open</button>
-          <button class="btn" onclick="downloadFile('{% static 'video/tornadoSafety.mp4' %}', 'tornadoSafety.mp4')">Download</button>
+          <button class="btn ghost" onclick="openNewTab('{% static 'video/tornadoSafety.mp4' %}')">Open</button>
+          <button class="btn ghost" onclick="downloadFile('{% static 'video/tornadoSafety.mp4' %}', 'tornadoSafety.mp4')">Download</button>
         </div>
       </div>
 
@@ -121,15 +294,14 @@
         <h3>🌊 Tsunami Awareness</h3>
         <p class="drill-desc">Tsunami wave behavior, evacuation signage, safe zones and timing for re-entry.</p>
         <div class="video-wrap">
-          <!-- corrected filename: tsunami.mp4 -->
           <video id="v-tsunami" controls playsinline preload="metadata" poster="{% static 'video/thumbs/tsunami.jpg' %}">
             <source src="{% static 'video/tsunami.mp4' %}" type="video/mp4">
           </video>
         </div>
         <div class="controls">
           <button class="btn primary" onclick="goFullscreen('v-tsunami')">Fullscreen</button>
-          <button class="btn" onclick="openNewTab('{% static 'video/tsunami.mp4' %}')">Open</button>
-          <button class="btn" onclick="downloadFile('{% static 'video/tsunami.mp4' %}', 'tsunami.mp4')">Download</button>
+          <button class="btn ghost" onclick="openNewTab('{% static 'video/tsunami.mp4' %}')">Open</button>
+          <button class="btn ghost" onclick="downloadFile('{% static 'video/tsunami.mp4' %}', 'tsunami.mp4')">Download</button>
         </div>
       </div>
 
@@ -144,8 +316,8 @@
         </div>
         <div class="controls">
           <button class="btn primary" onclick="goFullscreen('v-tsunami2')">Fullscreen</button>
-          <button class="btn" onclick="openNewTab('{% static 'video/tsunamiSafety.mp4' %}')">Open</button>
-          <button class="btn" onclick="downloadFile('{% static 'video/tsunamiSafety.mp4' %}', 'tsunamiSafety.mp4')">Download</button>
+          <button class="btn ghost" onclick="openNewTab('{% static 'video/tsunamiSafety.mp4' %}')">Open</button>
+          <button class="btn ghost" onclick="downloadFile('{% static 'video/tsunamiSafety.mp4' %}', 'tsunamiSafety.mp4')">Download</button>
         </div>
       </div>
 
@@ -160,14 +332,14 @@
         </div>
         <div class="controls">
           <button class="btn primary" onclick="goFullscreen('v-earth2')">Fullscreen</button>
-          <button class="btn" onclick="openNewTab('{% static 'video/earthquake_alt.mp4' %}')">Open</button>
-          <button class="btn" onclick="downloadFile('{% static 'video/earthquake_alt.mp4' %}', 'earthquake_alt.mp4')">Download</button>
+          <button class="btn ghost" onclick="openNewTab('{% static 'video/earthquake_alt.mp4' %}')">Open</button>
+          <button class="btn ghost" onclick="downloadFile('{% static 'video/earthquake_alt.mp4' %}', 'earthquake_alt.mp4')">Download</button>
         </div>
       </div>
 
     </div> <!-- /.drills-grid -->
 
-    <a href="{% url 'drills' %}" class="back-link">⬅ Back to Drills</a>
+    <a href="{% url 'drills' %}" class="back-link" style="margin-top:20px; display:inline-block;">⬅ Back to Drills</a>
   </div>
 
   <!-- VR instructions modal -->
@@ -193,7 +365,7 @@
   </div>
 
   <script>
-    // JS helpers for buttons
+    // JS helpers for buttons (kept unchanged)
     function _getVideoEl(id) {
       const el = document.getElementById(id);
       if (!el) console.warn('video element not found', id);
@@ -203,23 +375,18 @@
     function goFullscreen(videoId) {
       const v = _getVideoEl(videoId);
       if (!v) return;
-      // Prefer the video parent (container) for fullscreen so posters/controls remain visible
       const container = v.parentElement || v;
-      // modern fullscreen API
       const request = container.requestFullscreen || container.webkitRequestFullscreen || container.msRequestFullscreen;
       if (request) {
         request.call(container);
-        // try to play (some browsers require a user gesture; but we attempted fullscreen from a user click)
         v.play().catch(()=>{/* ignore play error */});
       } else {
-        // fallback: open in new tab
         openNewTab(v.querySelector('source')?.src || '');
       }
     }
 
     function openNewTab(url) {
       if (!url) return;
-      // if Django static returned a relative URL, open it as-is
       window.open(url, '_blank', 'noopener');
     }
 
@@ -227,20 +394,18 @@
       if (!url) return;
       const a = document.createElement('a');
       a.href = url;
-      // for cross-origin static assets, browsers may ignore download; still trigger
       a.setAttribute('download', filename || '');
       document.body.appendChild(a);
       a.click();
       a.remove();
     }
 
-    // VR instructions modal
+    // VR modal
     function openVrInstructions() {
       const m = document.getElementById('vrModal');
       if (!m) return;
       m.style.display = 'flex';
       m.setAttribute('aria-hidden', 'false');
-      // trap focus could be added if needed
     }
     function closeVrInstructions() {
       const m = document.getElementById('vrModal');
@@ -248,11 +413,7 @@
       m.style.display = 'none';
       m.setAttribute('aria-hidden', 'true');
     }
-
-    // small accessibility: close modal on ESC
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeVrInstructions();
-    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeVrInstructions(); });
   </script>
 </body>
 </html>
