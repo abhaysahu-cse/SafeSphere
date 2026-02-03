@@ -12,12 +12,11 @@
   <script>
     // replace with your images (placeholders here)
     window.SECTION_POSTERS = {
-      planning: "{% static 'image/protect/households/cyclone_planning.jpg' %}",
-      structure: "{% static 'image/protect/households/cyclone_structure.jpg' %}",
-      before: "{% static 'image/protect/households/cyclone_before.jpg' %}",
-      during: "{% static 'image/protect/households/cyclone_during.jpg' %}",
-      after: "{% static 'image/protect/households/cyclone_after.jpg' %}",
-      practice: "{% static 'image/protect/households/cyclone_practice.jpg' %}"
+      
+      before: "{% static 'image/cycone_before.jpg' %}",
+      during: "{% static 'image/cyclone-during.jpeg' %}",
+      after: "{% static 'image/cycone-after.jpg' %}",
+      
     };
   </script>
 </head>
@@ -144,7 +143,8 @@ function googleTranslateElementInit() {
             <li>Know nearest cyclone shelter</li>
           </ul>
         </div>
-
+        <h3>Poster</h3>
+         <img class="poster" src="{% static 'image/cyclone-during.jpeg' %}" >
         <div class="section">
           <h3>Emergency kit</h3>
           <ul class="small">
