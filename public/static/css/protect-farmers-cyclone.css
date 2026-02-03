@@ -76,3 +76,4 @@ html,body{height:100%; margin:0; font-family:Inter, system-ui, -apple-system, "S
 .alert-warning{background:linear-gradient(90deg,#ff9800,#ffc107); color:#222}
 .alert-danger{background:linear-gradient(90deg,#c62828,#e53935); color:#fff}
 .dismiss{margin-left:auto; background:rgba(255,255,255,0.12); border-radius:8px; padding:6px 8px; font-size:13px; color:inherit; border:none; cursor:pointer}
+.poster { width: 100%; max-width: 200px; height: auto; display: block; margin: 10px 0; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }

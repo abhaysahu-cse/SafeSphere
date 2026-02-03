@@ -125,3 +125,4 @@ body {
   .wrap { padding:12px; margin:8px; }
   .poster-container img { max-height:260px; }
 }
+.poster { width: 150%; max-width: 250px; height: auto; display: block; margin: 10px 0; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }

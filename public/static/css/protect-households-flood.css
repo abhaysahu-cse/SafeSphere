@@ -98,3 +98,4 @@ html,body { height:100%; margin:0; font-family:Inter, system-ui, -apple-system, 
   .poster-wrap img { max-height:240px; object-fit:cover; }
   .dnd-area { flex-direction:column; }
 }
+.poster { width: 150%; max-width: 250px; height: auto; display: block; margin: 10px 0; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
