@@ -33,6 +33,7 @@
       box-sizing:border-box;
       margin-right: 28px;
     }
+    
 
     /* subtle hero with content on left and illustration on right */
     .hero{
@@ -117,14 +118,21 @@
 
     /* responsive tweaks */
     @media (max-width:1000px){
-      .main-content{ margin-left:0; padding:18px; }
-      .hero-right{ display:none; }
-      .card{ min-height:170px; }
-    }
-    @media (max-width:520px){
-      .btn-primary{ min-width:unset; padding:10px; }
-      .card{ padding:14px; }
-    }
+  aside.sidebar{
+    position: static;
+    transform: none;
+    height: auto;
+    width: 100%;
+    z-index: auto;
+  }
+
+  .main-content{
+    margin-left: 0 !important;
+    padding: 16px !important;
+    max-width: 100% !important;
+  }
+}
+
   </style>
 </head>
 
