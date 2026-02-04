@@ -38,49 +38,52 @@ function googleTranslateElementInit() {
     </div>
 
     <nav class="sidebar-nav">
-        <a href="{% url 'index' %}" class="nav-link active">
+        <a href="{% url 'index' %}" class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}">
             <span class="nav-icon">📊</span>
             <span class="nav-text">Dashboard</span>
         </a>
-        <a href="{% url 'learn' %}" class="nav-link">
+        <a href="{% url 'learn' %}" class="nav-link {% if request.resolver_match.url_name == 'learn' %}active{% endif %}">
             <span class="nav-icon">📚</span>
             <span class="nav-text">Learn</span>
         </a>
-        <a href="{% url 'games' %}" class="nav-link">
-            <span class="nav-icon">🎮</span>
-            <span class="nav-text">Games</span>
-        </a>
-        <a href="{% url 'drills' %}" class="nav-link">
-            <span class="nav-icon">🚨</span>
-            <span class="nav-text">Drills</span>
-        </a>
-         <a href="{% url 'protect' %}" class="nav-link">
+             <a href="{% url 'protect' %}" class="nav-link {% if request.resolver_match.url_name == 'protect' %}active{% endif %}">
             <span class="nav-icon">🏡</span>
             <span class="nav-text">Protect Home, Farm & Livelihood</span>
         </a>
-        <a href="{% url 'emergency' %}" class="nav-link emergency-link">
+        
+        <a href="{% url 'games' %}" class="nav-link {% if request.resolver_match.url_name == 'games' %}active{% endif %}">
+            <span class="nav-icon">🎮</span>
+            <span class="nav-text">Games</span>
+        </a>
+        <a href="{% url 'drills' %}" class="nav-link {% if request.resolver_match.url_name == 'drills' %}active{% endif %}">
+            <span class="nav-icon">🚨</span>
+            <span class="nav-text">Drills</span>
+        </a>
+        
+        <a href="{% url 'emergency' %}" class="nav-link emergency-link {% if request.resolver_match.url_name == 'emergency' %}active{% endif %}">
             <span class="nav-icon">🆘</span>
             <span class="nav-text">Emergency</span>
         </a>
-        <a href="{% url 'chat' %}" class="nav-link">
+        <a href="{% url 'chat' %}" class="nav-link {% if request.resolver_match.url_name == 'chat' %}active{% endif %}">
             <span class="nav-icon">💬</span>
             <span class="nav-text">AI Assistant</span>
         </a>
         
         <!-- Weather page -->
-        <a href="{% url 'weather' %}" class="nav-link">
+        <a href="{% url 'weather' %}" class="nav-link {% if request.resolver_match.url_name == 'weather' %}active{% endif %}">
             <span class="nav-icon">🌦</span>
             <span class="nav-text">Weather</span>
         </a>
         <!-- Map page -->
-        <a href="{% url 'map' %}" class="nav-link">
+        <a href="{% url 'map' %}" class="nav-link {% if request.resolver_match.url_name == 'map' %}active{% endif %}">
             <span class="nav-icon">🗺️</span>
             <span class="nav-text">Safety Map</span>
         </a>
-        <a href="{% url 'profile' %}" class="nav-link">
+        <a href="{% url 'profile' %}" class="nav-link {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
             <span class="nav-icon">👤</span>
             <span class="nav-text">Profile</span>
         </a>
+
 
     </nav>
 </aside>
@@ -238,25 +241,25 @@ function googleTranslateElementInit() {
                         <div class="contact-icon">🚨</div>
                         <div class="contact-info">
                             <h3 class="contact-name">Emergency Services</h3>
-                            <p class="contact-number">7803919765</p>
+                            <p class="contact-number">112</p>
                         </div>
-                        <button class="btn btn-danger" onclick="callEmergency('7803919765')">Call</button>
+                        <button class="btn btn-danger" onclick="callEmergency('112')">Call</button>
                     </div>
 
                     <div class="contact-card">
                         <div class="contact-icon">🏥</div>
                         <div class="contact-info">
                             <h3 class="contact-name">Poison Control</h3>
-                            <p class="contact-number"></p>
+                            <p class="contact-number">1800-425-1213</p>
                         </div>
-                        <button class="btn btn-primary" onclick="callEmergency('1-800-222-1222')">Call</button>
+                        <button class="btn btn-primary" onclick="callEmergency('1800-425-1213')">Call</button>
                     </div>
 
                     <div class="contact-card">
                         <div class="contact-icon">👨‍⚕️</div>
                         <div class="contact-info">
                             <h3 class="contact-name">Personal Doctor</h3>
-                            <p class="contact-number">Dr. Abhay - (555) 987-6543</p>
+                            <p class="contact-number">Dr. Abhay - 7725061185</p>
                         </div>
                         <button class="btn btn-primary" onclick="callContact('9302828547')">Call</button>
                     </div>
@@ -274,20 +277,70 @@ function googleTranslateElementInit() {
                         <div class="contact-icon">🏘️</div>
                         <div class="contact-info">
                             <h3 class="contact-name">Local Emergency Management</h3>
-                            <p class="contact-number">(555) 246-8100</p>
+                            <p class="contact-number">112</p>
                         </div>
-                        <button class="btn btn-primary" onclick="callContact('555-246-8100')">Call</button>
+                        <button class="btn btn-primary" onclick="callContact('112')">Call</button>
                     </div>
 
                     <div class="contact-card">
                         <div class="contact-icon">🌐</div>
                         <div class="contact-info">
                             <h3 class="contact-name">Red Cross</h3>
-                            <p class="contact-number">1-800-733-2767</p>
+                            <p class="contact-number">0755-2572555</p>
                         </div>
-                        <button class="btn btn-primary" onclick="callEmergency('1-800-733-2767')">Call</button>
+                        <button class="btn btn-primary" onclick="callEmergency('0755-2572555')">Call</button>
                     </div>
                 </div>
+
+                 <div class="contact-card">
+                        <div class="contact-icon">🏘️</div>
+                        <div class="contact-info">
+                            <h3 class="contact-name">NDRF </h3>
+                            <p class="contact-number">011-26107953</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="callContact('011-26107953')">Call</button>
+                    </div>
+
+
+
+                      <div class="contact-card">
+                        <div class="contact-icon">🌐</div>
+                        <div class="contact-info">
+                            <h3 class="contact-name">local  disaster authorities</h3>
+                            <p class="contact-number">1079</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="callEmergency('1079')">Call</button>
+                    </div>
+                </div>
+
+                <div class="contact-card">
+                        <div class="contact-icon">🏘️</div>
+                        <div class="contact-info">
+                            <h3 class="contact-name"> fire safety number </h3>
+                            <p class="contact-number">101</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="callContact('101')">Call</button>
+                    </div>
+
+
+                     <div class="contact-card">
+                        <div class="contact-icon">🏘️</div>
+                        <div class="contact-info">
+                            <h3 class="contact-name"> Women helpline  number </h3>
+                            <p class="contact-number">1090</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="callContact('1090')">Call</button>
+                    </div>
+
+
+                      <div class="contact-card">
+                        <div class="contact-icon">🏘️</div>
+                        <div class="contact-info">
+                            <h3 class="contact-name"> contact as- </h3>
+                            <p class="contact-number">7725061185</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="callContact('7725061185')">Call</button>
+                    </div>
             </section>
         </div>
     </main>
