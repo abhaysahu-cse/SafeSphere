@@ -229,7 +229,8 @@ def thunderstorm(request):
 def dam_reservoir_failure(request):
     return render(request, "learn/dam_reservoir_failure.html")
 
-
+def learn_nuclear(request):
+    return render(request, "learn/nuclear.html")
 
 
 # def ar_hub(request):

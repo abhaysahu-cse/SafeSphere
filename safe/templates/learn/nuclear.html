@@ -1,0 +1,193 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Nuclear Safety — Learn | SafeSphere</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Nuclear safety: calm, practical steps for civilians to reduce exposure before, during and after an incident." />
+
+  <link rel="stylesheet" href="{% static 'css/nuclear.css' %}">
+</head>
+<body>
+  <main class="wrap" role="main" aria-labelledby="pageTitle">
+    <header class="topbar">
+      <div>
+        <h1 id="pageTitle">☢️ Nuclear Safety — Protect Families & Community</h1>
+        <p class="lead">Clear, practical guidance for civilians — preparedness, sheltering, decontamination and recovery. <strong>Follow official orders first.</strong></p>
+        <div class="meta-row">
+          <span class="badge">Module • Nuclear</span>
+          <span class="small">Est. time: 20–35 min</span>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <a class="btn btn-ghost" href="{% url 'learn' %}">⬅ Back to Learn</a>
+        <button class="btn btn-primary" id="openChecklistBtn">Open Checklist</button>
+        <a class="btn btn-ghost" href="#quiz">Jump to Quiz</a>
+      </div>
+    </header>
+
+    <!-- top alert (weather/incident) -->
+    <div id="incident-alert" class="alert-normal" role="status" aria-live="polite">
+      <span id="incidentIcon">🟢</span>
+      <span id="incidentText">No active nuclear incidents reported.</span>
+    </div>
+
+    <div class="content-grid">
+      <main class="main-col">
+        <!-- short hook + infographic placeholder -->
+        <section class="section" id="hook" aria-labelledby="hookTitle">
+          <h2 id="hookTitle">Why calm & early sheltering matters</h2>
+          <p class="small">Many exposures are avoidable if people shelter indoors, close ventilation, and avoid contaminated food/water. This module shows exactly what to do.</p>
+
+          <div class="infographic">
+            <img src="{% static 'image/learn/nuclear/infographic_placeholder.png' %}" alt="Infographic: sheltering steps" onerror="this.style.display='none'">
+          </div>
+        </section>
+
+        <!-- tabs -->
+        <nav class="tabs" role="tablist" aria-label="Sections">
+          <button class="tab active" data-tab="what" onclick="switchTab('what')">What & Types</button>
+          <button class="tab" data-tab="before" onclick="switchTab('before')">Before</button>
+          <button class="tab" data-tab="during" onclick="switchTab('during')">During</button>
+          <button class="tab" data-tab="after" onclick="switchTab('after')">After</button>
+          <button class="tab" data-tab="evac" onclick="switchTab('evac')">Evacuation</button>
+          <button class="tab" data-tab="decon" onclick="switchTab('decon')">Decontamination</button>
+          <button class="tab" data-tab="resources" onclick="switchTab('resources')">Resources</button>
+        </nav>
+
+        <section id="moduleContent" class="module-body"
+                 data-tts-slug="nuclear_safety"
+                 data-tts-text=""
+                 tabindex="0" aria-live="polite">
+          <!-- injected by JS -->
+          <noscript><p>Please enable JavaScript for interactive content.</p></noscript>
+        </section>
+
+        <!-- TTS Controls -->
+        <section class="section tts-section" aria-label="Listen to this module">
+          <div class="tts-controls">
+            <label for="ttsLang">Language</label>
+            <select id="ttsLang">
+              <option value="en-US">English</option>
+              <option value="hi-IN">हिन्दी</option>
+              <option value="bn-IN">বাংলা</option>
+              <option value="mr-IN">मराठी</option>
+            </select>
+
+            <label for="ttsRate">Speed</label>
+            <input id="ttsRate" type="range" min="0.7" max="1.4" step="0.1" value="1">
+
+            <button id="ttsPlay" class="btn btn-ghost">Play (Client)</button>
+            <button id="ttsPause" class="btn btn-ghost" disabled>Pause</button>
+            <button id="ttsStop" class="btn btn-ghost" disabled>Stop</button>
+
+            <button id="ttsServerBtn" class="btn btn-ghost">Server audio (if available)</button>
+            <a id="ttsDownload" class="btn btn-ghost" style="display:none" download>Download</a>
+          </div>
+        </section>
+
+        <!-- Quiz -->
+        <section id="quiz" class="section quiz-box" aria-labelledby="quizHeader">
+          <h2 id="quizHeader">Quick Quiz — Nuclear Safety</h2>
+          <div id="quizWrap"></div>
+        </section>
+
+      </main>
+
+      <aside class="side-col" aria-labelledby="sideTitle">
+        <div class="side-section" id="sideTitle">
+          <h3>Quick actions</h3>
+          <ul class="small">
+            <li>Go inside and close all windows/doors immediately</li>
+            <li>Turn off fans, HVAC and seal gaps</li>
+            <li>Do not eat uncovered food; use sealed water</li>
+            <li>Only evacuate when official order is given</li>
+          </ul>
+          <div style="margin-top:8px;">
+            <button class="btn btn-primary" onclick="openChecklist()">Open Checklist</button>
+            <a class="btn btn-ghost" href="{% url 'drills' %}">Training drills</a>
+          </div>
+        </div>
+
+        <div class="side-section">
+          <h3>Poster / Diagram</h3>
+          <img src="{% static 'image/learn/nuclear/poster_nuclear.png' %}" alt="Nuclear safety poster" class="poster" onerror="this.style.display='none'">
+          <p class="small">Use this printable poster in community centres.</p>
+        </div>
+
+        <div class="side-section">
+          <h3>Field video (demo)</h3>
+          <div class="video-wrapper">
+            <video controls preload="metadata" poster="{% static 'image/learn/nuclear/video_poster.jpg' %}">
+              <source src="{% static 'video/nuclear_demo.mp4' %}" type="video/mp4">
+            </video>
+          </div>
+          <p class="small">A short demo on sheltering and safe return.</p>
+        </div>
+
+        <div class="side-section">
+          <h3>Official contacts</h3>
+          <p class="small">Keep these ready and saved on multiple phones.</p>
+          <ul class="small">
+            <li>Local emergency services: (add)</li>
+            <li>District Disaster Management Office: (add)</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+    <footer class="foot">
+      <div class="note">Note: This module is educational. Follow official orders from authorities. For medical issues, contact health services.</div>
+    </footer>
+  </main>
+
+  <!-- Checklist modal -->
+  <div id="checklistModal" class="checklist-modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="checklist-backdrop" onclick="closeChecklist()"></div>
+    <div class="checklist-box" role="document">
+      <div class="checklist-header">
+        <div>
+          <h2 id="checklistTitle">Nuclear Safety — Checklist</h2>
+          <div id="checklistNote" class="small">Saved locally on this device. Use Print to produce paper copies.</div>
+        </div>
+        <div class="checklist-controls">
+          <button class="btn btn-ghost" onclick="printChecklist()">Print</button>
+          <button class="btn btn-ghost" onclick="shareChecklist()">Share</button>
+          <button class="btn btn-ghost" onclick="closeChecklist()">Close</button>
+        </div>
+      </div>
+
+      <div class="tabs-inner" role="tablist">
+        <button class="tab active" data-tab="overview" onclick="switchChecklistTab('overview')">Overview</button>
+        <button class="tab" data-tab="before" onclick="switchChecklistTab('before')">Before</button>
+        <button class="tab" data-tab="during" onclick="switchChecklistTab('during')">During</button>
+        <button class="tab" data-tab="after" onclick="switchChecklistTab('after')">After</button>
+        <button class="tab" data-tab="checklist" onclick="switchChecklistTab('checklist')">Checklist</button>
+      </div>
+
+      <div id="checklistContent" class="checklist-content" tabindex="0"></div>
+
+      <div class="checklist-footer">
+        <button class="btn btn-ghost" onclick="closeChecklist()">Close</button>
+        <button class="btn btn-primary" onclick="saveChecklistProgress()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- story modal -->
+  <div id="storyModal" class="story-modal" aria-hidden="true">
+    <div class="story-backdrop" onclick="closeStory()"></div>
+    <div class="story-box">
+      <div class="story-head">
+        <h3 id="storyModalTitle">Story</h3>
+        <button class="btn btn-ghost" onclick="closeStory()">Close</button>
+      </div>
+      <div id="storyModalBody" class="story-body"></div>
+    </div>
+  </div>
+
+  <script src="{% static 'js/nuclear.js' %}"></script>
+</body>
+</html>

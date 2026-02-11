@@ -238,16 +238,7 @@ function googleTranslateElementInit() {
                 progress: 80,
                 xp: 80
             },
-            {
-                id: 'communication',
-                title: 'Emergency Communication',
-                description: 'Maintain contact during infrastructure failures',
-                icon: '<img src="{% static "image/emmergency-comm-gif.gif" %}" class="card-icon" >',
-                difficulty: 'intermediate',
-                duration: 18,
-                progress: 0,
-                xp: 140
-            },
+           
             
             {
                 id: 'HeatWave-safety',
@@ -269,6 +260,17 @@ function googleTranslateElementInit() {
     duration: 12,
     progress: 0,
     xp: 85
+},
+
+{
+    id: 'thunderstorm',
+    title: 'Thunderstorm Safety',
+    description: 'Civilian safety basics during thunderstorms and related emergencies',
+    icon: '<img src="{% static "image/thenderstrom-gif.gif" %}" class="card-icon">',
+    difficulty: 'advanced',
+    duration: 25,
+    progress: 0,
+    xp: 200
 },
 
 {
@@ -306,6 +308,29 @@ function googleTranslateElementInit() {
 },
 
 {
+  id: 'nuclear-safety',
+  title: 'Nuclear Safety',
+  description: 'Calm, practical actions to reduce exposure and protect families during nuclear incidents.',
+  icon: '<img src="{% static "image/learn/nuclear/icon_nuclear.png" %}" class="card-icon" alt="nuclear icon">',
+  difficulty: 'advanced',
+  duration: 30,
+  progress: 0,
+  xp: 400,
+ 
+},
+
+ {
+   id: 'communication',
+    title: 'Emergency Communication',
+    description: 'Maintain contact during infrastructure failures',
+    icon: '<img src="{% static "image/emmergency-comm-gif.gif" %}" class="card-icon" >',
+    difficulty: 'intermediate',
+    duration: 18,
+    progress: 0,
+    xp: 140
+    },
+
+{
     id: 'gas-leak',
     title: 'Gas Leak Safety',
     description: 'Civilian safety basics during gas leaks and related emergencies',
@@ -332,17 +357,6 @@ function googleTranslateElementInit() {
 
 
 
-
-{
-    id: 'thunderstorm',
-    title: 'Thunderstorm Safety',
-    description: 'Civilian safety basics during thunderstorms and related emergencies',
-    icon: '<img src="{% static "image/thenderstrom-gif.gif" %}" class="card-icon">',
-    difficulty: 'advanced',
-    duration: 25,
-    progress: 0,
-    xp: 200
-},
 
      
 {
@@ -496,7 +510,10 @@ else if (moduleId === 'dam_reservoir_failure') {
     window.location.href = "{% url 'dam_reservoir_failure' %}";
 }
 
+else if (moduleId === 'nuclear-safety') {
+    window.location.href = "{% url 'learn_nuclear' %}";
 
+}
 
       }
         // Start or continue module

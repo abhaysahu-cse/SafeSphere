@@ -3,240 +3,768 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>AQI Emergency | SafeLearn</title>
+  <title>AQI Emergency — SafeLearn</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Air Quality Index (AQI) emergency — science, health impacts, preparedness, school/household actions, and printable resources." />
+
   <style>
-    :root {
-      --brand: #263238;
-      --accent: #d84315;
-      --safe: #2e7d32;
-      --bg: #f9fafb;
-      --text: #212121;
-      --card: #ffffff;
+    /* ---------- Theme & layout ---------- */
+    :root{
+      --brand:#263238;
+      --accent:#d84315;
+      --safe:#2e7d32;
+      --bg:#f6f8fa;
+      --card:#ffffff;
+      --muted:#5b6b73;
+      --glass: rgba(255,255,255,0.7);
+      --shadow: 0 10px 30px rgba(10,20,30,0.08);
+      --radius:12px;
+      --maxw:1200px;
     }
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; }
-    .wrap { max-width: 1200px; margin: 20px auto; padding: 25px; background: var(--card); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-    header { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 30px; }
-    .badge { background: #eceff1; color: var(--brand); padding: 5px 12px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; }
-    .grid { display: grid; grid-template-columns: 300px 1fr; gap: 30px; }
-    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
-    .section-side { background: #fff; padding: 15px; border: 1px solid #eee; border-radius: 10px; margin-bottom: 20px; }
-    .poster { width: 65%; max-width: 170px; border-radius: 6px; }
-    .contact-table { width: 100%; font-size: 0.85rem; border-collapse: collapse; }
-    .contact-table td { padding: 8px; border-bottom: 1px solid #eee; }
-    .info-box { background: #e8f5e9; border-left: 5px solid var(--safe); padding: 15px; margin: 20px 0; }
-    .warning-box { background: #fbe9e7; border-left: 5px solid var(--accent); padding: 15px; margin: 20px 0; }
-    h2 { border-bottom: 1px solid #eee; padding-bottom: 10px; color: var(--brand); }
-    table { width:100%; border-collapse: collapse; margin-top:10px; }
-    table th, table td { border:1px solid #ddd; padding:10px; }
-    .quiz-container { background: #eceff1; padding: 30px; border-radius: 15px; margin-top: 40px; }
-    .q-item { background: white; padding: 20px; border-radius: 10px; margin-bottom: 15px; }
-    .btn-submit { background: var(--brand); color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; width: 100%; font-size: 1.1rem; }
-    .result-display { margin-top: 20px; padding: 20px; border-radius: 10px; display: none; text-align: center; font-weight: bold; }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+      background: linear-gradient(180deg,#f9fbfc 0%, var(--bg) 100%);
+      color:var(--brand);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:18px;
+      display:flex;
+      justify-content:center;
+    }
+
+    .wrap{
+      width:100%;
+      max-width:var(--maxw);
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    header{
+      padding:22px;
+      border-bottom:1px solid #eef3f5;
+      display:flex;
+      gap:18px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      background:linear-gradient(90deg, rgba(216,67,21,0.03), rgba(46,125,50,0.02));
+    }
+
+    .title {
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      min-width:0;
+    }
+    .badge{
+      background:#eceff1;
+      color:var(--brand);
+      padding:6px 12px;
+      border-radius:999px;
+      font-weight:800;
+      font-size:0.86rem;
+    }
+    h1{margin:0; font-size:1.4rem; line-height:1.18}
+    .lead{ margin:6px 0 0; color:var(--muted); font-size:0.95rem }
+
+    .header-actions{ display:flex; gap:8px; align-items:center; flex-wrap:wrap }
+    .btn{ border:0; cursor:pointer; padding:8px 12px; border-radius:8px; font-weight:700; }
+    .btn-ghost{ background:transparent; color:var(--brand); border:1px solid rgba(16,24,28,0.06) }
+    .btn-primary{ background:var(--accent); color:#fff; }
+    .btn-safe{ background:var(--safe); color:#fff; }
+
+    /* ---------- main grid ---------- */
+    .main-grid{
+      display:grid;
+      grid-template-columns: 320px 1fr;
+      gap:22px;
+      padding:18px;
+      align-items:start;
+    }
+    @media (max-width:980px){
+      .main-grid{ grid-template-columns: 1fr; padding:12px; }
+      .sidebar { order: -1; }
+    }
+
+    /* ---------- sidebar ---------- */
+    .sidebar{
+      position:sticky;
+      top:22px;
+      align-self:start;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .card{
+      background:var(--card);
+      border-radius:12px;
+      padding:14px;
+      box-shadow:0 6px 18px rgba(10,20,30,0.03);
+      border:1px solid rgba(10,20,30,0.03);
+    }
+
+    .poster{
+      width:100%;
+      border-radius:8px;
+      display:block;
+      border:1px solid rgba(0,0,0,0.04);
+    }
+
+    .contact-table{ width:100%; border-collapse:collapse; font-size:0.92rem }
+    .contact-table td{ padding:8px 6px; border-bottom:1px solid #f1f1f1 }
+
+    /* ---------- content column ---------- */
+    .content{
+      min-height:420px;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+
+    section.module{
+      background:linear-gradient(180deg,#fff,#fbfeff);
+      border-radius:10px;
+      padding:16px;
+      border:1px solid rgba(10,20,30,0.03);
+    }
+    section.module h2{ margin:0 0 8px 0; color:var(--brand); font-size:1.05rem; border-bottom:1px dashed #eef4f6; padding-bottom:12px; }
+
+    .info-box{ background:#e8f5e9; border-left:4px solid var(--safe); padding:12px; border-radius:8px; color:#0b6b3c; }
+    .warning-box{ background:#fff3f2; border-left:4px solid var(--accent); padding:12px; border-radius:8px; color:#a12b1c; }
+
+    /* AQI bar */
+    .aqi-widget{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      flex-wrap:wrap;
+      margin-top:8px;
+    }
+    .aqi-scale{
+      flex:1 1 auto;
+      display:flex;
+      gap:4px;
+      height:28px;
+      border-radius:8px;
+      overflow:hidden;
+      border:1px solid rgba(0,0,0,0.04);
+    }
+    .aqi-seg{ flex:1; display:flex; align-items:center; justify-content:center; font-size:0.78rem; color:#fff; font-weight:800 }
+    .g { background:#2e7d32 }           /* Good 0-50 */
+    .m { background:#f6c844 }           /* Moderate 51-100 */
+    .p { background:#f39c12 }           /* Poor 101-200 */
+    .vp { background:#e65100 }          /* Very Poor 201-300 */
+    .se { background:#b71c1c }          /* Severe 301+ */
+    .aqi-value{ min-width:84px; text-align:center; padding:6px 8px; border-radius:8px; background:#fff; border:1px solid rgba(0,0,0,0.04) }
+
+    .flex-row{ display:flex; gap:10px; align-items:center; flex-wrap:wrap }
+    .muted{ color:var(--muted); font-size:0.95rem }
+
+    /* video */
+    .video-wrapper{ border-radius:8px; overflow:hidden; border:1px solid rgba(0,0,0,0.04); margin-top:8px }
+    .video-wrapper video{ width:100%; display:block; }
+
+    /* quiz */
+    .quiz-container{ display:flex; gap:18px; align-items:flex-start; flex-wrap:wrap }
+    .quiz-left{ flex:1 1 480px }
+    .quiz-right{ width:320px }
+    .q-item{ background:#fff; border-radius:8px; padding:12px; margin-bottom:10px; border:1px solid rgba(0,0,0,0.03) }
+
+    .btn-submit{ width:100%; padding:12px; border-radius:8px; border:0; background:var(--brand); color:#fff; font-weight:800 }
+
+    .result-display{ padding:12px; border-radius:8px; margin-top:10px; font-weight:800; text-align:center }
+
+    /* printable resources */
+    .resources{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+    .resource-card{ padding:10px; border-radius:8px; background:#fff; border:1px solid rgba(0,0,0,0.04); flex:1 1 220px }
+
+    /* checklist modal */
+    .modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:12000 }
+    .modal .backdrop{ position:absolute; inset:0; background:rgba(0,0,0,0.5) }
+    .modal .box{ position:relative; width:95%; max-width:900px; background:#fff; border-radius:10px; padding:14px; box-shadow:0 30px 60px rgba(0,0,0,0.28) }
+
+    .checklist-item{ display:flex; gap:10px; align-items:flex-start; padding:8px 0; border-bottom:1px dashed #f1f7f6 }
+    .checklist-footer{ display:flex; gap:8px; justify-content:flex-end; margin-top:12px }
+
+    /* small screens */
+    @media (max-width:760px){
+      .aqi-value{ min-width:64px; font-size:0.86rem }
+    }
   </style>
 </head>
 
+<body>
+  <div class="wrap" role="main" aria-labelledby="mainTitle">
+    <header>
+      <div class="title">
+        <div>
+          <div class="badge">Advanced Health Emergency Module</div>
+          <h1 id="mainTitle">🌫️ AQI Emergency & Air Pollution Safety</h1>
+          <div class="lead">Complete classroom & community module: what AQI means, health impacts, protective actions, school & household plans, checklists and printable resources.</div>
+        </div>
+      </div>
 
+      <div class="header-actions" role="region" aria-label="Controls">
+        <button class="btn btn-ghost" onclick="window.print()">🖨️ Print</button>
+        <button class="btn btn-ghost" id="openChecklistBtn">📋 Checklist</button>
+        <button class="btn btn-primary" id="openQuizBtn">📝 Take Quiz</button>
+        <button class="btn btn-safe" id="simulateBtn">🔁 Simulate AQI</button>
+      </div>
+    </header>
 
-<script type="text/javascript">
-function googleTranslateElementInit() {
-  new google.translate.TranslateElement(
-    {
+    <div class="main-grid">
+      <!-- SIDEBAR -->
+      <aside class="sidebar" aria-label="Sidebar">
+        <div class="card">
+          <h3>Safety Poster</h3>
+          <img class="poster" src="{% static 'image/aqi.jpg' %}" alt="AQI poster — protective steps">
+          <div style="margin-top:8px; display:flex; gap:8px">
+            <button class="btn btn-ghost" onclick="printPoster()">Print Poster</button>
+            <a class="btn btn-ghost" href="{% static 'pdf/aqi_poster.pdf' %}" download>Download PDF</a>
+          </div>
+        </div>
+
+        <div class="card" style="border:1px solid var(--accent);">
+          <h3>📞 Emergency Help</h3>
+          <table class="contact-table" role="table" aria-label="Emergency contacts">
+            <tr><td>Emergency</td><td><strong>112</strong></td></tr>
+            <tr><td>Ambulance</td><td><strong>108</strong></td></tr>
+            <tr><td>Health Helpline</td><td><strong>104</strong></td></tr>
+            <tr><td>Local Air Data</td><td><strong>(add local number)</strong></td></tr>
+          </table>
+        </div>
+
+        <div class="card">
+          <h3>🏠 Home Checklist (quick)</h3>
+          <ul style="margin:8px 0 0 18px">
+            <li>N95/KN95 masks available for family</li>
+            <li>Indoor sealed drinking water supply</li>
+            <li>Air purifier with HEPA filter (if possible)</li>
+            <li>Sealable bags for wet/contaminated items</li>
+            <li>Action plan for vulnerable people</li>
+          </ul>
+          <div style="margin-top:8px;">
+            <button class="btn btn-ghost" onclick="openChecklist()">Open full checklist</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Resources</h3>
+          <div class="resources">
+            <div class="resource-card">
+              <strong>Printable leaflet</strong>
+              <p class="muted">One-page guidance for households.</p>
+              <a class="btn btn-ghost" href="{% static 'pdf/aqi_leaflet.pdf' %}" download>Download</a>
+            </div>
+            <div class="resource-card">
+              <strong>Teacher pack</strong>
+              <p class="muted">Class activities & roll-call templates.</p>
+              <a class="btn btn-ghost" href="{% static 'pdf/aqi_teacher_pack.pdf' %}" download>Download</a>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="content" aria-label="AQI module content">
+
+        <!-- Quick summary + interactive AQI widget -->
+        <section class="module" id="overview">
+          <h2>What is AQI, and why it matters</h2>
+          <p class="muted">AQI (Air Quality Index) converts measurements of key pollutants into a single scale that tells how clean or polluted the air is — and what health actions to take. Main pollutants: PM2.5, PM10, NO₂, SO₂, CO, O₃.</p>
+
+          <div class="aqi-widget" role="group" aria-label="AQI simulator and scale">
+            <div class="aqi-scale" aria-hidden="true">
+              <div class="aqi-seg g">Good<br>0–50</div>
+              <div class="aqi-seg m">Moderate<br>51–100</div>
+              <div class="aqi-seg p">Poor<br>101–200</div>
+              <div class="aqi-seg vp">Very Poor<br>201–300</div>
+              <div class="aqi-seg se">Severe<br>301+</div>
+            </div>
+
+            <div style="min-width:220px; display:flex; flex-direction:column; gap:8px">
+              <div class="flex-row">
+                <label for="aqiInput" class="muted">Simulate AQI</label>
+                <input id="aqiInput" type="range" min="0" max="500" value="45" step="1" style="width:140px">
+              </div>
+              <div style="display:flex; gap:8px; align-items:center">
+                <div id="aqiValue" class="aqi-value">45</div>
+                <div id="aqiAdvice" class="muted">Good — enjoy normal activities.</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px" id="detailedScience">
+            <p><strong>PM2.5:</strong> particles <em>≤2.5 micrometres</em> — reach deep into lungs and bloodstream. Linked to heart and lung disease. <strong>PM10:</strong> larger particles, cause irritation and airway problems. <strong>NO₂ & O₃:</strong> respiratory irritants; increase asthma attacks.</p>
+            <p class="muted">Sources include vehicle emissions, industry, crop-residue burning, dust, and household combustion. Urban hotspots and seasonal events (crop burning, fireworks) can cause acute spikes.</p>
+          </div>
+        </section>
+
+        <!-- Preparedness: Household, School, Community -->
+        <section class="module" id="preparedness">
+          <h2>Preparedness — what to do before poor air events</h2>
+
+          <div class="info-box">
+            <strong>Principle:</strong> reduce exposure by reducing time outdoors, increasing indoor protection (sealing and filtration), and protecting vulnerable groups.
+          </div>
+
+          <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin-top:10px">
+            <div style="background:#fff; padding:10px; border-radius:8px; border:1px solid rgba(0,0,0,0.03)">
+              <strong>Household</strong>
+              <ul style="margin:8px 0 0 18px">
+                <li>Prepare a 48-72 hour kit with sealed bottled water and canned food.</li>
+                <li>Stock N95/KN95 masks sized for each family member; include extra for visitors.</li>
+                <li>Seal doors/windows: tape & plastic sheeting; know how to set HVAC to recirculate.</li>
+                <li>Identify a 'clean room' inside the home — minimal windows, inner room or basement if available.</li>
+              </ul>
+            </div>
+
+            <div style="background:#fff; padding:10px; border-radius:8px; border:1px solid rgba(0,0,0,0.03)">
+              <strong>School / Teachers</strong>
+              <ul style="margin:8px 0 0 18px">
+                <li>Create a shelter plan: classrooms that can be sealed, roll-call sheets and evacuation routes if needed.</li>
+                <li>Buy a classroom HEPA air purifier (sized for room volume) or plan for portable units.</li>
+                <li>Prepare child-sized masks and teach correct fit/use in drills.</li>
+                <li>Plan activities that keep children calm and indoors (quiet reading, worksheets).</li>
+              </ul>
+            </div>
+
+            <div style="background:#fff; padding:10px; border-radius:8px; border:1px solid rgba(0,0,0,0.03)">
+              <strong>Community / Workplace</strong>
+              <ul style="margin:8px 0 0 18px">
+                <li>Identify communal clean air shelters (community halls with purifiers).</li>
+                <li>Coordinate distribution of masks to vulnerable households.</li>
+                <li>Issue guidance to outdoor workers: stop or limit exposure, rotate shifts, provide PPE.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div style="margin-top:12px" class="muted">
+            <strong>Note on masks:</strong> N95/KN95 are recommended for particle protection; surgical / cloth masks reduce droplet spread but offer limited PM2.5 filtration. Ensure a good seal across nose and cheeks.
+          </div>
+        </section>
+
+        <!-- During an AQI emergency -->
+        <section class="module" id="during">
+          <h2>During an AQI emergency — immediate protective actions</h2>
+
+          <div class="warning-box">
+            If AQI reaches Very Poor or Severe, <strong>limit all outdoor activities</strong>. Protect children, elderly and those with respiratory/cardiac conditions first.
+          </div>
+
+          <ol style="margin:10px 0 0 18px">
+            <li><strong>Go indoors</strong>. Close doors/windows. Turn off kitchen exhausts and any ventilation bringing outside air in.</li>
+            <li><strong>Seal the room</strong>. Use tape & plastic to cover gaps. Move people into a single 'clean room' with fewer windows.</li>
+            <li><strong>Use filtration</strong>. Turn on HEPA purifiers (or portable AC with HEPA filter). Set to highest airflow. Clean/replace filters per manufacturer.</li>
+            <li><strong>Protect breathing</strong>. Use N95/KN95 masks if leaving indoor space or interacting with others.</li>
+            <li><strong>Hydrate & monitor</strong>. Use sealed water; watch for symptoms (coughing, difficulty breathing). Seek medical help if severe.</li>
+            <li><strong>Food safety</strong>. Avoid eating food left uncovered outdoors and do not consume produce that was exposed during heavy contamination until tested/cleared.</li>
+          </ol>
+
+          <div style="margin-top:10px; font-size:0.95rem" class="muted">
+            If someone develops severe breathing difficulty, chest pain, fainting or other emergency signs — call the ambulance immediately and inform medical staff about air pollution exposure.
+          </div>
+        </section>
+
+        <!-- After event -->
+        <section class="module" id="after">
+          <h2>After the event — clean-up, recovery & health checks</h2>
+
+          <ul style="margin:8px 0 0 18px">
+            <li>Ventilate the home gradually when AQI improves — open windows only when outside air is cleaner (monitor AQI first).</li>
+            <li>Wet mop floors and wipe surfaces with damp cloths to capture deposited particles. Avoid dry-sweeping which resuspends dust.</li>
+            <li>Wash bedding and clothing of those who were outdoors in hot wash cycles where possible.</li>
+            <li>If symptomatic, seek medical follow-up for persistent cough, wheeze or unusual symptoms.</li>
+            <li>Document any health incidents or infrastructure damage for community reporting and compensation/assistance requests.</li>
+          </ul>
+
+          <div style="margin-top:10px;" class="muted">
+            Long-term measures include planting green buffers, reducing domestic burning, and supporting community monitoring networks.
+          </div>
+        </section>
+
+        <!-- Video demonstration -->
+        <section class="module" id="videoSection">
+          <h2>Field demo: Sealing & creating a classroom 'clean room'</h2>
+          <div class="video-wrapper">
+            <!-- Replace data-video-src value with your video file or CDN link -->
+            <video controls preload="metadata" poster="{% static 'image/aqi_video_poster.jpg' %}" id="demoVideo" data-video-src="{% static 'video/aqi_demo.mp4' %}">
+              <source src="{% static 'video/aqi_demo.mp4' %}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div style="margin-top:8px" class="muted">
+            Replace the video file at <code>static/video/aqi_demo.mp4</code> or change the <code>data-video-src</code> attribute on the &lt;video&gt; if you host elsewhere.
+          </div>
+        </section>
+
+        <!-- Quiz / Assessment -->
+        <section class="module" id="quizModule" aria-labelledby="quizHeading">
+          <h2 id="quizHeading">📝 AQI Emergency Assessment — quick certification</h2>
+
+          <div class="quiz-container">
+            <div class="quiz-left">
+              <form id="aqiQuizForm" onsubmit="return false;">
+                <div class="q-item"><strong>1.</strong> Which pollutant is most dangerous on a mass/micro scale?<br>
+                  <label><input type="radio" name="q1" value="A"> PM2.5</label>
+                  <label><input type="radio" name="q1" value="B"> Carbon dioxide</label>
+                </div>
+
+                <div class="q-item"><strong>2.</strong> Best immediate action when AQI is 'Very Poor' (201–300):<br>
+                  <label><input type="radio" name="q2" value="A"> Go outdoors for exercise</label>
+                  <label><input type="radio" name="q2" value="B"> Move indoors & seal the house</label>
+                </div>
+
+                <div class="q-item"><strong>3.</strong> Which mask gives the strongest protection against PM2.5:<br>
+                  <label><input type="radio" name="q3" value="A"> Cloth mask</label>
+                  <label><input type="radio" name="q3" value="B"> N95/KN95 properly fitted</label>
+                </div>
+
+                <div class="q-item"><strong>4.</strong> After heavy pollution, best cleaning method:<br>
+                  <label><input type="radio" name="q4" value="A"> Dry dusting</label>
+                  <label><input type="radio" name="q4" value="B"> Wet mopping & damp wiping</label>
+                </div>
+
+                <div class="q-item"><strong>5.</strong> If you have asthma, when should you seek care?<br>
+                  <label><input type="radio" name="q5" value="A"> Only if symptoms worsen</label>
+                  <label><input type="radio" name="q5" value="B"> If you have increased breathlessness, wheeze or chest tightness</label>
+                </div>
+
+                <div class="q-item"><strong>6.</strong> How to protect children at school during high AQI:<br>
+                  <label><input type="radio" name="q6" value="A"> Keep them indoors & avoid physical play</label>
+                  <label><input type="radio" name="q6" value="B"> Continue outdoor PE</label>
+                </div>
+
+                <div class="q-item"><strong>7.</strong> Which household appliance helps reduce indoor PM?<br>
+                  <label><input type="radio" name="q7" value="A"> HEPA air purifier</label>
+                  <label><input type="radio" name="q7" value="B"> Conventional fan blowing outside air</label>
+                </div>
+
+                <div class="q-item"><strong>8.</strong> Is boiling water removing particulate pollution exposure?<br>
+                  <label><input type="radio" name="q8" value="A"> No (boiling helps microbiological safety, not PM)</label>
+                  <label><input type="radio" name="q8" value="B"> Yes, fully removes PM</label>
+                </div>
+
+                <div class="q-item"><strong>9.</strong> For outdoor workers, the best employer action is:<br>
+                  <label><input type="radio" name="q9" value="A"> Continue full shifts regardless of AQI</label>
+                  <label><input type="radio" name="q9" value="B"> Limit exposure, rotate tasks, provide PPE</label>
+                </div>
+
+                <div class="q-item"><strong>10.</strong> Long-term community response to reduce AQI includes:<br>
+                  <label><input type="radio" name="q10" value="A"> Promoting clean cookstoves, planting trees, reducing open burning</label>
+                  <label><input type="radio" name="q10" value="B"> Increased outdoor burning to clear fields faster</label>
+                </div>
+
+                <div style="margin-top:12px">
+                  <button class="btn btn-primary btn-submit" onclick="gradeAQIQuiz()">Submit Assessment</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="quiz-right card" aria-hidden="false">
+              <h4>Scoring</h4>
+              <p class="muted">Answer all 10 questions. Passing score: <strong>7/10</strong>. Results are stored locally — print the certificate on passing.</p>
+              <div id="quizResult" class="result-display" aria-live="polite"></div>
+              <div style="margin-top:10px">
+                <button class="btn btn-ghost" id="resetQuizBtn" onclick="resetQuiz()">Reset</button>
+                <button class="btn btn-ghost" id="printCertBtn" onclick="printCertificate()" disabled>Print Certificate</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Action plans & templates -->
+        <section class="module" id="plans">
+          <h2>School action plan template (printable)</h2>
+          <p class="muted">Use this template to create a school-specific AQI plan — map the 'clean rooms', allocate staff, list vulnerable children, and store teacher supplies.</p>
+
+          <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:10px; margin-top:10px">
+            <div class="card">
+              <strong>1. Clean room</strong>
+              <p class="muted">Room name: <em>e.g., Library</em></p>
+              <p class="muted">Checklist: Seal windows, HEPA purifier present, roll-call binder, first-aid kit, child-sized masks.</p>
+            </div>
+
+            <div class="card">
+              <strong>2. Vulnerable students</strong>
+              <p class="muted">List students with asthma, heart disease, or mobility limitations and assign staff to them.</p>
+            </div>
+
+            <div class="card">
+              <strong>3. Communication</strong>
+              <p class="muted">SMS/phone tree for parents. Prewritten text: "School closed for outdoor activity due to AQI. Children will be kept indoors."</p>
+            </div>
+          </div>
+
+          <div style="margin-top:12px">
+            <a class="btn btn-ghost" href="{% static 'pdf/school_aqi_plan_template.pdf' %}" download>Download School Plan (PDF)</a>
+          </div>
+        </section>
+
+        <!-- Closing note -->
+        <section class="module" id="closing">
+          <h2>Further reading & trusted sources</h2>
+          <ul style="margin:8px 0 0 18px" class="muted">
+            <li>National Air Quality monitoring websites & local environment agencies — follow official advisories.</li>
+            <li>WHO guidelines for ambient air quality (PM2.5, PM10).</li>
+            <li>Local public health authority instructions for vulnerable groups.</li>
+          </ul>
+
+          <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap">
+            <a class="btn btn-ghost" href="https://www.who.int/air-pollution" target="_blank" rel="noopener">WHO: Air pollution</a>
+            <a class="btn btn-ghost" href="#" onclick="alert('Replace with your local AQI link')">Local AQI portal</a>
+          </div>
+        </section>
+
+      </main>
+    </div>
+
+    <footer style="padding:14px; border-top:1px solid #eef3f5; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap">
+      <div class="muted">This educational module is for general guidance only — follow official instructions first.</div>
+      <div><small class="muted">Module version 1 — last updated: <span id="updatedAt"></span></small></div>
+    </footer>
+  </div>
+
+  <!-- Checklist modal -->
+  <div class="modal" id="checklistModal" role="dialog" aria-modal="true" aria-labelledby="checklistTitle">
+    <div class="backdrop" onclick="closeChecklist()"></div>
+    <div class="box" role="document">
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+        <div>
+          <h3 id="checklistTitle">AQI Emergency — Detailed Checklist</h3>
+          <div class="muted">Use this checklist to prepare households, schools and community centres.</div>
+        </div>
+        <div style="display:flex; gap:8px">
+          <button class="btn btn-ghost" onclick="printChecklist()">Print</button>
+          <button class="btn btn-ghost" onclick="closeChecklist()">Close</button>
+        </div>
+      </div>
+
+      <div style="margin-top:12px; max-height:60vh; overflow:auto; padding-right:8px">
+        <div class="checklist-item"><input type="checkbox" id="chk1"><label for="chk1"> Stock N95/KN95 masks for each household member</label></div>
+        <div class="checklist-item"><input type="checkbox" id="chk2"><label for="chk2"> Identify clean room and test sealing</label></div>
+        <div class="checklist-item"><input type="checkbox" id="chk3"><label for="chk3"> Obtain a HEPA purifier sized for living room / classroom</label></div>
+        <div class="checklist-item"><input type="checkbox" id="chk4"><label for="chk4"> Create parent contact list and SMS template</label></div>
+        <div class="checklist-item"><input type="checkbox" id="chk5"><label for="chk5"> Prepare child-sized masks & first aid</label></div>
+        <div class="checklist-item"><input type="checkbox" id="chk6"><label for="chk6"> Keep bottled water & canned food for 48–72 hours</label></div>
+        <div class="checklist-item"><input type="checkbox" id="chk7"><label for="chk7"> Train staff in recognizing breathing emergencies</label></div>
+        <div class="checklist-item"><input type="checkbox" id="chk8"><label for="chk8"> Plan for communication with local authorities</label></div>
+      </div>
+
+      <div class="checklist-footer">
+        <button class="btn btn-ghost" onclick="closeChecklist()">Close</button>
+        <button class="btn btn-primary" onclick="saveChecklist()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Certificate modal (print) -->
+  <div class="modal" id="certModal" aria-modal="true" role="dialog" style="display:none">
+    <div class="backdrop" onclick="closeCert()"></div>
+    <div class="box">
+      <div style="display:flex; justify-content:space-between; align-items:center">
+        <h3>Certificate</h3>
+        <div><button class="btn btn-ghost" onclick="closeCert()">Close</button></div>
+      </div>
+      <div id="certBody" style="margin-top:12px; padding:20px; border:1px dashed #e6eefb; border-radius:8px; background:#fff">
+        <!-- filled by JS -->
+      </div>
+      <div style="margin-top:10px; display:flex; justify-content:flex-end; gap:8px;">
+        <button class="btn btn-ghost" onclick="printCertificate()">Print Certificate</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Google Translate (optional) -->
+  <script type="text/javascript">
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
       pageLanguage: 'en',
       includedLanguages: 'en,hi,ta,te,bn,gu,kn,ml,mr,pa,ur',
       layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-    },
-    'google_translate_element'
-  );
-}
-</script>
-
-<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
-
-<body>
-<div class="wrap">
-
-<header>
-  <span class="badge">Advanced Health Emergency Module</span>
-  <h1>🌫️ AQI Emergency & Air Pollution Safety</h1>
-  <p>Air quality science, health impacts, emergency response & prevention strategies.</p>
-</header>
-
-<div class="grid">
-<aside>
-  <div class="section-side">
-    <h3>Safety Poster</h3>
-    <img class="poster" src="{% static 'image/aqi.jpg' %}">
-    <button onclick="window.print()">🖨️ Print Sheet</button>
-  </div>
-
-  <div class="section-side" style="border:1px solid var(--accent);">
-    <h3>📞 Emergency Help</h3>
-    <table class="contact-table">
-      <tr><td>Emergency</td><td><strong>112</strong></td></tr>
-      <tr><td>Ambulance</td><td><strong>108</strong></td></tr>
-      <tr><td>Health Helpline</td><td><strong>104</strong></td></tr>
-    </table>
-  </div>
-
-  <div class="section-side">
-    <h3>🏠 AQI Home Checklist</h3>
-    <ul>
-      <li>N95 / KN95 masks</li>
-      <li>Doors & windows sealed</li>
-      <li>Air purifiers</li>
-      <li>Emergency medicines</li>
-    </ul>
-  </div>
-</aside>
-
-<main>
-
-
- <div id="google_translate_element" class="lang-selector"></div> 
-
-<section>
-<h2>1. Understanding AQI</h2>
-<p>AQI measures air pollution based on <strong>PM2.5, PM10, NO₂, SO₂, CO, O₃</strong>.</p>
-<div class="info-box">
-PM2.5 particles are 30x smaller than human hair and enter bloodstream.
-</div>
-</section>
-
-<section>
-<h2>2. AQI Levels & Risk</h2>
-<ul>
-<li>0–50: Good</li>
-<li>51–100: Moderate</li>
-<li>101–200: Poor</li>
-<li>201–300: Very Poor</li>
-<li>301+: Severe / Emergency</li>
-</ul>
-</section>
-
-<section>
-<h2>3. Health Impact</h2>
-<ul>
-<li><strong>Short-term:</strong> Eye irritation, cough, breathlessness</li>
-<li><strong>Long-term:</strong> Asthma, heart disease, lung damage</li>
-</ul>
-</section>
-
-<section>
-<h2>4. Emergency Response Plan</h2>
-<div class="warning-box">
-Stay indoors, avoid exercise, wear masks if outdoor exposure is unavoidable.
-</div>
-</section>
-
-<section>
-<h2>5. Indoor Air Safety</h2>
-<p>Indoor AQI can be improved using HEPA purifiers and wet mopping.</p>
-</section>
-
-<section>
-<h2>6. Special Care Groups</h2>
-<ul>
-<li>Children & elderly</li>
-<li>Pregnant women</li>
-<li>Asthma & heart patients</li>
-<li>Outdoor workers</li>
-</ul>
-</section>
-
-<section>
-<h2>7. Do’s & Don’ts</h2>
-<table>
-<tr><th>Do</th><th>Don’t</th></tr>
-<tr><td>Wear N95 mask</td><td>Exercise outdoors</td></tr>
-<tr><td>Check AQI daily</td><td>Ignore symptoms</td></tr>
-<tr><td>Use purifier</td><td>Burn waste</td></tr>
-</table>
-</section>
-
-<!-- QUIZ -->
-<section class="quiz-container">
-<h2 style="border:none;">📝 AQI Emergency Certification Quiz</h2>
-<p><strong>Passing Score: 7 / 10</strong></p>
-
-<form id="quiz">
-
-<div class="q-item">1. AQI measures?<br>
-<input type="radio" name="q1" value="A"> Temperature
-<input type="radio" name="q1" value="B"> Air pollution
-</div>
-
-<div class="q-item">2. Most dangerous pollutant?<br>
-<input type="radio" name="q2" value="A"> PM2.5
-<input type="radio" name="q2" value="B"> Oxygen
-</div>
-
-<div class="q-item">3. AQI > 300 means?<br>
-<input type="radio" name="q3" value="A"> Moderate
-<input type="radio" name="q3" value="B"> Severe
-</div>
-
-<div class="q-item">4. Best mask?<br>
-<input type="radio" name="q4" value="A"> Cloth
-<input type="radio" name="q4" value="B"> N95
-</div>
-
-<div class="q-item">5. Safe activity during emergency?<br>
-<input type="radio" name="q5" value="A"> Jogging
-<input type="radio" name="q5" value="B"> Staying indoors
-</div>
-
-<div class="q-item">6. PM2.5 affects?<br>
-<input type="radio" name="q6" value="A"> Skin only
-<input type="radio" name="q6" value="B"> Lungs & heart
-</div>
-
-<div class="q-item">7. Best indoor cleaning method?<br>
-<input type="radio" name="q7" value="A"> Dry dusting
-<input type="radio" name="q7" value="B"> Wet mopping
-</div>
-
-<div class="q-item">8. Outdoor workers should?<br>
-<input type="radio" name="q8" value="A"> Ignore AQI
-<input type="radio" name="q8" value="B"> Limit exposure
-</div>
-
-<div class="q-item">9. AQI data source?<br>
-<input type="radio" name="q9" value="A"> Government sensors
-<input type="radio" name="q9" value="B"> Random guess
-</div>
-
-<div class="q-item">10. Long-term exposure causes?<br>
-<input type="radio" name="q10" value="A"> Immunity boost
-<input type="radio" name="q10" value="B"> Chronic disease
-</div>
-
-<button type="button" class="btn-submit" onclick="checkAQIQuiz()">Submit Assessment</button>
-</form>
-
-<div id="result" class="result-display"></div>
-</section>
-
-</main>
-</div>
-</div>
-
-<script>
-function checkAQIQuiz(){
-  const ans={q1:'B',q2:'A',q3:'B',q4:'B',q5:'B',q6:'B',q7:'B',q8:'B',q9:'A',q10:'B'};
-  let s=0;
-  for(let k in ans){
-    let v=document.querySelector(`input[name="${k}"]:checked`);
-    if(!v){ alert("Please answer all questions"); return; }
-    if(v.value===ans[k]) s++;
+    }, 'google_translate_element');
   }
-  const r=document.getElementById('result');
-  r.style.display='block';
-  r.style.background=s>=7?'#c8e6c9':'#ffcdd2';
-  r.innerHTML=`Score: ${s}/10 — `+(s>=7?'AQI Emergency Certified 🌫️':'Please review the module.');
-}
-</script>
+  </script>
+  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async defer></script>
 
+  <!-- ---------- Interactivity ---------- -->
+  <script>
+    // Initialize updatedAt
+    document.getElementById('updatedAt').innerText = new Date().toLocaleDateString();
+
+    // AQI simulator
+    const aqiInput = document.getElementById('aqiInput');
+    const aqiValue = document.getElementById('aqiValue');
+    const aqiAdvice = document.getElementById('aqiAdvice');
+
+    function updateAQIUI(val){
+      aqiValue.innerText = val;
+      let category='Good';
+      let advice='Good — enjoy normal activities.';
+      let cls='g';
+      if (val <= 50){ category='Good'; advice='Good — enjoy normal activities.'; cls='g'; }
+      else if (val <= 100){ category='Moderate'; advice='Sensitive groups should consider limiting prolonged outdoor exertion.'; cls='m'; }
+      else if (val <= 200){ category='Poor'; advice='Limit outdoor activity; consider indoor filtration and masks for vulnerable people.'; cls='p'; }
+      else if (val <= 300){ category='Very Poor'; advice='Stay indoors, minimize physical activity; use N95 masks if outdoors.'; cls='vp'; }
+      else { category='Severe'; advice='Emergency: avoid all outdoor activity, seek clean air shelters if available.'; cls='se'; }
+
+      aqiAdvice.innerHTML = `<strong>${category}</strong> — ${advice}`;
+      // visual highlight: add faint border color to aqiValue
+      aqiValue.style.borderColor = 'rgba(0,0,0,0.06)';
+      aqiValue.style.background = '#fff';
+    }
+
+    aqiInput.addEventListener('input', (e)=> updateAQIUI(parseInt(e.target.value,10)));
+    // init
+    updateAQIUI(parseInt(aqiInput.value,10));
+
+    // simulate button: picks some scenario sequence
+    document.getElementById('simulateBtn').addEventListener('click', function(){
+      const seq=[45,72,130,225,355];
+      let i=0;
+      const t=setInterval(()=>{
+        if(i>=seq.length){ clearInterval(t); return; }
+        aqiInput.value = seq[i];
+        updateAQIUI(seq[i]);
+        i++;
+      },800);
+    });
+
+    // Poster print
+    function printPoster(){
+      const img = document.querySelector('.poster');
+      const w = window.open('','_blank','width=800,height=900');
+      w.document.write(`<html><head><title>Print Poster</title></head><body style="margin:0"><img src="${img.src}" style="width:100%"></body></html>`);
+      w.document.close();
+      w.print();
+    }
+
+    // Checklist modal
+    const checklistModal = document.getElementById('checklistModal');
+    document.getElementById('openChecklistBtn').addEventListener('click', openChecklist);
+    function openChecklist(){ checklistModal.style.display='flex'; }
+    function closeChecklist(){ checklistModal.style.display='none'; }
+
+    function saveChecklist(){
+      const states = Array.from(document.querySelectorAll('#checklistModal input[type=checkbox]')).map(ch => ch.checked);
+      localStorage.setItem('aqi_checklist_v1', JSON.stringify(states));
+      alert('Checklist saved locally.');
+      closeChecklist();
+    }
+
+    // Print checklist (print only modal content)
+    function printChecklist(){
+      const box = document.querySelector('#checklistModal .box');
+      const html = box.innerHTML;
+      const w = window.open('','_blank','width=700,height=900');
+      w.document.write('<html><head><title>Checklist</title><style>body{font-family:Arial;padding:20px}</style></head><body>');
+      w.document.write(html);
+      w.document.write('</body></html>');
+      w.document.close();
+      w.print();
+    }
+
+    // Quiz logic
+    const answers = { q1:'A', q2:'B', q3:'B', q4:'B', q5:'B', q6:'A', q7:'A', q8:'A', q9:'B', q10:'A' };
+    function gradeAQIQuiz(){
+      // ensure all answered
+      for(const k in answers){
+        const sel = document.querySelector(`input[name="${k}"]:checked`);
+        if(!sel){ alert('Please answer all questions before submitting.'); return; }
+      }
+      let score=0;
+      for(const k in answers){
+        const sel = document.querySelector(`input[name="${k}"]:checked`);
+        if(sel.value === answers[k]) score++;
+      }
+      const result = document.getElementById('quizResult');
+      result.style.display='block';
+      if(score>=7){
+        result.style.background='#c8e6c9';
+        result.innerText = `Score: ${score}/10 — PASS. You are AQI-aware.`;
+        // enable print certificate
+        document.getElementById('printCertBtn').disabled=false;
+        showCertificate(score);
+      } else {
+        result.style.background='#ffcdd2';
+        result.innerText = `Score: ${score}/10 — Review the module and practise again.`;
+        document.getElementById('printCertBtn').disabled=true;
+      }
+      // store results locally
+      localStorage.setItem('aqi_quiz_v1', JSON.stringify({score, ts:Date.now()}));
+      // scroll to result
+      result.scrollIntoView({behavior:'smooth', block:'center'});
+    }
+
+    function resetQuiz(){
+      document.getElementById('aqiQuizForm').reset();
+      document.getElementById('quizResult').style.display='none';
+      document.getElementById('printCertBtn').disabled=true;
+    }
+
+    // Certificate generation + printing
+    function showCertificate(score){
+      const name = prompt('Enter name to print on certificate (or Cancel to use "Learner")') || 'Learner';
+      const date = new Date().toLocaleDateString();
+      const certHtml = `
+        <div style="text-align:center">
+          <h2>Certificate of Completion</h2>
+          <p>This certifies that <strong>${name}</strong> has successfully completed the <em>AQI Emergency</em> assessment.</p>
+          <p>Score: <strong>${score}/10</strong> — Date: ${date}</p>
+          <div style="margin-top:16px">Instructor: <em>SafeLearn</em></div>
+        </div>
+      `;
+      const certModal = document.getElementById('certModal');
+      document.getElementById('certBody').innerHTML = certHtml;
+      certModal.style.display='flex';
+      // enable printing button
+      document.getElementById('printCertBtn').onclick = function(){ printCertificate(); }
+    }
+
+    function closeCert(){ document.getElementById('certModal').style.display='none'; }
+    function printCertificate(){
+      const body = document.getElementById('certBody').innerHTML;
+      const w = window.open('','_blank','width=800,height=700');
+      w.document.write(`<html><head><title>Certificate</title></head><body style="font-family:Arial;padding:30px">${body}</body></html>`);
+      w.document.close();
+      w.print();
+    }
+
+    // print certificate (button outside)
+    window.printCertificate = printCertificate;
+
+    // open quiz button
+    document.getElementById('openQuizBtn').addEventListener('click', () => {
+      document.getElementById('quizHeading').scrollIntoView({behavior:'smooth', block:'start'});
+    });
+
+    // demo: try to load cached quiz result
+    (function init(){
+      const q = JSON.parse(localStorage.getItem('aqi_quiz_v1') || 'null');
+      if(q){ document.getElementById('quizResult').style.display='block'; document.getElementById('quizResult').innerText = `Previous result: ${q.score}/10 (saved)`; }
+      // allow pressing Enter on slider to announce
+      aqiInput.addEventListener('change', ()=>{
+        // small accessible announce
+        aqiValue.setAttribute('aria-live','polite');
+      });
+    })();
+
+    // Video source swap helper (in case you want to change video src later via data-video-src)
+    (function initVideo(){
+      const vid = document.getElementById('demoVideo');
+      if(!vid) return;
+      const src = vid.getAttribute('data-video-src');
+      if(src && vid.querySelector('source')) vid.querySelector('source').src = src;
+      vid.load();
+    })();
+
+  </script>
 </body>
 </html>

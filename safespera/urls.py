@@ -77,6 +77,8 @@ path(
         name='dam_reservoir_failure'
     ),
 
+    path('learn/nuclear/', views.learn_nuclear, name='learn_nuclear'),
+
     # Drills & simulations
     path('drills/simulation/', views.drills_simulation, name='drills_simulation'),
     path('drills/simulation/', views.drill_simulation, name='drill_simulation'),  # note: duplicate path in original - keeps both names on same path
