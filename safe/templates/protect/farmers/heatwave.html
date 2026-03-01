@@ -33,6 +33,12 @@ function googleTranslateElementInit() {
 </script>
 
 <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+ <div class="top-right">
+    <button  class ="chat-btn" onclick="window.location.href='{% url 'chatbot' %}'">
+    Chat with AI
+</button>
+</div>
+
 <body>
   <!-- ALERT BAR (weather integration hook) -->
   <div id="disaster-alert-bar" class="alert-normal" role="status" aria-live="polite" aria-atomic="true">

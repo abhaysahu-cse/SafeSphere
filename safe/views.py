@@ -82,6 +82,10 @@ def tsunami_safety(request):
     return render(request, "learn/tsunami_safety.html")
 
 
+
+def chatbot(request):
+    return render(request, 'chat.html')
+
 def signup_view(request):
     if request.method == "POST":
         username = request.POST.get('username')

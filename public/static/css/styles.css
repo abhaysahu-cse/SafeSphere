@@ -2821,3 +2821,33 @@ iframe.goog-te-banner-frame {
     height: auto;
     display: inline-block;
 }
+
+
+
+
+
+/* chat with aii button css */
+
+.top-right {
+    position: fixed;   /* important: fixed instead of absolute */
+    top: 40px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 9999;     /* ensures it stays above everything */
+}
+
+.language-btn {
+    padding: 8px 15px;
+    font-size: 14px;
+}
+
+.chat-btn {
+    padding: 10px 20px;
+    background: linear-gradient(90deg, #d8d7dc, #8a2be2);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}

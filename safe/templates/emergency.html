@@ -92,7 +92,11 @@ function googleTranslateElementInit() {
     <main class="main-content">
         <!-- Emergency SOS Button -->
          <div id="google_translate_element" class="translator"></div>
-
+          <div class="top-right">
+    <button  class ="chat-btn" onclick="window.location.href='{% url 'chatbot' %}'">
+    Chat with AI
+</button>
+</div>
         <div class="emergency-sos-container animate-fade-up">
             {% comment %} <button class="sos-button" id="sosButton">
 

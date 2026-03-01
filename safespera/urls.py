@@ -154,6 +154,11 @@ path(
     path('protect/schools/convert-to-shelter/', views.schools_convert_shelter, name='schools_convert_shelter'),
     path('protect/schools/drills/', views.schools_drills, name='schools_drills'),
     
+
+
+
+
+    path('chatbot/', views.chatbot, name='chatbot'),
 ]
 
 # Serve static files during development only
