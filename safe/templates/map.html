@@ -16,53 +16,73 @@
   
   <style>
     /* 🔥 OVERRIDE GLOBAL DASHBOARD STYLES FOR MAP PAGE */
-body {
-  background: none !important;
-}
-
-.main-content,
-.page-header,
-.stats-grid,
-section {
-  display: none !important;
-}
-
-/* Ensure nothing pushes map */
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-    /* MAP PAGE STYLES */
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
     html, body {
-      height: 100%;
-      margin: 0;
+      height: 100% !important;
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+      position: fixed !important;
+      -webkit-overflow-scrolling: touch;
     }
+    
     body {
-      overflow: hidden;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: none !important;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      touch-action: none;
     }
 
-    /* FULL SCREEN MAP */
+    /* Hide all dashboard elements */
+    .main-content,
+    .page-header,
+    .stats-grid,
+    .sidebar,
+    nav,
+    header,
+    section:not(.map-topbar) {
+      display: none !important;
+    }
+
+    /* FULL SCREEN MAP - Force absolute positioning */
     #mini-map {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 1;
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      height: 100dvh !important; /* Dynamic viewport height for mobile */
+      z-index: 1 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      touch-action: pan-x pan-y pinch-zoom;
+    }
+    
+    /* Ensure Leaflet container fills the space */
+    #mini-map .leaflet-container {
+      width: 100% !important;
+      height: 100% !important;
+      touch-action: pan-x pan-y pinch-zoom;
     }
 
     /* Top bar */
     .map-topbar {
       position: fixed;
-      top: 14px;
-      left: 14px;
-      right: 14px;
+      top: max(14px, env(safe-area-inset-top));
+      left: max(14px, env(safe-area-inset-left));
+      right: max(14px, env(safe-area-inset-right));
       z-index: 10000;
       display: flex;
       justify-content: space-between;
       align-items: center;
       pointer-events: none;
+      gap: 10px;
     }
 
     .map-topbar .left,
@@ -73,7 +93,9 @@ html, body {
     }
 
     .btn {
-      background: #ffffff;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       padding: 10px 16px;
       border-radius: 10px;
       font-weight: 600;
@@ -83,47 +105,72 @@ html, body {
       cursor: pointer;
       text-decoration: none;
       color: #222;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      min-height: 44px; /* Touch-friendly */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.22);
+    }
+
+    .btn:active {
+      transform: translateY(0);
     }
 
     /* Info panel */
     .info-panel {
       position: fixed;
-      bottom: 20px;
-      left: 20px;
+      bottom: max(20px, env(safe-area-inset-bottom));
+      left: max(20px, env(safe-area-inset-left));
       width: 300px;
-      background: #ffffff;
+      max-width: calc(100vw - 40px);
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       border-radius: 14px;
       padding: 16px;
       z-index: 10000;
       box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
     }
 
     .info-panel h3 {
       margin: 0 0 8px;
       font-size: 16px;
+      font-weight: 700;
     }
 
     .info-panel p {
       margin: 6px 0;
       font-size: 13px;
       color: #444;
+      line-height: 1.5;
     }
 
     /* Legend */
     .legend {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #ffffff;
+      bottom: max(20px, env(safe-area-inset-bottom));
+      right: max(20px, env(safe-area-inset-right));
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       padding: 14px;
       border-radius: 14px;
       box-shadow: 0 12px 30px rgba(0,0,0,0.2);
       z-index: 10000;
+      transition: all 0.3s ease;
     }
 
     .legend h4 {
       margin: 0 0 10px;
       font-size: 14px;
+      font-weight: 700;
     }
 
     .legend-item {
@@ -132,17 +179,285 @@ html, body {
       gap: 8px;
       font-size: 13px;
       margin-bottom: 6px;
+      line-height: 1.4;
+    }
+
+    .legend-item:last-child {
+      margin-bottom: 0;
     }
 
     .dot {
       width: 14px;
       height: 14px;
       border-radius: 50%;
+      flex-shrink: 0;
     }
 
     .red { background: #e53e3e; }
     .orange { background: #f6ad55; }
     .green { background: #48bb78; }
+
+    /* Leaflet controls adjustments for mobile */
+    .leaflet-control-zoom {
+      margin-top: max(10px, env(safe-area-inset-top)) !important;
+      margin-left: max(10px, env(safe-area-inset-left)) !important;
+    }
+
+    .leaflet-control-zoom a {
+      width: 36px !important;
+      height: 36px !important;
+      line-height: 36px !important;
+      font-size: 20px !important;
+    }
+    
+    /* TABLET RESPONSIVE (600px - 900px) */
+    @media (max-width: 900px) and (min-width: 601px) {
+      .map-topbar {
+        top: max(12px, env(safe-area-inset-top));
+        left: max(12px, env(safe-area-inset-left));
+        right: max(12px, env(safe-area-inset-right));
+      }
+
+      .btn {
+        padding: 9px 14px;
+        font-size: 13px;
+      }
+
+      .info-panel {
+        width: 280px;
+        bottom: max(16px, env(safe-area-inset-bottom));
+        left: max(16px, env(safe-area-inset-left));
+      }
+
+      .legend {
+        bottom: max(16px, env(safe-area-inset-bottom));
+        right: max(16px, env(safe-area-inset-right));
+        padding: 12px;
+      }
+    }
+    
+    /* MOBILE RESPONSIVE (481px - 600px) */
+    @media (max-width: 600px) {
+      .map-topbar {
+        top: max(10px, env(safe-area-inset-top));
+        left: max(10px, env(safe-area-inset-left));
+        right: max(10px, env(safe-area-inset-right));
+        flex-direction: column;
+        gap: 8px;
+        align-items: stretch;
+      }
+      
+      .map-topbar .left,
+      .map-topbar .right {
+        width: 100%;
+        justify-content: space-between;
+      }
+      
+      .btn {
+        padding: 10px 12px;
+        font-size: 13px;
+        flex: 1;
+        min-height: 44px;
+      }
+      
+      .info-panel {
+        bottom: max(12px, env(safe-area-inset-bottom));
+        left: max(12px, env(safe-area-inset-left));
+        width: calc(100vw - 24px);
+        max-width: 100%;
+        padding: 14px;
+      }
+
+      .info-panel h3 {
+        font-size: 15px;
+      }
+
+      .info-panel p {
+        font-size: 12px;
+      }
+      
+      .legend {
+        bottom: max(12px, env(safe-area-inset-bottom));
+        right: max(12px, env(safe-area-inset-right));
+        padding: 10px;
+        max-width: 140px;
+      }
+      
+      .legend h4 {
+        font-size: 13px;
+        margin-bottom: 8px;
+      }
+      
+      .legend-item {
+        font-size: 11px;
+        gap: 6px;
+        margin-bottom: 5px;
+      }
+
+      .dot {
+        width: 12px;
+        height: 12px;
+      }
+
+      /* Adjust Leaflet controls for mobile */
+      .leaflet-control-zoom {
+        margin-top: max(70px, env(safe-area-inset-top) + 60px) !important;
+      }
+    }
+    
+    /* SMALL MOBILE (320px - 480px) */
+    @media (max-width: 480px) {
+      .map-topbar {
+        top: max(8px, env(safe-area-inset-top));
+        left: max(8px, env(safe-area-inset-left));
+        right: max(8px, env(safe-area-inset-right));
+      }
+
+      .btn {
+        padding: 8px 10px;
+        font-size: 12px;
+        border-radius: 8px;
+      }
+
+      .info-panel {
+        bottom: max(10px, env(safe-area-inset-bottom));
+        left: max(10px, env(safe-area-inset-left));
+        width: calc(100vw - 20px);
+        padding: 12px;
+        border-radius: 12px;
+      }
+      
+      .info-panel h3 {
+        font-size: 14px;
+        margin-bottom: 6px;
+      }
+      
+      .info-panel p {
+        font-size: 11px;
+        margin: 4px 0;
+      }
+      
+      .legend {
+        bottom: max(10px, env(safe-area-inset-bottom));
+        right: max(10px, env(safe-area-inset-right));
+        padding: 8px;
+        border-radius: 10px;
+        max-width: 120px;
+      }
+
+      .legend h4 {
+        font-size: 12px;
+        margin-bottom: 6px;
+      }
+
+      .legend-item {
+        font-size: 10px;
+        gap: 5px;
+        margin-bottom: 4px;
+      }
+
+      .dot {
+        width: 10px;
+        height: 10px;
+      }
+    }
+
+    /* LANDSCAPE MODE ON MOBILE */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .map-topbar {
+        top: 6px;
+        left: 6px;
+        right: 6px;
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+
+      .map-topbar .left,
+      .map-topbar .right {
+        flex: 1;
+        min-width: 200px;
+      }
+
+      .btn {
+        padding: 6px 10px;
+        font-size: 11px;
+        min-height: 36px;
+      }
+
+      .info-panel {
+        bottom: 8px;
+        left: 8px;
+        width: 200px;
+        padding: 10px;
+      }
+
+      .info-panel h3 {
+        font-size: 13px;
+      }
+
+      .info-panel p {
+        font-size: 10px;
+        margin: 3px 0;
+      }
+
+      .legend {
+        bottom: 8px;
+        right: 8px;
+        padding: 8px;
+        max-width: 110px;
+      }
+
+      .legend h4 {
+        font-size: 11px;
+        margin-bottom: 5px;
+      }
+
+      .legend-item {
+        font-size: 9px;
+        margin-bottom: 3px;
+      }
+
+      .dot {
+        width: 9px;
+        height: 9px;
+      }
+    }
+
+    /* HIGH DPI DISPLAYS */
+    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+      .btn,
+      .info-panel,
+      .legend {
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      }
+    }
+
+    /* DARK MODE SUPPORT */
+    @media (prefers-color-scheme: dark) {
+      .btn {
+        background: rgba(40, 40, 40, 0.95);
+        color: #fff;
+      }
+
+      .info-panel,
+      .legend {
+        background: rgba(30, 30, 30, 0.95);
+        color: #fff;
+      }
+
+      .info-panel p {
+        color: #ccc;
+      }
+    }
+
+    /* REDUCED MOTION */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
   </style>
 </head>
 
@@ -186,13 +501,64 @@ html, body {
   <!-- FORCE FULL RENDER -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
+      // Force map to render properly
       setTimeout(() => {
         if (window.safeSphereMap?.mapInstance) {
           window.safeSphereMap.mapInstance.invalidateSize(true);
         }
       }, 400);
+
+      // Toggle zones functionality
+      const toggleBtn = document.getElementById('toggle-zones');
+      let zonesVisible = true;
+      
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          if (window.safeSphereMap?.zonesLayer) {
+            zonesVisible = !zonesVisible;
+            const map = window.safeSphereMap.mapInstance;
+            
+            if (zonesVisible) {
+              map.addLayer(window.safeSphereMap.zonesLayer);
+              toggleBtn.textContent = 'Hide Zones';
+            } else {
+              map.removeLayer(window.safeSphereMap.zonesLayer);
+              toggleBtn.textContent = 'Show Zones';
+            }
+          }
+        });
+      }
+
+      // Prevent body scroll on mobile
+      document.body.addEventListener('touchmove', (e) => {
+        if (!e.target.closest('#mini-map')) {
+          e.preventDefault();
+        }
+      }, { passive: false });
+
+      // Handle orientation change
+      window.addEventListener('orientationchange', () => {
+        setTimeout(() => {
+          if (window.safeSphereMap?.mapInstance) {
+            window.safeSphereMap.mapInstance.invalidateSize(true);
+          }
+        }, 200);
+      });
+
+      // Handle window resize
+      let resizeTimer;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          if (window.safeSphereMap?.mapInstance) {
+            window.safeSphereMap.mapInstance.invalidateSize(true);
+          }
+        }, 250);
+      });
     });
   </script>
 
+  <!-- Include floating chat button -->
+  {% include 'partials/floating_chat_button.html' %}
 </body>
 </html>

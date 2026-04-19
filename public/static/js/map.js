@@ -149,9 +149,11 @@
     if (!el.style.height) el.style.height = "360px";
 
     const map = L.map(el, { zoomControl: true }).setView(DEFAULT_CENTER, DEFAULT_ZOOM);
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: '© OpenStreetMap contributors',
-      maxZoom: 19
+    // Using CartoDB tile server (more permissive, no referer required)
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
+      attribution: '© OpenStreetMap contributors © CARTO',
+      maxZoom: 19,
+      subdomains: 'abcd'
     }).addTo(map);
     addLegend(map);
     addLocateControl(map);

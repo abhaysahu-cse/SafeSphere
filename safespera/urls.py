@@ -23,8 +23,11 @@ from safe import views
 urlpatterns = [
     path('admin/', admin.site.urls),
 
+    # Landing page
+    path('', views.landing, name='landing'),
+    
     # Core pages
-    path('', views.index, name='index'),
+    path('dashboard/', views.index, name='index'),
     path('learn/', views.learn, name='learn'),
     path('drills/', views.drills, name='drills'),
     path('games/', views.games, name='games'),

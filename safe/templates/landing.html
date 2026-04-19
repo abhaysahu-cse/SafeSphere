@@ -1,0 +1,1522 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>SafeSphere — Learn. Prepare. Survive.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --ink: #0a0e1a;
+  --ink-2: #1a2035;
+  --ink-3: #2d3655;
+  --muted: #64748b;
+  --surface: #ffffff;
+  --surface-2: #f8faff;
+  --surface-3: #f0f4ff;
+  --brand: #1e40af;
+  --brand-2: #3b82f6;
+  --brand-3: #60a5fa;
+  --accent: #f97316;
+  --accent-2: #fb923c;
+  --green: #059669;
+  --red: #dc2626;
+  --amber: #d97706;
+  --purple: #7c3aed;
+  --cyan: #0891b2;
+  --glow: rgba(59,130,246,0.18);
+  --radius: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{font-family:'Outfit',sans-serif;background:var(--surface);color:var(--ink);overflow-x:hidden}
+
+/* ─── NOISE TEXTURE OVERLAY ─── */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:9999;opacity:.4
+}
+
+/* ─── NAVBAR ─── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 5%;height:72px;
+  background:rgba(255,255,255,0.88);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(30,64,175,0.08);
+  transition:all .3s ease;
+}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo-icon{
+  width:38px;height:38px;border-radius:10px;
+  background:linear-gradient(135deg,#1e40af,#3b82f6);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;box-shadow:0 4px 14px rgba(59,130,246,0.35)
+}
+.nav-logo-text{font-weight:800;font-size:17px;color:var(--ink);letter-spacing:-.3px}
+.nav-logo-sub{font-size:10px;font-weight:500;color:var(--brand-2);letter-spacing:.5px;text-transform:uppercase}
+.nav-links{display:flex;align-items:center;gap:32px}
+.nav-links a{text-decoration:none;font-size:14px;font-weight:500;color:var(--muted);transition:color .2s}
+.nav-links a:hover{color:var(--brand)}
+.nav-links a.active{color:var(--brand);font-weight:600}
+.nav-cta{display:flex;align-items:center;gap:12px}
+.btn-ghost-nav{
+  padding:9px 20px;border-radius:10px;font-size:14px;font-weight:600;
+  color:var(--brand);border:1.5px solid rgba(59,130,246,0.3);
+  background:transparent;cursor:pointer;transition:all .2s;text-decoration:none
+}
+.btn-ghost-nav:hover{background:rgba(59,130,246,0.06)}
+.btn-primary-nav{
+  padding:9px 22px;border-radius:10px;font-size:14px;font-weight:700;
+  color:#fff;background:linear-gradient(135deg,#1e40af,#3b82f6);
+  border:none;cursor:pointer;transition:all .2s;text-decoration:none;
+  box-shadow:0 4px 14px rgba(59,130,246,0.35)
+}
+.btn-primary-nav:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(59,130,246,0.45)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px}
+.hamburger span{width:22px;height:2px;background:var(--ink);border-radius:2px;transition:all .3s}
+.mobile-menu{
+  display:none;position:fixed;top:72px;left:0;right:0;
+  background:#fff;border-bottom:1px solid rgba(0,0,0,0.06);
+  padding:20px 5%;flex-direction:column;gap:4px;z-index:999;
+  box-shadow:0 20px 40px rgba(0,0,0,0.08)
+}
+.mobile-menu a{
+  padding:13px 16px;border-radius:10px;font-size:15px;font-weight:500;
+  color:var(--ink-2);text-decoration:none;display:block;transition:background .2s
+}
+.mobile-menu a:hover{background:var(--surface-3)}
+.mobile-menu .mm-cta{margin-top:8px;display:flex;flex-direction:column;gap:8px}
+
+/* ─── HERO ─── */
+.hero{
+  min-height:100vh;display:flex;align-items:center;
+  padding:120px 5% 80px;
+  background:linear-gradient(160deg,#f0f6ff 0%,#e8f0ff 35%,#fdf4ff 65%,#fff5f0 100%);
+  position:relative;overflow:hidden
+}
+.hero-blob-1{
+  position:absolute;top:-200px;right:-100px;
+  width:700px;height:700px;border-radius:50%;
+  background:radial-gradient(circle,rgba(59,130,246,0.15) 0%,transparent 70%);
+  pointer-events:none
+}
+.hero-blob-2{
+  position:absolute;bottom:-100px;left:-150px;
+  width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle,rgba(249,115,22,0.12) 0%,transparent 70%);
+  pointer-events:none
+}
+.hero-grid-line{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(59,130,246,0.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(59,130,246,0.05) 1px,transparent 1px);
+  background-size:60px 60px;pointer-events:none
+}
+.hero-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;width:100%}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:7px 16px;border-radius:100px;
+  background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);
+  font-size:12px;font-weight:600;color:var(--brand);letter-spacing:.3px;
+  text-transform:uppercase;margin-bottom:24px
+}
+.hero-badge-dot{width:7px;height:7px;border-radius:50%;background:var(--brand-2);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.3)}}
+.hero-title{font-size:clamp(36px,5vw,64px);font-weight:900;line-height:1.08;letter-spacing:-1.5px;color:var(--ink);margin-bottom:20px}
+.hero-title .gradient-text{
+  background:linear-gradient(135deg,#1e40af,#3b82f6,#06b6d4);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text
+}
+.hero-title .accent-text{color:var(--accent)}
+.hero-sub{font-size:18px;font-weight:400;color:var(--muted);line-height:1.65;margin-bottom:36px;max-width:500px}
+.hero-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.btn-hero-primary{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:16px 32px;border-radius:14px;font-size:16px;font-weight:700;
+  color:#fff;background:linear-gradient(135deg,#1e40af,#3b82f6);
+  border:none;cursor:pointer;text-decoration:none;
+  box-shadow:0 8px 28px rgba(59,130,246,0.4);
+  transition:all .25s
+}
+.btn-hero-primary:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(59,130,246,0.5)}
+.btn-hero-secondary{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:15px 28px;border-radius:14px;font-size:16px;font-weight:600;
+  color:var(--ink-2);background:#fff;
+  border:1.5px solid rgba(0,0,0,0.1);cursor:pointer;text-decoration:none;
+  box-shadow:0 4px 16px rgba(0,0,0,0.08);
+  transition:all .25s
+}
+.btn-hero-secondary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.14)}
+.hero-stats{display:flex;gap:24px;margin-top:40px;flex-wrap:wrap}
+.hero-stat{text-align:left}
+.hero-stat-num{font-size:28px;font-weight:800;color:var(--ink);letter-spacing:-1px}
+.hero-stat-label{font-size:12px;font-weight:500;color:var(--muted);margin-top:2px}
+.hero-stat-div{width:1px;background:rgba(0,0,0,0.1);align-self:stretch}
+
+/* Hero visual */
+.hero-visual{position:relative;height:500px}
+.hero-card-main{
+  position:absolute;top:20px;right:0;
+  width:280px;background:#fff;border-radius:20px;
+  padding:20px;box-shadow:0 20px 60px rgba(0,0,0,0.12);
+  border:1px solid rgba(0,0,0,0.06);animation:float 6s ease-in-out infinite
+}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.hero-card-badge{
+  display:inline-block;padding:5px 12px;border-radius:100px;
+  background:rgba(5,150,105,0.12);color:var(--green);
+  font-size:11px;font-weight:700;letter-spacing:.3px;margin-bottom:12px
+}
+.hero-card-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.hero-card-sub{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:14px}
+.hero-card-progress{height:6px;background:#f1f5f9;border-radius:100px;margin-bottom:6px}
+.hero-card-progress-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,#1e40af,#3b82f6)}
+.hero-card-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}
+.hero-card-2{
+  position:absolute;top:180px;left:0;
+  width:240px;background:#fff;border-radius:18px;
+  padding:16px;box-shadow:0 16px 50px rgba(0,0,0,0.1);
+  border:1px solid rgba(0,0,0,0.06);
+  animation:float 6s ease-in-out infinite;animation-delay:-2s
+}
+.hero-card-3{
+  position:absolute;bottom:40px;right:30px;
+  width:260px;background:linear-gradient(135deg,#1e40af,#3b82f6);border-radius:18px;
+  padding:16px;box-shadow:0 16px 50px rgba(59,130,246,0.4);
+  animation:float 6s ease-in-out infinite;animation-delay:-4s
+}
+.achievement-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.achievement-icon{font-size:22px}
+.achievement-text{font-size:13px;font-weight:600;color:#fff}
+.achievement-sub{font-size:11px;color:rgba(255,255,255,0.7)}
+.xp-bar{height:8px;background:rgba(255,255,255,0.2);border-radius:100px;overflow:hidden}
+.xp-fill{height:100%;background:rgba(255,255,255,0.9);border-radius:100px;width:68%}
+
+/* ─── SECTION COMMONS ─── */
+section{padding:96px 5%}
+.section-label{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--brand);margin-bottom:14px
+}
+.section-title{font-size:clamp(28px,4vw,44px);font-weight:800;letter-spacing:-1px;color:var(--ink);line-height:1.15;margin-bottom:14px}
+.section-sub{font-size:17px;color:var(--muted);line-height:1.65;max-width:580px;margin-bottom:48px}
+.section-title .hl{
+  background:linear-gradient(135deg,#1e40af,#3b82f6);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text
+}
+.centered{text-align:center}
+.centered .section-sub{margin-left:auto;margin-right:auto}
+.container{max-width:1200px;margin:0 auto}
+
+/* ─── AUDIENCE SECTION ─── */
+.audience-section{background:var(--ink);position:relative;overflow:hidden}
+.audience-bg{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse at 20% 50%,rgba(59,130,246,0.2) 0%,transparent 60%),
+            radial-gradient(ellipse at 80% 50%,rgba(249,115,22,0.15) 0%,transparent 60%);
+  pointer-events:none
+}
+.audience-section .section-label{color:var(--brand-3)}
+.audience-section .section-title{color:#fff}
+.audience-section .section-sub{color:rgba(255,255,255,0.65)}
+.audience-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:48px}
+.audience-card{
+  background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);
+  border-radius:20px;padding:28px 20px;text-align:center;
+  cursor:pointer;transition:all .3s;text-decoration:none;
+  position:relative;overflow:hidden
+}
+.audience-card::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.08),transparent);
+  opacity:0;transition:opacity .3s
+}
+.audience-card:hover{transform:translateY(-6px);border-color:rgba(255,255,255,0.25);background:rgba(255,255,255,0.1)}
+.audience-card:hover::before{opacity:1}
+.audience-card-icon{font-size:40px;margin-bottom:14px;display:block}
+.audience-card-title{font-size:15px;font-weight:700;color:#fff;margin-bottom:6px}
+.audience-card-sub{font-size:12px;color:rgba(255,255,255,0.5);line-height:1.5}
+.audience-card-tag{
+  display:inline-block;margin-top:12px;
+  padding:4px 12px;border-radius:100px;
+  font-size:10px;font-weight:700;letter-spacing:.3px;text-transform:uppercase
+}
+
+/* ─── COURSES SECTION ─── */
+.courses-section{background:var(--surface-2)}
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:40px}
+.filter-btn{
+  padding:8px 20px;border-radius:100px;font-size:13px;font-weight:600;
+  border:1.5px solid rgba(0,0,0,0.1);background:#fff;color:var(--muted);
+  cursor:pointer;transition:all .2s
+}
+.filter-btn.active,.filter-btn:hover{
+  background:var(--brand);color:#fff;border-color:var(--brand);
+  box-shadow:0 4px 14px rgba(30,64,175,0.3)
+}
+.courses-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.course-card{
+  background:#fff;border-radius:var(--radius-lg);overflow:hidden;
+  box-shadow:0 4px 20px rgba(0,0,0,0.06);
+  border:1px solid rgba(0,0,0,0.06);
+  transition:all .3s;cursor:pointer;text-decoration:none;display:block
+}
+.course-card:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(0,0,0,0.12)}
+.course-thumb{
+  height:180px;display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden
+}
+.course-thumb-icon{font-size:60px;filter:drop-shadow(0 8px 16px rgba(0,0,0,0.15));z-index:1;position:relative}
+.course-level{
+  position:absolute;top:14px;right:14px;
+  padding:5px 12px;border-radius:100px;font-size:11px;font-weight:700
+}
+.level-beginner{background:rgba(5,150,105,0.15);color:var(--green)}
+.level-intermediate{background:rgba(217,119,6,0.15);color:var(--amber)}
+.level-advanced{background:rgba(220,38,38,0.15);color:var(--red)}
+.course-body{padding:20px}
+.course-title{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:6px;line-height:1.3}
+.course-desc{font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:16px}
+.course-meta{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--muted)}
+.course-meta-item{display:flex;align-items:center;gap:4px}
+.course-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 20px;border-top:1px solid rgba(0,0,0,0.06)
+}
+.course-xp{font-size:13px;font-weight:700;color:var(--brand)}
+.course-btn{
+  padding:8px 18px;border-radius:10px;font-size:13px;font-weight:700;
+  background:linear-gradient(135deg,#1e40af,#3b82f6);color:#fff;
+  border:none;cursor:pointer;transition:all .2s
+}
+.course-btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(59,130,246,0.4)}
+
+/* ─── VR LAB ─── */
+.vr-section{background:var(--ink);position:relative;overflow:hidden}
+.vr-bg{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 30% 60%,rgba(124,58,237,0.25) 0%,transparent 50%),
+    radial-gradient(circle at 70% 30%,rgba(8,145,178,0.2) 0%,transparent 50%);
+  pointer-events:none
+}
+.vr-section .section-label{color:#c4b5fd}
+.vr-section .section-title{color:#fff}
+.vr-section .section-sub{color:rgba(255,255,255,0.65)}
+.vr-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.vr-scenarios{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.vr-scenario-card{
+  background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);
+  border-radius:16px;padding:20px;cursor:pointer;transition:all .3s;
+  position:relative;overflow:hidden
+}
+.vr-scenario-card:hover{background:rgba(255,255,255,0.12);transform:translateY(-3px)}
+.vr-scenario-card.featured{
+  grid-column:1/-1;
+  background:linear-gradient(135deg,rgba(124,58,237,0.25),rgba(8,145,178,0.2));
+  border-color:rgba(196,181,253,0.3)
+}
+.vr-icon{font-size:28px;margin-bottom:10px;display:block}
+.vr-title{font-size:14px;font-weight:700;color:#fff;margin-bottom:4px}
+.vr-sub{font-size:12px;color:rgba(255,255,255,0.55)}
+.vr-badge{
+  display:inline-block;margin-top:8px;
+  padding:3px 10px;border-radius:100px;
+  font-size:10px;font-weight:700;
+  background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.8)
+}
+.vr-preview{position:relative}
+.vr-screen{
+  background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);
+  border-radius:24px;padding:40px;text-align:center;
+  min-height:380px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:16px
+}
+.vr-screen-emoji{font-size:80px;filter:drop-shadow(0 0 30px rgba(124,58,237,0.6))}
+.vr-screen-title{font-size:18px;font-weight:700;color:#fff}
+.vr-screen-sub{font-size:13px;color:rgba(255,255,255,0.6);max-width:250px;line-height:1.5}
+.btn-vr{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:14px 28px;border-radius:12px;font-size:14px;font-weight:700;
+  color:#fff;background:linear-gradient(135deg,#7c3aed,#3b82f6);
+  border:none;cursor:pointer;transition:all .25s;
+  box-shadow:0 8px 28px rgba(124,58,237,0.4)
+}
+.btn-vr:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(124,58,237,0.5)}
+
+/* ─── SIMULATIONS ─── */
+.sims-section{background:#fff}
+.sims-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.sim-card{
+  border-radius:var(--radius-lg);overflow:hidden;
+  position:relative;min-height:220px;
+  cursor:pointer;transition:all .3s;text-decoration:none;display:block
+}
+.sim-card:hover{transform:translateY(-6px);box-shadow:0 24px 60px rgba(0,0,0,0.18)}
+.sim-card-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.sim-card-content{
+  position:relative;z-index:1;
+  padding:24px;display:flex;flex-direction:column;justify-content:flex-end;
+  height:100%
+}
+.sim-tag{
+  display:inline-block;padding:4px 12px;border-radius:100px;
+  font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+  background:rgba(255,255,255,0.2);color:#fff;margin-bottom:8px;
+  backdrop-filter:blur(8px)
+}
+.sim-title{font-size:17px;font-weight:800;color:#fff;margin-bottom:4px;line-height:1.2}
+.sim-sub{font-size:12px;color:rgba(255,255,255,0.75);margin-bottom:12px}
+.sim-meta{display:flex;gap:12px;align-items:center}
+.sim-xp{font-size:12px;font-weight:700;color:rgba(255,255,255,0.9)}
+.sim-play-btn{
+  display:flex;align-items:center;justify-content:center;
+  width:36px;height:36px;border-radius:50%;
+  background:rgba(255,255,255,0.25);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,0.3);
+  font-size:14px;cursor:pointer;transition:all .2s;margin-left:auto
+}
+.sim-play-btn:hover{background:rgba(255,255,255,0.4)}
+
+/* ─── STATS / TRUST ─── */
+.stats-section{background:var(--surface-3);position:relative;overflow:hidden}
+.stats-bg{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(59,130,246,0.08) 0%,transparent 50%);
+  pointer-events:none
+}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:48px}
+.stat-card{
+  background:#fff;padding:36px 28px;text-align:center;
+  transition:transform .3s
+}
+.stat-card:first-child{border-radius:var(--radius-lg) 0 0 var(--radius-lg)}
+.stat-card:last-child{border-radius:0 var(--radius-lg) var(--radius-lg) 0}
+.stat-card:hover{transform:translateY(-4px)}
+.stat-number{font-size:48px;font-weight:900;letter-spacing:-2px;line-height:1;
+  background:linear-gradient(135deg,#1e40af,#3b82f6);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text
+}
+.stat-label{font-size:14px;font-weight:500;color:var(--muted);margin-top:8px}
+.stat-icon{font-size:24px;margin-bottom:12px}
+
+/* ─── SPECIALIZED SECTIONS ─── */
+.specialized-section{background:var(--surface-2)}
+.specialized-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin-top:48px}
+.spec-card{
+  background:#fff;border-radius:var(--radius-xl);padding:36px;
+  border:1px solid rgba(0,0,0,0.06);
+  box-shadow:0 4px 20px rgba(0,0,0,0.05);
+  transition:all .3s;cursor:pointer
+}
+.spec-card:hover{transform:translateY(-4px);box-shadow:0 20px 50px rgba(0,0,0,0.1)}
+.spec-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px}
+.spec-icon-wrap{
+  width:60px;height:60px;border-radius:16px;
+  display:flex;align-items:center;justify-content:center;font-size:28px;
+  flex-shrink:0
+}
+.spec-count{font-size:12px;font-weight:700;color:var(--muted);padding:6px 14px;border-radius:100px;background:var(--surface-2)}
+.spec-title{font-size:22px;font-weight:800;color:var(--ink);margin-bottom:8px;letter-spacing:-.3px}
+.spec-sub{font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:20px}
+.spec-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.spec-tag{padding:5px 14px;border-radius:100px;font-size:12px;font-weight:600}
+.spec-link{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:14px;font-weight:700;text-decoration:none;
+  transition:gap .2s
+}
+.spec-link:hover{gap:10px}
+
+/* ─── CERTIFICATES ─── */
+.cert-section{background:#fff}
+.cert-preview{
+  background:linear-gradient(135deg,#1e3a8a,#1e40af);
+  border-radius:var(--radius-xl);padding:48px;
+  display:grid;grid-template-columns:1fr 1fr;gap:40px;
+  align-items:center;position:relative;overflow:hidden
+}
+.cert-preview::before{
+  content:'';position:absolute;top:-60px;right:-60px;
+  width:300px;height:300px;border-radius:50%;
+  background:rgba(255,255,255,0.05)
+}
+.cert-preview::after{
+  content:'';position:absolute;bottom:-80px;left:30%;
+  width:200px;height:200px;border-radius:50%;
+  background:rgba(255,255,255,0.04)
+}
+.cert-content{position:relative;z-index:1}
+.cert-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#93c5fd;margin-bottom:16px}
+.cert-title{font-size:32px;font-weight:900;color:#fff;margin-bottom:14px;letter-spacing:-.5px;line-height:1.15}
+.cert-sub{font-size:16px;color:rgba(255,255,255,0.75);line-height:1.6;margin-bottom:28px}
+.cert-features{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+.cert-feature{display:flex;align-items:center;gap:10px;font-size:14px;color:rgba(255,255,255,0.85)}
+.cert-feature-icon{width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+.btn-cert{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:14px 28px;border-radius:12px;font-size:15px;font-weight:700;
+  background:#fff;color:var(--brand);border:none;cursor:pointer;transition:all .25s;
+  box-shadow:0 4px 20px rgba(0,0,0,0.2)
+}
+.btn-cert:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,0,0,0.25)}
+.cert-card-preview{
+  position:relative;z-index:1;
+  background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);
+  border-radius:20px;padding:28px;backdrop-filter:blur(10px)
+}
+.cert-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.cert-logo{font-size:22px}
+.cert-verified{padding:4px 12px;border-radius:100px;background:rgba(255,255,255,0.15);color:#fff;font-size:11px;font-weight:700}
+.cert-recipient{text-align:center;margin:16px 0}
+.cert-recipient-name{font-size:22px;font-weight:800;color:#fff;letter-spacing:-.3px}
+.cert-recipient-label{font-size:11px;color:rgba(255,255,255,0.6);margin-top:4px}
+.cert-course-name{text-align:center;margin-bottom:20px;font-size:14px;font-weight:600;color:rgba(255,255,255,0.85)}
+.cert-footer{display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid rgba(255,255,255,0.15)}
+.cert-date{font-size:11px;color:rgba(255,255,255,0.6)}
+.cert-id{font-size:11px;color:rgba(255,255,255,0.6)}
+
+/* ─── SOS / EMERGENCY ─── */
+.sos-section{background:var(--surface-2)}
+.sos-card{
+  background:linear-gradient(135deg,#7f1d1d,#991b1b,#b91c1c);
+  border-radius:var(--radius-xl);padding:48px;
+  display:flex;align-items:center;gap:40px;
+  position:relative;overflow:hidden
+}
+.sos-card::before{
+  content:'';position:absolute;right:-60px;top:-60px;
+  width:300px;height:300px;border-radius:50%;
+  background:rgba(255,255,255,0.05)
+}
+.sos-icon{font-size:72px;animation:pulse 2s infinite;flex-shrink:0}
+.sos-content{flex:1;position:relative;z-index:1}
+.sos-title{font-size:28px;font-weight:900;color:#fff;margin-bottom:8px;letter-spacing:-.5px}
+.sos-sub{font-size:15px;color:rgba(255,255,255,0.8);margin-bottom:24px;line-height:1.5}
+.sos-numbers{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px}
+.sos-num{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,0.15);backdrop-filter:blur(8px);
+  padding:10px 18px;border-radius:12px;text-decoration:none;
+  border:1px solid rgba(255,255,255,0.2);transition:all .2s
+}
+.sos-num:hover{background:rgba(255,255,255,0.25)}
+.sos-num-label{font-size:11px;color:rgba(255,255,255,0.7)}
+.sos-num-val{font-size:18px;font-weight:800;color:#fff}
+.btn-sos{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:14px 28px;border-radius:12px;font-size:15px;font-weight:700;
+  background:#fff;color:var(--red);border:none;cursor:pointer;
+  box-shadow:0 8px 28px rgba(0,0,0,0.2);transition:all .25s
+}
+.btn-sos:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,0,0,0.25)}
+.sos-app-note{
+  display:flex;align-items:center;gap:6px;
+  font-size:12px;color:rgba(255,255,255,0.65);margin-top:12px
+}
+
+/* ─── AI ASSISTANT ─── */
+.ai-section{background:#fff}
+.ai-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.ai-chat-preview{
+  background:var(--surface-2);border-radius:var(--radius-xl);padding:24px;
+  border:1px solid rgba(0,0,0,0.08)
+}
+.chat-header{display:flex;align-items:center;gap:10px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid rgba(0,0,0,0.08)}
+.chat-avatar{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#1e40af,#06b6d4);display:flex;align-items:center;justify-content:center;font-size:16px}
+.chat-name{font-size:14px;font-weight:700;color:var(--ink)}
+.chat-status{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--green)}
+.chat-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+.chat-messages{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}
+.chat-msg{max-width:80%;padding:12px 16px;border-radius:14px;font-size:13px;line-height:1.55}
+.chat-msg-bot{background:#fff;border:1px solid rgba(0,0,0,0.08);color:var(--ink);border-radius:4px 14px 14px 14px;align-self:flex-start}
+.chat-msg-user{background:linear-gradient(135deg,#1e40af,#3b82f6);color:#fff;border-radius:14px 4px 14px 14px;align-self:flex-end}
+.chat-input{
+  display:flex;gap:8px;padding:10px;
+  background:#fff;border-radius:12px;border:1px solid rgba(0,0,0,0.1)
+}
+.chat-input input{flex:1;border:none;outline:none;font-size:13px;font-family:inherit;color:var(--ink);background:transparent}
+.chat-send{
+  width:34px;height:34px;border-radius:8px;
+  background:linear-gradient(135deg,#1e40af,#3b82f6);
+  border:none;color:#fff;font-size:14px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center
+}
+.suggested-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.chip{
+  padding:6px 14px;border-radius:100px;font-size:11px;font-weight:600;
+  background:rgba(59,130,246,0.08);color:var(--brand);
+  border:1px solid rgba(59,130,246,0.15);cursor:pointer;transition:all .2s
+}
+.chip:hover{background:rgba(59,130,246,0.15)}
+
+/* ─── FOOTER ─── */
+footer{background:var(--ink);color:#fff;padding:64px 5% 32px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+.footer-brand{max-width:300px}
+.footer-logo{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.footer-desc{font-size:14px;color:rgba(255,255,255,0.55);line-height:1.7;margin-bottom:20px}
+.footer-social{display:flex;gap:10px}
+.social-btn{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;transition:background .2s}
+.social-btn:hover{background:rgba(255,255,255,0.16)}
+.footer-col h4{font-size:13px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:16px}
+.footer-col a{display:block;font-size:14px;color:rgba(255,255,255,0.65);text-decoration:none;margin-bottom:10px;transition:color .2s}
+.footer-col a:hover{color:#fff}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:28px;border-top:1px solid rgba(255,255,255,0.08);font-size:13px;color:rgba(255,255,255,0.4)}
+.lang-selector-footer{display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.55)}
+.lang-selector-footer select{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.8);padding:5px 10px;border-radius:8px;font-size:12px;cursor:pointer}
+
+/* ─── STICKY CTA BAR (mobile) ─── */
+.sticky-cta{
+  display:none;position:fixed;bottom:0;left:0;right:0;z-index:900;
+  background:#fff;border-top:1px solid rgba(0,0,0,0.1);
+  padding:12px 20px;gap:10px;
+  box-shadow:0 -8px 24px rgba(0,0,0,0.1)
+}
+.sticky-sos{
+  flex:0;padding:12px 18px;border-radius:12px;font-size:14px;font-weight:700;
+  background:#dc2626;color:#fff;border:none;cursor:pointer
+}
+.sticky-learn{
+  flex:1;padding:12px;border-radius:12px;font-size:14px;font-weight:700;
+  background:linear-gradient(135deg,#1e40af,#3b82f6);color:#fff;border:none;cursor:pointer
+}
+
+/* ─── ANIMATIONS ─── */
+.fade-up{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+.fade-up-2{transition-delay:.1s}
+.fade-up-3{transition-delay:.2s}
+.fade-up-4{transition-delay:.3s}
+.fade-up-5{transition-delay:.4s}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width:1024px){
+  .hero-inner{grid-template-columns:1fr;text-align:center}
+  .hero-visual{display:none}
+  .hero-sub{margin:0 auto 36px}
+  .hero-actions{justify-content:center}
+  .hero-stats{justify-content:center}
+  .audience-grid{grid-template-columns:repeat(3,1fr)}
+  .courses-grid{grid-template-columns:repeat(2,1fr)}
+  .sims-grid{grid-template-columns:repeat(2,1fr)}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .stat-card:nth-child(1){border-radius:var(--radius-lg) 0 0 0}
+  .stat-card:nth-child(2){border-radius:0 var(--radius-lg) 0 0}
+  .stat-card:nth-child(3){border-radius:0 0 0 var(--radius-lg)}
+  .stat-card:nth-child(4){border-radius:0 0 var(--radius-lg) 0}
+  .specialized-grid{grid-template-columns:1fr}
+  .cert-preview{grid-template-columns:1fr}
+  .vr-grid{grid-template-columns:1fr}
+  .ai-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:768px){
+  .nav-links,.nav-cta{display:none}
+  .hamburger{display:flex}
+  section{padding:64px 5%}
+  .audience-grid{grid-template-columns:1fr 1fr}
+  .courses-grid{grid-template-columns:1fr}
+  .sims-grid{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .sos-card{flex-direction:column;text-align:center}
+  .sos-numbers{justify-content:center}
+  .footer-grid{grid-template-columns:1fr}
+  .footer-bottom{flex-direction:column;gap:12px;text-align:center}
+  .sticky-cta{display:flex}
+  body{padding-bottom:72px}
+}
+@media (max-width:480px){
+  .audience-grid{grid-template-columns:1fr}
+  .hero-title{font-size:30px}
+}
+</style>
+</head>
+<body>
+
+<!-- ─── NAVBAR ─── -->
+<nav id="navbar">
+  <a href="{% url 'landing' %}" class="nav-logo">
+    <div class="nav-logo-icon">🛡️</div>
+    <div>
+      <div class="nav-logo-text">SafeSphere</div>
+      <div class="nav-logo-sub">Academy</div>
+    </div>
+  </a>
+
+  <div class="nav-links">
+    <a href="#learn" class="active">Learn</a>
+    <a href="#vr">VR Lab</a>
+    <a href="#simulations">Simulations</a>
+    <a href="#certifications">Certificates</a>
+    <a href="#specialized">For You</a>
+    <a href="#emergency">Emergency</a>
+  </div>
+
+  <div class="nav-cta">
+    <a href="{% url 'login' %}" class="btn-ghost-nav">Sign In</a>
+    <a href="{% url 'signup' %}" class="btn-primary-nav">Start Learning →</a>
+  </div>
+
+  <div class="hamburger" onclick="toggleMenu()" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#learn">📚 Learn</a>
+  <a href="#vr">🥽 VR Lab</a>
+  <a href="#simulations">🎮 Simulations</a>
+  <a href="#certifications">🏆 Certificates</a>
+  <a href="#specialized">🎯 For You</a>
+  <a href="#emergency">🆘 Emergency</a>
+  <div class="mm-cta">
+    <a href="{% url 'login' %}" style="padding:13px;border-radius:12px;text-align:center;border:1.5px solid rgba(59,130,246,0.3);color:#1e40af;font-weight:700">Sign In</a>
+    <a href="{% url 'signup' %}" style="padding:13px;border-radius:12px;text-align:center;background:linear-gradient(135deg,#1e40af,#3b82f6);color:#fff;font-weight:700">Start Learning →</a>
+  </div>
+</div>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="hero-blob-1"></div>
+  <div class="hero-blob-2"></div>
+  <div class="hero-grid-line"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        India's #1 Disaster Education Platform
+      </div>
+      <h1 class="hero-title">
+        Learn to <span class="gradient-text">Survive</span><br/>
+        Every <span class="accent-text">Disaster.</span>
+      </h1>
+      <p class="hero-sub">
+        Complete safety training for students, teachers, farmers, and families. VR simulations, certifications, quizzes — all in one platform built for India.
+      </p>
+      <div class="hero-actions">
+        <a href="{% url 'signup' %}" class="btn-hero-primary">🚀 Start Learning Free</a>
+        <a href="#vr" class="btn-hero-secondary">🥽 Explore VR Lab</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-num">1,500+</div>
+          <div class="hero-stat-label">Students Using</div>
+        </div>
+        <div class="hero-stat-div"></div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">10+</div>
+          <div class="hero-stat-label">Schools Active</div>
+        </div>
+        <div class="hero-stat-div"></div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">22+</div>
+          <div class="hero-stat-label">Disasters Covered</div>
+        </div>
+        <div class="hero-stat-div"></div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">8</div>
+          <div class="hero-stat-label">Indian Languages</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <!-- Floating card 1 -->
+      <div class="hero-card-main">
+        <div class="hero-card-badge">✅ IN PROGRESS</div>
+        <div class="hero-card-title">🌊 Flood Safety — Farmers</div>
+        <div class="hero-card-sub">Before, During & After flood — protect crops, livestock & income.</div>
+        <div class="hero-card-progress"><div class="hero-card-progress-fill" style="width:68%"></div></div>
+        <div class="hero-card-meta"><span>68% complete</span><span>⭐ 150 XP</span></div>
+      </div>
+
+      <!-- Floating card 2 -->
+      <div class="hero-card-2">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+          <span style="font-size:20px">🏆</span>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:#0a0e1a">Certificate Earned!</div>
+            <div style="font-size:11px;color:#64748b">Fire Safety Expert</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <div style="flex:1;padding:8px;background:#f0f4ff;border-radius:8px;text-align:center;font-size:11px;font-weight:600;color:#1e40af">📥 Download PDF</div>
+          <div style="flex:1;padding:8px;background:#f0fdf4;border-radius:8px;text-align:center;font-size:11px;font-weight:600;color:#059669">🔗 Share</div>
+        </div>
+      </div>
+
+      <!-- Floating card 3 (dark) -->
+      <div class="hero-card-3">
+        <div class="achievement-row">
+          <div class="achievement-icon">⚡</div>
+          <div>
+            <div class="achievement-text">Level 8 — Champion</div>
+            <div class="achievement-sub">2,450 XP • 12 modules done</div>
+          </div>
+        </div>
+        <div class="xp-bar"><div class="xp-fill"></div></div>
+        <div style="display:flex;justify-content:space-between;margin-top:6px">
+          <span style="font-size:11px;color:rgba(255,255,255,0.6)">Level 8</span>
+          <span style="font-size:11px;color:rgba(255,255,255,0.6)">350 XP to Level 9</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── AUDIENCE ─── -->
+<section class="audience-section" id="audience">
+  <div class="audience-bg"></div>
+  <div class="container">
+    <div class="section-label">🎯 Built For Everyone</div>
+    <h2 class="section-title">Who do you want to<br/>protect today?</h2>
+    <p class="section-sub">Specialized learning paths for every role — tailored content, relevant scenarios, right difficulty.</p>
+    <div class="audience-grid">
+      <a href="#" class="audience-card">
+        <span class="audience-card-icon">🧑‍🎓</span>
+        <div class="audience-card-title">Students</div>
+        <div class="audience-card-sub">Interactive modules, quizzes & gamified learning</div>
+        <div class="audience-card-tag" style="background:rgba(59,130,246,0.2);color:#93c5fd">18 Modules</div>
+      </a>
+      <a href="#" class="audience-card">
+        <span class="audience-card-icon">🧑‍🏫</span>
+        <div class="audience-card-title">Teachers</div>
+        <div class="audience-card-sub">Class dashboards, lesson plans & drill organizer</div>
+        <div class="audience-card-tag" style="background:rgba(16,185,129,0.2);color:#6ee7b7">Dashboard</div>
+      </a>
+      <a href="#" class="audience-card">
+        <span class="audience-card-icon">👨‍🌾</span>
+        <div class="audience-card-title">Farmers</div>
+        <div class="audience-card-sub">Crop protection, monsoon planning & livestock safety</div>
+        <div class="audience-card-tag" style="background:rgba(217,119,6,0.2);color:#fcd34d">4 Tracks</div>
+      </a>
+      <a href="#" class="audience-card">
+        <span class="audience-card-icon">👨‍👩‍👧</span>
+        <div class="audience-card-title">Families</div>
+        <div class="audience-card-sub">Home safety, emergency kits & escape planning</div>
+        <div class="audience-card-tag" style="background:rgba(244,63,94,0.2);color:#fda4af">Family Plan</div>
+      </a>
+      <a href="#" class="audience-card">
+        <span class="audience-card-icon">🏘️</span>
+        <div class="audience-card-title">Communities</div>
+        <div class="audience-card-sub">Shelters, evacuation & community drill organizer</div>
+        <div class="audience-card-tag" style="background:rgba(139,92,246,0.2);color:#c4b5fd">Leader Pack</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── COURSES ─── -->
+<section class="courses-section" id="learn">
+  <div class="container">
+    <div class="section-label">📚 Learning Modules</div>
+    <h2 class="section-title fade-up">Master <span class="hl">22+ Disasters.</span><br/>One Platform.</h2>
+    <p class="section-sub fade-up fade-up-2">From earthquakes to heatwaves — structured courses with quizzes, posters, videos, and expert-verified content.</p>
+
+    <div class="filter-bar fade-up fade-up-3">
+      <button class="filter-btn active">All</button>
+      <button class="filter-btn">🌍 Ground</button>
+      <button class="filter-btn">🌊 Water</button>
+      <button class="filter-btn">🔥 Fire</button>
+      <button class="filter-btn">💨 Wind</button>
+      <button class="filter-btn">🏥 Health</button>
+      <button class="filter-btn">🟢 Beginner</button>
+      <button class="filter-btn">🟡 Intermediate</button>
+      <button class="filter-btn">🔴 Advanced</button>
+    </div>
+
+    <div class="courses-grid">
+      <!-- Card 1 -->
+      <a href="#" class="course-card fade-up">
+        <div class="course-thumb" style="background:linear-gradient(135deg,#fef9c3,#fef3c7)">
+          <div class="course-thumb-icon">🌍</div>
+          <div class="course-level level-beginner">Beginner</div>
+        </div>
+        <div class="course-body">
+          <div class="course-title">भूकंप सुरक्षा की मूल बातें</div>
+          <div class="course-desc">DROP, COVER, HOLD ON — complete earthquake preparedness with low-cost home retrofit tips.</div>
+          <div class="course-meta">
+            <div class="course-meta-item">⏱ 15 min</div>
+            <div class="course-meta-item">📝 5 modules</div>
+            <div class="course-meta-item">🌐 Hindi + English</div>
+          </div>
+        </div>
+        <div class="course-footer">
+          <div class="course-xp">⭐ 100 XP</div>
+          <button class="course-btn">▶ Start</button>
+        </div>
+      </a>
+
+      <!-- Card 2 -->
+      <a href="#" class="course-card fade-up fade-up-2">
+        <div class="course-thumb" style="background:linear-gradient(135deg,#dbeafe,#bfdbfe)">
+          <div class="course-thumb-icon">🌊</div>
+          <div class="course-level level-intermediate">Intermediate</div>
+        </div>
+        <div class="course-body">
+          <div class="course-title">बाढ़ प्रतिक्रिया — Farmers & Households</div>
+          <div class="course-desc">Protect crops, livestock and family — complete flood response from early warning to recovery.</div>
+          <div class="course-meta">
+            <div class="course-meta-item">⏱ 20 min</div>
+            <div class="course-meta-item">📝 6 modules</div>
+            <div class="course-meta-item">🗺 Offline Ready</div>
+          </div>
+        </div>
+        <div class="course-footer">
+          <div class="course-xp">⭐ 150 XP</div>
+          <button class="course-btn">▶ Start</button>
+        </div>
+      </a>
+
+      <!-- Card 3 -->
+      <a href="#" class="course-card fade-up fade-up-3">
+        <div class="course-thumb" style="background:linear-gradient(135deg,#fee2e2,#fecaca)">
+          <div class="course-thumb-icon">🔥</div>
+          <div class="course-level level-beginner">Beginner</div>
+        </div>
+        <div class="course-body">
+          <div class="course-title">House Fire Prevention & Escape</div>
+          <div class="course-desc">PASS method, smoke alarm placement, escape planning, and stop-drop-roll for households.</div>
+          <div class="course-meta">
+            <div class="course-meta-item">⏱ 15 min</div>
+            <div class="course-meta-item">🎥 Video + Quiz</div>
+            <div class="course-meta-item">📜 Certificate</div>
+          </div>
+        </div>
+        <div class="course-footer">
+          <div class="course-xp">⭐ 100 XP</div>
+          <button class="course-btn">▶ Start</button>
+        </div>
+      </a>
+
+      <!-- Card 4 -->
+      <a href="#" class="course-card fade-up">
+        <div class="course-thumb" style="background:linear-gradient(135deg,#ecfdf5,#d1fae5)">
+          <div class="course-thumb-icon">🩺</div>
+          <div class="course-level level-intermediate">Intermediate</div>
+        </div>
+        <div class="course-body">
+          <div class="course-title">Emergency First Aid — DR ABC & CPR</div>
+          <div class="course-desc">Life-saving techniques: DR ABC protocol, CPR basics, bleeding control, and burn treatment.</div>
+          <div class="course-meta">
+            <div class="course-meta-item">⏱ 25 min</div>
+            <div class="course-meta-item">🏅 Certified</div>
+            <div class="course-meta-item">📥 Printable</div>
+          </div>
+        </div>
+        <div class="course-footer">
+          <div class="course-xp">⭐ 180 XP</div>
+          <button class="course-btn">▶ Start</button>
+        </div>
+      </a>
+
+      <!-- Card 5 -->
+      <a href="#" class="course-card fade-up fade-up-2">
+        <div class="course-thumb" style="background:linear-gradient(135deg,#faf5ff,#ede9fe)">
+          <div class="course-thumb-icon">🌀</div>
+          <div class="course-level level-advanced">Advanced</div>
+        </div>
+        <div class="course-body">
+          <div class="course-title">Cyclone Safety — Before, During & After</div>
+          <div class="course-desc">Roof anchorage, storm surge, community shelter management, and post-cyclone property recovery.</div>
+          <div class="course-meta">
+            <div class="course-meta-item">⏱ 18 min</div>
+            <div class="course-meta-item">🌍 Community</div>
+            <div class="course-meta-item">📜 Certificate</div>
+          </div>
+        </div>
+        <div class="course-footer">
+          <div class="course-xp">⭐ 120 XP</div>
+          <button class="course-btn">▶ Start</button>
+        </div>
+      </a>
+
+      <!-- Card 6 — Nuclear -->
+      <a href="#" class="course-card fade-up fade-up-3">
+        <div class="course-thumb" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7)">
+          <div class="course-thumb-icon">☢️</div>
+          <div class="course-level level-advanced">Advanced</div>
+        </div>
+        <div class="course-body">
+          <div class="course-title">Nuclear Safety & Shelter-in-Place</div>
+          <div class="course-desc">Radiation basics, shelter protocols, CBRN safety, and civil defence for extreme scenarios.</div>
+          <div class="course-meta">
+            <div class="course-meta-item">⏱ 22 min</div>
+            <div class="course-meta-item">🔒 Advanced</div>
+            <div class="course-meta-item">⭐ High XP</div>
+          </div>
+        </div>
+        <div class="course-footer">
+          <div class="course-xp">⭐ 200 XP</div>
+          <button class="course-btn">▶ Start</button>
+        </div>
+      </a>
+    </div>
+
+    <div style="text-align:center;margin-top:40px">
+      <a href="#" class="btn-hero-secondary">View All 22+ Modules →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── VR LAB ─── -->
+<section class="vr-section" id="vr">
+  <div class="vr-bg"></div>
+  <div class="container">
+    <div class="vr-grid">
+      <div>
+        <div class="section-label">🥽 VR / AR Training Center</div>
+        <h2 class="section-title" style="color:#fff">Experience Disasters<br/><span style="background:linear-gradient(135deg,#c4b5fd,#67e8f9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Safely. In 3D.</span></h2>
+        <p class="section-sub">Immersive WebXR simulations you can run in your browser. No expensive hardware needed — just a phone or computer.</p>
+
+        <div class="vr-scenarios">
+          <div class="vr-scenario-card featured">
+            <span class="vr-icon">🌊</span>
+            <div class="vr-title">Flood AR — Farm Simulation</div>
+            <div class="vr-sub">Watch water rise on a virtual farm. Learn when to move animals and evacuate.</div>
+            <span class="vr-badge">🟢 Available Now</span>
+          </div>
+          <div class="vr-scenario-card">
+            <span class="vr-icon">🔥</span>
+            <div class="vr-title">Fire Escape Room</div>
+            <div class="vr-sub">Navigate a burning building — find exits and make the right decisions.</div>
+            <span class="vr-badge">🟢 Live</span>
+          </div>
+          <div class="vr-scenario-card">
+            <span class="vr-icon">🌍</span>
+            <div class="vr-title">Earthquake Drill 3D</div>
+            <div class="vr-sub">DROP, COVER, HOLD in a realistic 3D environment.</div>
+            <span class="vr-badge">🟡 Coming Soon</span>
+          </div>
+          <div class="vr-scenario-card">
+            <span class="vr-icon">🌀</span>
+            <div class="vr-title">Cyclone Shelter</div>
+            <div class="vr-sub">Community shelter setup and storm management training.</div>
+            <span class="vr-badge">🟡 Phase 2</span>
+          </div>
+        </div>
+
+        <a href="#" class="btn-vr" style="margin-top:28px;display:inline-flex">🥽 Enter VR Lab →</a>
+      </div>
+
+      <div class="vr-preview">
+        <div class="vr-screen">
+          <div class="vr-screen-emoji">🌊</div>
+          <div class="vr-screen-title">Flood AR Training</div>
+          <div class="vr-screen-sub">Point your phone at a HIRO marker and watch flood simulation in real-time AR</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+            <div style="padding:8px 16px;border-radius:10px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);font-size:12px;color:rgba(255,255,255,0.8)">📱 Works on Phone</div>
+            <div style="padding:8px 16px;border-radius:10px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);font-size:12px;color:rgba(255,255,255,0.8)">🌐 Browser-Based</div>
+            <div style="padding:8px 16px;border-radius:10px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);font-size:12px;color:rgba(255,255,255,0.8)">🆓 Free to Try</div>
+          </div>
+          <div style="width:100%;background:rgba(255,255,255,0.1);border-radius:12px;padding:12px;margin-top:8px;text-align:left">
+            <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-bottom:6px">AR MODULES AVAILABLE</div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,0.8)"><span>🌊 Flood Farm</span><span style="color:#6ee7b7">Live</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,0.8)"><span>🔥 Fire Safety</span><span style="color:#6ee7b7">Live</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,0.8)"><span>🧭 Evacuation Route</span><span style="color:#6ee7b7">Live</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,0.55)"><span>🌍 Earthquake</span><span style="color:#fcd34d">Coming</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SIMULATIONS ─── -->
+<section class="sims-section" id="simulations">
+  <div class="container">
+    <div class="section-label centered">🎮 Interactive Simulations</div>
+    <h2 class="section-title centered fade-up">Learn by Doing.<br/><span class="hl">Not Just Reading.</span></h2>
+    <p class="section-sub centered fade-up fade-up-2">Browser-based disaster simulations — build shelters, manage evacuations, fight wildfires. Real decisions, real consequences, zero risk.</p>
+
+    <div class="sims-grid">
+      <a href="#" class="sim-card">
+        <div class="sim-card-bg" style="background:linear-gradient(135deg,#1e3a5f,#1e40af)">
+          <span style="font-size:120px;opacity:0.12;position:absolute">🌊</span>
+        </div>
+        <div class="sim-card-content">
+          <div class="sim-tag">Strategy Sim</div>
+          <div class="sim-title">Flood Defense<br/>Simulator</div>
+          <div class="sim-sub">Build levees, shelter houses, plant trees — then watch the flood hit</div>
+          <div class="sim-meta">
+            <div class="sim-xp">⭐ 80 XP</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.6)">Beginner</div>
+            <div class="sim-play-btn">▶</div>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="sim-card">
+        <div class="sim-card-bg" style="background:linear-gradient(135deg,#431407,#9a3412)">
+          <span style="font-size:120px;opacity:0.12;position:absolute">🔥</span>
+        </div>
+        <div class="sim-card-content">
+          <div class="sim-tag">Real-time Sim</div>
+          <div class="sim-title">Wildfire<br/>Response</div>
+          <div class="sim-sub">Plant firebreaks, protect shelters — stop the wildfire spread</div>
+          <div class="sim-meta">
+            <div class="sim-xp">⭐ 100 XP</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.6)">Intermediate</div>
+            <div class="sim-play-btn">▶</div>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="sim-card">
+        <div class="sim-card-bg" style="background:linear-gradient(135deg,#0c4a6e,#0891b2)">
+          <span style="font-size:120px;opacity:0.12;position:absolute">🌀</span>
+        </div>
+        <div class="sim-card-content">
+          <div class="sim-tag">Decision Game</div>
+          <div class="sim-title">Cyclone<br/>Crisis Manager</div>
+          <div class="sim-sub">Build pucca houses, embankments — manage community before storm hits</div>
+          <div class="sim-meta">
+            <div class="sim-xp">⭐ 120 XP</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.6)">Advanced</div>
+            <div class="sim-play-btn">▶</div>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="sim-card">
+        <div class="sim-card-bg" style="background:linear-gradient(135deg,#1c1917,#44403c)">
+          <span style="font-size:120px;opacity:0.12;position:absolute">🚪</span>
+        </div>
+        <div class="sim-card-content">
+          <div class="sim-tag">Story Game</div>
+          <div class="sim-title">Emergency<br/>Escape Room</div>
+          <div class="sim-sub">Make the right choices through 4 crisis scenes to escape safely</div>
+          <div class="sim-meta">
+            <div class="sim-xp">⭐ 100 XP</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.6)">Intermediate</div>
+            <div class="sim-play-btn">▶</div>
+          </div>
+        </div>
+      </a>
+
+      <a href="#" class="sim-card" style="grid-column:span 2">
+        <div class="sim-card-bg" style="background:linear-gradient(135deg,#14532d,#166534,#15803d)">
+          <span style="font-size:140px;opacity:0.1;position:absolute">🌾</span>
+        </div>
+        <div class="sim-card-content">
+          <div class="sim-tag">Role Play</div>
+          <div class="sim-title">Village Chief — Protect Your Community</div>
+          <div class="sim-sub">You are the village sarpanch — manage resources, organize drills, protect farms and families through a series of seasonal disasters</div>
+          <div class="sim-meta">
+            <div class="sim-xp">⭐ 200 XP • Season Strategy</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.6)">Advanced</div>
+            <div class="sim-play-btn">▶</div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── STATS ─── -->
+<section class="stats-section" id="impact">
+  <div class="stats-bg"></div>
+  <div class="container">
+    <div class="section-label centered">📊 Our Impact</div>
+    <h2 class="section-title centered fade-up">Numbers that<br/><span class="hl">matter most.</span></h2>
+    <div class="stats-grid fade-up">
+      <div class="stat-card">
+        <div class="stat-icon">🧑‍🎓</div>
+        <div class="stat-number">1,500+</div>
+        <div class="stat-label">Students Using</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🏫</div>
+        <div class="stat-number">10+</div>
+        <div class="stat-label">Schools Active</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📜</div>
+        <div class="stat-number">500+</div>
+        <div class="stat-label">Certificates Issued</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🌍</div>
+        <div class="stat-number">22+</div>
+        <div class="stat-label">Disasters Covered</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SPECIALIZED ─── -->
+<section class="specialized-section" id="specialized">
+  <div class="container">
+    <div class="section-label centered">🎯 Specialized Tracks</div>
+    <h2 class="section-title centered fade-up">Deep training for<br/><span class="hl">every audience.</span></h2>
+    <p class="section-sub centered fade-up fade-up-2">Not one-size-fits-all. Role-specific learning paths with the right content, tools and certifications for each user.</p>
+
+    <div class="specialized-grid">
+      <div class="spec-card">
+        <div class="spec-header">
+          <div class="spec-icon-wrap" style="background:linear-gradient(135deg,#fef3c7,#fde68a)">🏫</div>
+          <div class="spec-count">6 Modules</div>
+        </div>
+        <div class="spec-title">For Schools & Teachers</div>
+        <div class="spec-sub">Complete school safety system: drills, evacuation planning, supply management, child protection protocols, and teacher dashboards with class-level progress tracking.</div>
+        <div class="spec-tags">
+          <span class="spec-tag" style="background:#fef3c7;color:#92400e">Drill Organizer</span>
+          <span class="spec-tag" style="background:#dbeafe;color:#1e40af">Class Dashboard</span>
+          <span class="spec-tag" style="background:#dcfce7;color:#065f46">Audit Tool</span>
+          <span class="spec-tag" style="background:#fce7f3;color:#9d174d">Child Safety</span>
+        </div>
+        <a href="#" class="spec-link" style="color:#1e40af">Explore School Track →</a>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-header">
+          <div class="spec-icon-wrap" style="background:linear-gradient(135deg,#d1fae5,#a7f3d0)">👨‍🌾</div>
+          <div class="spec-count">4 Tracks</div>
+        </div>
+        <div class="spec-title">For Farmers & Livelihoods</div>
+        <div class="spec-sub">Monsoon planning, crop protection, livestock safety, and income preservation guides for floods, cyclones, droughts and heatwaves — in Hindi and regional languages.</div>
+        <div class="spec-tags">
+          <span class="spec-tag" style="background:#dcfce7;color:#065f46">🌊 Flood</span>
+          <span class="spec-tag" style="background:#fef3c7;color:#92400e">☀️ Heatwave</span>
+          <span class="spec-tag" style="background:#fce7f3;color:#9d174d">🌀 Cyclone</span>
+          <span class="spec-tag" style="background:#f5f3ff;color:#6d28d9">🌵 Drought</span>
+        </div>
+        <a href="#" class="spec-link" style="color:#059669">Explore Farmer Track →</a>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-header">
+          <div class="spec-icon-wrap" style="background:linear-gradient(135deg,#dbeafe,#bfdbfe)">🏘️</div>
+          <div class="spec-count">6 Guides</div>
+        </div>
+        <div class="spec-title">For Communities</div>
+        <div class="spec-sub">Shelter management, evacuation planning, grain banks, rescue tools, WASH protocols, and community drill training for local leaders and volunteers.</div>
+        <div class="spec-tags">
+          <span class="spec-tag" style="background:#dbeafe;color:#1e40af">Shelters</span>
+          <span class="spec-tag" style="background:#d1fae5;color:#065f46">WASH</span>
+          <span class="spec-tag" style="background:#fef3c7;color:#92400e">Evacuation</span>
+          <span class="spec-tag" style="background:#ede9fe;color:#6d28d9">Rescue</span>
+        </div>
+        <a href="#" class="spec-link" style="color:#1e40af">Explore Community Track →</a>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-header">
+          <div class="spec-icon-wrap" style="background:linear-gradient(135deg,#fee2e2,#fecaca)">👨‍👩‍👧</div>
+          <div class="spec-count">5 Modules</div>
+        </div>
+        <div class="spec-title">For Families & Households</div>
+        <div class="spec-sub">Home safety for earthquakes, fires, cyclones, floods, and heatwaves — practical checklists, emergency kits, escape planning, and offline-first content.</div>
+        <div class="spec-tags">
+          <span class="spec-tag" style="background:#fee2e2;color:#991b1b">🔥 Fire</span>
+          <span class="spec-tag" style="background:#fef9c3;color:#854d0e">🌊 Flood</span>
+          <span class="spec-tag" style="background:#ede9fe;color:#6d28d9">🌍 Earthquake</span>
+          <span class="spec-tag" style="background:#f0fdf4;color:#166534">📋 Checklists</span>
+        </div>
+        <a href="#" class="spec-link" style="color:#dc2626">Explore Family Track →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CERTIFICATES ─── -->
+<section class="cert-section" id="certifications">
+  <div class="container">
+    <div class="section-label centered">🏆 Certification System</div>
+    <h2 class="section-title centered fade-up">Prove your safety<br/><span class="hl">knowledge.</span></h2>
+    <p class="section-sub centered fade-up fade-up-2" style="margin-bottom:48px">Earn verifiable certificates after completing modules. Share on LinkedIn, WhatsApp, or print for institutions.</p>
+    <div class="cert-preview">
+      <div class="cert-content">
+        <div class="cert-label">🏆 Certification System</div>
+        <div class="cert-title">Earn Verified<br/>Safety Certificates</div>
+        <div class="cert-sub">Complete any module, pass the quiz (70%+), and instantly receive a shareable, verifiable certificate.</div>
+        <div class="cert-features">
+          <div class="cert-feature"><div class="cert-feature-icon">✓</div>QR code for instant verification</div>
+          <div class="cert-feature"><div class="cert-feature-icon">✓</div>Downloadable PDF — share anywhere</div>
+          <div class="cert-feature"><div class="cert-feature-icon">✓</div>School & institution certificates</div>
+          <div class="cert-feature"><div class="cert-feature-icon">✓</div>LinkedIn and WhatsApp sharing</div>
+          <div class="cert-feature"><div class="cert-feature-icon">✓</div>Unique certificate ID & blockchain-ready</div>
+        </div>
+        <button class="btn-cert">🎓 Start Earning Certificates →</button>
+      </div>
+      <div class="cert-card-preview">
+        <div class="cert-card-header">
+          <span class="cert-logo">🛡️ DisasterSuraksha Academy</span>
+          <span class="cert-verified">✓ VERIFIED</span>
+        </div>
+        <div style="text-align:center;padding:16px 0;border-top:1px solid rgba(255,255,255,0.15);border-bottom:1px solid rgba(255,255,255,0.15);margin:12px 0">
+          <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-bottom:8px">THIS CERTIFIES THAT</div>
+          <div class="cert-recipient-name">Priya Sharma</div>
+          <div class="cert-recipient-label">has successfully completed</div>
+        </div>
+        <div class="cert-course-name">🌊 Flood Safety — Farmers & Households<br/><span style="font-size:12px;color:rgba(255,255,255,0.6)">Score: 92% • Advanced Level</span></div>
+        <div class="cert-footer">
+          <div class="cert-date">📅 March 21, 2026</div>
+          <div style="font-size:20px">▣</div>
+          <div class="cert-id">ID: DSA-2026-F48X</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── AI ASSISTANT ─── -->
+<section class="ai-section" id="ai">
+  <div class="container">
+    <div class="ai-grid">
+      <div>
+        <div class="section-label">🤖 AI Safety Assistant</div>
+        <h2 class="section-title fade-up">Ask anything about<br/><span class="hl">disaster safety.</span></h2>
+        <p class="section-sub fade-up fade-up-2">Powered by Gemini AI — get instant, expert-verified answers on disaster preparedness, emergency response, and safety protocols. Available in multiple Indian languages.</p>
+        <div style="display:flex;flex-direction:column;gap:14px;margin-top:32px">
+          <div style="display:flex;align-items:flex-start;gap:12px">
+            <span style="font-size:20px">🌊</span>
+            <div><div style="font-weight:700;font-size:14px;color:#0a0e1a">Disaster-specific guidance</div><div style="font-size:13px;color:#64748b;margin-top:2px">Tailored advice for flood, earthquake, fire, cyclone, and 18 more disasters</div></div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:12px">
+            <span style="font-size:20px">🇮🇳</span>
+            <div><div style="font-weight:700;font-size:14px;color:#0a0e1a">India-first answers</div><div style="font-size:13px;color:#64748b;margin-top:2px">NDMA, IMD, INCOIS systems — knows Indian emergency numbers and protocols</div></div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:12px">
+            <span style="font-size:20px">⚡</span>
+            <div><div style="font-weight:700;font-size:14px;color:#0a0e1a">Instant actionable steps</div><div style="font-size:13px;color:#64748b;margin-top:2px">Bullet-point answers you can act on immediately — no jargon</div></div>
+          </div>
+        </div>
+        <a href="#" class="btn-hero-primary" style="display:inline-flex;margin-top:28px">💬 Try AI Assistant →</a>
+      </div>
+
+      <div class="ai-chat-preview">
+        <div class="chat-header">
+          <div class="chat-avatar">🤖</div>
+          <div>
+            <div class="chat-name">SafeSphere AI</div>
+            <div class="chat-status"><div class="chat-dot"></div>Powered by Gemini</div>
+          </div>
+        </div>
+        <div class="chat-messages">
+          <div class="chat-msg chat-msg-bot">👋 Hi! I'm your AI Safety Assistant. Ask me anything about disaster preparedness, emergency kits, or safety steps.</div>
+          <div class="chat-msg chat-msg-user">What should I do during an earthquake?</div>
+          <div class="chat-msg chat-msg-bot">🌍 <strong>Earthquake — What to do RIGHT NOW:</strong><br/><br/>1. DROP to your hands and knees<br/>2. COVER head & neck under a sturdy table<br/>3. HOLD ON until shaking stops<br/><br/>📞 After shaking stops, call 112 if injured.</div>
+        </div>
+        <div class="chat-input">
+          <input type="text" placeholder="Ask about any disaster or emergency..."/>
+          <button class="chat-send">→</button>
+        </div>
+        <div class="suggested-chips">
+          <div class="chip">Flood safety kit</div>
+          <div class="chip">Cyclone warning signs</div>
+          <div class="chip">CPR steps</div>
+          <div class="chip">Gas leak at home</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SOS / EMERGENCY ─── -->
+<section class="sos-section" id="emergency">
+  <div class="container">
+    <div class="sos-card">
+      <div class="sos-icon">🆘</div>
+      <div class="sos-content">
+        <div class="sos-title">In Immediate Danger?</div>
+        <div class="sos-sub">Get emergency numbers, instant step-by-step disaster guides, and a view-only safety map. For full SOS with live tracking and auto-SMS, download the DisasterSuraksha app.</div>
+        <div class="sos-numbers">
+          <a href="tel:112" class="sos-num">
+            <div><div class="sos-num-label">Emergency</div><div class="sos-num-val">112</div></div>
+          </a>
+          <a href="tel:108" class="sos-num">
+            <div><div class="sos-num-label">Ambulance</div><div class="sos-num-val">108</div></div>
+          </a>
+          <a href="tel:101" class="sos-num">
+            <div><div class="sos-num-label">Fire Service</div><div class="sos-num-val">101</div></div>
+          </a>
+          <a href="tel:1078" class="sos-num">
+            <div><div class="sos-num-label">NDMA</div><div class="sos-num-val">1078</div></div>
+          </a>
+        </div>
+        <button class="btn-sos">📋 Open Emergency Guide</button>
+        <div class="sos-app-note">📱 For full protection with live alerts & SOS tracking → <strong style="color:#fff;margin-left:4px">Download the App</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <div class="nav-logo-icon">🛡️</div>
+          <div>
+            <div style="font-weight:800;font-size:16px">DisasterSuraksha</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.4);letter-spacing:.5px;text-transform:uppercase">Academy</div>
+          </div>
+        </div>
+        <div class="footer-desc">India's most comprehensive disaster preparedness and safety education platform. Built for students, teachers, farmers, families and communities.</div>
+        <div class="footer-social">
+          <div class="social-btn">📘</div>
+          <div class="social-btn">🐦</div>
+          <div class="social-btn">📸</div>
+          <div class="social-btn">▶</div>
+          <div class="social-btn">💼</div>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Learn</h4>
+        <a href="#">All Modules</a>
+        <a href="#">Earthquake</a>
+        <a href="#">Flood Safety</a>
+        <a href="#">Fire Safety</a>
+        <a href="#">First Aid</a>
+        <a href="#">View All 22+</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <a href="#">VR Lab</a>
+        <a href="#">Simulations</a>
+        <a href="#">Quizzes</a>
+        <a href="#">Certificates</a>
+        <a href="#">Leaderboard</a>
+        <a href="#">AI Assistant</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>For You</h4>
+        <a href="#">Schools & Teachers</a>
+        <a href="#">Farmers</a>
+        <a href="#">Families</a>
+        <a href="#">Communities</a>
+        <a href="#">Organizations</a>
+        <a href="#">Download App</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>© 2026 DisasterSuraksha Academy. All rights reserved.</div>
+      <div class="lang-selector-footer">
+        🌐 Language:
+        <select>
+          <option>English</option>
+          <option>हिंदी</option>
+          <option>मराठी</option>
+          <option>বাংলা</option>
+          <option>తెలుగు</option>
+          <option>தமிழ்</option>
+          <option>ಕನ್ನಡ</option>
+          <option>ਪੰਜਾਬੀ</option>
+        </select>
+      </div>
+      <div>Abhay Sahu · SIRT Bhopal · Patent Filing 2026</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ─── STICKY MOBILE CTA ─── -->
+<div class="sticky-cta">
+  <button class="sticky-sos">🆘 SOS</button>
+  <button class="sticky-learn">📚 Start Learning Free →</button>
+</div>
+
+<script>
+// Mobile menu toggle
+function toggleMenu() {
+  const menu = document.getElementById('mobileMenu');
+  const ham = document.getElementById('hamburger');
+  const open = menu.style.display === 'flex';
+  menu.style.display = open ? 'none' : 'flex';
+  ham.style.opacity = open ? '1' : '.7';
+}
+
+// Close menu on link click
+document.querySelectorAll('.mobile-menu a').forEach(a => {
+  a.addEventListener('click', () => {
+    document.getElementById('mobileMenu').style.display = 'none';
+  });
+});
+
+// Navbar scroll effect
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('navbar');
+  if (window.scrollY > 20) {
+    nav.style.boxShadow = '0 4px 20px rgba(0,0,0,0.1)';
+  } else {
+    nav.style.boxShadow = 'none';
+  }
+});
+
+// Scroll animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// Filter buttons
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+// Chat chips
+document.querySelectorAll('.chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelector('.chat-input input').value = chip.textContent;
+  });
+});
+
+// Simple counter animation
+function animateCounter(el, target, suffix='') {
+  let start = 0;
+  const duration = 2000;
+  const step = target / (duration / 16);
+  const timer = setInterval(() => {
+    start += step;
+    if (start >= target) { start = target; clearInterval(timer); }
+    el.textContent = Math.floor(start).toLocaleString() + suffix;
+  }, 16);
+}
+
+const statsObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const nums = e.target.querySelectorAll('.stat-number');
+      nums.forEach(n => {
+        const text = n.textContent;
+        const num = parseInt(text.replace(/[^0-9]/g,''));
+        const suffix = text.replace(/[0-9,]/g,'');
+        animateCounter(n, num, suffix);
+      });
+      statsObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+
+const statsGrid = document.querySelector('.stats-grid');
+if (statsGrid) statsObs.observe(statsGrid);
+</script>
+</body>
+</html>

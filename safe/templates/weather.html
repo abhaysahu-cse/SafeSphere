@@ -6,6 +6,7 @@
   <title>Weather & Air Quality | SafeSphere</title>
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
 
   <style>
     :root{
@@ -92,6 +93,103 @@
       #weather-icon{ width:56px; height:56px; }
       .weather-hero { gap:12px; }
       .controls { justify-content:flex-start; }
+    }
+
+    /* Module recommendations styling */
+    .recommendations-card {
+      margin-top: 24px;
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .recommendations-card h3 {
+      margin: 0 0 16px 0;
+      font-size: 1.3rem;
+      color: #111;
+    }
+
+    .module-recommendations-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .recommendation-item {
+      background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
+      border: 1px solid #e6e9f2;
+      border-radius: 10px;
+      padding: 16px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .recommendation-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(91, 75, 255, 0.15);
+      border-color: var(--accent);
+    }
+
+    .recommendation-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .recommendation-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin: 0 0 6px 0;
+      color: #111;
+    }
+
+    .recommendation-reason {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    .recommendation-badge {
+      display: inline-block;
+      background: #fef3c7;
+      color: #92400e;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+
+    .recommendation-badge.urgent {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .recommendation-badge.important {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .recommendation-badge.suggested {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .no-recommendations {
+      text-align: center;
+      padding: 32px;
+      color: var(--muted);
+    }
+
+    .no-recommendations-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
     }
   </style>
 </head>
@@ -244,28 +342,44 @@ function googleTranslateElementInit() {
         </div>
       </aside>
     </div>
-    <div class="card" id="module-recommendations">
-  <h3>📚 Recommended Learning Modules</h3>
-  <ul id="module-list"></ul>
-</div>
+    <!-- Module Recommendations -->
+    <section class="recommendations-card" id="module-recommendations">
+      <h3>📚 Recommended Learning Modules</h3>
+      <p style="color: var(--muted); margin: 0 0 16px 0;">Based on current weather and air quality conditions</p>
+      <div class="module-recommendations-grid" id="recommendations-grid">
+        <!-- Recommendations will be dynamically inserted here -->
+      </div>
+    </section>
   </main>
+
+  <!-- Include floating chat button -->
+  {% include 'partials/floating_chat_button.html' %}
+
+  <!-- Sidebar overlay for mobile -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
   <script src="{% static 'js/weather.js' %}"></script>
   <script>
-function showFixedRecommendations() {
-  const list = document.getElementById("module-list");
-  if (!list) return;
+    // Mobile sidebar toggle
+    document.addEventListener('DOMContentLoaded', function() {
+      const sidebar = document.getElementById('sidebar');
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      const sidebarOverlay = document.getElementById('sidebarOverlay');
 
-  list.innerHTML = `
-    <li>❄️ <a href="{% url 'WinterStorms_Safety' %}">Winter Storm Survival</a></li>
-    <li>🌫 <a href="{% url 'air_pollution' %}">AQI Emergency (Air Pollution)</a></li>
-  `;
-}
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  showFixedRecommendations();
-});
-</script>
+      if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', function() {
+          sidebar.classList.toggle('active');
+          sidebarOverlay.classList.toggle('active');
+        });
+      }
+
+      if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', function() {
+          sidebar.classList.remove('active');
+          sidebarOverlay.classList.remove('active');
+        });
+      }
+    });
+  </script>
 </body>
 </html>

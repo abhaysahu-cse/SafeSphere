@@ -486,6 +486,7 @@ async function fetchAQIForCurrentImpl(force = false) {
       // update safety guidance using cached + cached weather (if present)
       const cachedWeather = loadCacheKey(CACHE_KEY);
       updateSafetyGuidance(cachedWeather?.main?.temp ?? null, cachedWeather?.wind?.speed ?? null, cached);
+      updateRecommendations(); // Update module recommendations
       return cached;
     }
     const a = await fetchAQI(coords.lat, coords.lon);
@@ -495,14 +496,17 @@ async function fetchAQIForCurrentImpl(force = false) {
       // update safety guidance with new AQI + latest weather (from cache/last weather)
       const cachedWeather = loadCacheKey(CACHE_KEY);
       updateSafetyGuidance(cachedWeather?.main?.temp ?? null, cachedWeather?.wind?.speed ?? null, a);
+      updateRecommendations(); // Update module recommendations
       return a;
     } else {
       updateAQIUI(null);
+      updateRecommendations(); // Update even if AQI fails
       return null;
     }
   } catch (e) {
     console.warn("fetchAQIForCurrentImpl error:", e);
     updateAQIUI(null);
+    updateRecommendations(); // Update even on error
     return null;
   }
 }
@@ -604,4 +608,288 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error("weather.js DOMContentLoaded error:", e);
     if ($id("weather-error")) $id("weather-error").textContent = "Initialization error";
   }
+});
+
+// =================== INTELLIGENT MODULE RECOMMENDATIONS ===================
+// Module database with conditions for recommendations
+const MODULE_DATABASE = [
+  {
+    id: 'flood',
+    title: 'Flood Safety & Response',
+    icon: '🌊',
+    url: '/learn/flood/',
+    conditions: {
+      weather: ['rain', 'storm', 'thunderstorm', 'heavy rain'],
+      tempRange: null,
+      humidity: { min: 80 },
+      aqi: null
+    },
+    reason: 'Heavy rainfall detected - learn flood preparedness',
+    priority: 'urgent'
+  },
+  {
+    id: 'air_pollution',
+    title: 'Air Quality & Pollution Safety',
+    icon: '🌫️',
+    url: '/learn/air-pollution/',
+    conditions: {
+      weather: null,
+      tempRange: null,
+      humidity: null,
+      aqi: { min: 55.5 } // Unhealthy for sensitive groups
+    },
+    reason: 'Poor air quality detected - protect your health',
+    priority: 'urgent'
+  },
+  {
+    id: 'heatwave',
+    title: 'Heatwave Safety',
+    icon: '🌡️',
+    url: '/learn/heatwave/',
+    conditions: {
+      weather: null,
+      tempRange: { min: 35 },
+      humidity: null,
+      aqi: null
+    },
+    reason: 'Extreme heat conditions - stay safe',
+    priority: 'urgent'
+  },
+  {
+    id: 'winter_storms',
+    title: 'Winter Storm Survival',
+    icon: '❄️',
+    url: '/learn/winterstorm/',
+    conditions: {
+      weather: ['snow', 'blizzard', 'ice', 'freezing'],
+      tempRange: { max: 5 },
+      humidity: null,
+      aqi: null
+    },
+    reason: 'Cold weather conditions - winter safety tips',
+    priority: 'important'
+  },
+  {
+    id: 'cyclone',
+    title: 'Cyclone Preparedness',
+    icon: '🌀',
+    url: '/learn/Cyclone_Safety',
+    conditions: {
+      weather: ['cyclone', 'hurricane', 'typhoon', 'tropical storm'],
+      tempRange: null,
+      humidity: null,
+      aqi: null
+    },
+    reason: 'Cyclone conditions possible - be prepared',
+    priority: 'urgent'
+  },
+  {
+    id: 'earthquake',
+    title: 'Earthquake Safety Basics',
+    icon: '🏚️',
+    url: '/learn/Earthquake_Safety',
+    conditions: {
+      weather: null,
+      tempRange: null,
+      humidity: null,
+      aqi: null
+    },
+    reason: 'Essential earthquake preparedness knowledge',
+    priority: 'suggested'
+  },
+  {
+    id: 'fire',
+    title: 'Fire Safety & Prevention',
+    icon: '🔥',
+    url: '/households/fire/',
+    conditions: {
+      weather: null,
+      tempRange: { min: 30 },
+      humidity: { max: 30 },
+      aqi: null
+    },
+    reason: 'Hot and dry conditions increase fire risk',
+    priority: 'important'
+  },
+  {
+    id: 'thunderstorm',
+    title: 'Thunderstorm Safety',
+    icon: '⛈️',
+    url: '/learn/thunderstorm/',
+    conditions: {
+      weather: ['thunder', 'lightning', 'storm'],
+      tempRange: null,
+      humidity: null,
+      aqi: null
+    },
+    reason: 'Thunderstorm conditions - stay safe indoors',
+    priority: 'urgent'
+  },
+  {
+    id: 'tornado',
+    title: 'Tornado Safety',
+    icon: '🌪️',
+    url: '/learn/tornado/',
+    conditions: {
+      weather: ['tornado', 'twister'],
+      tempRange: null,
+      humidity: null,
+      aqi: null
+    },
+    reason: 'Tornado warning - seek shelter immediately',
+    priority: 'urgent'
+  },
+  {
+    id: 'tsunami',
+    title: 'Tsunami Safety',
+    icon: '🌊',
+    url: '/learn/tsunami-safety/',
+    conditions: {
+      weather: ['tsunami', 'tidal wave'],
+      tempRange: null,
+      humidity: null,
+      aqi: null
+    },
+    reason: 'Tsunami alert - move to higher ground',
+    priority: 'urgent'
+  },
+  {
+    id: 'landslide',
+    title: 'Landslide Safety',
+    icon: '⛰️',
+    url: '/learn/landslide_safety/',
+    conditions: {
+      weather: ['heavy rain', 'storm'],
+      tempRange: null,
+      humidity: { min: 85 },
+      aqi: null
+    },
+    reason: 'Heavy rainfall may trigger landslides',
+    priority: 'important'
+  },
+  {
+    id: 'firstaid',
+    title: 'First Aid Basics',
+    icon: '🩹',
+    url: '/learn/firstaid/',
+    conditions: {
+      weather: null,
+      tempRange: null,
+      humidity: null,
+      aqi: null
+    },
+    reason: 'Essential first aid knowledge for emergencies',
+    priority: 'suggested'
+  }
+];
+
+function getModuleRecommendations(weatherData, aqiData) {
+  const recommendations = [];
+  
+  if (!weatherData) {
+    // Return default recommendations if no weather data
+    return [
+      MODULE_DATABASE.find(m => m.id === 'earthquake'),
+      MODULE_DATABASE.find(m => m.id === 'fire')
+    ].filter(Boolean);
+  }
+
+  const temp = weatherData.main?.temp ?? null;
+  const humidity = weatherData.main?.humidity ?? null;
+  const weatherDesc = (weatherData.weather?.[0]?.description || '').toLowerCase();
+  const pm25 = aqiData?.pm25 ?? null;
+
+  // Check each module against current conditions
+  MODULE_DATABASE.forEach(module => {
+    let matches = false;
+    let matchReason = module.reason;
+
+    // Check weather description
+    if (module.conditions.weather) {
+      const weatherMatch = module.conditions.weather.some(keyword => 
+        weatherDesc.includes(keyword.toLowerCase())
+      );
+      if (weatherMatch) matches = true;
+    }
+
+    // Check temperature range
+    if (module.conditions.tempRange && temp !== null) {
+      const { min, max } = module.conditions.tempRange;
+      if ((min === undefined || temp >= min) && (max === undefined || temp <= max)) {
+        matches = true;
+      }
+    }
+
+    // Check humidity
+    if (module.conditions.humidity && humidity !== null) {
+      const { min, max } = module.conditions.humidity;
+      if ((min === undefined || humidity >= min) && (max === undefined || humidity <= max)) {
+        matches = true;
+      }
+    }
+
+    // Check AQI
+    if (module.conditions.aqi && pm25 !== null) {
+      const { min, max } = module.conditions.aqi;
+      if ((min === undefined || pm25 >= min) && (max === undefined || pm25 <= max)) {
+        matches = true;
+      }
+    }
+
+    if (matches) {
+      recommendations.push(module);
+    }
+  });
+
+  // Sort by priority: urgent > important > suggested
+  const priorityOrder = { urgent: 0, important: 1, suggested: 2 };
+  recommendations.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
+
+  // If no specific recommendations, add general ones
+  if (recommendations.length === 0) {
+    recommendations.push(
+      MODULE_DATABASE.find(m => m.id === 'earthquake'),
+      MODULE_DATABASE.find(m => m.id === 'fire')
+    );
+  }
+
+  // Limit to top 6 recommendations
+  return recommendations.slice(0, 6).filter(Boolean);
+}
+
+function renderModuleRecommendations(recommendations) {
+  const grid = $id('recommendations-grid');
+  if (!grid) return;
+
+  if (!recommendations || recommendations.length === 0) {
+    grid.innerHTML = `
+      <div class="no-recommendations">
+        <div class="no-recommendations-icon">✅</div>
+        <p>No urgent recommendations at this time. Weather conditions are normal.</p>
+      </div>
+    `;
+    return;
+  }
+
+  grid.innerHTML = recommendations.map(module => `
+    <a href="${module.url}" class="recommendation-item">
+      <span class="recommendation-icon">${module.icon}</span>
+      <h4 class="recommendation-title">${module.title}</h4>
+      <p class="recommendation-reason">${module.reason}</p>
+      <span class="recommendation-badge ${module.priority}">${module.priority.toUpperCase()}</span>
+    </a>
+  `).join('');
+}
+
+// Update recommendations when weather or AQI updates
+function updateRecommendations() {
+  const weatherData = loadCacheKey(CACHE_KEY);
+  const aqiData = loadCacheKey(AQI_CACHE_KEY);
+  const recommendations = getModuleRecommendations(weatherData, aqiData);
+  renderModuleRecommendations(recommendations);
+}
+
+// Listen for weather updates
+document.addEventListener('weather:updated', () => {
+  setTimeout(updateRecommendations, 500); // Small delay to ensure AQI is also updated
 });

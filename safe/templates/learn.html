@@ -8,6 +8,7 @@
     <title>SafeLearn - Learning Modules</title>
     <meta name="description" content="Browse and complete disaster preparedness learning modules">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
     <script src="script.js" defer></script>
 </head>
 
@@ -549,5 +550,8 @@ else if (moduleId === 'nuclear-safety') {
         // Initial render
         renderModules();
     </script>
+
+    <!-- Include floating chat button -->
+    {% include 'partials/floating_chat_button.html' %}
 </body>
 </html>

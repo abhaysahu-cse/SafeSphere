@@ -143,7 +143,7 @@ def index(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('login')
+    return redirect('landing')
 
 
 def password_reset_request(request):
@@ -346,3 +346,9 @@ def zones_api(request):
         {"lat": 23.22, "lng": 77.41, "level": "safe", "msg": "Relief shelter"},
     ]
     return JsonResponse(data, safe=False)
+
+def landing(request):
+    """Landing page view"""
+    if request.user.is_authenticated:
+        return redirect('index')
+    return render(request, 'landing.html')

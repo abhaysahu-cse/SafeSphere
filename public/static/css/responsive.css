@@ -1,0 +1,746 @@
+/* ==========================================
+   RESPONSIVE ENHANCEMENTS - Cross-Device Compatibility
+   SafeSphere - Mobile, Tablet, Desktop Optimized
+   ========================================== */
+
+/* ==========================================
+   BASE RESPONSIVE UTILITIES
+   ========================================== */
+
+/* Ensure proper box-sizing for all responsive elements */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Prevent horizontal scroll on all devices */
+html {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+body {
+  overflow-x: hidden;
+  width: 100%;
+  min-width: 320px; /* Minimum supported width */
+}
+
+/* Touch-friendly tap targets (minimum 44x44px) */
+button,
+a,
+input,
+select,
+textarea {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Improve text readability on mobile */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ==========================================
+   SIDEBAR RESPONSIVE BEHAVIOR
+   ========================================== */
+
+/* Mobile: Hamburger menu toggle */
+@media (max-width: 900px) {
+  .sidebar {
+    transform: translateX(-100%);
+    position: fixed;
+    z-index: 1000;
+  }
+
+  .sidebar.active {
+    transform: translateX(0);
+  }
+
+  .sidebar-toggle {
+    display: block !important;
+  }
+
+  .main-content {
+    margin-left: 0 !important;
+    padding: 20px 16px;
+    width: 100%;
+  }
+
+  /* Overlay for mobile sidebar */
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
+  }
+
+  .sidebar-overlay.active {
+    display: block;
+  }
+}
+
+/* ==========================================
+   TYPOGRAPHY RESPONSIVE SCALING
+   ========================================== */
+
+/* Desktop (default) */
+.page-title {
+  font-size: clamp(28px, 5vw, 42px);
+}
+
+.page-subtitle {
+  font-size: clamp(14px, 2.5vw, 18px);
+}
+
+.section-title {
+  font-size: clamp(20px, 4vw, 28px);
+}
+
+/* ==========================================
+   GRID LAYOUTS - RESPONSIVE BREAKPOINTS
+   ========================================== */
+
+/* Stats Grid */
+@media (max-width: 1200px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+/* Modules Grid */
+@media (max-width: 1024px) {
+  .modules-grid,
+  .learn-modules-grid,
+  .games-grid,
+  .drills-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .modules-grid,
+  .learn-modules-grid,
+  .games-grid,
+  .drills-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+/* Shortcuts Grid */
+@media (max-width: 768px) {
+  .shortcuts-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .shortcuts-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+/* ==========================================
+   CARDS - RESPONSIVE BEHAVIOR
+   ========================================== */
+
+/* Continue Learning Card */
+@media (max-width: 768px) {
+  .continue-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 28px 20px;
+    gap: 20px;
+  }
+
+  .continue-title {
+    font-size: 22px;
+  }
+
+  .continue-description {
+    font-size: 14px;
+  }
+}
+
+/* Module Cards */
+@media (max-width: 600px) {
+  .module-card,
+  .game-card,
+  .drill-card {
+    padding: 20px;
+  }
+
+  .module-title,
+  .game-title,
+  .drill-title {
+    font-size: 18px;
+  }
+
+  .module-icon,
+  .game-icon,
+  .drill-icon {
+    font-size: 36px;
+  }
+}
+
+/* ==========================================
+   WEATHER PAGE - RESPONSIVE LAYOUT
+   ========================================== */
+
+/* Tablet and below: Stack weather and AQI cards */
+@media (max-width: 880px) {
+  .panel-row {
+    grid-template-columns: 1fr !important;
+    gap: 16px;
+  }
+
+  .weather-card,
+  .aqi-card {
+    min-height: auto;
+  }
+}
+
+/* Mobile: Adjust weather display */
+@media (max-width: 580px) {
+  .weather-temp {
+    font-size: 40px !important;
+  }
+
+  #weather-icon,
+  #weather-icon img {
+    width: 56px !important;
+    height: 56px !important;
+  }
+
+  .weather-hero {
+    gap: 12px !important;
+  }
+
+  .controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .controls .btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* Module Recommendations - Responsive */
+@media (max-width: 768px) {
+  .module-recommendations-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .recommendations-card {
+    padding: 20px 16px;
+  }
+
+  .recommendations-card h3 {
+    font-size: 1.1rem;
+  }
+}
+
+/* ==========================================
+   CHAT PAGE - RESPONSIVE LAYOUT
+   ========================================== */
+
+@media (max-width: 900px) {
+  .chat-header {
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px 20px;
+  }
+
+  .chat-title {
+    font-size: 24px;
+  }
+
+  .chat-container {
+    height: calc(100vh - 400px);
+    min-height: 350px;
+  }
+
+  .chat-message {
+    max-width: 90%;
+  }
+
+  .suggested-questions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .suggestion-chip {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .chat-input-wrapper {
+    gap: 6px;
+  }
+
+  .chat-input {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+
+  .chat-send-btn,
+  .icon-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+}
+
+/* ==========================================
+   GAMES & DRILLS - RESPONSIVE
+   ========================================== */
+
+@media (max-width: 768px) {
+  .games-banner,
+  .drill-timer {
+    padding: 28px 20px;
+  }
+
+  .banner-title {
+    font-size: 32px;
+  }
+
+  .banner-subtitle {
+    font-size: 16px;
+  }
+
+  .banner-decoration {
+    display: none;
+  }
+
+  .timer-display {
+    font-size: 48px;
+  }
+}
+
+@media (max-width: 600px) {
+  .games-stats {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .timer-controls {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .timer-controls .btn {
+    width: 100%;
+  }
+}
+
+/* ==========================================
+   EMERGENCY PAGE - RESPONSIVE
+   ========================================== */
+
+@media (max-width: 768px) {
+  .emergency-sos-container {
+    padding: 40px 20px;
+  }
+
+  .sos-button {
+    width: 220px;
+    height: 220px;
+  }
+
+  .sos-text {
+    font-size: 56px;
+  }
+
+  .sos-subtext {
+    font-size: 14px;
+  }
+
+  .emergency-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .emergency-tab {
+    white-space: nowrap;
+  }
+
+  .info-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sos-button {
+    width: 180px;
+    height: 180px;
+  }
+
+  .sos-text {
+    font-size: 48px;
+  }
+}
+
+/* ==========================================
+   PROFILE PAGE - RESPONSIVE
+   ========================================== */
+
+@media (max-width: 768px) {
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+    padding: 32px 20px;
+  }
+
+  .profile-name {
+    font-size: 28px;
+  }
+
+  .profile-level {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .profile-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-avatar {
+    width: 100px;
+    height: 100px;
+    font-size: 56px;
+  }
+}
+
+/* ==========================================
+   LEADERBOARD - RESPONSIVE
+   ========================================== */
+
+@media (max-width: 900px) {
+  .top-three {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .rank-1,
+  .rank-2,
+  .rank-3 {
+    order: initial;
+  }
+
+  .rank-crown {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .leaderboard-table {
+    font-size: 13px;
+  }
+
+  .leaderboard-table th,
+  .leaderboard-table td {
+    padding: 12px 8px;
+  }
+
+  /* Hide less important columns on mobile */
+  .leaderboard-table th:nth-child(5),
+  .leaderboard-table td:nth-child(5),
+  .leaderboard-table th:nth-child(6),
+  .leaderboard-table td:nth-child(6) {
+    display: none;
+  }
+}
+
+/* ==========================================
+   BUTTONS - RESPONSIVE TOUCH TARGETS
+   ========================================== */
+
+@media (max-width: 768px) {
+  .btn {
+    padding: 12px 24px;
+    font-size: 14px;
+    min-height: 44px;
+  }
+
+  .btn-sm {
+    padding: 10px 16px;
+    font-size: 13px;
+    min-height: 40px;
+  }
+}
+
+/* ==========================================
+   FORMS & INPUTS - RESPONSIVE
+   ========================================== */
+
+@media (max-width: 768px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 12px;
+  }
+
+  .filter-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+  }
+
+  .filter-tab {
+    white-space: nowrap;
+  }
+}
+
+/* ==========================================
+   FLOATING CHAT BUTTON - RESPONSIVE
+   ========================================== */
+
+@media (max-width: 768px) {
+  .floating-chat-btn {
+    width: 56px !important;
+    height: 56px !important;
+    bottom: 20px !important;
+    right: 20px !important;
+    font-size: 24px !important;
+  }
+
+  .floating-chat-btn-tooltip {
+    display: none; /* Hide tooltip on mobile */
+  }
+}
+
+/* ==========================================
+   GOOGLE TRANSLATE - RESPONSIVE
+   ========================================== */
+
+@media (max-width: 768px) {
+  #google_translate_element {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    font-size: 12px;
+    padding: 4px 6px;
+  }
+
+  .goog-te-gadget-simple {
+    font-size: 12px !important;
+  }
+}
+
+/* ==========================================
+   LANDSCAPE ORIENTATION FIXES
+   ========================================== */
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .chat-container {
+    height: 60vh;
+    min-height: 300px;
+  }
+
+  .sos-button {
+    width: 160px;
+    height: 160px;
+  }
+
+  .sos-text {
+    font-size: 40px;
+  }
+}
+
+/* ==========================================
+   PRINT STYLES
+   ========================================== */
+
+@media print {
+  .sidebar,
+  .floating-chat-btn,
+  #google_translate_element,
+  .sidebar-toggle,
+  .btn,
+  button {
+    display: none !important;
+  }
+
+  .main-content {
+    margin-left: 0 !important;
+    padding: 0 !important;
+  }
+
+  body {
+    background: white !important;
+  }
+
+  .card,
+  .module-card,
+  .game-card {
+    box-shadow: none !important;
+    border: 1px solid #ddd;
+  }
+}
+
+/* ==========================================
+   ACCESSIBILITY IMPROVEMENTS
+   ========================================== */
+
+/* Focus visible for keyboard navigation */
+*:focus-visible {
+  outline: 3px solid var(--color-blue-primary, #4F46E5);
+  outline-offset: 2px;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .floating-chat-btn {
+    animation: none !important;
+  }
+
+  .site-bg-video {
+    display: none !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .card,
+  .module-card,
+  .game-card,
+  .drill-card {
+    border: 2px solid currentColor;
+  }
+
+  .btn {
+    border: 2px solid currentColor;
+  }
+}
+
+/* ==========================================
+   SAFE AREA INSETS (iPhone X+, Notch Support)
+   ========================================== */
+
+@supports (padding: max(0px)) {
+  body {
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+  }
+
+  .sidebar {
+    padding-left: max(12px, env(safe-area-inset-left));
+  }
+
+  .floating-chat-btn {
+    bottom: max(30px, calc(30px + env(safe-area-inset-bottom)));
+    right: max(30px, calc(30px + env(safe-area-inset-right)));
+  }
+}
+
+/* ==========================================
+   PERFORMANCE OPTIMIZATIONS
+   ========================================== */
+
+/* GPU acceleration for animations */
+.card,
+.module-card,
+.game-card,
+.drill-card,
+.stat-card,
+.floating-chat-btn {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Optimize images */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Lazy loading hint */
+img[loading="lazy"] {
+  content-visibility: auto;
+}
+
+/* ==========================================
+   UTILITY CLASSES
+   ========================================== */
+
+/* Hide on mobile */
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+/* Hide on desktop */
+@media (min-width: 769px) {
+  .hide-desktop {
+    display: none !important;
+  }
+}
+
+/* Show only on mobile */
+.show-mobile {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  .show-mobile {
+    display: block !important;
+  }
+}
+
+/* Responsive text alignment */
+@media (max-width: 768px) {
+  .text-center-mobile {
+    text-align: center !important;
+  }
+}
+
+/* Full width on mobile */
+@media (max-width: 768px) {
+  .full-width-mobile {
+    width: 100% !important;
+  }
+}

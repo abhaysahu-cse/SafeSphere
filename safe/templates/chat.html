@@ -9,6 +9,7 @@
     <meta name="description" content="Get instant help from AI assistant for disaster preparedness">
     
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
     
     <style>
         .chat-input-wrapper {
@@ -197,9 +198,11 @@
 
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
 <script>
     // *** CONFIGURATION ch ***
-    const GEMINI_API_KEY = 'AIzaSyAtlBYvLPTqfJ2uyvmBAnNK8ao6OTPvYaM'; //api key
+    const GEMINI_API_KEY = 'AIzaSyDlkttw1Nsn7NDCZN0JcHV5lBN24ANbx6A'; //api key
     const GEMINI_MODEL = 'gemini-2.5-flash';
 
     // System Instruction 
@@ -493,4 +496,23 @@
 
     // --- Initialize ---
     loadChatHistory();
+
+    // Mobile sidebar toggle
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('active');
+            sidebarOverlay.classList.toggle('active');
+        });
+    }
+
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', function() {
+            sidebar.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+    }
 </script>
