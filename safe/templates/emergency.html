@@ -8,6 +8,8 @@
     <title>SafeLearn - Emergency</title>
     <meta name="description" content="Emergency contacts and quick access to critical information">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/modern-backgrounds.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
     <script src="script.js" defer></script>
 </head>
 <script type="text/javascript">
@@ -25,6 +27,13 @@ function googleTranslateElementInit() {
 
 <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <body>
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
     <!-- Sidebar -->
 <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
@@ -482,3 +491,7 @@ getUserLocation();
 
     <!-- Include floating chat button -->
     {% include 'partials/floating_chat_button.html' %}
+
+    <script src="{% static 'js/mobile-menu.js' %}"></script>
+</body>
+</html>

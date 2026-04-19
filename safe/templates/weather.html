@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
   <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+  <link rel="stylesheet" href="{% static 'css/modern-backgrounds.css' %}">
 
   <style>
     :root{
@@ -209,6 +210,12 @@ function googleTranslateElementInit() {
 <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <body>
   
+  <!-- Mobile Menu Button -->
+  <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle navigation menu">
+      <span></span>
+      <span></span>
+      <span></span>
+  </button>
 
   <!-- Sidebar -->
 <aside class="sidebar" id="sidebar">
@@ -358,6 +365,7 @@ function googleTranslateElementInit() {
   <!-- Sidebar overlay for mobile -->
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
+  <script src="{% static 'js/mobile-menu.js' %}"></script>
   <script src="{% static 'js/weather.js' %}"></script>
   <script>
     // Mobile sidebar toggle

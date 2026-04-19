@@ -44,7 +44,8 @@
     .sidebar,
     nav,
     header,
-    section:not(.map-topbar) {
+    section:not(.map-topbar),
+    .mobile-menu-btn {
       display: none !important;
     }
 
@@ -462,15 +463,23 @@
 </head>
 
 <body>
+  <!-- Mobile Menu Button -->
+  <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle navigation menu">
+      <span></span>
+      <span></span>
+      <span></span>
+  </button>
 
   <!-- TOP BAR -->
   <div class="map-topbar">
     <div class="left">
       <a href="{% url 'index' %}" class="btn">⬅ Dashboard</a>
-      <button id="toggle-zones" class="btn">Toggle Zones</button>
+      <button id="toggle-zones" class="btn">Hide Zones</button>
+      <button id="toggle-hospitals" class="btn">🏥 Hospitals</button>
+      <button id="toggle-centers" class="btn">🏛️ Shelters</button>
     </div>
     <div class="right">
-      <span class="btn">🚨 Emergency Map</span>
+      <span class="btn">🌡️ Heatwave Alert Map - MP</span>
     </div>
   </div>
 
@@ -479,19 +488,20 @@
 
   <!-- INFO PANEL -->
   <div class="info-panel">
-    <h3>📍 Safety Guidance</h3>
-    <p>• Red zones: <strong>Do NOT enter</strong></p>
-    <p>• Orange zones: <strong>Proceed with caution</strong></p>
-    <p>• Green zones: <strong>Safe shelters</strong></p>
-    <p style="margin-top:10px;font-weight:600;">Tap on zones for details.</p>
+    <h3>🌡️ Heatwave Safety Guide</h3>
+    <p>• <span style="color:#e53e3e">Red zones:</span> <strong>EXTREME HEAT - Stay indoors</strong></p>
+    <p>• <span style="color:#f6ad55">Yellow zones:</span> <strong>HIGH HEAT - Limit outdoor activity</strong></p>
+    <p>• <span style="color:#48bb78">Green zones:</span> <strong>MODERATE - Stay hydrated</strong></p>
+    <p style="margin-top:10px;"><strong>🏥 Hospitals</strong> & <strong>🏛️ Shelters</strong> shown on map</p>
+    <p style="font-weight:600;">Click 📍 button to find nearest facilities</p>
   </div>
 
   <!-- LEGEND -->
   <div class="legend">
-    <h4>Legend</h4>
-    <div class="legend-item"><span class="dot red"></span> High Risk</div>
-    <div class="legend-item"><span class="dot orange"></span> Medium Risk</div>
-    <div class="legend-item"><span class="dot green"></span> Safe Zone</div>
+    <h4>Heatwave Alert Levels</h4>
+    <div class="legend-item"><span class="dot red"></span> Extreme Heat (45°C+)</div>
+    <div class="legend-item"><span class="dot orange"></span> High Heat (42-45°C)</div>
+    <div class="legend-item"><span class="dot green"></span> Moderate (38-42°C)</div>
   </div>
 
   <!-- JS -->
@@ -529,6 +539,36 @@
         });
       }
 
+      // Toggle hospitals
+      const toggleHospitalsBtn = document.getElementById('toggle-hospitals');
+      let hospitalsVisible = true;
+      
+      if (toggleHospitalsBtn) {
+        toggleHospitalsBtn.addEventListener('click', () => {
+          hospitalsVisible = !hospitalsVisible;
+          toggleHospitalsBtn.style.opacity = hospitalsVisible ? '1' : '0.5';
+          toggleHospitalsBtn.style.background = hospitalsVisible ? 'rgba(255, 255, 255, 0.95)' : 'rgba(200, 200, 200, 0.7)';
+          
+          // This will be handled by layer groups in the future
+          // For now, just visual feedback
+        });
+      }
+
+      // Toggle community centers
+      const toggleCentersBtn = document.getElementById('toggle-centers');
+      let centersVisible = true;
+      
+      if (toggleCentersBtn) {
+        toggleCentersBtn.addEventListener('click', () => {
+          centersVisible = !centersVisible;
+          toggleCentersBtn.style.opacity = centersVisible ? '1' : '0.5';
+          toggleCentersBtn.style.background = centersVisible ? 'rgba(255, 255, 255, 0.95)' : 'rgba(200, 200, 200, 0.7)';
+          
+          // This will be handled by layer groups in the future
+          // For now, just visual feedback
+        });
+      }
+
       // Prevent body scroll on mobile
       document.body.addEventListener('touchmove', (e) => {
         if (!e.target.closest('#mini-map')) {
@@ -560,5 +600,7 @@
 
   <!-- Include floating chat button -->
   {% include 'partials/floating_chat_button.html' %}
+
+  <script src="{% static 'js/mobile-menu.js' %}"></script>
 </body>
 </html>

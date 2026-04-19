@@ -9,6 +9,7 @@
     <meta name="description" content="Browse and complete disaster preparedness learning modules">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <link rel="stylesheet" href="{% static 'css/modern-backgrounds.css' %}">
     <script src="script.js" defer></script>
 </head>
 
@@ -32,6 +33,13 @@ function googleTranslateElementInit() {
 
 
 <body>
+
+      <!-- Mobile Menu Button -->
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle navigation menu">
+          <span></span>
+          <span></span>
+          <span></span>
+      </button>
 
       <div class="site-bg" aria-hidden="true" role="presentation">
   <!-- preload hint (optional) -->
@@ -146,6 +154,7 @@ function googleTranslateElementInit() {
     <!-- Mobile Overlay -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
+    <script src="{% static 'js/mobile-menu.js' %}"></script>
     <script>
         // Module data
         const modules = [

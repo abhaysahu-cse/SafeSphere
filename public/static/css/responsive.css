@@ -47,25 +47,89 @@ body {
    SIDEBAR RESPONSIVE BEHAVIOR
    ========================================== */
 
+/* Mobile Hamburger Menu Button - Fixed in top-left corner */
+.mobile-menu-btn {
+  display: none;
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 1001;
+  width: 48px;
+  height: 48px;
+  background: var(--color-white, #ffffff);
+  border: 1px solid var(--color-gray-200, #e5e7eb);
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 0;
+}
+
+.mobile-menu-btn:hover {
+  background: var(--color-gray-50, #f9fafb);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.mobile-menu-btn:active {
+  transform: scale(0.95);
+}
+
+/* Hamburger icon lines */
+.mobile-menu-btn span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--color-blue-primary, #4F46E5);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+/* Animated hamburger to X */
+.mobile-menu-btn.active span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.mobile-menu-btn.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-menu-btn.active span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
 /* Mobile: Hamburger menu toggle */
 @media (max-width: 900px) {
+  /* Show mobile menu button */
+  .mobile-menu-btn {
+    display: flex;
+  }
+
+  /* Hide desktop sidebar toggle */
+  .sidebar-toggle {
+    display: none !important;
+  }
+
+  /* Sidebar slides in from left */
   .sidebar {
     transform: translateX(-100%);
     position: fixed;
     z-index: 1000;
+    width: 280px;
+    box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
   }
 
   .sidebar.active {
     transform: translateX(0);
   }
 
-  .sidebar-toggle {
-    display: block !important;
-  }
-
+  /* Main content takes full width */
   .main-content {
     margin-left: 0 !important;
-    padding: 20px 16px;
+    padding: 80px 16px 20px 16px; /* Extra top padding for mobile menu button */
     width: 100%;
   }
 
@@ -79,10 +143,66 @@ body {
     background: rgba(0, 0, 0, 0.5);
     z-index: 999;
     display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
   }
 
   .sidebar-overlay.active {
     display: block;
+    opacity: 1;
+  }
+
+  /* Adjust sidebar header for mobile */
+  .sidebar-header {
+    padding: 20px;
+  }
+
+  .logo {
+    font-size: 20px;
+  }
+
+  .logo-icon {
+    font-size: 28px;
+  }
+}
+
+/* Tablet adjustments */
+@media (max-width: 768px) {
+  .mobile-menu-btn {
+    top: 12px;
+    left: 12px;
+    width: 44px;
+    height: 44px;
+  }
+
+  .mobile-menu-btn span {
+    width: 20px;
+  }
+
+  .main-content {
+    padding: 70px 12px 16px 12px;
+  }
+
+  .sidebar {
+    width: 260px;
+  }
+}
+
+/* Small mobile adjustments */
+@media (max-width: 480px) {
+  .mobile-menu-btn {
+    top: 10px;
+    left: 10px;
+    width: 42px;
+    height: 42px;
+  }
+
+  .sidebar {
+    width: 240px;
+  }
+
+  .main-content {
+    padding: 65px 10px 12px 10px;
   }
 }
 

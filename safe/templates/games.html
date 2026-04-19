@@ -8,6 +8,8 @@
     <title>SafeSphere - Games</title>
     <meta name="description" content="Practice disaster preparedness through interactive games">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <link rel="stylesheet" href="{% static 'css/modern-backgrounds.css' %}">
     <script src="script.js" defer></script>
 </head>
 <script type="text/javascript">
@@ -25,6 +27,13 @@ function googleTranslateElementInit() {
 
 <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <body>
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
     <!-- GLOBAL BACKGROUND (place immediately after <body>) -->
 <div class="site-bg" aria-hidden="true" role="presentation">
   <!-- preload hint (optional) -->
@@ -342,6 +351,8 @@ function openGame(gameId) {
         loadGameStats();
         renderGames();
     </script>
+
+    <script src="{% static 'js/mobile-menu.js' %}"></script>
 </body>
 </html>
 

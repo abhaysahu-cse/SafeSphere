@@ -10,6 +10,7 @@
     
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <link rel="stylesheet" href="{% static 'css/modern-backgrounds.css' %}">
     
     <style>
         .chat-input-wrapper {
@@ -65,6 +66,13 @@
     </style>
 </head>
 <body>
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
     <!-- Sidebar -->
 <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
@@ -145,19 +153,19 @@
             <div class="chat-welcome">
                 <div class="welcome-icon">👋</div>
                 <h2>Welcome to AI Assistant!</h2>
-                <p>I'm here to help you learn about disaster preparedness. Ask me questions like:</p>
+                <p>I'm here to help you stay safe. Currently monitoring heatwave conditions in Bhopal. Ask me:</p>
                 <div class="suggested-questions">
-                    <button class="suggestion-chip" onclick="sendSuggestion('What should I include in an emergency kit?')">
-                        What should I include in an emergency kit?
+                    <button class="suggestion-chip" onclick="sendSuggestion('Where am I?')">
+                        Where am I?
                     </button>
-                    <button class="suggestion-chip" onclick="sendSuggestion('How do I prepare for an earthquake?')">
-                        How do I prepare for an earthquake?
+                    <button class="suggestion-chip" onclick="sendSuggestion('What is the temperature here?')">
+                        What is the temperature here?
                     </button>
-                    <button class="suggestion-chip" onclick="sendSuggestion('What are the steps for fire evacuation?')">
-                        What are the steps for fire evacuation?
+                    <button class="suggestion-chip" onclick="sendSuggestion('What dangers are in my area?')">
+                        What dangers are in my area?
                     </button>
-                    <button class="suggestion-chip" onclick="sendSuggestion('How to perform CPR?')">
-                        How to perform CPR?
+                    <button class="suggestion-chip" onclick="sendSuggestion('How to prevent heatstroke?')">
+                        How to prevent heatstroke?
                     </button>
                 </div>
             </div>
@@ -200,13 +208,86 @@
 
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
+<script src="{% static 'js/mobile-menu.js' %}"></script>
 <script>
-    // *** CONFIGURATION ch ***
-    const GEMINI_API_KEY = 'AIzaSyDlkttw1Nsn7NDCZN0JcHV5lBN24ANbx6A'; //api key
+    // *** CONFIGURATION - API KEY ROTATION SYSTEM ***
+    const GEMINI_API_KEYS = [
+        'AIzaSyDP1yC5LwBZ5VxtUNfCcLkUdFp_Cn6LrHE', // Primary key
+        'AIzaSyACR7Lc6ugt5xtn3i0Z_-FV2kM7VWAC-zU'  // Backup key
+    ];
+    
+    // Get current API key index from localStorage (default to 0)
+    let currentKeyIndex = parseInt(localStorage.getItem('gemini_key_index') || '0');
+    
+    // Reset to 0 if index is out of bounds (happens when we reduce number of keys)
+    if (currentKeyIndex >= GEMINI_API_KEYS.length) {
+        currentKeyIndex = 0;
+        localStorage.setItem('gemini_key_index', '0');
+    }
+    
+    // Function to get current API key
+    function getCurrentApiKey() {
+        return GEMINI_API_KEYS[currentKeyIndex];
+    }
+    
+    // Function to rotate to next API key
+    function rotateToNextKey() {
+        currentKeyIndex = (currentKeyIndex + 1) % GEMINI_API_KEYS.length;
+        localStorage.setItem('gemini_key_index', currentKeyIndex.toString());
+        console.log(`🔄 Rotated to API key ${currentKeyIndex + 1} of ${GEMINI_API_KEYS.length}`);
+        return getCurrentApiKey();
+    }
+    
     const GEMINI_MODEL = 'gemini-2.5-flash';
 
-    // System Instruction 
-    const SYSTEM_INSTRUCTION = "You are SafeSphere AI Safety Assistant, an AI-powered disaster preparedness guide for students, teachers, administrators, farmers, households, and community responders. Your purpose is to provide fast, practical, and empathetic guidance for any disaster scenario and to promote SafeSphere services. Rules and responsibilities: 1. Greet users politely and state your role briefly. Use line breaks and short point lists. Emphasize headings using double underscores for bold, not asterisks.2. Provide clear step by step safety actions for all disaster types including earthquake, flood, tsunami, cyclone, storm surge, landslide, fire, drought, heatwave, coldwave, flash flood, chemical release, pandemic, and complex multi-hazard events.3. Offer audience-specific guidance: students, teachers, school administrators, farmers, health workers, first responders, and households. Give short actionable checklists, equipment lists, and simple timings where relevant.4. Share SafeSphere core services concisely: Learning Modules, Quizzes and Assessments, AR and VR Disaster Simulations, AI Risk Alerts, Resource Hub with Guidelines and Checklists, Gamification and Certificates, Emergency SOS integration.5. In emergencies, lead with immediate life saving steps and first aid, then instruct to call local emergency numbers such as 112 in India. Use alert emojis like 🚨 🔥 🌊 when appropriate.6. Keep answers short and minimal by default. Expand only if the user asks for more detail or for step by step procedures. Be empathetic, culturally sensitive, and calm.7. Reply in English. For simple Hindi inputs reply in Hinglish style. Maintain an Indian context when giving local examples.8. Formatting constraints: avoid using asterisks and hash marks. Use double underscores for bold headings and plain numbered lists for steps.9. Safety policy: never provide instructions that enable wrongdoing. For high risk or uncertain scenarios, advise contacting local authorities and emergency services and offer to connect to official resources when asked.10. Personalization: when helpful, ask one short clarifying question before giving tailored instructions; otherwise provide best-effort guidance based on the information available.";
+    // System Instruction with Location Context
+    const SYSTEM_INSTRUCTION = `You are SafeSphere AI Safety Assistant, an AI-powered disaster preparedness guide for students, teachers, administrators, farmers, households, and community responders.
+
+CURRENT LOCATION CONTEXT:
+- You are currently deployed at Sage University, Bhopal, Madhya Pradesh, India
+- Coordinates: 23.2599°N, 77.4126°E
+- Current Season: Summer (April-May 2026)
+- Active Hazard: HEATWAVE - Severe heat conditions across Madhya Pradesh
+- Current Temperature Range: 42-45°C (107-113°F) in Bhopal region
+- Heat Index: EXTREME - Red Alert Zone
+- Risk Level: HIGH - Heatstroke and dehydration risk
+
+LOCATION-AWARE RESPONSES:
+When users ask "Where am I?" or "What's my location?", respond: "You are at Sage University, Bhopal, Madhya Pradesh, India."
+
+When users ask about temperature or weather, provide:
+- Current temperature: 43-45°C (extremely hot)
+- Condition: Severe heatwave affecting central India
+- Heat index: Dangerous levels
+- Recommendation: Stay indoors, drink water frequently, avoid 11 AM - 4 PM outdoor activities
+
+When users ask about dangers or risks in their area, respond:
+"🚨 HEATWAVE ALERT - Your location (Bhopal, MP) is under SEVERE HEAT WARNING
+- Temperature: 43-45°C (feels like 48°C)
+- Risk: HIGH for heatstroke, dehydration, heat exhaustion
+- Immediate Actions: Stay hydrated, remain indoors during peak hours, wear light clothing
+- Vulnerable Groups: Elderly, children, outdoor workers at highest risk"
+
+CORE RESPONSIBILITIES:
+1. Greet users politely and state your role briefly. Use line breaks and short point lists. Emphasize headings using double underscores for bold, not asterisks.
+2. Provide clear step-by-step safety actions for all disaster types including earthquake, flood, tsunami, cyclone, storm surge, landslide, fire, drought, HEATWAVE (priority), coldwave, flash flood, chemical release, pandemic, and complex multi-hazard events.
+3. For HEATWAVE specifically, provide immediate cooling strategies, hydration protocols, and warning signs of heat-related illness.
+4. Offer audience-specific guidance: students, teachers, school administrators, farmers, health workers, first responders, and households.
+5. Share SafeSphere core services: Learning Modules, Quizzes, AR/VR Simulations, AI Risk Alerts, Resource Hub, Gamification, Emergency SOS.
+6. In emergencies, lead with immediate life-saving steps, then instruct to call 112 (India emergency number).
+7. Keep answers short and minimal by default. Expand only if asked for more detail.
+8. Reply in English. For Hindi inputs, reply in Hinglish style. Maintain Indian context.
+9. Formatting: Use double underscores for bold headings, plain numbered lists for steps. Avoid asterisks and hash marks.
+10. Safety policy: Never provide harmful instructions. For uncertain scenarios, advise contacting local authorities.
+
+HEATWAVE-SPECIFIC GUIDANCE (Current Priority):
+- Recognize symptoms: dizziness, nausea, rapid heartbeat, confusion
+- First aid: Move to shade, cool water, wet cloth on forehead
+- Prevention: 3-4 liters water daily, ORS if sweating heavily
+- Timing: Avoid sun 11 AM - 4 PM
+- Clothing: Light, loose, cotton fabrics
+- Emergency: Call 112 if unconscious or severe symptoms`;
+
 
 
 
@@ -374,33 +455,36 @@
         sendMessage();
     }
 
-    async function sendMessage() {
+    async function sendMessage(retryCount = 0) {
         const message = chatInput.value.trim();
         
         if (!message || isTyping) return;
         
-        // 1. Prepare and display user message
-        const userMessageAPI = { role: 'user', parts: [{ text: message }] };
-        chatHistory.push(userMessageAPI);
-        
-        const displayUserMessage = {
-            role: 'user',
-            content: message,
-            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        };
+        // 1. Prepare and display user message (only on first attempt)
+        if (retryCount === 0) {
+            const userMessageAPI = { role: 'user', parts: [{ text: message }] };
+            chatHistory.push(userMessageAPI);
+            
+            const displayUserMessage = {
+                role: 'user',
+                content: message,
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            };
 
-        if (welcomeDiv) welcomeDiv.style.display = 'none';
-        if (chatMessagesContainer) chatMessagesContainer.innerHTML += createMessageElement(displayUserMessage);
-        
-        // Clear input and show loading
-        chatInput.value = '';
-        chatInput.style.height = 'auto';
-        showTypingIndicator();
+            if (welcomeDiv) welcomeDiv.style.display = 'none';
+            if (chatMessagesContainer) chatMessagesContainer.innerHTML += createMessageElement(displayUserMessage);
+            
+            // Clear input and show loading
+            chatInput.value = '';
+            chatInput.style.height = 'auto';
+            showTypingIndicator();
+        }
 
         try {
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+            // 🔑 USE ROTATION SYSTEM - Get current API key
+            const currentApiKey = getCurrentApiKey();
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${currentApiKey}`;
             
-            // 🚨 FINAL FIX APPLIED: Wrapping systemInstruction into a Content object
             const payload = {
                 contents: chatHistory,
                 systemInstruction: {
@@ -414,9 +498,38 @@
                 body: JSON.stringify(payload)
             });
             
+            // 🔄 DETECT QUOTA EXCEEDED ERROR
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.error.message || 'API Error: Could not get response.');
+                const errorMessage = errorData.error?.message || '';
+                const isQuotaError = response.status === 429 || 
+                                   errorMessage.includes('quota') || 
+                                   errorMessage.includes('RESOURCE_EXHAUSTED') ||
+                                   errorMessage.includes('rate limit');
+                
+                // If quota exceeded and we haven't tried all keys yet
+                if (isQuotaError && retryCount < GEMINI_API_KEYS.length - 1) {
+                    console.warn(`⚠️ API Key ${currentKeyIndex + 1} quota exceeded. Rotating...`);
+                    
+                    // Show rotation notification to user
+                    const rotationNotice = {
+                        role: 'assistant',
+                        content: `🔄 Switching to backup API key (${currentKeyIndex + 2}/${GEMINI_API_KEYS.length})...`,
+                        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                    };
+                    removeTypingIndicator();
+                    if (chatMessagesContainer) chatMessagesContainer.innerHTML += createMessageElement(rotationNotice);
+                    showTypingIndicator();
+                    
+                    // Rotate to next key
+                    rotateToNextKey();
+                    
+                    // Retry with new key after short delay
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    return sendMessage(retryCount + 1);
+                }
+                
+                throw new Error(errorMessage || 'API Error: Could not get response.');
             }
 
             const result = await response.json();
@@ -440,14 +553,21 @@
         } catch (error) {
             console.error('Gemini API Error:', error);
             removeTypingIndicator();
+            
+            // Check if all keys exhausted
+            const allKeysExhausted = retryCount >= GEMINI_API_KEYS.length - 1;
+            const errorContent = allKeysExhausted 
+                ? `🚨 All API keys have reached their quota limit. Please try again later or contact support.`
+                : `🚨 Error connecting to AI: ${error.message}`;
+            
             // Display an informative error message to the user
             const errorMessage = {
                 role: 'assistant',
-                content: `🚨 Error connecting to AI: ${error.message}. Please verify your API key and ensure the model name is correct.`,
+                content: errorContent,
                 time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
             };
             if (chatMessagesContainer) chatMessagesContainer.innerHTML += createMessageElement(errorMessage);
-            speak("I encountered an error while connecting to the AI. Please verify the API key and try again.");
+            speak(allKeysExhausted ? "All API keys have reached their limit. Please try again later." : "I encountered an error while connecting to the AI.");
 
         } finally {
             isTyping = false;

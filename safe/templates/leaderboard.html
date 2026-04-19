@@ -8,6 +8,8 @@
     <title>SafeLearn - Leaderboard</title>
     <meta name="description" content="Compete with other learners and track your progress">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/modern-backgrounds.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
     <style>
       /* Small helper styles for leaderboard extras (keeps most styling in your main CSS) */
       .controls {
@@ -27,6 +29,13 @@
     </style>
 </head>
 <body>
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
     <!-- Sidebar (same as before) -->
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
@@ -371,5 +380,7 @@
 
       // If your real backend is ready: replace leaderboardData with fetch('/api/leaderboard') and then call updateUserMetrics()/render()
     </script>
+
+    <script src="{% static 'js/mobile-menu.js' %}"></script>
 </body>
 </html>
