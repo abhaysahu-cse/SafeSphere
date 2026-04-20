@@ -13,7 +13,7 @@
 }
 
 *{box-sizing:border-box}
-html,body{height:100%;margin:0;background:var(--bg);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial; color:var(--brand);-webkit-font-smoothing:antialiased}
+html,body{min-height:100%;margin:0;background:var(--bg);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial; color:var(--brand);-webkit-font-smoothing:antialiased}
 .wrap{max-width:var(--maxw);margin:20px auto;padding:20px;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow)}
 .topbar{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:12px}
 .topbar .lead{color:var(--muted);margin:6px 0 0}
